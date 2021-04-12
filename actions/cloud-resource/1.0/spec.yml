@@ -1,0 +1,97 @@
+name: cloud-resource
+version: "1.0"
+type: action
+category: ops
+displayName: 云资源添加
+desc: 添加云资源
+public: false
+supportedVersions:
+  - ">= 3.12"
+
+params:
+  # 通过terraform先创建云资源，再创建集群，需要如下参数
+  - name: cloud_vendor
+    type: string
+    desc: 云提供商，默认alicloud
+    required: true
+
+  - name: ak
+    type: string
+    desc: 访问密钥
+    required: false
+
+  - name: sk
+    type: string
+    desc: 访问密钥
+    required: false
+
+  - name: region
+    type: string
+    desc: 集群安装区域
+    required: false
+
+  - name: availability_zone
+    type: string
+    desc: 预付费周期，默认1，即包月
+    required: false
+
+  - name: charge_type
+    type: string
+    desc: 集群规格(PrePaid, PostPaid)，默认是PrePaid
+    required: false
+
+  - name: charge_period
+    type: string
+    desc: 预付费周期，默认1，即包月
+    required: false
+
+  - name: cluster_name
+    type: string
+    desc: 集群名字
+    required: false
+
+  - name: cloud_resource
+    type: string
+    desc: 创建的云资源类型，比如ecs
+    required: false
+
+  - name: ecs_num
+    type: string
+    desc: 创建的机器数目
+    required: false
+
+  - name: ecs_password
+    type: string
+    desc: 机器密码
+    required: false
+
+  - name: ecs_type
+    type: string
+    desc: 机器类型
+    required: false
+
+  - name: vswitch_id
+    type: string
+    desc: 交换机id
+    required: false
+
+  - name: sg_ids
+    type: string
+    desc: 安全组ids,用","分隔
+    required: false
+
+  - name: disk_type
+    type: string
+    desc: 磁盘类型
+    required: false
+
+  - name: disk_size
+    type: string
+    desc: 磁盘大小
+    required: false
+
+  - name: terraform
+    type: string
+    desc: 执行的terraform命令，支持（plan, apply, destroy）
+    required: false
+

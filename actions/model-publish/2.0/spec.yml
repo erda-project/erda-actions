@@ -1,0 +1,24 @@
+name: model-publish
+version: "2.0"
+type: action
+category: data_management
+displayName: 模型发布
+desc: 模型发布
+logoUrl:
+imageUrls:
+supportedVersions:
+  - ">= 3.9"
+
+labels:
+  maintainer: shaozhong.hsz@alibaba-inc.com
+
+params:
+  - name: config
+    required: true
+    desc: action配置
+  - name: default_spark_config
+    required: true
+    desc: Spark数据源配置
+  - name: default_cassandra_config
+    required: true
+    desc: Cassandra数据源配置

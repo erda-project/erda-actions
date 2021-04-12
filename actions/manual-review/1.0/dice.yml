@@ -1,0 +1,11 @@
+### job 配置项
+jobs:
+  api-test:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/manual-review-action:20210104-aa28e3b1
+    resources:
+      cpu: 0.5
+      mem: 1024
+
+
+
+

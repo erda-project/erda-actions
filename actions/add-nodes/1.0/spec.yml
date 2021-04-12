@@ -1,0 +1,40 @@
+name: add-nodes
+version: "1.0"
+type: action
+category: ops
+displayName: 添加节点
+desc: 添加一个或多个节点到集群中
+public: false
+supportedVersions:
+  - ">= 3.10"
+
+params:
+  - name: hosts
+    type: array
+    desc: 节点的 IP 地址列表
+    required: false
+
+  - name: labels
+    type: array
+    desc: 节点的标签
+    required: false
+
+  - name: port
+    type: int
+    desc: 节点 SSH 端口号，默认 22
+    required: false
+
+  - name: user
+    type: string
+    desc: 节点 SSH 用户名
+    required: true
+
+  - name: password
+    type: string
+    desc: 节点 SSH 密码
+    required: true
+
+  - name: data_disk_device
+    type: string
+    desc: 节点数据盘设备名，如：vdb
+    required: false

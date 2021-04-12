@@ -1,0 +1,7 @@
+name: java-agent
+version: '1.0'
+type: action
+desc: 监控java agent注入
+public: false
+supportedVersions:
+  - ">= 3.19"

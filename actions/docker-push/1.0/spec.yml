@@ -1,0 +1,9 @@
+name: docker-push
+version: "1.0"
+type: action
+displayName: 容器推送
+category: custom_task
+params:
+public: true
+supportedVersions:
+  - ">= 3.5"

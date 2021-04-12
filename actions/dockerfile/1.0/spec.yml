@@ -1,0 +1,26 @@
+name: dockerfile
+version: "1.0"
+type: action
+category: build_management
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/dadf5ad2-8f66-4eee-a53f-3119bebb074b.png
+displayName: 容器镜像打包
+desc: 针对自定义 dockerfile 打包，产出可运行镜像
+public: true
+supportedVersions:
+  - ">= 3.12"
+
+params:
+  - name: workdir
+    type: string
+    desc: 工程根目录
+    required: true
+  - name: path
+    type: string
+    desc: dockerfile 相对应用路径
+    required: true
+  - name: build_args
+    type: map
+    desc: Dockerfile build args，在这里填写的键值对 会被渲染成为 Dockerfile 中的 ARG
+
+outputs:
+  - name: image

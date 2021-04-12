@@ -1,0 +1,14 @@
+name: k8sflink
+version: "1.0"
+type: action
+category: data_management
+displayName: Flink-Job 集群
+desc: 创建 Flink Job 集群
+public: true
+logoUrl:
+imageUrls:
+supportedVersions:
+  - ">= 1.12"
+
+labels:
+  maintainer: ld269464@alibaba-inc.com

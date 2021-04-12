@@ -1,0 +1,29 @@
+name: mobile-publish
+version: "1.0"
+type: action
+category: deploy_management
+displayName: 移动应用内容发布
+desc: 用于移动应用发布到发布内容
+public: true
+supportedVersions:
+  - ">= 3.13"
+
+params:
+  - name: release_id
+    desc: release_id值 eg:${release:OUTPUT:releaseID}
+
+accessibleAPIs:
+  # get release
+  - path: /api/releases/<releaseId>
+    method: GET
+    schema: http
+  # get app publishItem relation
+  - path: /api/applications/<application>/actions/get-publish-item-relations
+    method: GET
+    schema: http
+  # create publishItem version
+  - path: /api/publish-items/<publishItemId>/versions
+    method: POST
+    schema: http
+
+

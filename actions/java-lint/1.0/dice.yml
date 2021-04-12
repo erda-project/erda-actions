@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  java-lint:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/java-lint-action:20200306-ec56cdb
+    resources:
+      cpu: 0.5
+      mem: 2048
+      disk: 1024

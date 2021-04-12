@@ -1,0 +1,43 @@
+name: sftp-access
+version: "1.0"
+type: action
+category: data_management
+displayName: sftp server交互
+desc: 与sftp server交互的工具。
+logoUrl:
+imageUrls:
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+labels:
+  maintainer: jiejin.ljj@alibaba-inc.com
+
+source:
+  - name: SFTP_HOST
+    required: true
+    desc: sftp server的主机地址，如：127.0.0.1
+    default:
+  - name: SFTP_PORT
+    required: false
+    desc: sftp server的端口号，如：22
+    default:
+  - name: SFTP_USER
+    required: true
+    desc: 登录使用的用户名，如：root
+    default:
+  - name: SFTP_PASSWORD
+    required: true
+    desc: 登录使用的密码，如：123456
+    default:
+params:
+  - name: SFTP_REMOTE_PATH
+    desc: 需要下载的远程文件路径
+    type: string
+    required: true
+    default:
+  - name: SFTP_LOCAL_PATH
+    desc: 本地文件保存路径
+    type: string
+    required: true
+    default:

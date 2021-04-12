@@ -1,0 +1,16 @@
+* Java Dependency Check
+
+** 操作步骤
+
+*** 修改流水线文件
+	- 3.19 版本之前一个分支不支持运行多条流水线，因此建议新建一个 feature/dependency-check 分支。
+	- 3.19 之后可以在 .dice/pipelines 目录下新建 yaml 文件，例如 .dice/pipelines/dependency-check.yml
+	- 在图形化界面上新增 java-dependency-check action，参数填写 code_dir，即待扫描的代码目录，例如 ${git-checkout}
+
+*** 执行流水线
+
+*** 下载漏洞扫描报告文件
+	https://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/15/74979eef-fb1d-4219-812f-c32bfd7a8b53.png
+
+*** 查看报告，对有漏洞的依赖包进行升级
+	点击详情，可以看到具体依赖包通过漏洞扫描的最低版本 (例如 up to 1.5.9)

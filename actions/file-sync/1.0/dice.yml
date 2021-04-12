@@ -1,0 +1,8 @@
+### 文件上传/下载
+jobs:
+  file-sync:
+    image: registry.cn-hangzhou.aliyuncs.com/terminus/pipeline-cloudstorage-resource:v1.0.0
+    resources:
+      cpu: 0.9
+      mem: 1024
+      disk: 1024

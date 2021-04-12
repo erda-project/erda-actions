@@ -1,0 +1,35 @@
+name: gitbook
+version: "1.0"
+type: action
+category: build_management
+displayName: gitbook构建
+desc: gitbook构建
+public: true
+supportedVersions:
+  - ">= 3.10"
+
+params:
+  - name: workdir
+    type: string
+    desc: gitbook doc目录
+    required: true
+outputs:
+  - name: image
+    desc: 镜像
+
+formProps:
+  - component: formGroup
+    key: params
+    componentProps:
+      indentation: true
+      showDivider: true
+      title: 任务参数
+    group: params
+  - label: workdir
+    component: input
+    required: true
+    key: params.workdir
+    componentProps:
+      placeholder: 请输入数据
+    group: params
+    labelTip: gitbook doc目录

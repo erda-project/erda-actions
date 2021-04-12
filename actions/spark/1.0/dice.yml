@@ -1,0 +1,8 @@
+### Spark
+jobs:
+  sql:
+    image: registry.cn-hangzhou.aliyuncs.com/terminus/spark:v2.4.3-cassandra
+    resources:
+      cpu: 1
+      mem: 1024
+      disk: 1024

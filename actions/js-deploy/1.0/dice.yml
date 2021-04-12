@@ -1,0 +1,7 @@
+### job 配置项
+jobs:
+  js-deploy:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/js-deploy-action:20200521-5c68300
+    resources:
+      cpu: 1
+      mem: 1024

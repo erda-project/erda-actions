@@ -1,0 +1,15 @@
+name: custom-script
+version: "1.0"
+type: action
+displayName: 自定义任务
+category: custom_task
+desc: 运行自定义命令
+public: true
+supportedVersions:
+  - ">= 3.5"
+labels:
+  autotest: true
+
+params:
+  - name: command
+    desc: 运行的命令

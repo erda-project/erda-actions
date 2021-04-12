@@ -1,0 +1,110 @@
+name: cs-kubernetes
+version: "1.0"
+type: action
+category: ops
+displayName: 阿里云Kubernetes集群
+desc: 创建阿里云容器服务 Kubernetes 集群
+public: false
+supportedVersions:
+  - ">= 3.12"
+
+params:
+    - name: cluster_name
+      type: string
+      desc: 集群名称
+      required: true
+
+    - name: access_key_id
+      type: string
+      desc: AccessKeyID
+      required: true
+
+    - name: access_key_secret
+      type: string
+      desc: AccessKeySecret
+      required: true
+
+    - name: region
+      type: string
+      desc: 地域
+      required: true
+
+    - name: charge_type
+      type: string
+      desc: 付费模式
+      required: false
+
+    - name: charge_period
+      type: int
+      desc: 包年包月购买时长
+      required: false
+
+    - name: vpc_id
+      type: string
+      desc: 通过已有vpc创建，传入vpc_id
+      required: false
+
+    - name: vpc_subnet
+      type: string
+      desc: VPC 网段
+      required: false
+
+    - name: vswitch_id
+      type: string
+      desc: 通过已有交换机创建，传入vswitch_id
+      required: false
+
+    - name: vswitch_subnet
+      type: string
+      desc: VSwitch 网段
+      required: false
+
+    - name: container_subnet
+      type: string
+      desc: Pod 网段
+      required: false
+
+    - name: vip_subnet
+      type: string
+      desc: Service 网段
+      required: false
+
+    - name: worker_numbers
+      type: int
+      desc: 节点数
+      required: false
+
+    - name: ssh_password
+      type: string
+      desc: SSH 密码
+      required: false
+
+    - name: org_name
+      type: string
+      desc: 企业名称
+      required: false
+
+    - name: root_domain
+      type: string
+      desc: dice 泛域名
+      required: false
+
+    - name: collector_url
+      type: string
+      desc: 中心集群 collector 地址
+      required: false
+
+    - name: openapi_url
+      type: string
+      desc: 中心集群 openapi 地址
+      required: false
+
+    - name: enable_https
+      type: bool
+      desc: 是否启用 https
+      required: false
+
+    - name: terraform_command
+      type: string
+      desc: terraform 命令，支持 plan, apply, destroy
+      required: false

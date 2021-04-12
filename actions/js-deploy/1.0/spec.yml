@@ -1,0 +1,27 @@
+name: js-deploy
+version: "1.0"
+type: action
+category: build_management
+displayName: npm 包推送
+desc: 推送 npm library 至远程 registry
+public: true
+supportedVersions:
+  - ">= 3.14"
+
+params:
+  - name: workdir
+    type: string
+    desc: npm library 代码根目录
+    required: true
+  - name: registry
+    type: string
+    desc: npm registry
+    required: true
+  - name: username
+    type: string
+    desc: npm publish 用户名
+    required: true
+  - name: password
+    type: string
+    desc: npm publish 密码
+    required: true

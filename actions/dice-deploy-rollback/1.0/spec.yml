@@ -1,0 +1,45 @@
+name: dice-deploy-rollback
+version: "1.0"
+type: action
+category: deploy_management
+desc: 用于 dice 平台部署应用服务
+public: true
+supportedVersions:
+  - ">= 3.19"
+
+params:
+  - name: runtime_id
+  - name: deployment_id
+  
+accessibleAPIs:
+  # redeploy 
+  - path: /api/runtimes/<runtimeId>/actions/rollback-action
+    method: POST
+    schema: http
+
+outputs:
+  - name: runtime_id
+    desc: 部署中心运行时 ID
+  - name: deployment_id
+    desc: 部署单 ID
+
+formProps:
+  - component: formGroup
+    key: params
+    componentProps:
+      indentation: true
+      showDivider: true
+      title: 任务参数
+    group: params
+  - label: runtime_id
+    component: input
+    key: params.runtime_id
+    componentProps:
+      placeholder: 请输入数据
+    group: params
+  - label: deployment_id
+    component: input
+    key: params.deployment_id
+    componentProps:
+      placeholder: 请输入数据
+    group: params

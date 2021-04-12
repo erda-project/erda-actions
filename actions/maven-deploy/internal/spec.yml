@@ -1,0 +1,37 @@
+name: maven-deploy
+type: action
+
+desc: 将构建产物发布到 Maven 仓库
+displayName: Maven 构建发布
+category: version_management
+support:
+  get: false
+  put: true
+supportedVersions:
+  - ">= 3.5"
+
+source:
+  - name: url
+    required: true
+    desc: 仓库的地址（一般是 Release 仓库的地址）
+  - name: snapshot_url
+    desc:  Snapshot 仓库的地址
+  - name: artifact
+    required: true
+    desc: 构建产品，格式必须是 groupId:artifactId:type[:classifier]
+  - name: username
+    desc: 验权的用户名
+  - name: password
+    desc: 验权的密码
+
+params:
+  - name: file
+    desc: 构建产物的路径名。（和 app app_file 组合必须二选一）
+  - name: app
+    desc: 构建产物所在的压缩包。（配合 bp-compile 等 resource 使用）
+  - name: app_file
+    desc: 构建产物在压缩包中的路径名。（配合 app 参数使用）
+  - name: pom_file
+    desc: 构建产物共生的 pom 文件
+  - name: version_file
+    desc: 版本文件

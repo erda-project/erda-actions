@@ -1,0 +1,14 @@
+### job 配置项
+jobs:
+  java:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/java-action:20210409-bdfaecbd
+    envs:
+      # 详见 actions/buildpack/1.0/dice.yml
+      BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
+    resources:
+      cpu: 0.5
+      mem: 2048
+      disk: 1024
+#  预留，pipeline级别实现全局缓存
+#  binds:
+#    - ((storageMountPoint))/devops/storage/pipeline_build_cache:/opt/build_cache

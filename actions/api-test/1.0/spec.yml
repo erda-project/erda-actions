@@ -1,0 +1,32 @@
+name: api-test
+version: '1.0'
+type: action
+displayName: api测试
+# add category: test
+category: test_management
+desc:
+public: false
+supportedVersions:
+  - ">= 3.5"
+
+params:
+  - name: api_id
+  - name: api_info
+
+accessibleAPIs:
+  # test env info
+  - path: /api/testenv/<id>
+    method: GET
+    schema: http
+
+  - path: /api/testenv/actions/list-envs
+    method: GET
+    schema: http
+
+  - path: /api/apitests/<id>
+    method: PUT
+    schema: http
+
+  - path: /api/apitests/<id>
+    method: GET
+    schema: http

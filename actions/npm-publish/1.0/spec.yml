@@ -1,0 +1,32 @@
+name: npm
+version: "1.0"
+type: action
+category: version_management
+displayName: NPM 包推送
+desc: 将 npm 的 package publish 到 npm 仓库，以统一和规范化 package 管理
+labels:
+  maintainer: xxx
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+params:
+- name: package_name
+  required: true
+  desc: publish的package名称
+- name: registry
+  desc: npm仓库，默认为terminus公有的npm仓库
+- name: path
+  required: true
+  desc: 需要publish的package存放路径
+- name: tag
+  desc: publish package的tag
+- name: email
+  required: true
+  desc: 用户的email地址
+- name: username
+  required: true
+  desc: npm仓库的用户名
+- name: password
+  required: true
+  desc: npm仓库的登陆密码

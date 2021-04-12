@@ -1,0 +1,21 @@
+name: integration-test
+version: "1.0"
+type: action
+category: test_management
+displayName: 接口测试
+desc: 该 action 是针对 接口测试  的能力抽象
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+params:
+  - name: context
+    required: true
+    desc: 上下文目录。一般为 repo
+  - name: run_cmd
+    desc: 用于运行测试用例的 CMD。如 mvn test -Dmaven.test.failure.ignore=true
+  - name: name
+    required: true
+    desc: 该次测试的测试名
+  - name: parser_type
+    desc: 测试框架名称，只支持 TESTNG/JUNIT

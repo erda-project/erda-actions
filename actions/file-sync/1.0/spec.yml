@@ -1,0 +1,51 @@
+name: file-sync
+version: "1.0"
+type: action
+category: data_management
+displayName: 对象存储系统文件同步
+desc: 文件同步Action允许用户从对象存储系统中上传或下载文件,当前支持Minio和阿里云OSS
+logoUrl:
+imageUrls:
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+labels:
+  maintainer: cb167668@alibaba-inc.com
+
+source:
+  - name: cloudType
+    required: true
+    desc: 云存储类型
+    default:
+  - name: operateType
+    required: true
+    desc: 上传或下载
+    default:
+  - name: endpoint
+    required: true
+    desc: 云存储地址
+    default:
+  - name: bucketName
+    required: true
+    desc: 云存储bucketName
+    default:
+  - name: accessKey
+    required: true
+    desc: 云存储accessKey
+    default:
+  - name: secretKey
+    required: true
+    desc: 云存储secretKey
+    default:
+params:
+  - name: srcFile
+    desc: 源文件：云存储上传对应的本地文件或者下载对应的objectFile
+    required: true
+    type: string
+    default:
+  - name: destFile
+    desc: 目标文件：云存储上传对应的objectFile,下载对应下载到某个目标地址
+    required: true
+    type: string
+    default:

@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  buildpack:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/buildpack-action:develop-20190624-66620f3078
+    resources:
+      cpu: 0.1
+      mem: 1024
+      disk: 1024

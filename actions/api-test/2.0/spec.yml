@@ -1,0 +1,109 @@
+name: api-test
+version: '2.0'
+type: action
+category: test_management
+displayName: 接口测试
+desc: 执行单个接口测试。上层可以通过 pipeline.yml 编排一组接口测试的执行顺序。
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/10/24195384-07b7-4203-93e1-666373639af4.png
+public: true
+supportedVersions:
+  - ">= 3.19"
+labels:
+  autotest: true
+
+params:
+  - name: name
+    required: false
+    desc: 接口名
+  - name: url
+    required: true
+    desc: 接口地址
+  - name: method
+    required: true
+    desc: HTTP 方法。可选值：GET, POST, DELETE, PUT, PATCH, HEAD
+  - name: params
+    required: false
+    desc: HTTP Query Params
+    type: struct_array
+    struct:
+      - name: key
+        required: true
+      - name: value
+        required: true
+      - name: desc
+        required: false
+  - name: headers
+    required: false
+    desc: HTTP 请求头
+    type: struct_array
+    struct:
+      - name: key
+        required: true
+      - name: value
+        required: true
+      - name: desc
+        required: false
+  - name: body
+    required: false
+    desc: 请求体
+    type: struct
+    struct:
+      - name: type
+        required: false
+        desc: Content-Type。可选值：none, application/json, application/x-www-form-urlencoded 等
+        default: none
+      - name: content
+        required: false
+  - name: out_params
+    required: false
+    desc: 出参。可供后续接口使用
+    type: struct_array
+    struct:
+      - name: key
+        required: true
+        desc: 出参名
+      - name: source
+        required: true
+        desc: 出参来源。可选值：status, body:json, body:text, header
+      - name: expression
+        required: false
+        desc: 表达式。jq 格式，例如 .sessionid。参考 jq 文档：https://stedolan.github.io/jq/manual/v1.6/
+  - name: asserts
+    required: false
+    desc: 断言。若接口返回成功，但断言失败，最终结果仍为失败
+    type: struct_array
+    struct:
+      - name: arg
+        required: true
+        desc: 出参名
+      - name: operator
+        required: true
+        type: string
+        desc: 比较操作。支持的值有：=, !=, >=, <=, >, <, contains, not_contains, belong, not_belong, empty, not_empty, exist, not_exist
+      - name: value
+        required: false
+        desc: 值
+
+accessibleAPIs:
+  # test env info
+  - path: /api/testenv/<id>
+    method: GET
+    schema: http
+
+  - path: /api/testenv/actions/list-envs
+    method: GET
+    schema: http
+
+  - path: /api/apitests/<id>
+    method: PUT
+    schema: http
+
+  - path: /api/apitests/<id>
+    method: GET
+    schema: http
+
+formProps:
+  - label: API 配置
+    component: apiTest
+    required: true
+    key: params

@@ -1,0 +1,9 @@
+jobs:
+  add-nodes:
+    image: registry.cn-hangzhou.aliyuncs.com/terminus/add-nodes:3.21
+    resources:
+      cpu: 0.2
+      mem: 128
+    binds:
+    - ((storageMountPoint))/dice-ops/dice-config:/opt/dice-config:rw
+    - ((storageMountPoint))/dice-ops/dice-config/kube-config:/root/.kube/config

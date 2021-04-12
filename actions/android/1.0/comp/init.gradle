@@ -1,0 +1,26 @@
+def NEXUS_SERVER = "{{NEXUS_URL}}/repository/public/"
+def NEXUS_USERNAME = "{{NEXUS_USERNAME}}"
+def NEXUS_PASSWORD = "{{NEXUS_PASSWORD}}"
+
+allprojects {
+    buildscript {
+        repositories {
+            maven {
+                credentials {
+                    username NEXUS_USERNAME
+                    password NEXUS_PASSWORD
+                }
+                url NEXUS_SERVER
+            }
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username NEXUS_USERNAME
+                password NEXUS_PASSWORD
+            }
+            url NEXUS_SERVER
+        }
+    }
+}

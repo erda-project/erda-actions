@@ -1,0 +1,6 @@
+jobs:
+  cs-kubernetes-scale:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/cs-kubernetes-scale:3.16
+    resources:
+      cpu: 0.2
+      mem: 128

@@ -1,0 +1,24 @@
+name: python-script
+version: "4.0"
+type: action
+category: big_data
+displayName: python执行
+desc: python执行
+loop:
+  break: task_status == 'Success'
+  strategy:
+    max_times: 5
+    decline_limit_sec: 480
+    interval_sec: 15
+    decline_ratio: 2
+public: true
+logoUrl:
+imageUrls:
+
+labels:
+  maintainer: shaozhong.hsz@alibaba-inc.com
+
+params:
+  - name: config
+    required: false
+    desc: action 配置

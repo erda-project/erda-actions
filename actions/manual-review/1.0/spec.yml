@@ -1,0 +1,56 @@
+name: manual-review
+version: '1.0'
+type: action
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/01/04/ef2070ae-5046-43f5-97ef-6ffb9b8e2d34.png
+displayName: 人工确认
+# add category: test
+category: test_management
+desc: 在流水线过程中添加人工确认步骤
+public: true
+supportedVersions:
+  - ">= 3.20"
+
+params:
+  - name: processor
+    required: true
+    desc: 处理人 id
+    type: string_array
+  - name: waiting_time
+    type: int
+    desc: 等待时间
+    default: 5
+accessibleAPIs:
+  # test env info
+  - path: /api/reviews/actions/<id>
+    method: GET
+    schema: http
+  - path: /api/reviews/actions/review/approve
+    method: POST
+    schema: http
+  - path: /api/reviews/actions/user/create
+    method: POST
+    schema: http
+
+
+formProps:
+- key: params
+  component: formGroup
+  group: params
+  componentProps:
+    title: 任务参数
+- label: 处理人
+  component: memberSelector
+  required: true
+  key: params.processor
+  group: params
+  componentProps:
+    scopeType: app
+    mode: multiple
+- label: wating_time
+  component: input
+  key: params.wating_time
+  componentProps:
+    placeholder: 请输入数据
+  group: params
+  defaultValue: 5
+  labelTip: 等待时间

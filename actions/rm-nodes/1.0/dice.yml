@@ -1,0 +1,11 @@
+jobs:
+  release:
+    labels:
+      PLATFORM: true
+    image: registry.cn-hangzhou.aliyuncs.com/terminus/rmnodes:3.12
+    resources:
+      cpu: 0.2
+      mem: 128
+    binds:
+       - ((storageMountPoint))/dice-ops/dice-config:/opt/dice-config
+       - ((storageMountPoint))/dice-ops/dice-config/kube-config:/root/.kube/config

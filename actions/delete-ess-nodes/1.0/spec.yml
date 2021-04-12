@@ -1,0 +1,45 @@
+name: delete-ess-nodes
+version: "1.0"
+type: action
+category: ops
+displayName: ess伸缩组机器删除
+desc: 通过instance id删除ess伸缩组中的机器
+public: false
+supportedVersions:
+  - ">= 3.13"
+
+params:
+  - name: ak
+    type: string
+    desc: 访问密钥
+    required: true
+
+  - name: sk
+    type: string
+    desc: 访问密钥
+    required: true
+
+  - name: region
+    type: string
+    desc: 集群安装区域
+    required: true
+
+  - name: scaling_group_id
+    type: string
+    desc: 弹性伸缩组id
+    required: true
+
+  - name: instance_ids
+    type: string
+    desc: instance ids, 多个instance id 通过逗号分隔, optional
+    required: false
+
+  - name: is_cron
+    type: bool
+    desc: 是否为定时ess
+    required: false
+
+  - name: instance_ids_file
+    type: string
+    desc: 存放instance id的文件，若is_cron为true，则上一个action通过文件传送instance id
+    required: false

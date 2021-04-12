@@ -1,0 +1,22 @@
+name: js-script
+version: "1.0"
+type: action
+category: build_management
+displayNameL: 自定义 js 命令构建
+desc: 自定义js命令构建产物
+public: true
+supportedVersions:
+  - ">= 3.10"
+
+params:
+  - name: workdir
+    type: string
+    desc: 工程根目录
+    required: true
+  - name: commands
+    type: string_array
+    desc: 编译命令
+  - name: targets
+    type: string_array
+    desc: 输出内容
+    required: false

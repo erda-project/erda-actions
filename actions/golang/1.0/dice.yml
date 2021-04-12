@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  golang:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/golang-action:20201124-23c413dc
+    resources:
+      cpu: 0.5
+      mem: 1024
+      disk: 1024

@@ -1,0 +1,9 @@
+### job 配置项
+jobs:
+  mysql-cli:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/mysql-cli-action:20210107-9449e155
+    envs:
+      BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
+    resources:
+      cpu: 1
+      mem: 2048

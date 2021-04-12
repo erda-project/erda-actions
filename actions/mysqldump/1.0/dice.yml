@@ -1,0 +1,8 @@
+jobs:
+  mysqldump:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/mysqldump-action:20201028-0a4db20
+    resources:
+      cpu: 1
+      mem: 2048
+    binds:
+    - ((storageMountPoint))/devops/actions/mysqldump/dump_result/:/tmp/dump_result/

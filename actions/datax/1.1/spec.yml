@@ -1,0 +1,52 @@
+name: datax
+version: "1.1"
+type: action
+category: data_management
+displayName: 数据源同步
+desc: DataX为用户提供多种不同数据源之间的全量同步功能。
+logoUrl:
+imageUrls:
+public: true
+isDefault: true
+supportedVersions:
+  - ">= 3.5"
+
+labels:
+  maintainer: cb167668@alibaba-inc.com
+
+source:
+  - name: jsonFilePath
+    required: true
+    desc: datax json配置文件路径
+    default:
+  - name: databaseType
+    required: true
+    desc: 目标数据源类型
+    default:
+  - name: url
+    required: true
+    desc: 目标数据库jdbc url
+    default:
+  - name: username
+    required: true
+    desc: 目标数据库jdbc用户名
+    default:
+  - name: password
+    required: true
+    desc: 目标数据库jdbc密码
+    default:
+  - name: database
+    required: true
+    desc: 目标数据库jdbc数据库
+    default:
+params:
+  - name: outputTables
+    desc: datax action执行输出表
+    type: string_array
+    required: true
+    default:
+  - name: els
+    desc: datax执行传入EL表达式
+    type: string_array
+    required: false
+    default:

@@ -1,0 +1,9 @@
+name: virtual-offline-image
+version: "1.0"
+type: action
+category: custom_task
+displayName: 离线部署时需要安装的镜像
+desc: 离线部署时需要安装的镜像，是 Action 依赖的镜像。
+public: false
+supportedVersions:
+  - ">= 3.5"

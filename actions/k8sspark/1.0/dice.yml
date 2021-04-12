@@ -1,0 +1,7 @@
+jobs:
+  k8sspark:
+    image: registry.cn-hangzhou.aliyuncs.com/terminus/pipeline-flink-resource:v1.1.0
+    resources:
+      cpu: 0.9
+      mem: 1024
+      disk: 1024

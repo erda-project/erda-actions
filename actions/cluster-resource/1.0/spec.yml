@@ -1,0 +1,139 @@
+name: cluster-resource
+version: "1.0"
+type: action
+category: ops
+displayName: 边缘集群资源
+desc: 创建边缘集群所有云资源
+public: false
+supportedVersions:
+  - ">= 3.12"
+
+params:
+  # 通过terraform先创建云资源，再创建集群，需要如下参数
+  # 企业相关信息
+  - name: org_name
+    type: string
+    desc: 企业名
+    required: true
+
+  # 集群相关配置信息
+  - name: dice_version
+    type: string
+    desc: dice 版本号
+    required: true
+
+  - name: cluster_name
+    type: string
+    desc: 集群名字
+    required: true
+
+  - name: root_domain
+    type: string
+    desc: 泛域名
+    required: true
+
+  - name: enable_https
+    type: bool
+    desc: 是否开启https
+    required: true
+
+  - name: collector_url
+    type: string
+    desc: 边缘集群所需的中心集群参数
+    required: true
+
+  - name: open_api
+    type: string
+    desc: 边缘集群所需的中心集群参数
+    required: true
+
+  # 云供应商相关信息
+  - name: cloud_vendor
+    type: string
+    desc: 云提供商，默认alicloud
+    required: true
+
+  - name: ak
+    type: string
+    desc: 访问密钥
+    required: true
+
+  - name: sk
+    type: string
+    desc: 访问密钥
+    required: true
+
+  # 集群规格，付费信息
+  - name: cluster_type
+    type: string
+    desc: Central or Edge
+    required: true
+
+  - name: cluster_spec
+    type: string
+    desc: High, Standard, Small, Test
+    required: true
+
+  - name: charge_type
+    type: string
+    desc: 集群规格(PrePaid, PostPaid)，默认是PrePaid
+    required: true
+
+  - name: charge_period
+    type: string
+    desc: 预付费周期，默认1，即包月
+    required: false
+
+  # vpc配置信息
+  - name: region
+    type: string
+    desc: 集群安装区域
+    required: true
+
+  - name: vpc_id
+    type: string
+    desc: 通过已有vpc创建，传入vpc_id
+    required: false
+
+  - name: vpc_cidr
+    type: string
+    desc: 新建vpc，传入vpc_cidr
+    required: false
+
+  - name: vswitch_id
+    type: string
+    desc: 通过已有交换机创建，传入vswitch_id
+    required: false
+
+  - name: vswitch_cidr
+    type: string
+    desc: 新建交换机，传入vswitch_cidr
+    required: false
+
+  # 容器配置相关信息
+  - name: service_cidr
+    type: string
+    desc: k8s service 网段
+    required: false
+
+  - name: pod_cidr
+    type: string
+    desc: k8s pod 网段
+    required: false
+
+  - name: docker_cidr
+    type: string
+    desc: docker 网段
+    required: false
+
+  - name: docker_bip
+    type: string
+    desc: docker 网桥ip/mask
+    required: false
+
+  # terraform命令参数
+  - name: terraform
+    type: string
+    desc: 执行的terraform命令，支持（plan, apply, destroy）
+    required: false
+

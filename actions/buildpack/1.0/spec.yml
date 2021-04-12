@@ -1,0 +1,75 @@
+name: buildpack
+version: "1.0"
+type: action
+displayName: 统一构建器
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/23/c5867d7a-ba0e-4357-bec7-6d7599889a2c.png
+category: build_management
+desc: |-
+  平台内置的应用构建逻辑。
+  目前支持：
+  1. Java
+  2. NodeJS(Herd)
+  3. Single Page Application(SPA)
+  4. Dockerfile
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+params:
+  - name: context
+    required: true
+    desc: 应用所在的上下文环境。所有的 module 必须在该路径下
+  - name: modules
+    type: struct_array
+    desc: >-
+      Buildpack 的对象是应用（Application），而一个应用包含一个或多个模块（Module）。
+      对于多模块项目，这里只需要写最终需要运行的模块；对于 lib 类的模块，无需声明。
+    struct:
+      - name: name
+        required: true
+        desc: 模块名
+      - name: path
+        desc: 模块路径
+      - name: image
+        type: struct
+        struct:
+          - {name: name, desc: 镜像名 }
+          - {name: username, desc: docker registry 用户名 }
+          - {name: password, desc: docker registry 密码 }
+  - name: bp_repo
+    desc: 使用的 buildpack 类型。非特殊情况下无需指定，平台会自动探测出合适的类型。
+  - name: bp_ver
+    desc: 使用的 buildpack 版本。与 bp_repo 一起使用。
+  - name: bp_args
+    desc: 指定 buildpack 参数。
+    type: map
+  - name: http_proxy
+    desc: 指定 HTTP 代理 参数。
+    type: string
+  - name: https_proxy
+    desc: 指定 HTTPS 代理 参数。
+    type: string
+  - name: only_build
+    desc: 只编译应用，不制作镜像
+    type: bool
+
+
+labels:
+  maintainer: lj@terminus.io
+
+options:
+  fetchHistoryBPConfig: true
+
+accessibleAPIs:
+  # 查询构建产物
+  - path: /api/build-artifacts/<sha>
+    method: GET
+    schema: http
+  # 注册构建产物
+  - path: /api/build-artifacts
+    method: POST
+    schema: http
+  # 上报缓存镜像
+  - path: /api/build-caches
+    method: POST
+    schema: http

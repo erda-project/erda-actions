@@ -1,0 +1,21 @@
+name: android
+version: "1.0"
+type: action
+displayName: android
+category: build
+desc: android action
+public: true
+supportedVersions:
+  - ">= 3.9"
+
+params:
+  - name: context
+    desc: 代码路径
+    required: true
+  - name: commands
+    type: string_array
+    desc: 构建命令列表
+  - name: target
+    desc: 构建产物路径
+    required: true
+

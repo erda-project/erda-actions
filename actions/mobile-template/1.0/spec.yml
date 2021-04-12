@@ -1,0 +1,23 @@
+name: mobile-template
+version: "1.0"
+type: action
+category: build_management
+displayName: 移动端代码模板初始化
+desc: 移动端代码模板初始化
+public: true
+supportedVersions:
+  - ">= 3.15"
+
+params:
+  - name: display_name
+    type: string
+    desc: app 显示名称
+    required: true
+  - name: bundle_id
+    type: string
+    desc: ios bundle id
+    required: true
+  - name: package_name
+    type: string
+    desc: android package name
+    required: true

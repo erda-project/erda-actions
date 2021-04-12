@@ -1,0 +1,7 @@
+### job 配置项
+jobs:
+  java-deploy:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/java-deploy-action:20200417-7842866
+    resources:
+      cpu: 0.5
+      mem: 2048

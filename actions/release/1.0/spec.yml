@@ -1,0 +1,85 @@
+name: release
+version: "1.0"
+type: action
+category: version_management
+displayName: 应用打包发布制品
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/1211ff12-97de-460a-9274-3de39cb02714.png
+desc: 用于打包完成时，向dicehub 提交完整可部署的dice.yml。用户若没在pipeline.yml里定义该action，CI会自动在pipeline.yml里插入该action
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+params:
+  - name: dice_yml
+    type: string
+    desc: dice.yml 文件路径。一般通过 ${git-checkout}/dice.yml 方式从代码仓库中进行引用。
+    required: false
+
+  - name: cross_cluster
+    type: bool
+    desc: 制品是否可以跨集群部署，默认为 false
+    required: false
+    default: false
+
+  - name: replacement_images
+    type: string_array
+    desc: dice_yml, 与 image 参数功能相同，二者指定其一即可
+    required: false
+
+  - name: init_sql
+    type: string
+    desc: |
+      用户可以指定一个包含数据库初始化脚本的目录，目录下可以有多个 sql 文件，每个 sql 文件对应一个 数据库级别 的初始化脚本。
+      sql 文件名去掉 .sql 后缀得到的即为 db 的名字，这个名字需要在 dice.yml 中 mysql addon 的 options.create_dbs 中声明。
+      执行成功后，会在 mysql addon 的 options 下新增 init_sql 字段。
+      init_sql 功能只有 mysql addon 第一次初始化的时候有效。
+    required: false
+
+  - name: dice_development_yml
+    type: string
+    desc: dice_development.yml 文件路径。
+    required: false
+
+  - name: dice_test_yml
+    type: string
+    desc: dice_test.yml 文件路径。
+    required: false
+
+  - name: dice_staging_yml
+    type: string
+    desc: dice_staging.yml 文件路径。
+    required: false
+
+  - name: dice_production_yml
+    type: string
+    desc: dice_production.yml 文件路径。
+    required: false
+
+  - name: check_diceyml
+    type: bool
+    desc: |
+      是否需要对 dice.yml 进行格式校验。默认为 true。
+      在某些特定场景下，dice.yml 不面向发布，可能包含一些模板内容，无法通过校验，但仍然需要 release，则需要设置 check_diceyml: false。
+    required: false
+
+  - name: image
+    type: map
+    desc: 与 replacement_images 功能相同，以字符串形式提供 微服务-镜像 对应信息，二者指定其一即可
+    required: false
+
+  - name: services
+    type: map
+    desc: 项目基于那个镜像运行，运行命令是什么
+
+accessibleAPIs:
+  # push release
+  - path: /api/releases
+    method: POST
+    schema: http
+  # file upload
+  - path: /api/files
+    method: POST
+    schema: http
+
+outputs:
+  - name: releaseID
