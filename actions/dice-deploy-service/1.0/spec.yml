@@ -1,0 +1,28 @@
+name: dice-deploy-service
+version: "1.0"
+type: action
+category: deploy_management
+desc: 用于 dice 平台部署应用服务
+public: true
+supportedVersions:
+  - ">= 3.19"
+
+params:
+  - name: deployment_id
+    desc: 部署单 id
+  - name: time_out
+    type: int
+    desc: 部署超时时间
+    default: 86400
+
+accessibleAPIs:
+  # runtime create
+  - path: /api/deployments/<deploymentID>/actions/deploy-services
+    method: POST
+    schema: http
+  # deployment status
+  - path: /api/deployments/<deploymentId>/status
+    method: GET
+    schema: http
+
+outputs:

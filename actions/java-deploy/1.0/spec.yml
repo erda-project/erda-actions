@@ -1,0 +1,35 @@
+name: java-deploy
+version: "1.0"
+type: action
+category: build_management
+displayName: Java Jar 包推送
+desc: 推送 java library 至远程 registry
+public: true
+supportedVersions:
+  - ">= 3.14"
+
+params:
+  - name: workdir
+    type: string
+    desc: java library 代码根目录
+    required: true
+  - name: registry
+    type: string
+    desc: registry
+    required: true
+  - name: username
+    type: string
+    desc: 有 deploy 权限的用户名
+    required: true
+  - name: password
+    type: string
+    desc: 对应的密码
+    required: true
+  - name: skip_tests
+    type: bool
+    desc: 是否跳过测试
+    required: false
+  - name: modules
+    type: string
+    desc: 指定需要 deploy 的模块列表，使用 `,` 分隔
+    required: false

@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  unit-test:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/unit-test-action:20210310-7d68e4ab
+    resources:
+      cpu: 0.5
+      mem: 2048
+      disk: 1024

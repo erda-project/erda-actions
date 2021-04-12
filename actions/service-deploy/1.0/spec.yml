@@ -1,0 +1,35 @@
+name: service-deploy
+version: "1.0"
+type: action
+category: deploy_management
+displayName: dice平台部署应用服务
+desc: 用于 dice 平台部署应用服务
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+params:
+  - name: uri
+    required: true
+    desc: dice 平台的地址。使用占位符  ((dice.url)) 则由平台渲染
+    default: ((dice.url))
+  - name: app_id
+    requir  ed: true
+    desc: dice 应用的 ID。使用占位符 ((dice.id)) 则由平台渲染
+    default: ((dice.id))
+  - name: operator_id
+    required: true
+    desc: 操作者ID。使用占位符  ((dice.operator.id)) 则由 CI 平台渲染 。注意， 当 operator_id 为 Number 时， 需要用 ' 单引号 括起
+    default: ((dice.operator.id))
+  - name: branch
+    required: true
+    desc: 代码分支名。使用占位符 ((gittar.branch)) 则由平台渲染
+    default: ((gittar.branch))
+  - name: release_id_path
+    desc: dicehub-resource releasdse时存放的releaseId路径，dice-resource需要到此路径去取。若pipeline.yml里没有写dicehub，pipeline.yml里会自动插入到dice-resource的source里。若pipeline.yml里写了dicehub，则release_id_path必填，其值为dicehub-resource的Name
+  - name: callback
+    desc: 回调地址，仅支持 POST 方法,用于通知部署结果
+  - name: time_out
+    type: int
+    desc: 部署超时时间
+    default: 43200

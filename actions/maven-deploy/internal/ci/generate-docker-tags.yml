@@ -1,0 +1,18 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: busybox
+    tag: '1.26'
+
+inputs:
+  - name: project
+  - name: version
+
+outputs:
+  - name: task-output
+
+run:
+  path: project/ci/generate-docker-tags.sh

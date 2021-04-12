@@ -1,0 +1,40 @@
+name: cs-kubernetes-scale
+version: "1.0"
+type: action
+category: ops
+displayName: 阿里云Kubernetes集群扩容
+desc: 扩容阿里云容器服务 Kubernetes 集群
+public: false
+supportedVersions:
+  - ">= 3.12"
+
+params:
+    - name: cluster_name
+      type: string
+      desc: 集群名称
+      required: true
+
+    - name: access_key_id
+      type: string
+      desc: AccessKeyID
+      required: true
+
+    - name: access_key_secret
+      type: string
+      desc: AccessKeySecret
+      required: true
+
+    - name: region
+      type: string
+      desc: 地域
+      required: true
+
+    - name: worker_numbers
+      type: int
+      desc: 节点数
+      required: false
+
+    - name: ssh_password
+      type: string
+      desc: SSH 密码
+      required: true

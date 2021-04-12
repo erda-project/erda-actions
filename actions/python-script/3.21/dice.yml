@@ -1,0 +1,7 @@
+jobs:
+  python-script:
+    image: registry.cn-hangzhou.aliyuncs.com/terminus/python-script:v2.0
+    resources:
+      cpu: 1
+      mem: 1024
+      disk: 1024

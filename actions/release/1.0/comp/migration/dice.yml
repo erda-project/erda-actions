@@ -1,0 +1,7 @@
+### job 配置项
+jobs:
+  migration:
+    resources:
+      cpu: 0.5
+      mem: 512
+      disk: 128

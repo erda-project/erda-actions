@@ -1,0 +1,7 @@
+### job 配置项
+jobs:
+  buildpack:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/docker-push-action:20200701-f4cb9d8
+    resources:
+      cpu: 0.5
+      mem: 512

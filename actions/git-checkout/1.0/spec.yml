@@ -1,0 +1,95 @@
+name: git-checkout
+version: "1.0"
+type: action
+category: source_code_management
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/06e7346b-9377-47d4-8eb7-06a1f735691f.png
+displayName: 代码克隆
+desc: 代码仓库克隆
+public: true
+labels:
+  new_workspace: true
+supportedVersions:
+  - ">= 3.5"
+
+params:
+  - name: uri
+    required: false
+    desc: 仓库完整地址。可使用占位符 ((gittar.repo))
+    default: ((gittar.repo))
+  - name: branch
+    desc: 要检出的远程引用,支持 分支,标签和 commit-sha。可使用占位符 ((gittar.branch))
+    default: ((gittar.branch))
+  - name: username
+    desc: 用户名。可使用占位符 ((gittar.username))
+    default: ((gittar.username))
+  - name: password
+    desc: 密码。可使用占位符 ((gittar.password))
+    default: ((gittar.password))
+  - name: depth
+    type: number
+    required: false
+    default: 1
+    desc: >-
+      git clone --depth 参数，浅克隆。
+      因此如果指定了该参数，将不能得到完整的克隆。
+
+outputs:
+  - name: commit
+  - name: author
+  - name: author_date
+    desc: 提交时间
+  - name: committer
+    desc: 提交人
+  - name: committer_date
+  - name: branch
+  - name: message
+    desc: 提交信息
+
+formProps:
+  - component: formGroup
+    key: params
+    componentProps:
+      indentation: true
+      showDivider: true
+      title: 任务参数
+    group: params
+  - label: uri
+    component: input
+    key: params.uri
+    componentProps:
+      placeholder: 请输入数据
+    group: params
+    defaultValue: "((gittar.repo))"
+    labelTip: 仓库完整地址。可使用占位符 ((gittar.repo))
+  - label: branch
+    component: input
+    key: params.branch
+    componentProps:
+      placeholder: 请输入数据
+    group: params
+    defaultValue: "((gittar.branch))"
+    labelTip: 要检出的远程引用,支持 分支,标签和 commit-sha。可使用占位符 ((gittar.branch))
+  - label: username
+    component: input
+    key: params.username
+    componentProps:
+      placeholder: 请输入数据
+    group: params
+    defaultValue: "((gittar.username))"
+    labelTip: 用户名。可使用占位符 ((gittar.username))
+  - label: password
+    component: input
+    key: params.password
+    componentProps:
+      placeholder: 请输入数据
+    group: params
+    defaultValue: "((gittar.password))"
+    labelTip: 密码。可使用占位符 ((gittar.password))
+  - label: depth
+    component: input
+    key: params.depth
+    componentProps:
+      placeholder: 请输入数据
+    group: params
+    defaultValue: 1
+    labelTip: git clone --depth 参数，浅克隆。 因此如果指定了该参数，将不能得到完整的克隆。

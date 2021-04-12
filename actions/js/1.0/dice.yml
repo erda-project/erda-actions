@@ -1,0 +1,9 @@
+### job 配置项
+jobs:
+  js:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/js-action:20210121-860f02b6
+    envs:
+      BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
+    resources:
+      cpu: 1
+      mem: 2048

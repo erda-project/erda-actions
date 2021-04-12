@@ -1,0 +1,20 @@
+name: spark-upload
+version: "1.1"
+type: action
+category: data_management
+displayName: Spark上传
+desc: Spark上传 Action 允许用户上传Spark应用的jar包
+logoUrl:
+imageUrls:
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+labels:
+  maintainer: cb167668@alibaba-inc.com
+
+params:
+  - name: jarPath
+    required: true
+    desc: 云存储jar包路径
+    default:

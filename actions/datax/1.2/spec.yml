@@ -1,0 +1,92 @@
+name: datax
+version: "1.2"
+type: action
+category: data_management
+displayName: 数据源同步
+desc: DataX为用户提供多种不同数据源之间的全量同步功能。
+logoUrl:
+imageUrls:
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+labels:
+  maintainer: cb167668@alibaba-inc.com
+
+source:
+  - name: jsonFilePath
+    required: true
+    desc: datax json配置文件路径
+    default:
+  - name: databaseType
+    required: true
+    desc: 目标数据源类型
+    default:
+  - name: url
+    required: true
+    desc: 目标数据库jdbc url
+    default:
+  - name: username
+    required: true
+    desc: 目标数据库jdbc用户名
+    default:
+  - name: password
+    required: true
+    desc: 目标数据库jdbc密码
+    default:
+  - name: database
+    required: true
+    desc: 目标数据库jdbc数据库
+    default:
+  - name: META_DATA_JDBC_URL
+    required: false
+    desc: 元数据存储数据库URL
+    default:
+  - name: META_DATA_JDBC_USER
+    required: false
+    desc: 元数据存储数据库鉴权用户
+    default:
+  - name: META_DATA_JDBC_PASSWORD
+    required: false
+    desc: 元数据存储数据库鉴权密码
+    default:
+  - name: META_DATA_JDBC_DRIVER
+    required: false
+    desc: 元数据存储数据库使用的驱动
+    default:
+params:
+  - name: outputTables
+    desc: datax action执行输出表
+    type: string_array
+    required: true
+    default:
+  - name: els
+    desc: datax执行传入EL表达式
+    type: string_array
+    required: false
+    default:
+  - name: MAX_WAIT_TIME
+    desc: 发现依赖表缺失后的最大等待时间，单位分钟，默认等待一天
+    type: string
+    required: false
+    default:
+  - name: TASK_TYPE
+    desc: 任务类型，默认如果配置了crontab表达式则为周期任务。当然这里也可以手动指定：ONCE 或 PERIODIC
+    type: string
+    required: false
+    default:
+  - name: TASK_NAME_SPACE
+    desc: 任务命名空间，不填默认为DEFAULT。为了是隔离不同项目的数据。如果不同项目间不存在同名表，则不需要配置
+    type: string
+    required: false
+    default:
+  - name: DEPENDENCY_CHECK_INTERVAL
+    desc: 发现依赖表缺失后 轮询 依赖表的时间间隔，单位：分钟， 默认1分钟轮询一次
+    type: string
+    required: false
+    default:
+  - name: CRON_TYPE
+    desc: crontab表达式类型，不填默认为SPRING，也支持UNIX等
+    type: string
+    required: false
+    default:

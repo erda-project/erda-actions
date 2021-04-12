@@ -1,0 +1,15 @@
+name: upgrade-edge-cluster
+version: "1.0"
+type: action
+category: ops
+displayName: 升级边缘集群
+desc: 升级边缘集群
+public: false
+supportedVersions:
+  - ">= 3.10"
+
+params:
+  - name: dice_version
+    type: string
+    desc: 目标 dice 版本
+    required: true

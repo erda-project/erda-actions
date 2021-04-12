@@ -1,0 +1,23 @@
+name: unit-test
+version: "1.0"
+type: action
+category: test_management
+displayName: 单元测试
+desc: 该 action 是针对 单元测试  的能力抽象，在提交代码时，会自动触发 UT 分析。
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+params:
+  - name: context
+    required: true
+    desc: 上下文目录。一般为 repo
+  - name: name
+    desc: 该次测试的测试名。
+  - name: go_dir
+    desc: golang 代码的路径，需要跟代码里的 import 一样。若测试代码为 golang，则该参数为必填
+
+accessibleAPIs:
+  - path: /api/qa/actions/test-callback
+    method: POST
+    schema: http

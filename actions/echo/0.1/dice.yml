@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  echo:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/echo-action
+    resources:
+      cpu: 0.01
+      mem: 32
+      disk: 0

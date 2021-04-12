@@ -1,0 +1,11 @@
+name: java-lint
+version: "1.0"
+type: action
+category: lint_management
+displayName: Java 工程静态检查
+desc: 针对 java 工程的代码静态检查任务，产出可运行镜像
+labels:
+  maintainer: xxx
+public: true
+supportedVersions:
+  - ">= 3.9"

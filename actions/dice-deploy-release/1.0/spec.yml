@@ -1,0 +1,43 @@
+name: dice-deploy-release
+version: "1.0"
+type: action
+category: deploy_management
+desc: 用于 dice 平台部署应用服务
+public: true
+supportedVersions:
+  - ">= 3.19"
+
+params:
+  - name: release_id
+    desc: release id
+  - name: workspaces
+    desc: 环境
+    
+accessibleAPIs:
+  # deploy addons
+  - path: /api/runtimes/actions/deploy-release-action
+    method: POST
+    schema: http
+
+outputs:
+  - name: runtime_id
+    desc: 部署中心运行时 ID
+  - name: deployment_id
+    desc: 部署单 ID
+
+formProps:
+  - component: formGroup
+    key: params
+    componentProps:
+      indentation: true
+      showDivider: true
+      title: 任务参数
+    group: params
+  - label: release_id
+    component: input
+    key: params.release_id
+    componentProps:
+      placeholder: 请输入数据
+    group: params
+    labelTip: release id
+

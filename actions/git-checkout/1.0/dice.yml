@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  git-checkout:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/git-checkout-action:20200416-134268e
+    resources:
+      cpu: 0.5
+      mem: 1024
+      disk: 1024

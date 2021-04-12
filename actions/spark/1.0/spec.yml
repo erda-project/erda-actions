@@ -1,0 +1,25 @@
+name: spark
+version: "1.0"
+type: action
+category: data_management
+desc: 以jar包的方式提交Spark作业
+displayName: Spark作业
+logoUrl:
+imageUrls:
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+labels:
+  maintainer: cb167668@alibaba-inc.com
+
+params:
+- name: depends
+  required: true
+  desc: 由哪个任务生成的 jar 包
+- name: main_class
+  required: false
+  desc: 指定 jar 包里要执行的主类
+- name: main_args
+  required: false
+  desc: java -jar xxx.jar 后面的参数

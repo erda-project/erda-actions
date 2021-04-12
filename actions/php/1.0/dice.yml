@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  php:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/php-action:20200701-f4cb9d8
+    resources:
+      cpu: 0.5
+      mem: 512
+      disk: 1024

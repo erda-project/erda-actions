@@ -1,0 +1,52 @@
+name: ios
+version: "1.0"
+type: action
+category: build
+displayName: ios构建
+desc: ios remote action
+public: true
+supportedVersions:
+  - ">= 3.9"
+
+params:
+  - name: context
+    desc: 代码路径
+    required: true
+  - name: commands
+    type: string_array
+    desc: 构建命令列表
+  - name: targets
+    type: string_array
+    desc: 构建产物路径
+    required: true
+  - name: p12_cert
+    desc: p12证书
+    type: struct
+    struct:
+      - {name: source, desc: p12证书配置key }
+      - {name: dest, desc: 存储的目标路径 }
+      - {name: password, desc: p12证书配置的password }
+  - name: mobile_provision
+    desc: mobileprovision文件
+    type: struct
+    struct:
+      - {name: source, desc: mobileprovision证书配置key }
+      - {name: dest, desc: 存储的目标路径 }
+
+
+accessibleAPIs:
+  - path: /api/files
+    method: POST
+    schema: http
+  - path: /api/runner/tasks
+    method: POST
+    schema: http
+  - path: /api/runner/tasks/<runnerTaskID>
+    method: GET
+    schema: http
+  - path: /api/runner/collect/logs/<runnerSource>
+    method: GET
+    schema: http
+
+
+

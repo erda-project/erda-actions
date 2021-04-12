@@ -1,0 +1,7 @@
+jobs:
+  dice:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/dice-deploy-service-action:20201029-3a732e9f
+    resources:
+      cpu: 0.2
+      mem: 128
+      disk: 128

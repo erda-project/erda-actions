@@ -1,0 +1,23 @@
+name: flink-upload
+version: "1.1"
+type: action
+category: data_management
+displayName: Flink上传
+desc: Flink上传 Action允许用户上传一个Flink作业的jar包
+logoUrl:
+imageUrls:
+supportedVersions:
+  - ">= 3.5"
+
+labels:
+  maintainer: cb167668@alibaba-inc.com
+
+source:
+- name: jobManagerUrl
+  required: true
+  desc: flink cluster jobManagerUrl
+  default:
+- name: jarPath
+  required: true
+  desc: flink jar path
+  default:

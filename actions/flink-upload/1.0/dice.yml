@@ -1,0 +1,8 @@
+### Flink jar包上传
+jobs:
+  sql:
+    image: registry.cn-hangzhou.aliyuncs.com/terminus/pipeline-flink-resource:v1.0.0
+    resources:
+      cpu: 0.1
+      mem: 1024
+      disk: 1024

@@ -1,0 +1,35 @@
+name: oss-upload
+version: "1.0"
+type: action
+category: custom_task
+displayName: oss文件上传
+desc: 上传文件到OSS
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+params:
+  - name: access_key_id
+    required: true
+    desc: oss key id
+    default: ""
+  - name: access_key_secret
+    required: true
+    desc: oss key secret
+    default: ""
+  - name: endpoint
+    required: true
+    desc: 区域endpoint
+    default: "http://oss-cn-hangzhou.aliyuncs.com"
+  - name: local_path
+    required: true
+    desc: 本地路径,支持目录和文件
+    default: ""
+  - name: oss_path
+    required: true
+    desc: oss路径, 格式为 oss://{bucketName}/{path}
+    default: ""
+  - name: meta
+    required: false
+    desc: 文件元信息
+    default: ""

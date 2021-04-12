@@ -1,0 +1,42 @@
+name: java
+version: "1.0"
+type: action
+category: build_management
+displayName: Java 工程编译打包镜像构建
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/d74a0d23-523d-4451-9647-f32f47b2000d.png
+desc: 针对 java 工程的编译打包任务，产出可运行镜像
+labels:
+  maintainer: xxx
+public: true
+supportedVersions:
+  - ">= 3.9"
+
+params:
+  - name: jdk_version
+    desc: 构建使用的jdk版本,支持8,11
+  - name: build_type
+    desc: 构建类型 可选 gradle,maven
+  - name: build_cmd
+    desc: 构建命令,如:./gradlew :user:build
+  - name: target
+    desc: 产物jar或war文件
+  - name: container_type
+    desc: 容器类型，可选 openjdk,tomcat
+  - name: workdir
+    desc: 工作目录一般为仓库路径 ${git-checkout}
+  - name: swagger_path
+    desc: swagger.json相对workdir的路径
+  - name: service_name
+    desc: 服务名称，需要和dice.yml中对应
+  - name: copy_assets
+    type: string_array
+    desc: 需要配置文件到容器中的文件, 支持2种格式, 复制到相对路径:fileNmae, 复制到绝对路径:sourceFile:destFile
+accessibleAPIs:
+  # api compatibility check
+  - path: /api/gateway/check-compatibility
+    method: POST
+    schema: http
+
+outputs:
+  - name: image
+    desc: 镜像

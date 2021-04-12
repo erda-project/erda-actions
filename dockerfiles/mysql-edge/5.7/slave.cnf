@@ -1,0 +1,44 @@
+[client]
+socket = /var/lib/mysql/mysqld.sock
+default-character-set = utf8mb4
+
+[mysql]
+socket = /var/lib/mysql/mysqld.sock
+default-character-set = utf8mb4
+
+[mysqld]
+skip-host-cache
+skip-name-resolve
+datadir = /data/mysql
+user = mysql
+port = 3306
+bind-address = 0.0.0.0
+socket = /var/lib/mysql/mysqld.sock
+general_log_file = /var/log/mysql/query.log
+slow_query_log_file = /var/log/mysql/slow.log
+gtid-mode = ON
+log-bin = mysql-bin
+log-slave-updates = ON
+enforce_gtid_consistency=1
+log-error = /var/log/mysql/error.log
+binlog_format=row
+replicate-ignore-db = mysql
+replicate-ignore-db = information_schema
+replicate-ignore-db = performance_schema
+replicate_wild_ignore_table=mysql.%
+replicate_wild_ignore_table=information_schema.%
+replicate_wild_ignore_table=performance_schema.%
+default-time_zone = '+8:00'
+character-set-client-handshake = FALSE
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+init_connect='SET NAMES utf8mb4'
+expire_logs_days = 7
+innodb_buffer_pool_size=1G
+innodb_buffer_pool_chunk_size=256M
+innodb_buffer_pool_instances=1
+max_allowed_packet=40M
+max_connections=4096
+log_timestamps=SYSTEM
+sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+server-id=1

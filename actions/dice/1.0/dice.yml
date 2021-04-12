@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  dice:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/dice-action:20201231-8a10786d
+    resources:
+      cpu: 0.2
+      mem: 512
+      disk: 128

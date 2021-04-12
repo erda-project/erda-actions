@@ -1,0 +1,36 @@
+name: java-build
+version: "1.0"
+type: action
+category: build_management
+displayName: Java 工程编译打包
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/d74a0d23-523d-4451-9647-f32f47b2000d.png
+desc: 针对 java 工程的编译打包任务
+labels:
+  maintainer: xxx
+public: true
+supportedVersions:
+  - ">= 3.9"
+
+params:
+  - name: jdk_version
+    desc: 构建使用的jdk版本,支持8,11
+    required: true
+  - name: build_cmd
+    type: string_array
+    desc: 构建命令,如:./gradlew :user:build，mvn package
+    required: true
+  - name: workdir
+    desc: 工作目录一般为仓库路径 ${git-checkout}
+    default: "."
+accessibleAPIs:
+  # api compatibility check
+  - path: /api/gateway/check-compatibility
+    method: POST
+    schema: http
+
+outputs:
+  - name: buildPath
+    desc: 包的位置
+  - name: JAVA_OPTS
+    desc: 需要假如的监控agent入参
+

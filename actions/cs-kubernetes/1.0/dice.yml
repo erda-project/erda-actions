@@ -1,0 +1,8 @@
+jobs:
+  cs-kubernetes:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/cs-kubernetes:3.20
+    resources:
+      cpu: 0.2
+      mem: 128
+    binds:
+    - ((storageMountPoint))/dice-ops/ecluster-configs:/opt/ecluster-configs:rw

@@ -1,0 +1,30 @@
+name: rm-nodes
+version: "1.0"
+type: action
+displayName: 下线节点
+category: ops
+desc: 下线节点
+public: false
+supportedVersions:
+  - ">= 3.10"
+
+params:
+  - name: hosts
+    type: array
+    desc: 节点的 IP 地址列表
+    required: true
+
+  - name: password
+    type: string
+    desc: 节点 SSH 密码
+    required: true
+
+  - name: force
+    type: string
+    desc: 跳过检查节点上是否有addon
+    required: false
+
+  - name: cluster
+    type: string
+    desc: 集群名字
+    required: true

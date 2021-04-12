@@ -1,0 +1,22 @@
+name: dice-deploy-redeploy
+version: "1.0"
+type: action
+category: deploy_management
+desc: 用于 dice 平台部署应用服务
+public: true
+supportedVersions:
+  - ">= 3.19"
+
+params:
+    
+accessibleAPIs:
+  # redeploy 
+  - path: /api/runtimes/<runtimeId>/actions/redeploy-action
+    method: POST
+    schema: http
+
+outputs:
+  - name: runtime_id
+    desc: 部署中心运行时 ID
+  - name: deployment_id
+    desc: 部署单 ID

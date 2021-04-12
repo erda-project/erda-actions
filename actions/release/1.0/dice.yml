@@ -1,0 +1,10 @@
+### job 配置项
+jobs:
+  release:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/release-action:20210305-53398316
+    envs:
+      BASE64_SWITCH: false
+    resources:
+      cpu: 0.2
+      mem: 512
+      disk: 128

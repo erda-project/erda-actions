@@ -1,0 +1,14 @@
+name: k8sspark
+version: "1.0"
+type: action
+category: data_management
+displayName: Spark-Job 集群
+desc: 创建 Spark-Job 集群
+public: true
+logoUrl:
+imageUrls:
+supportedVersions:
+  - ">= 3.0.0"
+
+labels:
+  maintainer: ld269464@alibaba-inc.com

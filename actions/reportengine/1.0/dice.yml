@@ -1,0 +1,7 @@
+### job 配置项
+jobs:
+  reportengine:
+    image: registry.cn-hangzhou.aliyuncs.com/terminus/dice-reportengine:3.15.0-20200618-937e5ad
+    resources:
+      cpu: 0.1
+      mem: 128

@@ -1,0 +1,35 @@
+name: publish-api-asset
+version: "1.0"
+type: action
+category: deploy_management
+displayName: API 文档发布
+desc: 将 API 描述文档发布到 API 集市，成为 API 资源
+public: true
+supportedVersions:
+  - ">= 3.18"
+
+params:
+  - name: display_name
+    desc: API 资源的展现名称, 不填时使用 asset_id
+  - name: asset_id
+    desc: API 资源的标识 id
+    required: true
+  - name: version
+    desc: API 资源版本，需要使用 X.Y.Z 的格式，不填时自动生成
+  - name: spec_path
+    desc: API 描述文档的路径，eg:${java}/swagger/swagger.json
+    required: true    
+  - name: runtime_id
+    desc: runtime_id 值，eg:${dice:OUTPUT:runtimeID}
+    required: true    
+  - name: service_name
+    desc: 服务名称，需要和 dice.yml 中的一致
+    required: true
+
+accessibleAPIs:
+  # publish api asset
+  - path: /api/api-assets
+    method: POST
+    schema: http
+
+

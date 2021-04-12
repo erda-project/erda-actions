@@ -1,0 +1,12 @@
+### job 配置项
+jobs:
+  java-agent-inject:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/java-agent-action:20201106-706b7d19
+    cmd: tar -xf /resource/java-agent/spot-agent.tar.gz -C /dice
+    envs:
+      JAVA_AGENT_OPTS: -javaagent:/dice/spot-agent/spot-agent.jar -javaagent:/dice/spot-agent/spot-profiler.jar
+    binds:
+      - /dice
+    resources:
+      cpu: 0.2
+      mem: 128

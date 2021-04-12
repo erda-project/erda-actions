@@ -1,0 +1,9 @@
+name: agent
+version: "1.0"
+type: action
+category: custom_task
+desc: action agent
+public: false
+isDefault: false
+supportedVersions:
+  - ">= 3.5"

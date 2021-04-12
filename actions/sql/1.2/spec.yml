@@ -1,0 +1,67 @@
+name: sql
+version: "1.1"
+type: action
+category: data_management
+displayName: sql脚本执行器
+desc: SQL Action执行用户配置的SQL脚本。
+logoUrl:
+imageUrls:
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+labels:
+  maintainer: hxf168482@alibaba-inc.com
+
+params:
+  - name: queryType
+    required: false
+    desc: sql脚本类型，sparksql ,hivesql等
+    default: sparksql
+  - name: queryEndPoint
+    required: true
+    desc: 目标数据源url
+    default: jdbc:hive2://1.1.1.1:10000/;auth=noSasl
+  - name: username
+    required: true
+    desc: 目标数据源用户名
+    default: hive
+  - name: password
+    required: true
+    desc: 目标数据源密码
+    default: hive
+  - name: path
+    desc: 待执行的sql脚本路径
+    type: string
+    required: true
+    default:
+  - name: queryargs
+    desc: sql action执行传入的参数变量
+    type: string
+    required: false
+    default:
+  - name: inputTables
+    desc: sql action执行依赖输入表
+    type: string_array
+    required: false
+    default:
+  - name: outputTables
+    desc: sql action执行输出表
+    type: string_array
+    required: false
+    default:
+  - name: triggerType
+    desc: 周期性触发类型
+    type: string
+    required: false
+    default:
+  - name: frequency
+    desc: 周期大小
+    type: string
+    required: false
+    default:
+  - name: process
+    desc: sql action处理类型，当前onedata模型分为init和process
+    type: string
+    required: false
+    default:

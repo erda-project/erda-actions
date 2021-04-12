@@ -1,0 +1,24 @@
+name: dice-deploy
+version: "1.0"
+type: action
+category: deploy_management
+desc: 用于 dice 平台部署应用服务
+public: true
+supportedVersions:
+  - ">= 3.19"
+
+params:
+  - name: release_id_path
+    desc: dicehub-resource release时存放的releaseId路径，dice-resource需要到此路径去取。若pipeline.yml里没有写dicehub，pipeline.yml里会自动插入到dice-resource的source里。若pipeline.yml里写了dicehub，则release_id_path必填，其值为dicehub-resource的Name
+
+accessibleAPIs:
+  # runtime create
+  - path: /api/runtimes
+    method: POST
+    schema: http
+
+outputs:
+  - name: runtime_id
+    desc: 部署中心运行时 ID
+  - name: deployment_id
+    desc: 部署单 ID

@@ -1,0 +1,30 @@
+name: ess-info
+version: "1.0"
+type: action
+category: ops
+displayName: ess信息
+desc: 获取ess group信息，如instance id，private ip
+public: false
+supportedVersions:
+  - ">= 3.13"
+
+params:
+  - name: ak
+    type: string
+    desc: 访问密钥
+    required: true
+
+  - name: sk
+    type: string
+    desc: 访问密钥
+    required: true
+
+  - name: region
+    type: string
+    desc: 集群安装区域
+    required: true
+
+  - name: scaling_group_id
+    type: string
+    desc: 弹性伸缩组id
+    required: true

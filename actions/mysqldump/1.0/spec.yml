@@ -1,0 +1,66 @@
+name: mysqldump
+version: 1.0
+type: action
+category: test_management
+desc: mysqldump
+logoUrl: ""
+public: true
+supportedVersions:
+  - ">= 3.19"
+
+params:
+  - name: mysql_host
+    required: true
+    desc: 数据库连接地址
+  - name: mysql_port
+    required: false
+    desc: 数据库连接端口
+    default: 3306
+  - name: mysql_username
+    required: true
+    desc: 数据库用户名
+  - name: mysql_password
+    required: false
+    desc: 数据库密码
+  - name: mysql_database
+    required: true
+    desc: 数据库
+  - name: dump_all_tables
+    required: false
+    desc: 是否操作指定数据库下的所有表。可配合 dump_all_tables_ignore_regexp 使用，即导出所有表，除了指定的需要忽略的表
+    default: false
+  - name: dump_all_tables_ignore_regexp
+    required: false
+    desc: 导出指定数据库下的所有表时(dump_all_tables=true)，忽略匹配正则表达式的表。例如：^(fdp|pmp).*$ 忽以 fdp 或 pmp 开头的表
+  - name: global_drop_table_if_not_exists
+    required: false
+    desc: 全局配置：drop 已有表并重建
+    default: true
+  - name: global_charset
+    required: false
+    default: utf8mb4
+    desc: 全局字符集
+  - name: global_try_filter_by_columns_and_values
+    required: false
+    desc: 尝试使用字段进行过滤。若字段存在，则过滤；否则忽略
+  - name: must_include_tables
+    required: false
+    desc: 指定必须要 dump 的表，这里声明的表一定会被 dump。该参数优先级高于 dump_all_tables_ignore_regexp
+    type: struct_array
+    struct:
+      - name: table
+        required: true
+        desc: 表名
+      - name: where
+        required: false
+        desc: 过滤条件，若为空，则 dump 该表下的所有数据
+      - name: drop_table_if_not_exists
+        required: false
+        desc: 是否 drop 已有表并重建。不填写则使用全局配置。
+      - name: try_filter_by_columns_and_values
+        required: false
+        desc: 尝试使用字段对数据进行过滤后再 dump。若字段存在，则过滤；不存在则忽略。优先级高于全局配置 global_try_filter_by_columns_and_values
+  - name: post_commands
+    required: false
+    type: string_array
+    desc: dump 完成后执行一组后置命令，例如 sed 等。dump 文件可以使用环境变量 DUMP_FILE_PATH 获取，例如：head ${DUMP_FILE_PATH}

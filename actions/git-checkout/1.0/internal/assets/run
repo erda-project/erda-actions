@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euo pipefail
+
+retry=0
+maxRetries=3
+interval=2
+while [ ${retry} -lt ${maxRetries} ]
+do  
+  retry=$(($retry + 1))
+  wait=$(($interval ** $retry))
+  # run successfully, exit 0  
+  $(dirname $0)/internal_run.sh && exit 0
+  echo "Retry [${retry}/${maxRetries}] exited $?, retrying in $wait(s) "
+  sleep $wait
+done
+
+echo "Failed after ${maxRetries} attempts!"
+exit 1
+

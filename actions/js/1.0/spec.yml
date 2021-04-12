@@ -1,0 +1,41 @@
+name: js
+version: "1.0"
+type: action
+category: build_management
+displayName: Node.js 工程打包
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/ba477ac1-c375-4fd4-ba23-b76966830daf.jpeg
+desc: 针对 nodejs 工程的编译打包任务，产出可运行镜像
+public: true
+supportedVersions:
+  - ">= 3.10"
+
+params:
+  - name: workdir
+    type: string
+    desc: 工程根目录
+    required: true
+  - name: dependency_cmd
+    type: string
+    desc: 依赖下载命令
+    required: false
+    default: npm ci
+  - name: build_cmd
+    type: string
+    desc: 编译 nodejs 命令
+    required: true
+  - name: container_type
+    type: string
+    desc: spa/herd
+    required: true
+  - name: dest_dir
+    type: string
+    desc: 构建结果目录(public)
+    required: true
+  - name: registry
+    type: string
+    desc: "npm 镜像地址, default: https://registry.npm.terminus.io/"
+    required: false
+
+outputs:
+  - name: image
+    desc: 镜像

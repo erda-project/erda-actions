@@ -1,0 +1,12 @@
+### job 配置项
+jobs:
+  agent:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/action-agent:3.21-20210322-891e3565d
+    labels:
+      # 必填字段
+      MD5: d4066da01687f429ce35ab692e49c1ab
+    envs:
+      # DEBUG mode, will produce more logs
+      DEBUG: false
+      # push log to collector
+      ENABLE_PUSH_LOG_TO_COLLECTOR: false

@@ -1,0 +1,10 @@
+### job 配置项
+jobs:
+  cluster-resource:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/cluster-resource:3.14
+    resources:
+      cpu: 0.2
+      mem: 200
+      disk: 1024
+    binds:
+      - ((storageMountPoint))/dice-ops/ecluster-configs:/opt/ecluster-configs

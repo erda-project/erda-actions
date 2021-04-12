@@ -1,0 +1,184 @@
+name: sonar
+version: "1.0"
+type: action
+category: test_management
+public: true
+displayName: Sonar 代码质量检测
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/21/825d9774-c095-4b4f-a729-2efd5a33509a.png
+supportedVersions:
+  - ">= 3.14"
+
+params:
+  - name: code_dir
+    required: true
+    desc: 执行代码质量分析的目录
+  - name: language
+    required: true
+    desc: 语言类型，当前版本需要用户需要明确指定。支持 java / go / js
+  - name: sonar_host_url
+    required: false
+    desc: sonar 服务器地址，用户可以手动指定。若不填写，则使用平台提供的 sonar 服务
+  - name: sonar_login
+    required: false
+    desc: 用于登录 sonar 服务器的用户名或 token。若不填写，使用平台 sonar 服务自动生成的 token
+  - name: sonar_password
+    required: false
+    desc: 用于登录 sonar 服务器的密码。若不填写，使用平台 sonar 服务自动生成的 token。特别的，当 sonar_login 为 token 而非 username 方式时，sonar_password 无需填写
+  - name: sonar_exclustions
+    requied: false
+    desc: 声明哪些文件不进行代码质量扫描。参考文档：https://docs.sonarqube.org/latest/project-administration/narrowing-the-focus/
+  - name: sonar_log_level
+    requied: false
+    desc: sonar 分析时的日志级别，级别越高，打印的日志越详细。可选值：INFO（默认值） / DEBUG / TRACE
+  - name: project_key
+    required: false
+    desc: 对应 sonar 里的 project key。一般不需要填写，系统自动生成 UUID
+  - name: delete_project
+    requied: false
+    desc: 分析完成后是否删除 sonar 里对应的项目。默认为 true
+    default: true
+  - name: use_platform_quality_gate
+    required: false
+    type: bool
+    defaule: true
+    desc: 是否加载平台的门禁
+  - name: quality_gate
+    required: false
+    desc: 自定义质量门禁
+    type: struct_array
+    struct:
+      - name: metric
+        required: true
+        desc: 质量门禁指标，可选值：
+          "new_technical_debt"
+          "blocker_violations"
+          "bugs"
+          "burned_budget"
+          "business_value"
+          "classes"
+          "code_smells"
+          "cognitive_complexity"
+          "comment_lines"
+          "comment_lines_density"
+          "comment_lines_data"
+          "class_complexity"
+          "file_complexity"
+          "function_complexity"
+          "complexity_in_classes"
+          "complexity_in_functions"
+          "branch_coverage"
+          "new_branch_coverage"
+          "conditions_to_cover"
+          "new_conditions_to_cover"
+          "confirmed_issues"
+          "coverage"
+          "new_coverage"
+          "critical_violations"
+          "complexity"
+          "last_commit_date"
+          "development_cost"
+          "new_development_cost"
+          "directories"
+          "duplicated_blocks"
+          "new_duplicated_blocks"
+          "duplicated_files"
+          "duplicated_lines"
+          "duplicated_lines_density"
+          "new_duplicated_lines_density"
+          "new_duplicated_lines"
+          "duplications_data"
+          "effort_to_reach_maintainability_rating_a"
+          "executable_lines_data"
+          "false_positive_issues"
+          "file_complexity_distribution"
+          "files"
+          "function_complexity_distribution"
+          "functions"
+          "generated_lines"
+          "generated_ncloc"
+          "info_violations"
+          "violations"
+          "line_coverage"
+          "new_line_coverage"
+          "lines"
+          "ncloc"
+          "ncloc_language_distribution"
+          "lines_to_cover"
+          "new_lines_to_cover"
+          "sqale_rating"
+          "new_maintainability_rating"
+          "major_violations"
+          "minor_violations"
+          "ncloc_data"
+          "new_blocker_violations"
+          "new_bugs"
+          "new_code_smells"
+          "new_critical_violations"
+          "new_info_violations"
+          "new_violations"
+          "new_lines"
+          "new_major_violations"
+          "new_minor_violations"
+          "new_security_hotspots"
+          "new_vulnerabilities"
+          "open_issues"
+          "quality_profiles"
+          "projects"
+          "public_api"
+          "public_documented_api_density"
+          "public_undocumented_api"
+          "quality_gate_details"
+          "alert_status"
+          "reliability_rating"
+          "new_reliability_rating"
+          "reliability_remediation_effort"
+          "new_reliability_remediation_effort"
+          "reopened_issues"
+          "security_hotspots"
+          "security_hotspots_reviewed"
+          "new_security_hotspots_reviewed"
+          "security_rating"
+          "new_security_rating"
+          "security_remediation_effort"
+          "new_security_remediation_effort"
+          "security_review_rating"
+          "new_security_review_rating"
+          "security_hotspots_reviewed_status"
+          "new_security_hotspots_reviewed_status"
+          "security_hotspots_to_review_status"
+          "new_security_hotspots_to_review_status"
+          "skipped_tests"
+          "statements"
+          "team_size"
+          "sqale_index"
+          "sqale_debt_ratio"
+          "new_sqale_debt_ratio"
+          "uncovered_conditions"
+          "new_uncovered_conditions"
+          "uncovered_lines"
+          "new_uncovered_lines"
+          "test_execution_time"
+          "test_errors"
+          "test_failures"
+          "test_success_density"
+          "tests"
+          "vulnerabilities"
+          "wont_fix_issues"
+
+      - name: op
+        requied: true
+        desc: 比较操作。可选值：GT / LT
+      - name: error
+        type: int
+        required: true
+        desc: 门槛值，超过该值即为不通过质量门禁
+accessibleAPIs:
+  - path: /api/qa/actions/sonar-results-store
+    method: POST
+    schema: http
+  - path: /api/qa/actions/get-sonar-credential
+    method: GET
+    schema: http
+  - path: /api/sonar-metric-rules/actions/query-list
+    method: GET
+    schema: http

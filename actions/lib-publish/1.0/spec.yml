@@ -1,0 +1,22 @@
+name: lib-publish
+version: "1.0"
+type: action
+category: deploy_management
+displayName: 库应用内容发布
+desc: 用于库应用发布到发布内容
+public: true
+supportedVersions:
+  - ">= 3.13"
+
+params:
+  - name: workdir
+    desc: spec.yml & README.md 文件所在目录
+accessibleAPIs:
+  # get app publishItem relation
+  - path: /api/applications/<application>/actions/get-publish-item-relations
+    method: GET
+    schema: http
+  # create publishItem version
+  - path: /api/publish-items/<publishItemId>/versions
+    method: POST
+    schema: http

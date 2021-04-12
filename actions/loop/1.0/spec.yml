@@ -1,0 +1,80 @@
+name: loop
+version: "1.0"
+type: action
+category: custom_task
+displayName: 循环操作
+desc: 循环某个操作，直至满足退出条件或超时。
+public: true
+supportedVersions:
+  - ">= 3.5"
+
+params:
+  - name: type
+    type: string
+    required: true
+    desc: |-
+      操作类型，可选：HTTP, CMD。
+      HTTP: 根据 HTTP CODE 判断成功与否。HTTP CODE=2xx 时为成功。
+      CMD: 根据命令 EXIT CODE 判断成功或失败。EXIT CODE=0 时为成功。
+
+  - name: json_response_success_field
+    type: string
+    required: false
+    desc: 使用 json 格式解析 response(HTTP Response Body 或 CMD 标准输出)，根据所需字段是否为 true 判断成功与否。例如 .success
+
+  - name: loop_max_times
+    type: int
+    required: false
+    desc: 设置循环的最大次数
+
+  - name: loop_interval
+    type: time.Duration
+    required: false
+    desc: 设置每次循环的间隔时间
+
+  - name: loop_decline_ratio
+    type: int
+    required: false
+    desc: 设置衰退延迟的比例，默认是 1
+
+  - name: loop_decline_limit
+    type: time.Duration
+    required: false
+    desc: 设置衰退延迟的最大值，默认不限制最大值
+
+  - name: http_conf
+    required: false
+    desc: >-
+      当操作类型为 HTTP 时，该参数必填，描述 HTTP 配置。
+    struct:
+      - name: host
+        type: string
+        required: true
+        desc: Host。例如：127.0.0.1:8080, https://www.baidu.com
+      - name: path
+        type: string
+        required: false
+        default: /
+        desc: Host 后的路径，与 Host 拼接在一起。例如：/ping, /status
+      - name: method
+        type: string
+        required: false
+        default: GET
+        desc: HTTP Method，目前支持 GET/POST/PUT/DELETE
+      - name: header
+        type: map
+        required: false
+        desc: HTTP Header，map[string]string 格式
+      - name: query_params
+        type: map[string]string
+        required: false
+        desc: HTTP Query String
+      - name: request_body
+        type: string
+        required: false
+        decs: HTTP Request Body String
+
+  - name: cmd
+    type: string
+    required: false
+    desc: 当操作类型为 CMD 时，该参数必填。
