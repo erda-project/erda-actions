@@ -1,0 +1,7 @@
+jobs:
+  dice-version-archive:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/dice-version-archive-action:20210414-1e5452bb
+    resource:
+      cpu: 0.5
+      disk: 1.24
+      mem: 1.24
