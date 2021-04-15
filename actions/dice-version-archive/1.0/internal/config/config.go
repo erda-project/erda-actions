@@ -1,3 +1,17 @@
+// Copyright (c) 2021 Terminus, Inc.
+//
+// This program is free software: you can use, redistribute, and/or modify
+// it under the terms of the GNU Affero General Public License, version 3
+// or later ("AGPL"), as published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+// defines configurations
 package config
 
 import (
@@ -9,11 +23,9 @@ import (
 	"github.com/erda-project/erda-actions/pkg/log"
 )
 
-// out params keys
+// metafile keys
 const (
-	Commit  = "commit"
 	MrID    = "mr_id"
-	MrUrl   = "mr_url"
 	Success = "success"
 	Err     = "err"
 	Warn    = "warn"
@@ -34,7 +46,7 @@ func init() {
 }
 
 type config struct {
-	// 基本环境参数
+	// basic envs
 	OrgID             uint64 `env:"DICE_ORG_ID" required:"true"`
 	CiOpenapiToken    string `env:"DICE_OPENAPI_TOKEN" required:"true"`
 	DiceOpenapiPrefix string `env:"DICE_OPENAPI_ADDR" required:"true"`
@@ -44,19 +56,19 @@ type config struct {
 	AppID             uint64 `env:"DICE_APPLICATION_ID" required:"true"`
 	Workspace         string `env:"DICE_WORKSPACE" required:"true"`
 
-	// 流水线配置
+	// pipeline parameters
 	PipelineDebugMode bool   `env:"PIPELINE_DEBUG_MODE"`
 	PipelineID        string `env:"PIPELINE_ID"`
 	PipelineTaskLogID string `env:"PIPELINE_TASK_LOG_ID"`
 	PipelineTaskID    string `env:"PIPELINE_TASK_ID"`
 
-	// Action 入参
+	// action parameters
 	Workdir     string               `env:"ACTION_WORKDIR"`
 	Dst         RepoInfo             `env:"ACTION_DST"`
 	MRProcessor uint64               `env:"ACTION_MR_PROCESSOR"`
 	Registry    *RegistryReplacement `env:"ACTION_REGISTRY_REPLACEMENT"`
 
-	// 其他参数
+	// other parameters
 	MetaFilename string `env:"METAFILE"`
 }
 

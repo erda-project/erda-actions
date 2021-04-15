@@ -1,6 +1,17 @@
-// gittar 相关的操作
-// commit && merge request
+// Copyright (c) 2021 Terminus, Inc.
+//
+// This program is free software: you can use, redistribute, and/or modify
+// it under the terms of the GNU Affero General Public License, version 3
+// or later ("AGPL"), as published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+// operations about gittar: create new branch, commit and merge request
 package archive
 
 import (
@@ -138,34 +149,45 @@ func (api *AccessAPI) RequestHeader() http.Header {
 	}
 }
 
-// {"name":"feature/some-release","ref":"feature/migration-cicd"}
 type CreateBranchPayload struct {
-	Name string `json:"name"` // 新分支名
-	Ref  string `json:"ref"`  // 源分支名
+	// new branch name
+	Name string `json:"name"`
+	// src branch name
+	Ref  string `json:"ref"`
 }
 
 type CreateCommitPayload struct {
-	Message string                       `json:"message"` // 提交信息
-	Branch  string                       `json:"branch"`  // 分支名
-	Actions []*CreateCommitPayloadAction `json:"actions"` // 修改行为
+	// commit message
+	Message string                       `json:"message"`
+	// branch name
+	Branch  string                       `json:"branch"`
+	// changes
+	Actions []*CreateCommitPayloadAction `json:"actions"`
 }
 
-// {"message":"Add BaseResponse","branch":"feature/some-release","actions":[{"action":"add","content":"sdfgsad","path":"BaseResponse","pathType":"blob"}]}
 type CreateCommitPayloadAction struct {
-	Action   string `json:"action"`   // add
-	Content  string `json:"content"`  // 文本内容
-	Path     string `json:"path"`     // 修改的文件的路径
-	PathType string `json:"pathType"` // blob
+	// Action is always "add"
+	Action   string `json:"action"`
+	// file's content
+	Content  string `json:"content"`
+	// file's path
+	Path     string `json:"path"`
+	// PathType is always "blob"
+	PathType string `json:"pathType"`
 }
 
-// {"title":"测试提交 mr","description":"测试提交 mr","assigneeId":"2","sourceBranch":"feature/some-release","targetBranch":"feature/migration-cicd",
-// "removeSourceBranch":true}
 type CreateMergeRequestPayload struct {
+	// mr title
 	Title              string `json:"title"`
+	// mr description
 	Description        string `json:"description"`
+	// mr processor user id
 	AssigneeID         string `json:"assigneeId"`
+	// the branch merging from
 	SourceBranch       string `json:"sourceBranch"`
+	// the branch merging to
 	TargetBranch       string `json:"targetBranch"`
+	// remove source branch after merged
 	RemoveSourceBranch bool   `json:"removeSourceBranch"`
 }
 

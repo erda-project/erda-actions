@@ -1,3 +1,16 @@
+// Copyright (c) 2021 Terminus, Inc.
+//
+// This program is free software: you can use, redistribute, and/or modify
+// it under the terms of the GNU Affero General Public License, version 3
+// or later ("AGPL"), as published by the Free Software Foundation.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+// FITNESS FOR A PARTICULAR PURPOSE.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 package main
 
 import (
@@ -16,7 +29,7 @@ import (
 func main() {
 	logrus.Infoln("Dice Version Archive start working")
 
-	// 读取 VERSION 文件
+	// read VERSION file
 	_ = metawriter.Write(config.Step, "read VERSION")
 	versionFile := filepath.Join(config.Workdir(), "VERSION")
 	version := new(archive.Version)
@@ -33,7 +46,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	// 读取 dice.yml 文件
+	// read dice.yml
 	_ = metawriter.Write(config.Step, "read dice.yml")
 	diceyaml := new(archive.DiceYaml)
 	if err := diceyaml.Read(filepath.Join(config.Workdir(), config.DiceYmlPathFromSrcRepo)); err != nil {
@@ -48,7 +61,7 @@ func main() {
 		logrus.Fatalf("failed to read dice: %v", err)
 	}
 
-	// 读取 migrations 脚本文件
+	// read migrations scripts files
 	_ = metawriter.Write(config.Step, "read migration scripts")
 	logrus.Infoln("read migration scripts")
 	scripts, err := archive.ReadScripts(config.Workdir(), config.MigrationPathFromSrcRepo)
@@ -58,7 +71,7 @@ func main() {
 		logrus.Fatalf("failed to read migration scripts: %v", err)
 	}
 
-	// 利用 gittar 句柄在目标应用仓库中创建分支、commit、merge request
+	// create new branch, commit, merge request in src repo by gittar handler
 	_ = metawriter.Write(config.Step, "archiving")
 	gittar := archive.NewGittar(
 		config.OpenapiPrefix(),
