@@ -18,7 +18,7 @@ type ele struct {
 	Value string `json:"value"`
 }
 
-// Write 是 New(filename).Write(key, value) 的快捷方式, 获取默认的 METAFILE
+// Write is the shortcut for New(filename).Write(key, value)
 func Write(key string, value interface{}) (err error) {
 	return New(os.Getenv(metafile)).Write(key, value)
 }
