@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strconv"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda-actions/actions/mysql-cli/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
+	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/httpclient"
 )
 
@@ -33,12 +35,12 @@ func Execute() error {
 	return nil
 }
 
+type results struct {
+	Rows []interface{} `json:"rows"`
+}
+
 func build(cfg conf.Conf) error {
 
-	err := simpleRunAndPrint("/bin/sh", "-c", "echo '"+cfg.Sql+"' >> /mysql-cli.sql")
-	if err != nil {
-		return err
-	}
 	mysqlAddon, err := getAddonFetchResponseData(cfg)
 	if err != nil {
 		fmt.Println(fmt.Errorf("getAddonFetchResponseData error %v", err))
@@ -61,9 +63,8 @@ func build(cfg conf.Conf) error {
 		return fmt.Errorf("not find %s", mysqlPassword)
 	}
 
-	cmd := exec.Command("mysql", "-h"+mysqlAddon.Config[mysqlHost].(string), "-P"+mysqlAddon.Config[mysqlPort].(string),
-		"-u"+mysqlAddon.Config[mysqlUsername].(string), "-p"+mysqlAddon.Config[mysqlPassword].(string), "-D"+cfg.Database,
-		"-e", "source /mysql-cli.sql")
+	cmd := exec.Command("/bin/sh", "-c", "echo '"+cfg.Sql+"' >> mysql-cli.sql && mysqlsh --json=raw --host="+mysqlAddon.Config[mysqlHost].(string)+" --password="+mysqlAddon.Config[mysqlPassword].(string)+" "+
+		"--dbuser="+mysqlAddon.Config[mysqlUsername].(string)+" --port="+mysqlAddon.Config[mysqlPort].(string)+" --database="+cfg.Database+" --file=mysql-cli.sql")
 
 	var output bytes.Buffer
 	var errors bytes.Buffer
@@ -76,19 +77,64 @@ func build(cfg conf.Conf) error {
 
 	// error 信息大于 0
 	if errors.Len() > 0 {
-		return fmt.Errorf("exec sql error: %s", errors.String())
+		split := strings.Split(errors.String(), "\n")
+		for _, v := range split {
+			if strings.Contains(v, "[Warning] Using a password on the command line interface can be insecure.") {
+				continue
+			}
+			if strings.Contains(v, "WARNING: The --dbuser option has been deprecated,") {
+				continue
+			}
+			if strings.TrimSpace(v) == "" {
+				continue
+			}
+			fmt.Println("------ sql exec failed -------")
+			return fmt.Errorf("%v", v)
+		}
 	}
 
-	split := strings.Split(output.String(), "\n")
-	for index, v := range split {
-		err = simpleRun("/bin/sh", "-c", "echo 'exec_result["+strconv.Itoa(index)+"]="+v+"'>> "+cfg.MetaFile)
+	fmt.Println("------ sql exec success -------")
+	split := strings.Split(strings.TrimSpace(output.String()), "\n")
+	v := split[len(split)-1]
+	var result results
+	err = json.Unmarshal([]byte(v), &result)
+	if err != nil {
+		fmt.Println(fmt.Errorf("unmarshal result error: %v", err))
+		printJson(v)
+		return err
+	} else {
+		rows, err := json.Marshal(result.Rows)
+		if err != nil {
+			fmt.Println(fmt.Errorf("marshal rows error: %v", err))
+			printJson(v)
+			return err
+		}
+
+		var prettyJSON bytes.Buffer
+		err = json.Indent(&prettyJSON, rows, "", "\t")
+		if err != nil {
+			fmt.Println(fmt.Errorf("format rows result error: %v", err))
+			fmt.Println(rows)
+			return err
+		}
+		fmt.Println(prettyJSON.String())
+		err = storeMetaFile(&cfg, prettyJSON.String())
 		if err != nil {
 			return err
 		}
 	}
-
-	fmt.Println(output.String())
 	return nil
+}
+
+func printJson(v string) {
+	var prettyJSON bytes.Buffer
+	err := json.Indent(&prettyJSON, []byte(v), "", "\t")
+	if err != nil {
+		fmt.Println(fmt.Errorf("format result error: %v", err))
+		fmt.Println(v)
+	} else {
+		fmt.Println("sql select json: ", prettyJSON.String())
+	}
 }
 
 func simpleRun(name string, arg ...string) error {
@@ -104,6 +150,25 @@ func simpleRunAndPrint(name string, arg ...string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+func storeMetaFile(cfg *conf.Conf, jsonValue string) error {
+	meta := apistructs.ActionCallback{
+		Metadata: apistructs.Metadata{
+			{
+				Name:  "result",
+				Value: jsonValue,
+			},
+		},
+	}
+	b, err := json.Marshal(&meta)
+	if err != nil {
+		return err
+	}
+	if err := filehelper.CreateFile(cfg.MetaFile, string(b), 0644); err != nil {
+		return errors.Wrap(err, "write file:metafile failed")
+	}
+	return nil
 }
 
 func getAddonFetchResponseData(cfg conf.Conf) (*apistructs.AddonFetchResponseData, error) {
