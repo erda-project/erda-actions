@@ -64,7 +64,7 @@ func main() {
 	// read migrations scripts files
 	_ = metawriter.Write(config.Step, "read migration scripts")
 	logrus.Infoln("read migration scripts")
-	scripts, err := archive.ReadScripts(config.Workdir(), config.MigrationPathFromSrcRepo)
+	scripts, err := archive.ReadScripts(config.Workdir(), config.MigrationsPathFromSrcRepoRoot())
 	if err != nil {
 		_ = metawriter.Write(config.Success, false)
 		_ = metawriter.Write(config.Err, err)

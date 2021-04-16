@@ -118,7 +118,7 @@ func (g Gittar) CreateMergeRequest(payload *CreateMergeRequestPayload) (mrID str
 		return "", errors.Wrap(err, "failed to Unmarshal CreateMergeRequestResponseData")
 	}
 
-	return d.ID(), nil
+	return d.MergeID(), nil
 }
 
 type AccessAPI struct {
@@ -198,11 +198,16 @@ type Response struct {
 }
 
 type CreateMergeRequestResponseData struct {
-	Id uint64 `json:"id"`
+	Id       uint64 `json:"id"`
+	MergeID_ uint64 `json:"mergeId"`
 }
 
 func (d CreateMergeRequestResponseData) ID() string {
 	return strconv.FormatUint(d.Id, 10)
+}
+
+func (d CreateMergeRequestResponseData) MergeID() string {
+	return strconv.FormatUint(d.MergeID_, 10)
 }
 
 func RequestPost(url string, payload []byte, header http.Header) ([]byte, *http.Response, error) {

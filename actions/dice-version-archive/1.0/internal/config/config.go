@@ -35,7 +35,6 @@ const (
 const (
 	DiceYmlPathFromSrcRepo             = "dice.yml"
 	DiceYmlPathFromDstRepoVersionDir   = "releases/dice/dice.yml"
-	MigrationPathFromSrcRepo           = ".dice/migrations"
 	MigrationPathFromDstRepoVersionDir = "sqls"
 )
 
@@ -63,10 +62,11 @@ type config struct {
 	PipelineTaskID    string `env:"PIPELINE_TASK_ID"`
 
 	// action parameters
-	Workdir     string               `env:"ACTION_WORKDIR"`
-	Dst         RepoInfo             `env:"ACTION_DST"`
-	MRProcessor uint64               `env:"ACTION_MR_PROCESSOR"`
-	Registry    *RegistryReplacement `env:"ACTION_REGISTRY_REPLACEMENT"`
+	Workdir                   string               `env:"ACTION_WORKDIR"`
+	MigrationsPathFromSrcRepo string               `env:"ACTION_MIGRATIONS_DIR"`
+	Dst                       RepoInfo             `env:"ACTION_DST"`
+	MRProcessor               uint64               `env:"ACTION_MR_PROCESSOR"`
+	Registry                  *RegistryReplacement `env:"ACTION_REGISTRY_REPLACEMENT"`
 
 	// other parameters
 	MetaFilename string `env:"METAFILE"`
@@ -110,6 +110,13 @@ func OpenapiPrefix() string {
 
 func Workdir() string {
 	return configuration().Workdir
+}
+
+func MigrationsPathFromSrcRepoRoot() string {
+	if p := configuration().MigrationsPathFromSrcRepo; p != "" {
+		return p
+	}
+	return ".dice/migrations"
 }
 
 func DstRepo() RepoInfo {
