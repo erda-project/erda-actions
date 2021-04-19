@@ -1,0 +1,140 @@
+# Copyright (c) 2021 Terminus, Inc.
+#
+# This program is free software: you can use, redistribute, and/or modify
+# it under the terms of the GNU Affero General Public License, version 3
+# or later ("AGPL"), as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+name: dice-version-archive
+displayName: Erda 归档
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/04/14/1a196371-6cb6-4095-9928-3595d1222e66.png
+version: 1.0
+type: action
+category: deploy_management
+desc: 从源仓库将制品快照和数据迁移脚本归档到目标（version）仓库
+public: true
+supportedVersion:
+  - ">3.21"
+
+
+params:
+  - name: workdir
+    desc: 工作目录, 一般为 ${git-checkout}, 也是也是源仓库所在目录
+    default: ${git-checkout}
+
+  - name: migrations_dir
+    desc: migrations 目录, 一般为 .dice/migraions 或 .erda/migrations
+    type: string
+    default: .dice/migrations
+    required: false
+
+  - name: dst
+    type: struct
+    desc: 目录仓库配置信息
+    required: true
+    struct:
+      - { name: repoName, type: string, default: version, desc: 目标仓库名称 }
+      - { name: branch, type: string, default: master, desc: 目标仓库的分支名称 }
+      - { name: snapName, type: string, default: dice, desc: dice.yml 快照的应用名称}
+
+  - name: registry_replacement
+    type: struct
+    desc: dice.yml 中要替换的 registry 地址
+    required: false
+    struct:
+      - { name: old, type: string, default: , desc: 要替换的原始 registry host, 为空时 action 会自动识别 registy host 并替换 }
+      - { name: new, type: string, default: , desc: 要替换的目标 registry host, 为空时不会发生替换 }
+
+  - name: mr_processor
+    type: string
+    required: true
+    desc: merge request 处理人 id
+
+outputs:
+  - name: mr_id
+  - name: success
+    type: boolean
+
+
+accessibleAPIs:
+  - path: /api/repo/<*>
+    method: POST
+    schema: http
+
+
+formProps:
+  - key: params
+    component: formGroup
+    group: params
+    componentProps:
+      title: 任务参数
+
+  - label: 工作目录
+    component: input
+    key: params.workdir
+    componentProps:
+      placeholder: ${git-checkout}
+    group: params
+    defaultValue: ${git-checkout}
+    labelTip: 工作目录, 一般为 ${git-checkout}, 也是也是源仓库所在目录
+
+  - label: 源仓库 migrations 目录
+    component: input
+    key: params.migrations_dir
+    componentProps:
+      placeholder: .dice/migraions
+    group: params
+    defaultValue: .dice/migrations
+    labelTip: 源仓库的 migrations 目录, 一般为 .dice/migraions 或 .erda/migrations
+
+  - label: 目标仓库应用名称
+    component: input
+    key: params.dst.repoName
+    group: params
+    labelTip: 目标仓库应用名称
+
+  - label: 目标仓库源分支名称
+    component: input
+    key: params.dst.branch
+    group: params
+    labelTip: 目标仓库源分支名称
+
+  - label: 快照的应用名称
+    component: input
+    key: params.dst.snapName
+    group: params
+    labelTip: 快照的应用名称
+    componentProps:
+      placeholder: 快照的应用名称, 为空时默认为本应用名称
+
+  - label: 旧的 registry host
+    component: input
+    key: params.registry_replacement.old
+    group: params
+    labelTip: 要替换的原始 registry host, 为空时 action 会自动识别 registy host 并替换
+    componentProps:
+      placeholder: 要替换的原始 registry host, 为空时 action 会自动识别 registy host 并替换
+
+  - label: 新的 registry host
+    component: input
+    key: params.registry_replacement.new
+    group: params
+    labelTip: 要替换的目标 registry host, 为空时不会发生替换
+    componentProps:
+      placeholder: 要替换的目标 registry host, 为空时不会发生替换
+
+  - label: 处理人
+    component: memberSelector
+    required: true
+    key: params.mr_processor
+    group: params
+    labelTip: 指定 MergeRequest 的处理人
+    componentProps:
+      scopeType: app
+      placeholder: 下拉指定处理 MR 的用户
