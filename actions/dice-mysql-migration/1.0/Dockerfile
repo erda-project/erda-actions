@@ -17,12 +17,20 @@ COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 # go build
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/dice-version-archive/1.0/internal/cmd/main.go
+RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/dice-mysql-migration/1.0/internal/cmd/main.go
 
-FROM centos
+RUN chmod 777 /opt/action/run
+
+FROM centos/mysql-57-centos7
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
+USER root
+
+ENV MYSQL_ROOT_PASSWORD="12345678"
+ENV MYSQL_ALLOW_EMPTY_PASSWORD yes
+
 COPY --from=builder /opt/action/run /opt/action/run
+COPY actions/dice-mysql-migration/1.0/my.cnf /etc/my.cnf
 
 RUN chmod 777 /opt/action/*

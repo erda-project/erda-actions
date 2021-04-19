@@ -12,8 +12,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 jobs:
-  dice-version-archive:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/dice-version-archive-action:20210419-112ef9f
+  dice-mysql-migration:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/dice-mysql-migration-action:20210412-42dac5fb
     resource:
       cpu: 0.5
       disk: 1.24

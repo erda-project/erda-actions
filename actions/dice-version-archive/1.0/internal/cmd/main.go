@@ -15,7 +15,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"strconv"
 
@@ -30,7 +29,6 @@ func main() {
 	logrus.Infoln("Dice Version Archive start working")
 
 	// read VERSION file
-	_ = metawriter.Write(config.Step, "read VERSION")
 	versionFile := filepath.Join(config.Workdir(), "VERSION")
 	version := new(archive.Version)
 	if err := version.Read(versionFile); err != nil {
@@ -39,15 +37,7 @@ func main() {
 		logrus.Fatalf("failed to read version file: %v", err)
 	}
 
-	if version.Major() < 4 || (version.Major() == 4 && version.Minor() == 0) {
-		logrus.Warningln("dice version is lower than 4.1, exit.")
-		_ = metawriter.Write(config.Success, true)
-		_ = metawriter.Write(config.Warn, "dice version is lower than 4.1, dice-version-archive is not applied.")
-		os.Exit(0)
-	}
-
 	// read dice.yml
-	_ = metawriter.Write(config.Step, "read dice.yml")
 	diceyaml := new(archive.DiceYaml)
 	if err := diceyaml.Read(filepath.Join(config.Workdir(), config.DiceYmlPathFromSrcRepo)); err != nil {
 		_ = metawriter.Write(config.Success, false)
@@ -62,17 +52,15 @@ func main() {
 	}
 
 	// read migrations scripts files
-	_ = metawriter.Write(config.Step, "read migration scripts")
 	logrus.Infoln("read migration scripts")
 	scripts, err := archive.ReadScripts(config.Workdir(), config.MigrationsPathFromSrcRepoRoot())
 	if err != nil {
-		_ = metawriter.Write(config.Success, false)
-		_ = metawriter.Write(config.Err, err)
-		logrus.Fatalf("failed to read migration scripts: %v", err)
+		_ = metawriter.Write(config.Warn, "failed to read migrations scripts, no script is archived")
+		logrus.Warnf("failed to read migration scripts: %v", err)
 	}
 
 	// create new branch, commit, merge request in src repo by gittar handler
-	_ = metawriter.Write(config.Step, "archiving")
+	logrus.Infoln("do archiving: create new branch, commit, merge request")
 	gittar := archive.NewGittar(
 		config.OpenapiPrefix(),
 		config.OpenapiToken(),
@@ -126,7 +114,7 @@ func main() {
 	logrus.Infoln("create merge request on dst repo")
 	createMergeRequestPayload := archive.CreateMergeRequestPayload{
 		Title: "archive dice.yml and migrations from dice/dice",
-		Description: fmt.Sprintf("[pipeline-%s](/workBench/projects/%v/apps/%v/pipeline/%s)",
+		Description: fmt.Sprintf("this merge request is created from [pipeline-%s](/workBench/projects/%v/apps/%v/pipeline/%s)",
 			config.PipelineID(), config.ProjectID(), config.ApplicationID(), config.PipelineID()),
 		AssigneeID:         config.MRProcessor(),
 		SourceBranch:       createBranchPayload.Name,
