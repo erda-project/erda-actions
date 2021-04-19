@@ -39,8 +39,9 @@ params:
     desc: 目录仓库配置信息
     required: true
     struct:
-      - { name: applicationName, type: string, default: version, desc: 目标应用名称 }
+      - { name: repoName, type: string, default: version, desc: 目标仓库名称 }
       - { name: branch, type: string, default: master, desc: 目标仓库的分支名称 }
+      - { name: snapName, type: string, default: dice, desc: dice.yml 快照的应用名称}
 
   - name: registry_replacement
     type: struct
@@ -94,7 +95,7 @@ formProps:
 
   - label: 目标仓库应用名称
     component: input
-    key: params.dst.applicationName
+    key: params.dst.repoName
     group: params
     labelTip: 目标仓库应用名称
 
@@ -103,6 +104,14 @@ formProps:
     key: params.dst.branch
     group: params
     labelTip: 目标仓库源分支名称
+
+  - label: 快照的应用名称
+    component: input
+    key: params.dst.snapName
+    group: params
+    labelTip: 快照的应用名称
+    componentProps:
+      placeholder: 快照的应用名称, 为空时默认为本应用名称
 
   - label: 旧的 registry host
     component: input

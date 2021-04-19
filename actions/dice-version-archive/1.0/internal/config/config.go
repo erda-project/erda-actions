@@ -15,6 +15,7 @@
 package config
 
 import (
+	"path/filepath"
 	"strconv"
 
 	"github.com/erda-project/erda/pkg/envconf"
@@ -34,7 +35,6 @@ const (
 
 const (
 	DiceYmlPathFromSrcRepo             = "dice.yml"
-	DiceYmlPathFromDstRepoVersionDir   = "releases/dice/dice.yml"
 	MigrationPathFromDstRepoVersionDir = "sqls"
 )
 
@@ -73,8 +73,9 @@ type config struct {
 }
 
 type RepoInfo struct {
-	ApplicationName string `json:"applicationName"`
-	Branch          string `json:"branch"`
+	RepoName string `json:"repoName"`
+	Branch   string `json:"branch"`
+	SnapName string `json:"snapName"`
 }
 
 type RegistryReplacement struct {
@@ -148,10 +149,10 @@ func ApplicationName() string {
 }
 
 func DstApplicationName() string {
-	if configuration().Dst.ApplicationName == "" {
+	if configuration().Dst.RepoName == "" {
 		return "version"
 	}
-	return configuration().Dst.ApplicationName
+	return configuration().Dst.RepoName
 }
 
 func DstRepoRefBranch() string {
@@ -168,6 +169,13 @@ func MRProcessor() string {
 
 func Replacement() *RegistryReplacement {
 	return configuration().Registry
+}
+
+func DiceYmlPathFromDstRepoVersionDir() string {
+	if configuration().Dst.SnapName == "" {
+		return filepath.Join("releases", configuration().AppName, "dice.yml")
+	}
+	return filepath.Join("releases", configuration().Dst.SnapName, "dice.yml")
 }
 
 func initLog() {

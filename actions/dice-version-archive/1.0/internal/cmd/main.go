@@ -32,22 +32,19 @@ func main() {
 	versionFile := filepath.Join(config.Workdir(), "VERSION")
 	version := new(archive.Version)
 	if err := version.Read(versionFile); err != nil {
-		_ = metawriter.Write(config.Success, false)
-		_ = metawriter.Write(config.Err, err)
+		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalf("failed to read version file: %v", err)
 	}
 
 	// read dice.yml
 	diceyaml := new(archive.DiceYaml)
 	if err := diceyaml.Read(filepath.Join(config.Workdir(), config.DiceYmlPathFromSrcRepo)); err != nil {
-		_ = metawriter.Write(config.Success, false)
-		_ = metawriter.Write(config.Err, err)
+		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalf("failed to read dice.yml: %v", err)
 	}
 	deployableContent, err := diceyaml.Deployable()
 	if err != nil {
-		_ = metawriter.Write(config.Success, false)
-		_ = metawriter.Write(config.Err, err)
+		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalf("failed to read dice: %v", err)
 	}
 
@@ -55,7 +52,7 @@ func main() {
 	logrus.Infoln("read migration scripts")
 	scripts, err := archive.ReadScripts(config.Workdir(), config.MigrationsPathFromSrcRepoRoot())
 	if err != nil {
-		_ = metawriter.Write(config.Warn, "failed to read migrations scripts, no script is archived")
+		_ = metawriter.Write(map[string]interface{}{config.Warn: "failed to read migrations scripts, no script is archived"})
 		logrus.Warnf("failed to read migration scripts: %v", err)
 	}
 
@@ -75,8 +72,7 @@ func main() {
 	}
 	logrus.Infof("create branch %s refered from master on dst repo", createBranchPayload.Name)
 	if err = gittar.CreateBranch(&createBranchPayload); err != nil {
-		_ = metawriter.Write(config.Success, false)
-		_ = metawriter.Write(config.Err, err)
+		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalf("failed to CreateBranch on DstReop: %v", err)
 	}
 
@@ -87,7 +83,7 @@ func main() {
 		Actions: []*archive.CreateCommitPayloadAction{{
 			Action:   archive.ActionAdd,
 			Content:  deployableContent,
-			Path:     filepath.Join(version.String(), config.DiceYmlPathFromDstRepoVersionDir),
+			Path:     filepath.Join(version.String(), "releases", config.DiceYmlPathFromDstRepoVersionDir()),
 			PathType: archive.PathTypeBlob,
 		}, {
 			Action:   archive.ActionAdd,
@@ -106,8 +102,7 @@ func main() {
 		createCommitPayload.Actions = append(createCommitPayload.Actions, &action)
 	}
 	if err = gittar.CreateCommit(&createCommitPayload); err != nil {
-		_ = metawriter.Write(config.Success, false)
-		_ = metawriter.Write(config.Err, err)
+		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalf("failed to CreateCommit on DesRepo: %v", err)
 	}
 
@@ -123,13 +118,10 @@ func main() {
 	}
 	id, err := gittar.CreateMergeRequest(&createMergeRequestPayload)
 	if err != nil {
-		_ = metawriter.Write(config.Success, false)
-		_ = metawriter.Write(config.Err, err)
+		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalf("failed to CreateMergeRequest on DesRepo: %v", err)
 	}
 
-	_ = metawriter.Write(config.Success, true)
-	_ = metawriter.Write(config.MrID, id)
-
+	_ = metawriter.Write(map[string]interface{}{config.Success: true, config.MrID: id})
 	logrus.Infoln("archive complete.")
 }

@@ -19,8 +19,8 @@ type ele struct {
 }
 
 // Write is the shortcut for New(filename).Write(key, value)
-func Write(key string, value interface{}) (err error) {
-	return New(os.Getenv(metafile)).Write(key, value)
+func Write(m map[string]interface{}) (err error) {
+	return New(os.Getenv(metafile)).Write(m)
 }
 
 type Writer struct {
@@ -31,8 +31,12 @@ func New(filename string) *Writer {
 	return &Writer{filename: filename}
 }
 
-func (w Writer) Write(key string, value interface{}) error {
-	data, err := json.Marshal(meta{Metadata: []ele{{Name: key, Value: fmt.Sprintf("%v", value)}}})
+func (w Writer) Write(m map[string]interface{}) error {
+	var mt meta
+	for k, v := range m {
+		mt.Metadata = append(mt.Metadata, ele{k, fmt.Sprintf("%v", v)})
+	}
+	data, err := json.Marshal(mt)
 	if err != nil {
 		return err
 	}
