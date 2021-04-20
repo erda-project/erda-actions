@@ -1,0 +1,9 @@
+### job 配置项
+jobs:
+  assert:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/assert-action:20210420-5eec497
+    envs:
+      BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
+    resources:
+      cpu: 0.1
+      mem: 200

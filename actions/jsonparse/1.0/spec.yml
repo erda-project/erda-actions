@@ -1,0 +1,28 @@
+name: jsonparse
+version: '1.0'
+type: action
+category: custom_task
+displayName: json 解析
+desc: 对 json 解析值然后返回出参
+public: true
+supportedVersions:
+  - ">= 3.21"
+labels:
+  configsheet: true
+
+params:
+  - name: out_params
+    required: false
+    desc: 出参
+    type: struct_array
+    struct:
+      - name: key
+        required: true
+        desc: 出参名
+      - name: expression
+        required: true
+        desc: 支持 linux jq 表达式 以 . 开头，支持 jackson 以 $. 开头
+  - name: data
+    required: true
+    desc: json 数据
+

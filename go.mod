@@ -40,14 +40,14 @@ require (
 	github.com/caarlos0/env v3.3.1-0.20180521112546-3e0f30cbf50b+incompatible
 	github.com/cespare/trie v0.0.0-20150610204604-3fe1a95cbba9 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
-	github.com/erda-project/erda v0.0.0-20210412090314-c9fea1ece9d1
+	github.com/erda-project/erda v0.0.0-20210422115807-80e1dcb22cfa
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/labstack/gommon v0.3.0
 	github.com/machinebox/progress v0.2.0
 	github.com/matryer/is v1.4.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/otiai10/copy v1.5.0
-	github.com/parnurzeal/gorequest v0.2.16-0.20171015110455-8e3aed27fe49
+	github.com/parnurzeal/gorequest v0.2.16
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.12.1-0.20201118115123-7230c61342c8
 	github.com/robertkrimen/terst v0.0.0-20140908162406-4b1c60b7cc23
@@ -58,7 +58,7 @@ require (
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2
 	github.com/toqueteos/trie v0.0.0-20150530104557-56fed4a05683 // indirect
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
-	golang.org/x/net v0.0.0-20210226101413-39120d07d75e
+	golang.org/x/net v0.0.0-20210316092652-d523dce5a7f4
 	gopkg.in/src-d/enry.v1 v1.6.4
 	gopkg.in/stretchr/testify.v1 v1.2.2
 	gopkg.in/toqueteos/substring.v1 v1.0.2 // indirect

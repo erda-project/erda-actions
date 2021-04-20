@@ -9,6 +9,7 @@ supportedVersions:
   - ">= 3.5"
 labels:
   autotest: true
+  configsheet: true
 
 params:
   - name: command
