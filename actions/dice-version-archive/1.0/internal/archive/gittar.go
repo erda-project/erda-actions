@@ -15,15 +15,9 @@
 package archive
 
 import (
-	"bytes"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"net/http"
 	"strconv"
-	"strings"
 
-	"github.com/erda-project/erda/pkg/customhttp"
 	"github.com/pkg/errors"
 )
 
@@ -36,16 +30,8 @@ type Gittar struct {
 	uri *AccessAPI
 }
 
-func NewGittar(host, token, org, projectName, applicationName string) *Gittar {
-	return &Gittar{
-		uri: &AccessAPI{
-			host:            host,
-			token:           token,
-			org:             org,
-			projectName:     projectName,
-			applicationName: applicationName,
-		},
-	}
+func NewGittar(api *AccessAPI) *Gittar {
+	return &Gittar{uri: api}
 }
 
 func (g Gittar) URI() *AccessAPI {
@@ -121,74 +107,46 @@ func (g Gittar) CreateMergeRequest(payload *CreateMergeRequestPayload) (mrID str
 	return d.MergeID(), nil
 }
 
-type AccessAPI struct {
-	host            string
-	token           string
-	org             string
-	projectName     string
-	applicationName string
-}
-
-func (api *AccessAPI) CreateBranchURL() string {
-	return api.host + fmt.Sprintf("/api/repo/%s/%s/branches", api.projectName, api.applicationName)
-}
-
-func (api *AccessAPI) CreateCommitURL() string {
-	return api.host + fmt.Sprintf("/api/repo/%s/%s/commits", api.projectName, api.applicationName)
-}
-
-func (api *AccessAPI) CreateMergeRequestURL() string {
-	return api.host + fmt.Sprintf("/api/repo/%s/%s/merge-requests", api.projectName, api.applicationName)
-}
-
-func (api *AccessAPI) RequestHeader() http.Header {
-	return map[string][]string{
-		"authorization": {api.token},
-		"org-id":        {api.org},
-		"content-type":  {"application/json"},
-	}
-}
-
 type CreateBranchPayload struct {
 	// new branch name
 	Name string `json:"name"`
 	// src branch name
-	Ref  string `json:"ref"`
+	Ref string `json:"ref"`
 }
 
 type CreateCommitPayload struct {
 	// commit message
-	Message string                       `json:"message"`
+	Message string `json:"message"`
 	// branch name
-	Branch  string                       `json:"branch"`
+	Branch string `json:"branch"`
 	// changes
 	Actions []*CreateCommitPayloadAction `json:"actions"`
 }
 
 type CreateCommitPayloadAction struct {
 	// Action is always "add"
-	Action   string `json:"action"`
+	Action string `json:"action"`
 	// file's content
-	Content  string `json:"content"`
+	Content string `json:"content"`
 	// file's path
-	Path     string `json:"path"`
+	Path string `json:"path"`
 	// PathType is always "blob"
 	PathType string `json:"pathType"`
 }
 
 type CreateMergeRequestPayload struct {
 	// mr title
-	Title              string `json:"title"`
+	Title string `json:"title"`
 	// mr description
-	Description        string `json:"description"`
+	Description string `json:"description"`
 	// mr processor user id
-	AssigneeID         string `json:"assigneeId"`
+	AssigneeID string `json:"assigneeId"`
 	// the branch merging from
-	SourceBranch       string `json:"sourceBranch"`
+	SourceBranch string `json:"sourceBranch"`
 	// the branch merging to
-	TargetBranch       string `json:"targetBranch"`
+	TargetBranch string `json:"targetBranch"`
 	// remove source branch after merged
-	RemoveSourceBranch bool   `json:"removeSourceBranch"`
+	RemoveSourceBranch bool `json:"removeSourceBranch"`
 }
 
 type Response struct {
@@ -208,33 +166,4 @@ func (d CreateMergeRequestResponseData) ID() string {
 
 func (d CreateMergeRequestResponseData) MergeID() string {
 	return strconv.FormatUint(d.MergeID_, 10)
-}
-
-func RequestPost(url string, payload []byte, header http.Header) ([]byte, *http.Response, error) {
-	if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
-		url = "http://" + url
-	}
-
-	request, err := customhttp.NewRequest(http.MethodPost, url, bytes.NewReader(payload))
-	if err != nil {
-		return nil, nil, errors.WithStack(err)
-	}
-	for k, values := range header {
-		for _, v := range values {
-			request.Header.Add(k, v)
-		}
-	}
-
-	response, err := http.DefaultClient.Do(request)
-	if err != nil {
-		return nil, nil, err
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return body, response, nil
 }

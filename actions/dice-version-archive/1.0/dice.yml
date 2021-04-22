@@ -13,7 +13,7 @@
 
 jobs:
   dice-version-archive:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/dice-version-archive-action:20210419-b219b11
+    image: registry.cn-hangzhou.aliyuncs.com/dice/dice-version-archive-action:20210422-a3e030b
     resource:
       cpu: 0.5
       disk: 1.24

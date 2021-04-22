@@ -67,6 +67,7 @@ type config struct {
 	Dst                       RepoInfo             `env:"ACTION_DST"`
 	MRProcessor               uint64               `env:"ACTION_MR_PROCESSOR"`
 	Registry                  *RegistryReplacement `env:"ACTION_REGISTRY_REPLACEMENT"`
+	ReleaseID                 string               `env:"ACTION_RELEASEID"`
 
 	// other parameters
 	MetaFilename string `env:"METAFILE"`
@@ -89,6 +90,9 @@ func configuration() *config {
 		if err := envconf.Load(c); err != nil {
 			logrus.Fatalf("failed to load configuration, err: %v", err)
 		}
+		if c.Dst.SnapName == "" {
+			c.Dst.SnapName = c.AppName
+		}
 		if c.Dst.Branch == "" {
 			c.Dst.Branch = "master"
 		}
@@ -97,7 +101,7 @@ func configuration() *config {
 	return c
 }
 
-func OrdID() uint64 {
+func OrgID() uint64 {
 	return configuration().OrgID
 }
 
@@ -118,14 +122,6 @@ func MigrationsPathFromSrcRepoRoot() string {
 		return p
 	}
 	return ".dice/migrations"
-}
-
-func DstRepo() RepoInfo {
-	return configuration().Dst
-}
-
-func Metafile() string {
-	return configuration().MetaFilename
 }
 
 func PipelineID() string {
@@ -171,11 +167,16 @@ func Replacement() *RegistryReplacement {
 	return configuration().Registry
 }
 
+// DiceYmlPathFromDstRepoVersionDir e.g. releases/erda/dice.yml, "erda" in the path defaults current application name
 func DiceYmlPathFromDstRepoVersionDir() string {
 	if configuration().Dst.SnapName == "" {
 		return filepath.Join("releases", configuration().AppName, "dice.yml")
 	}
 	return filepath.Join("releases", configuration().Dst.SnapName, "dice.yml")
+}
+
+func ReleaseID() string {
+	return configuration().ReleaseID
 }
 
 func initLog() {
