@@ -17,7 +17,11 @@ logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/04/14/1
 version: 1.0
 type: action
 category: deploy_management
-desc: 从源仓库将制品快照和数据迁移脚本归档到目标（version）仓库
+desc: >-
+  从源仓库将制品快照和数据迁移脚本归档到目标（version）仓库。源仓库一般就是当前仓库。
+  当前仓库的 <.dice|.erda>/migrations 归档到目标仓库的 <version>/sqls 。
+  应用打包发布的制品归档到目标仓库的 <version>/releases/<snapName>/dice.yml 。
+
 public: true
 supportedVersion:
   - ">3.21"
@@ -25,23 +29,29 @@ supportedVersion:
 
 params:
   - name: workdir
-    desc: 工作目录, 一般为 ${git-checkout}, 也是也是源仓库所在目录
+    desc: 工作目录, 默认为 ${git-checkout} , 也即源仓库所在目录。action 从仓库中读取 VERSION 文件、migrations 脚本等。
     default: ${git-checkout}
 
   - name: migrations_dir
-    desc: migrations 目录, 一般为 .dice/migraions 或 .erda/migrations
+    desc: migrations 脚本所在目录, 默认为 .dice/migraions，也可以设置为其他目录，如 .erda/migrations 。
     type: string
     default: .dice/migrations
     required: false
+
+  - name: releaseID
+    desc: 应用打包发布制品的 releaseID, 默认为 ${release:OUTPUT:realeseID}
+    type: string
+    default: ${release:OUTPUT:realeseID}
+    required: true
 
   - name: dst
     type: struct
     desc: 目录仓库配置信息
     required: true
     struct:
-      - { name: repoName, type: string, default: version, desc: 目标仓库名称 }
-      - { name: branch, type: string, default: master, desc: 目标仓库的分支名称 }
-      - { name: snapName, type: string, default: dice, desc: dice.yml 快照的应用名称}
+      - { name: repoName, type: string, default: version, desc: 目标仓库名称，默认为 version。注意目标仓库应当是本项目下的。 }
+      - { name: branch, type: string, default: master, desc: 目标仓库的 base 分支名称，默认为 master。此 action 从该分支切出新分支，修改后又向该分支提交 MR 。 }
+      - { name: snapName, type: string, default: , desc: 制品快照（dice.yml）归档时的父目录名称。为空时为当前仓库名称。如 erda 仓库归档后制品快照文件路径为 <version>/releases/<snapName>/dice.yml }
 
   - name: registry_replacement
     type: struct
@@ -67,6 +77,10 @@ accessibleAPIs:
     method: POST
     schema: http
 
+  - path: /api/releases/<releaseId>/actions/get-dice
+    method: GET
+    schema: http
+
 
 formProps:
   - key: params
@@ -82,7 +96,7 @@ formProps:
       placeholder: ${git-checkout}
     group: params
     defaultValue: ${git-checkout}
-    labelTip: 工作目录, 一般为 ${git-checkout}, 也是也是源仓库所在目录
+    labelTip: 工作目录, 默认为 ${git-checkout} , 也即源仓库所在目录。action 从仓库中读取 VERSION 文件、migrations 脚本等。
 
   - label: 源仓库 migrations 目录
     component: input
@@ -91,27 +105,38 @@ formProps:
       placeholder: .dice/migraions
     group: params
     defaultValue: .dice/migrations
-    labelTip: 源仓库的 migrations 目录, 一般为 .dice/migraions 或 .erda/migrations
+    labelTip: migrations 脚本所在目录, 默认为 .dice/migraions，也可以设置为其他目录，如 .erda/migrations 。
 
-  - label: 目标仓库应用名称
+  - label: 应用打包发布制品的 releaseID
+    component: input
+    key: params.releaseID
+    componentProps:
+      placeholder: ${release:OUTPUT:realeseID}
+    group: params
+    defaultValue: ${release:OUTPUT:realeseID}
+    labelTip: 应用打包发布制品的 releaseID, 默认为 ${release:OUTPUT:realeseID}
+
+  - label: 目标仓库名称
     component: input
     key: params.dst.repoName
     group: params
-    labelTip: 目标仓库应用名称
+    labelTip: 目标仓库名称，默认为 version。注意目标仓库应当是本项目下的。
+    defaultValue: version
 
-  - label: 目标仓库源分支名称
+  - label: 目标仓库的 base 分支名称
     component: input
     key: params.dst.branch
     group: params
-    labelTip: 目标仓库源分支名称
+    labelTip: 目标仓库的 base 分支名称，默认为 master。此 action 从该分支切出新分支，修改后又向该分支提交 MR 。
+    defaultValue: master
 
-  - label: 快照的应用名称
+  - label: 制品快照（dice.yml）归档时的父目录名称
     component: input
     key: params.dst.snapName
     group: params
-    labelTip: 快照的应用名称
+    labelTip: 制品快照（dice.yml）归档时的父目录名称。为空时为当前仓库名称。如 erda 仓库归档后制品快照文件路径为 <version>/releases/<snapName>/dice.yml
     componentProps:
-      placeholder: 快照的应用名称, 为空时默认为本应用名称
+      placeholder: 为空时默认为当前仓库名称
 
   - label: 旧的 registry host
     component: input
@@ -129,7 +154,7 @@ formProps:
     componentProps:
       placeholder: 要替换的目标 registry host, 为空时不会发生替换
 
-  - label: 处理人
+  - label: MR 处理人
     component: memberSelector
     required: true
     key: params.mr_processor

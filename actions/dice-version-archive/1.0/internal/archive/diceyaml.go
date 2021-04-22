@@ -15,10 +15,10 @@
 package archive
 
 import (
-	"io/ioutil"
 	"strings"
 
 	"github.com/erda-project/erda/pkg/parser/diceyml"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 
@@ -29,11 +29,16 @@ type DiceYaml struct {
 	text []byte
 }
 
-func (y *DiceYaml) Read(filename string) error {
-	data, err := ioutil.ReadFile(filename)
+func (y *DiceYaml) ReadFromDiceHub(api *AccessAPI) error {
+	if api == nil {
+		return errors.New("AccessAPI is nil")
+	}
+
+	data, _, err := RequestGet(api.GetDiceURL(), api.RequestHeader())
 	if err != nil {
 		return err
 	}
+
 	y.text = data
 	return nil
 }
