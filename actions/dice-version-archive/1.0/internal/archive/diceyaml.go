@@ -34,7 +34,9 @@ func (y *DiceYaml) ReadFromDiceHub(api *AccessAPI) error {
 		return errors.New("AccessAPI is nil")
 	}
 
-	data, _, err := RequestGet(api.GetDiceURL(), api.RequestHeader())
+	header := api.RequestHeader()
+	header.Add("Accept", "application/x-yaml")
+	data, _, err := RequestGet(api.GetDiceURL(), header)
 	if err != nil {
 		return err
 	}
@@ -46,7 +48,7 @@ func (y *DiceYaml) ReadFromDiceHub(api *AccessAPI) error {
 func (y *DiceYaml) Deployable() (string, error) {
 	deployable, err := diceyml.NewDeployable(y.text, diceyml.WS_PROD, false)
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "failed to NewDeployable")
 	}
 	return replaceRegistry(deployable)
 }

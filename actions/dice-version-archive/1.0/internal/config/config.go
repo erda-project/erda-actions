@@ -88,7 +88,7 @@ func configuration() *config {
 	if c == nil {
 		c = new(config)
 		if err := envconf.Load(c); err != nil {
-			logrus.Fatalf("failed to load configuration, err: %v", err)
+			logrus.Errorf("failed to load configuration, err: %v", err)
 		}
 		if c.Dst.SnapName == "" {
 			c.Dst.SnapName = c.AppName
