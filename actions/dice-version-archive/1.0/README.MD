@@ -11,7 +11,7 @@
  
  You should have received a copy of the GNU Affero General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
--->:
+-->
 
 ### Dice Version Archive
 将 dice/dice 仓库下的 released dice.yml 和 migrations 打包迁移到 dice/version 仓库下。
