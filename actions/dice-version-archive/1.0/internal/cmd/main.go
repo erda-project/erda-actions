@@ -36,9 +36,18 @@ func main() {
 		logrus.Fatalf("failed to read version file: %v", err)
 	}
 
+	api := archive.NewAccessAPI(
+		config.OpenapiPrefix(),
+		config.OpenapiToken(),
+		strconv.FormatUint(config.OrgID(), 10),
+		config.ProjectName(),
+		config.DstApplicationName(),
+		config.ReleaseID(),
+	)
+
 	// read dice.yml
 	diceyaml := new(archive.DiceYaml)
-	if err := diceyaml.Read(filepath.Join(config.Workdir(), config.DiceYmlPathFromSrcRepo)); err != nil {
+	if err := diceyaml.ReadFromDiceHub(api); err != nil {
 		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalf("failed to read dice.yml: %v", err)
 	}
@@ -58,13 +67,7 @@ func main() {
 
 	// create new branch, commit, merge request in src repo by gittar handler
 	logrus.Infoln("do archiving: create new branch, commit, merge request")
-	gittar := archive.NewGittar(
-		config.OpenapiPrefix(),
-		config.OpenapiToken(),
-		strconv.FormatUint(config.OrdID(), 10),
-		config.ProjectName(),
-		config.DstApplicationName(),
-	)
+	gittar := archive.NewGittar(api)
 
 	createBranchPayload := archive.CreateBranchPayload{
 		Name: config.DstRepoBranch(),
