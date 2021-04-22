@@ -87,7 +87,7 @@ func main() {
 		Actions: []*archive.CreateCommitPayloadAction{{
 			Action:   archive.ActionAdd,
 			Content:  deployableContent,
-			Path:     filepath.Join(version.String(), "releases", config.DiceYmlPathFromDstRepoVersionDir()),
+			Path:     filepath.Join(version.String(), config.DiceYmlPathFromDstRepoVersionDir()),
 			PathType: archive.PathTypeBlob,
 		}, {
 			Action:   archive.ActionAdd,
