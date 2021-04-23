@@ -55,9 +55,4 @@ if [ -f /opt/spot/spot-agent/spot-profiler.jar ]; then
     export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent/spot-profiler.jar"
 fi
 
-# spot java profiler
-if [ -f /cnooc/dice_files/ArmsAgent/arms-bootstrap-1.7.0-SNAPSHOT.jar ]; then
-    export JAVA_OPTS="$JAVA_OPTS -javaagent:/cnooc/dice_files/ArmsAgent/arms-bootstrap-1.7.0-SNAPSHOT.jar  -Darms.licenseKey=$LICENSE_KEY -Darms.appName=$DICE_CLUSTER_NAME-$DICE_APPLICATION_NAME-$DICE_SERVICE_NAME"
-fi
-
 $JAVA_HOME/bin/java -Dedas.dubbo.subscribe.time=1000 $JAVA_OPTS -jar $CATALINA_OPTS -Djava.security.egd=file:/dev/./urandom -Dalicloud.deployment.mode=EDAS_MANAGED -Dcatalina.logs=$CATALINA_HOME/logs -Dpandora.location=$CATALINA_HOME/deploy/taobao-hsf.sar   "/home/admin/app/${APP_DIR}/app.jar"  --spring.profiles.active=$SPRING_PROFILES_ACTIVE  --server.context-path=/  --server.tomcat.uri-encoding=UTF-8 --server.tomcat.max-threads=400

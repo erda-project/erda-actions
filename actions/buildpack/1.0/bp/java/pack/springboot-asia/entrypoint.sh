@@ -49,10 +49,5 @@ if [ -f /opt/spot/spot-agent/spot-profiler.jar ]; then
     export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent/spot-profiler.jar"
 fi
 
-# spot java profiler
-if [ -f /asia/dice_files/ArmsAgent/arms-bootstrap-1.7.0-SNAPSHOT.jar ]; then
-    export JAVA_OPTS="$JAVA_OPTS -javaagent:/asia/dice_files/ArmsAgent/arms-bootstrap-1.7.0-SNAPSHOT.jar  -Darms.licenseKey=$LICENSE_KEY -Darms.appName=$DICE_CLUSTER_NAME-$DICE_WORKSPACE-$DICE_APPLICATION_NAME-$DICE_SERVICE_NAME"
-fi
-
 exec java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar \
 /app/${APP_DIR}/app.jar --spring.profiles.active=${SPRING_PROFILES_ACTIVE}
