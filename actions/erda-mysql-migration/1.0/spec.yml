@@ -1,0 +1,162 @@
+# Copyright (c) 2021 Terminus, Inc.
+#
+# This program is free software: you can use, redistribute, and/or modify
+# it under the terms of the GNU Affero General Public License, version 3
+# or later ("AGPL"), as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+name: erda-mysql-migration
+displayName: Erda MySQL 数据迁移
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/03/31/5ad6b5a6-23a7-4b3b-9b43-ef8e896e687d.png
+version: "1.0"
+type: action
+category: deploy_management
+desc: Erda MySQL Migration 工具
+public: true
+supportedVersion:
+  - ">4.0"
+
+params:
+  - name: workdir
+    desc: 工作目录, 如 ${git-checkout}
+    default: ${git-checkout}
+  - name: migrationDir
+    type: string
+    desc: 脚本存放目录
+    default: .dice/migrations
+  - name: database
+    default: dice
+    required: true
+  - name: needMySQLLint
+    type: boolean
+    desc: true 表示要进行 Erda MySQL 规约检查. 注意标明 "MIGRATION_BASE" 的脚本总是不会被检查.
+    default: true
+  - name: modules
+    type: string_array
+    desc: 要进行数据迁移的模块, 为空时对 migrationDir 目录下的所有模块进行数据迁移
+    required: false
+
+  - name: linters
+    type: struct
+    desc: Erda MySQL 规约配置. 一般情况下按默认配置即可.
+    struct:
+      - { name: boolean_field_linter, type: boolean, default: true, desc: 表达是否概念的字段，必须使用boolean、bool、tinyint(1) 、bit 类型。命名方式应当为系表结构如：is_deleted, is_public，符合表达习惯。}
+      - { name: charset_linter, type: boolean, default: true, desc: 建表时应当显式的设定 UTF8MB4 编码。}
+      - { name: column_name_linter, type: boolean, default: true, desc: 字段名必须使用小写字母、数字、下划线组成，禁止数字开头，禁止两个下划线中间只出现数字。}
+      - { name: column_comment_linter, type: boolean, default: true, desc: 所有字段必须有 COMMENT}
+      - { name: float_double_linter, type: boolean, default: true, desc: 小数类型为 DECIMAL，禁止 FLOAT、DOUBLE}
+      - { name: foreign_key_linter, type: boolean, default: true, desc: 不得使用外键与级联，一切外键概念必须在应用层解决。}
+      - { name: index_length_linter, type: boolean, default: true, desc: 单列索引长度不能超过 767 bytes，联合索引长度不能超过 3072 bytes}
+      - { name: index_name_linter, type: boolean, default: true, desc: 唯一索引名为 uk_字段名 , 普通索引名为 idx_字段名。}
+      - { name: keywords_linter, type: boolean, default: true, desc: 禁止使用 MySQL 保留字作为表名键名。}
+      - { name: id_exists_linter, type: boolean, default: true, desc: 建表时必须有 id 字段。}
+      - { name: id_type_linter, type: boolean, default: true, desc: id 字段的类型必须是 bigint，char， varchar 类型。}
+      - { name: id_is_primary_linter, type: boolean, default: true, desc: id 必须是主键，主键必须是 id。}
+      - { name: created_at_exists_linter, type: boolean, default: true, desc: 建表时必须有 created_at 字段。}
+      - { name: created_at_type_linter, type: boolean, default: true, desc: created_at 的类型必须是 DATETIME}
+      - { name: created_at_default_value_linter, type: boolean, default: true, desc: created_at 必须跟踪记录的创建时间。}
+      - { name: updated_at_exists_linter, type: boolean, default: true, desc: 建表时必须有 updated_at 字段。}
+      - { name: updated_at_type_linter, type: boolean, default: true, desc: updated_at 必须是 DATETIME 类型。}
+      - { name: updated_at_default_value_linter, type: boolean, default: true, desc: updated_at 必须跟踪记录的创建时间。}
+      - { name: updated_at_on_update_linter, type: boolean, default: true, desc: updated_at 必须跟踪记录的更新时间。}
+      - { name: not_null_linter, type: boolean, default: true, desc: 建表时所有字段都必须声明为 NOT NULL}
+      - { name: table_comment_linter, type: boolean, default: true, desc: 建表时必须有表 COMMENT}
+      - { name: table_name_linter, type: boolean, default: true, desc: 表名名必须使用小写字母、数字、下划线组成，禁止数字开头，禁止两个下划线中间只出现数字。}
+      - { name: varchar_length_linter, type: boolean, default: true, desc: VARCHAR 类型长度不得超过 5000}
+
+      - { name: create_database_stmt, type: boolean, default: false, desc: 允许此类型 SQL }
+      - { name: alter_database_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: drop_database_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: create_table_stmt, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: drop_table_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: drop_sequence_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: rename_table_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: create_view_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: create_sequence_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: create_index_stmt, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: drop_index_stmt, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: lock_tables_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: unlock_tables_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: cleanup_table_lock_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: repair_table_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: truncate_table_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: recover_table_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: flash_back_table_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_option, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: alter_table_add_columns, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: alter_table_add_constraint, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: alter_table_drop_column, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_drop_primary_key, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_drop_index, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: alter_table_drop_foreign_key, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_modify_column, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: alter_table_change_column, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: alter_table_rename_column, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_rename_table, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_alter_column, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: alter_table_lock, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_algorithm, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_rename_index, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: alter_table_force, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_add_partitions, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_coalesce_partitions, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_drop_partition, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_truncate_partition, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_partition, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_enable_keys, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_disable_keys, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_remove_partitioning, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_with_validation, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_without_validation, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_secondary_load, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_secondary_unload, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_rebuild_partition, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_reorganize_partition, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_check_partitions, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_exchange_partition, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_optimize_partition, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_repair_partition, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_import_partition_tablespace, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_discard_partition_tablespace, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_alter_check, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_drop_check, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_import_tablespace, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_discard_tablespace, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_index_invisible, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_order_by_columns, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: alter_table_set_ti_flash_replica, type: boolean, default: false, desc:允许此类型 SQL }
+
+      - { name: select_stmt, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: union_stmt, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: load_data_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: insert_stmt, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: delete_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: update_stmt, type: boolean, default: true, desc:允许此类型 SQL }
+      - { name: show_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+      - { name: split_region_stmt, type: boolean, default: false, desc:允许此类型 SQL }
+
+
+outputs:
+  - name: success
+    type: boolean
+    desc: 是否成功
+  - name: err
+    type: string
+    desc: 错误信息
+
+accessibleAPIs:
+  - path: /api/addons/<addonId>
+    method: GET
+    schema: http
+  - path: /api/addons
+    method: GET
+    schema: http
+  - path: /api/addons/<addonID>/actions/references
+    method: GET
+    schema: http
