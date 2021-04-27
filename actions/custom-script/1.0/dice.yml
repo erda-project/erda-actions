@@ -1,8 +1,8 @@
 ### job 配置项
 jobs:
   custom-script:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/custom-script-action:20200804-318bdf9
+    image: registry.cn-hangzhou.aliyuncs.com/dice/custom-script-action:20210419-f4b21a2
     resources:
-      cpu: 0.9
-      mem: 2048
+      cpu: 0.1
+      mem: 1024
       disk: 1024
