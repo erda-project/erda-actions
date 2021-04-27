@@ -7,9 +7,11 @@ ARG MAVEN_OPTS
 ARG MAVEN_EXTRA_ARGS
 
 COPY --from=cache-image /root/.m2 /root/.m2
+RUN true
 COPY /bp/build/maven-settings.xml /root/.m2/settings.xml
 
 # compile
+RUN true
 COPY /code /code
 
 WORKDIR /code
