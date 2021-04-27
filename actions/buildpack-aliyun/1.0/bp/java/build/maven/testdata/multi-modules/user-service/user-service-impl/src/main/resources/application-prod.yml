@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    include: actuator
+  application:
+    name: user-service
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:pampas-showcase}?useUnicode=true&characterEncoding=UTF8
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:anywhere}
+
+rpc:
+  mode: true
+  dubbo:
+    module: user-service
+    registryAddress: ${ZOOKEEPER_HOST:localhost}:${ZOOKEEPER_PORT:2181}
+    port: 20880

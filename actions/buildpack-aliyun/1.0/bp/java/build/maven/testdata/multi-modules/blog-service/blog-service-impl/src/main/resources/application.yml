@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    include: actuator
+  application:
+    name: blog-service
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:test}?useUnicode=true&characterEncoding=UTF8
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:anywhere}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    ddl-auto: none
+
+rpc:
+  mode: true
+  dubbo:
+    module: blog-service
+    registryAddress: ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT}
+    port: 20880

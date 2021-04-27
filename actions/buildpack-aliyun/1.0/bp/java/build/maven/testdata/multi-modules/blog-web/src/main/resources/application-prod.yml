@@ -1,0 +1,15 @@
+server:
+  port: ${PAMPAS_WEB_PORT:12300}
+
+spring:
+  profiles:
+    include: actuator
+  application:
+    name: showcase-service
+
+rpc:
+  mode: true
+  dubbo:
+    module: showcase-service
+    registryAddress: ${ZOOKEEPER_HOST}:${ZOOKEEPER_PORT}
+    port: 20880
