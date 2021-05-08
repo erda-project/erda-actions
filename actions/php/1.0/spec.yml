@@ -3,7 +3,7 @@ version: "1.0"
 type: action
 category: build_management
 displayName: php镜像构建
-logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/7f3b441c-52ca-4a7b-805d-d11b0ebc80e5.jpeg
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/7f3b441c-52ca-4a7b-805d-d11b0ebc80e5.jpeg
 desc: php action
 public: true
 supportedVersions:
