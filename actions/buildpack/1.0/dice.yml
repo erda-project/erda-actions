@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   buildpack:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/buildpack-action:20210427-d717a0e
+    image: registry.cn-hangzhou.aliyuncs.com/dice/buildpack-action:20210511-66f0d75
     envs:
       # Dockerfile / Dockerfile.build 中 {{BP_DOCKER_BASE_REGISTRY}} 需要该环境变量进行文件渲染。
       # 作用：Dockerfile 里 FROM XXX，这个 XXX 镜像的 Registry 地址。
