@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   java:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/java-action:20210409-bdfaecbd
+    image: registry.cn-hangzhou.aliyuncs.com/dice/java-action:20210511-66f0d75
     envs:
       # 详见 actions/buildpack/1.0/dice.yml
       BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
