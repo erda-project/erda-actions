@@ -63,7 +63,16 @@ func build(cfg conf.Conf) error {
 		return fmt.Errorf("not find %s", mysqlPassword)
 	}
 
-	cmd := exec.Command("/bin/sh", "-c", "echo '"+cfg.Sql+"' >> mysql-cli.sql && mysqlsh --json=raw --host="+mysqlAddon.Config[mysqlHost].(string)+" --password="+mysqlAddon.Config[mysqlPassword].(string)+" "+
+	mysqlFile, err := os.Create("mysql-cli.sql")
+	if err != nil {
+		return err
+	}
+	_, err = mysqlFile.Write([]byte(cfg.Sql))
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command("/bin/sh", "-c", "mysqlsh --json=raw --host="+mysqlAddon.Config[mysqlHost].(string)+" --password="+mysqlAddon.Config[mysqlPassword].(string)+" "+
 		"--dbuser="+mysqlAddon.Config[mysqlUsername].(string)+" --port="+mysqlAddon.Config[mysqlPort].(string)+" --database="+cfg.Database+" --file=mysql-cli.sql")
 
 	var output bytes.Buffer

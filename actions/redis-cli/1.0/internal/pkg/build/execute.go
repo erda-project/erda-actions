@@ -33,9 +33,13 @@ func Execute() error {
 }
 
 func build(cfg conf.Conf) error {
-	err := simpleRunAndPrint("/bin/sh", "-c", "echo '"+cfg.Command+"' >> /redis-cli.txt")
+	mysqlFile, err := os.Create("/redis-cli.txt")
 	if err != nil {
-		return fmt.Errorf("exec shell error %v", err)
+		return err
+	}
+	_, err = mysqlFile.Write([]byte(cfg.Command))
+	if err != nil {
+		return err
 	}
 
 	redisAddon, err := getAddonFetchResponseData(cfg)

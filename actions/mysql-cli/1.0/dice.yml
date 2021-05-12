@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   mysql-cli:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/mysql-cli-action:20210415-c11cbca
+    image: registry.cn-hangzhou.aliyuncs.com/dice/mysql-cli-action:20210512-821626d
     envs:
       BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
     resources:
