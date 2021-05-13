@@ -22,7 +22,14 @@ configure_credentials
 
 # 从 环境变量 获取 params
 uri=${ACTION_URI-${GITTAR_REPO}} # 默认用 GITTAR_REPO
+
 branch=${ACTION_BRANCH-${GITTAR_BRANCH}} # 默认用 GITTAR_BRANCH
+
+# if ACTION_BRANCH and ACTION_URI is empty, mean use gittar repo
+if [ -z ${ACTION_BRANCH} ] && [ -z ${ACTION_URI} ]; then
+  branch=${GITTAR_COMMIT-${GITTAR_BRANCH}}
+fi
+
 git_config_payload=${ACTION_GIT_CONFIG-[]}
 ref=${ACTION_REF-HEAD}
 depth=${ACTION_DEPTH-1}
