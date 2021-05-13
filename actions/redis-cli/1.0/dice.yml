@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   redis-cli:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/redis-cli-action:20201224-d83487b1
+    image: registry.cn-hangzhou.aliyuncs.com/dice/redis-cli-action:20210512-456de5e
     envs:
       BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
     resources:
