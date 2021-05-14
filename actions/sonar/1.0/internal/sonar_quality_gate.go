@@ -10,6 +10,18 @@ import (
 	"github.com/erda-project/erda/pkg/httpclient"
 )
 
+type SonarQualityGateResult struct {
+	Status     SonarQualityGateStatus            `json:"status"`
+	Conditions []SonarQualityGateConditionResult `json:"conditions"`
+}
+type SonarQualityGateConditionResult struct {
+	Status         SonarQualityGateStatus `json:"status"`
+	MetricKey      MetricKey              `json:"metricKey"`
+	Comparator     string                 `json:"comparator"`
+	ErrorThreshold string                 `json:"errorThreshold"`
+	ActualValue    string                 `json:"actualValue"`
+}
+
 type SonarQualityGateStatus string
 
 var (
@@ -20,23 +32,21 @@ var (
 )
 
 // getSonarQualityGateStatus 查询代码门禁结果
-func (sonar *Sonar) getSonarQualityGateStatus(analysisID string) (SonarQualityGateStatus, error) {
+func (sonar *Sonar) getSonarQualityGateStatus(analysisID string) (*SonarQualityGateResult, error) {
 	var statusResp struct {
-		ProjectStatus struct {
-			Status SonarQualityGateStatus `json:"status"`
-		}
+		ProjectStatus *SonarQualityGateResult `json:"projectStatus"`
 	}
 	resp, err := httpclient.New(httpclient.WithCompleteRedirect()).BasicAuth(sonar.Auth.Login, sonar.Auth.Password).
 		Get(sonar.Auth.HostURL).Path("/api/qualitygates/project_status").
 		Param("analysisId", analysisID).
 		Do().JSON(&statusResp)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if !resp.IsOK() {
-		return "", fmt.Errorf("failed to fetch qualitygates status, status code: %d", resp.StatusCode())
+		return nil, fmt.Errorf("failed to fetch qualitygates status, status code: %d", resp.StatusCode())
 	}
-	return statusResp.ProjectStatus.Status, nil
+	return statusResp.ProjectStatus, nil
 }
 
 // createQualityGate 创建代码质量门禁

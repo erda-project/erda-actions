@@ -20,23 +20,19 @@ func NewCommand(packageManager PackageManager) *Command {
 }
 
 func (command *Command) Analysis(cfg *Conf) error {
-	resultMap, err := command.packageManager.Analysis(cfg)
-	if len(resultMap) > 0 {
-		logrus.Println("Sonar analysis result:")
-		for k, v := range resultMap {
-			fmt.Printf("%s: %v\n", k, v)
-		}
-		if err := storeMetaFile(cfg.MetaFile, resultMap); err != nil {
+	results, err := command.packageManager.Analysis(cfg)
+	if results != nil && len(*results) > 0 {
+		if err := storeMetaFile(cfg.MetaFile, results); err != nil {
 			logrus.Fatalf("failed to store meta file, err: %v", err)
 		}
 	}
 	return err
 }
 
-func storeMetaFile(metafilepath string, result map[ResultKey]string) error {
+func storeMetaFile(metafilepath string, results *ResultMetas) error {
 	var kvs []string
-	for k, v := range result {
-		kvs = append(kvs, fmt.Sprintf("%s=%s", k, v))
+	for _, meta := range *results {
+		kvs = append(kvs, fmt.Sprintf("%s=%s", meta.Key, meta.Value))
 	}
 	content := strutil.Join(kvs, "\n", true)
 	return filehelper.CreateFile(metafilepath, content, 0644)

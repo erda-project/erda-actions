@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   sonar:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/sonar-action:20201229-b4ba9b2
+    image: registry.cn-hangzhou.aliyuncs.com/dice/sonar-action:20210513-9a072fa
     resources:
       cpu: 1
       mem: 2048

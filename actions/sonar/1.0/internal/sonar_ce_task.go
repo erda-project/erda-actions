@@ -12,6 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda/pkg/httpclient"
+	"github.com/erda-project/erda/pkg/jsonparse"
 )
 
 type SonarCeTaskStatus string
@@ -91,6 +92,8 @@ func (sonar *Sonar) handleScannerReportTaskFile(filePath string) (*ScannerReport
 			logrus.Infof("invoke sonar to get ce task status failed, continue, err: %v\n", err)
 			continue
 		}
+		fmt.Println("ceTask below:")
+		fmt.Println(jsonparse.JsonOneLine(ceTask))
 		switch ceTask.Status {
 		case SonarCeTaskStatusSuccess:
 			logrus.Infof("ce task status: %s\n", ceTask.Status)

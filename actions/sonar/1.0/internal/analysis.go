@@ -10,21 +10,14 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/jsonparse"
 	"github.com/erda-project/erda/pkg/uuid"
 )
 
-type ResultKey string
-
-var (
-	ResultKeyProjectKey        ResultKey = "projectKey"
-	ResultKeyLanguage          ResultKey = "language"
-	ResultKeyQualityGateStatus ResultKey = "qualityGateStatus"
-)
-
 // Analysis 使用 sonar-scanner 进行代码质量分析
-func (sonar *Sonar) Analysis(cfg *Conf) (map[ResultKey]string, error) {
+func (sonar *Sonar) Analysis(cfg *Conf) (*ResultMetas, error) {
 	// 存储结果
-	resultMap := make(map[ResultKey]string)
+	results := &ResultMetas{}
 
 	// make sonar-scanner args
 	scanner := exec.Command("sonar-scanner")
@@ -56,7 +49,7 @@ func (sonar *Sonar) Analysis(cfg *Conf) (map[ResultKey]string, error) {
 	if cfg.ActionParams.DeleteProject {
 		defer sonar.invokeDelSonarServerProject(projectKey)
 	}
-	resultMap[ResultKeyProjectKey] = projectKey
+	results.Add(ResultKeyProjectKey, projectKey)
 
 	// language
 	if !cfg.ActionParams.Language.Supported() {
@@ -72,7 +65,7 @@ func (sonar *Sonar) Analysis(cfg *Conf) (map[ResultKey]string, error) {
 		}
 		args = append(args, fmt.Sprintf("-Dsonar.java.binaries=%s", sonarJavaBinary))
 	}
-	resultMap[ResultKeyLanguage] = string(cfg.ActionParams.Language)
+	results.Add(ResultKeyLanguage, string(cfg.ActionParams.Language))
 
 	// exclusions
 	if cfg.ActionParams.SonarExclusions != "" {
@@ -187,15 +180,29 @@ func (sonar *Sonar) Analysis(cfg *Conf) (map[ResultKey]string, error) {
 	}
 
 	// quality gate
-	qualityGateStatus, err := sonar.getSonarQualityGateStatus(ceTask.AnalysisID)
+	qualityGateResult, err := sonar.getSonarQualityGateStatus(ceTask.AnalysisID)
 	if err != nil {
-		return resultMap, err
+		return results, err
 	}
-	resultMap[ResultKeyQualityGateStatus] = string(qualityGateStatus)
-	if qualityGateStatus != "OK" {
+	qualityGateStatus := qualityGateResult.Status
+	results.Add(ResultKeyQualityGateStatus, string(qualityGateStatus))
+	// add condition results to meta
+	fmt.Println("quality gate conditions result below:")
+	for _, condition := range qualityGateResult.Conditions {
+		// log
+		fmt.Printf("metric: %s, status: %s\n", condition.MetricKey, condition.Status)
+		fmt.Printf("metric(detail): %s, detail: %s\n", condition.MetricKey, jsonparse.JsonOneLine(condition))
+		// if not ok, add to meta and show it
+		if condition.Status == SonarQualityGateStatusOK {
+			continue
+		}
+		results.Add(ResultKey(fmt.Sprintf("metric: %s", condition.MetricKey)), string(condition.Status))
+		results.Add(ResultKey(fmt.Sprintf("metric(detail): %s", condition.MetricKey)), jsonparse.JsonOneLine(condition))
+	}
+	if qualityGateStatus != SonarQualityGateStatusOK {
 		logrus.Errorf("QUALITY GATE STATUS: %s", qualityGateStatus)
-		return resultMap, fmt.Errorf("quality gate status: %s", qualityGateStatus)
+		return results, fmt.Errorf("quality gate status: %s", qualityGateStatus)
 	}
 
-	return resultMap, nil
+	return results, nil
 }
