@@ -7,45 +7,45 @@ jobs:
   ## for buildpack
   ### java
   terminus-maven-3-jdk-8-alpine:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-maven:3-jdk-8-alpine
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-maven:3-jdk-8-alpine
   terminus-openjdk-1-0-1:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-openjdk8:1.0.1
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk8:1.0.1
   bp-tomcat7:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-tomcat:v7.0.96-jdk8
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-tomcat:v7.0.96-jdk8
   bp-tomcat8:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-tomcat:v8.5.43-jdk8
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-tomcat:v8.5.43-jdk8
   bp-openjdk8-181:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-openjdk:v1.8.0.181
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v1.8.0.181
   bp-openjdk8-242:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-openjdk:v1.8.0.242
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v1.8.0.242
   openjdk8:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/openjdk:8
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:8
   openjdk8u272:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/openjdk:8u272
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:8u272
   openjdk11:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/openjdk:11
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:11
   openjdk11-0:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/openjdk:11.0
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:11.0
   openjdk11-0-9:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/openjdk:11.0.9
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:11.0.9
   openjdk11-0-9-11:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/openjdk:11.0.9.11
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:11.0.9.11
 
   ### nodejs
   terminus-nodejs-npm-6-4-1:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-nodejs:npm-6.4.1
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nodejs:npm-6.4.1
   terminus-nodejs-node-12-8-1-npm-6-10-2:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-nodejs:node.12.8.1.npm.6.10.2
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nodejs:node.12.8.1.npm.6.10.2
   terminus-herd-1-1-5:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-herd:1.1.5
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-herd:1.1.5
   bp-node:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-nodejs:12.13
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nodejs:12.13
   js-herd:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-herd:1.1.8-node12
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-herd:1.1.8-node12
   js-spa:
-    image: registry.cn-hangzhou.aliyuncs.com/dice-third-party/terminus-nginx:0.2
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nginx:0.2
 
   ### spa
   dice-nginx-1-1-0:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/dice-nginx:1.1.0
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/dice-nginx:1.1.0
   ## ...

@@ -1,6 +1,6 @@
 jobs:
   python-script:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/python-script:v4.0
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/python-script:v4.0
     resources:
       cpu: 1
       mem: 1024

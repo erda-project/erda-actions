@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-golang:1.13 AS builder
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.13 AS builder
 
 # disable CGO for ALL THE THINGS (to help ensure no libc)
 ENV CGO_ENABLED 0
@@ -14,7 +14,7 @@ RUN set -x \
 RUN mkdir -p /opt/action/assets && \
     cp -r actions/java-deploy/1.0/internal/assets/* /opt/action/assets
 
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-maven:3-jdk-8-alpine
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-maven:3-jdk-8-alpine
 
 RUN echo "http://mirrors.aliyun.com/alpine/v3.9/main/" > /etc/apk/repositories && \
     echo "http://mirrors.aliyun.com/alpine/v3.9/community/" >> /etc/apk/repositories

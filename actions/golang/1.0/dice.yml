@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   golang:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/golang-action:20201124-23c413dc
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/golang-action:20201124-23c413dc
     resources:
       cpu: 0.5
       mem: 1024

@@ -1,6 +1,6 @@
 jobs:
   add-nodes:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/add-nodes:3.21
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/add-nodes:3.21
     resources:
       cpu: 0.2
       mem: 128

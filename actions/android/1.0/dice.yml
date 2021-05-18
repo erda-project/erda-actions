@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   golang:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/android-action:20210118-b362e93d
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/android-action:20210118-b362e93d
     resources:
       cpu: 2
       mem: 4096

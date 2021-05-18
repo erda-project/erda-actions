@@ -1,5 +1,5 @@
 
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-nodejs:node-9.11.1-npm-5.8.0
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nodejs:node-9.11.1-npm-5.8.0
 ARG FORCE_DEP="true"
 ARG FORCE_UPDATE_SNAPSHOT="false"
 ARG PACKAGE_LOCK_DIR

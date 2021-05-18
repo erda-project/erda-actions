@@ -1,6 +1,6 @@
 jobs:
   dice:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/dice-deploy-rollback-action:20201211-13244358
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/dice-deploy-rollback-action:20201211-13244358
     resources:
       cpu: 0.2
       mem: 128

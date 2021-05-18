@@ -40,7 +40,7 @@ herd模式
           cmd: cd /root/js-build && ls && npm run dev
           copys:
             - ${js-build}:/root/
-          image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-herd:1.1.8-node12
+          image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-herd:1.1.8-node12
 ``` 
 
 spa模式

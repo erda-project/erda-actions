@@ -1,6 +1,6 @@
 jobs:
   mysqldump:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/mysqldump-action:20201028-0a4db20
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/mysqldump-action:20201028-0a4db20
     resources:
       cpu: 1
       mem: 2048
