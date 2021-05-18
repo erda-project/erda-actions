@@ -7,13 +7,15 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
+
 	"github.com/erda-project/erda-actions/actions/manual-review/1.0/internal/conf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/httpclient"
 	"github.com/erda-project/erda/pkg/httpserver/errorresp"
-	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
+	"github.com/erda-project/erda/pkg/jsonparse"
 )
 
 func handleAPIs() error {
@@ -26,25 +28,33 @@ func handleAPIs() error {
 		logrus.Errorf("manualReview failed")
 	} else {
 		//创建审核记录
-		err := CreateReview()
+		err, reviewID := CreateReview()
 		if err != nil {
-			logrus.Warningf("create fail")
+			logrus.Warningf("createReview fail")
+			return err
 		}
+
+		var allProcessorName []string
 		//创建用户审批权限
 		for _, val := range conf.ProcessorId() {
-			err = CreateReviewUser(val)
+			err, data := CreateReviewUser(val)
 			if err != nil {
-				logrus.Warningf("create fail")
+				logrus.Warningf("createReviewUser fail")
+				return err
 			}
+
+			if data == nil || data.OperatorUserInfo == nil {
+				allProcessorName = append(allProcessorName, val)
+				continue
+			}
+			allProcessorName = append(allProcessorName, data.OperatorUserInfo.Name)
 		}
-		task_id := strconv.FormatUint(conf.TaskId(), 10)
 
-		processor_id, _ := json.Marshal(conf.ProcessorId())
+		taskID := strconv.FormatUint(conf.TaskId(), 10)
+		processorID, _ := json.Marshal(conf.ProcessorId())
+		reviewIDString := strconv.FormatInt(reviewID, 10)
 
-		ID, _ := getId(conf.TaskId())
-		review_id := strconv.FormatUint(ID, 10)
-
-		if err := storeMetaFile(task_id, string(processor_id), review_id); err != nil {
+		if err := storeMetaFile(taskID, string(processorID), reviewIDString, jsonparse.JsonOneLine(allProcessorName)); err != nil {
 			return err
 		}
 
@@ -121,7 +131,7 @@ func getId(envID uint64) (uint64, error) {
 }
 
 //创建审核记录
-func CreateReview() error {
+func CreateReview() (error, int64) {
 	// invoke
 	createReq := CreateReviewRequest{
 		ProjectId:       conf.ProjectId(),
@@ -142,23 +152,23 @@ func CreateReview() error {
 		Path("/api/reviews/actions/review/approve").
 		Header("Authorization", conf.DiceOpenapiToken()).
 		JSONBody(&createReq).Do().JSON(&artifact)
-	logrus.Error("pipipipipi:", artifact.Error)
 
 	if !artifact.Success {
-		return errorresp.New(errorresp.WithMessage(artifact.Error.Msg))
+		return errorresp.New(errorresp.WithMessage(artifact.Error.Msg)), 0
 	}
 
 	if err != nil {
-		return err
+		return err, 0
 	}
 	if !r.IsOK() {
-		return err
+		return err, 0
 	}
-	return nil
+
+	return nil, artifact.Data
 }
 
 //创建审核
-func CreateReviewUser(Operator string) error {
+func CreateReviewUser(Operator string) (error, *apistructs.CreateReviewUserResponse) {
 	createReq := CreateReviewUserRequest{
 		TaskId:   conf.TaskId(),
 		OrgId:    conf.OrgId(),
@@ -170,38 +180,42 @@ func CreateReviewUser(Operator string) error {
 		Path("/api/reviews/actions/user/create").
 		Header("Authorization", conf.DiceOpenapiToken()).
 		JSONBody(&createReq).Do().JSON(&artifact)
-	logrus.Error("pipipipipi:", artifact.Error)
 
 	if !artifact.Success {
-		return errorresp.New(errorresp.WithMessage(artifact.Error.Msg))
+		return errorresp.New(errorresp.WithMessage(artifact.Error.Msg)), nil
 	}
 
 	if err != nil {
-		return err
+		return err, nil
 	}
 	if !r.IsOK() {
-		return err
+		return err, nil
 	}
-	return nil
+	return nil, artifact.Data
 }
 
-func storeMetaFile(task_id string, processor_id string, review_id string) error {
+func storeMetaFile(taskID string, processorID string, reviewID string, processorName string) error {
 	meta := apistructs.ActionCallback{
 		Metadata: apistructs.Metadata{
 			{
 				Name:  "task_id",
-				Value: task_id,
+				Value: taskID,
 			},
 			{
 				Name:  "processor_id",
-				Value: processor_id,
+				Value: processorID,
+			},
+			{
+				Name:  "processor_name",
+				Value: processorName,
 			},
 			{
 				Name:  "review_id",
-				Value: review_id,
+				Value: reviewID,
 			},
 		},
 	}
+
 	b, err := json.Marshal(&meta)
 	if err != nil {
 		return err

@@ -3,6 +3,7 @@ package manualReview
 import (
 	"time"
 
+	"github.com/erda-project/erda/apistructs"
 )
 
 type ErrorResponse struct {
@@ -15,7 +16,6 @@ type Header struct {
 	Success bool          `json:"success" `
 	Error   ErrorResponse `json:"err"`
 }
-
 
 type ManualReview struct {
 	Header
@@ -42,14 +42,15 @@ type CreateReviewRequest struct {
 }
 type CreateReviewResponse struct {
 	Header
-	Data string `json:"data"`
+	Data int64 `json:"data"`
 }
 type CreateReviewUserRequest struct {
 	Operator string `json:"operator"`
 	OrgId    uint64 `json:"orgId"`
 	TaskId   uint64 `json:"taskId"`
 }
+
 type CreateReviewUserResponse struct {
 	Header
-	Data string `json:"data"`
+	Data *apistructs.CreateReviewUserResponse `json:"data"`
 }
