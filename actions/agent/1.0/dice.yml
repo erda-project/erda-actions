@@ -4,7 +4,7 @@ jobs:
     image: registry.cn-hangzhou.aliyuncs.com/dice/action-agent:3.21-20210322-891e3565d
     labels:
       # 必填字段
-      MD5: d4066da01687f429ce35ab692e49c1ab
+      MD5: 775229abe45f90fdfd8b47771b636c60
     envs:
       # DEBUG mode, will produce more logs
       DEBUG: false
