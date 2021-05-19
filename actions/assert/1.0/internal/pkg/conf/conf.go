@@ -9,7 +9,7 @@ type Conf struct {
 }
 
 type Assert struct {
-	Value       string `json:"value"`
-	Assert      string `json:"assert"`
-	ActualValue string `json:"actualValue"`
+	Value       string      `json:"value"`
+	Assert      string      `json:"assert"`
+	ActualValue interface{} `json:"actualValue"`
 }

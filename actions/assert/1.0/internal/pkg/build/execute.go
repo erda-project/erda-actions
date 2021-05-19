@@ -8,6 +8,7 @@ import (
 	"github.com/erda-project/erda-actions/actions/assert/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda/pkg/assert"
 	"github.com/erda-project/erda/pkg/envconf"
+	"github.com/erda-project/erda/pkg/jsonparse"
 )
 
 func Execute() error {
@@ -32,7 +33,7 @@ func build(cfg conf.Conf) error {
 		logrus.Infof("Assert Result:")
 		logrus.Infof("  value: %v", v.Value)
 		logrus.Infof("  assert: %v", v.Assert)
-		logrus.Infof("  actualValue: %v", v.ActualValue)
+		logrus.Infof("  actualValue: %s", jsonparse.JsonOneLine(v.ActualValue))
 		logrus.Infof("  success: %v", success)
 		logrus.Infof("==========")
 	}
