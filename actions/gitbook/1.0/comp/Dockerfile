@@ -1,4 +1,4 @@
-FROM {{CENTRAL_REGISTRY}}/dice-third-party/terminus-nginx:0.2
+FROM {{CENTRAL_REGISTRY}}/erda/terminus-nginx:0.2
 
 ARG DSTDIR=_book
 

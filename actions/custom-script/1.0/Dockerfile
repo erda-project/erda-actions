@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/dice/git-golang-image:1.1
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/git-golang-image:1.1
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH

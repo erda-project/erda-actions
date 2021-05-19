@@ -58,5 +58,5 @@ spa模式
             copys:
               - ${js-build}/dist:/usr/share/nginx/html/
               - ${js-build}/nginx.conf.template:/etc/nginx/conf.d/
-            image: registry.cn-hangzhou.aliyuncs.com/dice-third-party/terminus-nginx:0.2
+            image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nginx:0.2
 ```

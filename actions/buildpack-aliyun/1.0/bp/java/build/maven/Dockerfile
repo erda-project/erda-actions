@@ -1,7 +1,7 @@
 ARG DEP_CACHE_IMAGE
 FROM ${DEP_CACHE_IMAGE} as cache-image
 
-FROM {{BP_DOCKER_BASE_REGISTRY}}/terminus/terminus-maven:3-jdk-8-alpine
+FROM {{BP_DOCKER_BASE_REGISTRY}}/erda/terminus-maven:3-jdk-8-alpine
 
 ARG MAVEN_OPTS
 ARG MAVEN_EXTRA_ARGS

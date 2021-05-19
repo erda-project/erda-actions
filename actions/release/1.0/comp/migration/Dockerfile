@@ -1,5 +1,5 @@
 # Build app image
-FROM registry.cn-hangzhou.aliyuncs.com/dice-third-party/migration:1.0.2
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/migration:1.0.2
 
 RUN echo "Asia/Shanghai" | tee /etc/timezone
 

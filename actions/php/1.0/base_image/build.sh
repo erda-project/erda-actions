@@ -1,4 +1,4 @@
-registry="registry.cn-hangzhou.aliyuncs.com/dice-third-party"
+registry="erda-registry.cn-hangzhou.cr.aliyuncs.com/erda"
 version="7.2"
 image="${registry}/terminus-php-apache:${version}"
 dockerfile="${version}/Dockerfile"
