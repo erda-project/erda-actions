@@ -39,7 +39,7 @@ params:
     required: false
 
   - name: releaseID
-    desc: 应用打包发布制品的 releaseID, 默认为 ${release:OUTPUT:raleaseID}
+    desc: 应用打包发布制品的 releaseID, 默认为 ${release:OUTPUT:releaseID}
     type: string
     default: ${release:OUTPUT:releaseID}
     required: true
