@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   assert:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/assert-action:20210420-5eec497
+    image: registry.cn-hangzhou.aliyuncs.com/dice/assert-action:20210519-a6835f8
     envs:
       BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
     resources:
