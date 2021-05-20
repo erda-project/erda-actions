@@ -39,9 +39,9 @@ params:
     required: false
 
   - name: releaseID
-    desc: 应用打包发布制品的 releaseID, 默认为 ${release:OUTPUT:realeseID}
+    desc: 应用打包发布制品的 releaseID, 默认为 ${release:OUTPUT:releaseID}
     type: string
-    default: ${release:OUTPUT:realeseID}
+    default: ${release:OUTPUT:releaseID}
     required: true
 
   - name: dst
@@ -111,10 +111,10 @@ formProps:
     component: input
     key: params.releaseID
     componentProps:
-      placeholder: ${release:OUTPUT:realeseID}
+      placeholder: ${release:OUTPUT:releaseID}
     group: params
-    defaultValue: ${release:OUTPUT:realeseID}
-    labelTip: 应用打包发布制品的 releaseID, 默认为 ${release:OUTPUT:realeseID}
+    defaultValue: ${release:OUTPUT:releaseID}
+    labelTip: 应用打包发布制品的 releaseID, 默认为 ${release:OUTPUT:releaseID}
 
   - label: 目标仓库名称
     component: input
