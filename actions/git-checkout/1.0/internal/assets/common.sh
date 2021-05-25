@@ -100,7 +100,10 @@ add_git_metadata_branch() {
       {name: \"branch\", value: \"${branch}\"}
     ]"
   else
-    cat
+    branch=${ACTION_BRANCH-${GITTAR_BRANCH}}
+     jq ". + [
+      {name: \"branch\", value: \"${branch}\"}
+    ]"
   fi
 }
 

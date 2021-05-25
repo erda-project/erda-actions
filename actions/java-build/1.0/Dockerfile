@@ -27,20 +27,13 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
   && rm -f /tmp/apache-maven.tar.gz \
   && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
-RUN  yum remove -y docker \
-                docker-client \
-                docker-client-latest \
-                docker-common \
-                docker-latest \
-                docker-latest-logrotate \
-                docker-logrotate \
-                docker-engine \
-   && yum install -y yum-utils java-1.8.0-openjdk-devel \
+RUN  yum install -y yum-utils java-1.8.0-openjdk-devel-1:1.8.0.272.b10-1.el7_9.x86_64 \
    && yum-config-manager \
          --add-repo \
-         https://download.docker.com/linux/centos/docker-ce.repo \
+         http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo \
    && yum install -y docker-ce-cli \
    && yum clean all
+
 
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
