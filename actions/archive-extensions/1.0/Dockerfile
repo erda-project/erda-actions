@@ -11,10 +11,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-jobs:
-  dice-version-archive:
-    image: registry.erda.cloud/erda-actions/dice-version-archive-action:20210422-047586e
-    resource:
-      cpu: 0.5
-      disk: 1.24
-      mem: 1.24
+FROM golang:1.15 AS builder
+
+COPY . /go/src/github.com/erda-project/erda-actions
+WORKDIR /go/src/github.com/erda-project/erda-actions
+
+# go build
+RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/archive-extensions/1.0/internal/cmd/main.go
+
+FROM centos
+
+MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
+
+COPY --from=builder /opt/action/run /opt/action/run
+
+RUN chmod 777 /opt/action/*
