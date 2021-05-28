@@ -145,22 +145,7 @@ func build(cfg conf.Conf) error {
 
 	//做一些agent的工作，将dockerfile中下载和拷贝到agent.jar文件拷贝到buildPath目录下
 	runCommand(fmt.Sprintf(" mkdir -p %s", fmt.Sprintf("%s/%s/%s", cfg.WorkDir, pwdName, "spot-agent")))
-	runCommand(fmt.Sprintf(" cp %s %s ", "/opt/action/comp/spot-agent/spot-agent.jar",
-		fmt.Sprintf("%s/%s/%s/spot-agent.jar", cfg.WorkDir, pwdName, "spot-agent")))
-
-	//输出java_option到OUTPUT中
-
-	//simpleRun("chmod", "+x", "/opt/action/comp/openjdk/entrypoint.sh")
-	//simpleRun("chmod", "+x", "/opt/action/comp/tomcat/entrypoint.sh")
-	//if err := simpleRun("/bin/bash", "-c", "/opt/action/comp/openjdk/entrypoint.sh"); err != nil {
-	//	logrus.Errorf("error : %v", err)
-	//	return err
-	//}
-	//if err := simpleRun("/bin/bash", "-c", "/opt/action/comp/tomcat/entrypoint.sh"); err != nil {
-	//	logrus.Errorf("error : %v", err)
-	//	return err
-	//}
-	//runCommand(fmt.Sprintf("echo 'JAVA_TOMCAT_OPTS=%s' >> %s ", os.Getenv("JAVA_TOMCAT_OPTS"), cfg.MetaFile))
+	runCommand(fmt.Sprintf(" cp %s %s ", "/opt/action/comp/${DICE_VERSION}/spot-agent/spot-agent.jar", fmt.Sprintf("%s/%s/%s/spot-agent.jar", cfg.WorkDir, pwdName, "spot-agent")))
 	runCommand(fmt.Sprintf("echo 'JAVA_OPTS=%s' >> %s ", "-javaagent:/spot-agent/spot-agent.jar", cfg.MetaFile))
 
 	return nil

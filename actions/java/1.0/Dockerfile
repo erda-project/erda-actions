@@ -16,6 +16,10 @@ RUN set -x \
 RUN mkdir -p /opt/action/comp && \
     cp -r actions/java/1.0/comp/* /opt/action/comp
 
+# newest spot agent
+RUN bash /opt/action/comp/download_spot_agent.sh
+RUN bash /opt/action/comp/download_fonts.sh
+
 
 FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-openjdk:v11.0.6
 
@@ -39,7 +43,3 @@ ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/comp /opt/action/comp
-
-# newest spot agent
-RUN bash /opt/action/comp/download_spot_agent.sh
-RUN bash /opt/action/comp/download_fonts.sh
