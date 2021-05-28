@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   java-build:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/java-build-action:20210522-f0e72c6
+    image: registry.cn-hangzhou.aliyuncs.com/dice/java-build-action:20210528-c27bc7d
     resources:
       cpu: 0.5
       mem: 2048

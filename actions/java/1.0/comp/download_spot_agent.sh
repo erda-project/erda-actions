@@ -10,6 +10,7 @@ versions=(
 3.20
 3.21
 4.0
+1.1
 )
 
 # mkdir for assets

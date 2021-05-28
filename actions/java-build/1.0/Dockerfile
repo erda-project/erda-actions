@@ -16,6 +16,9 @@ RUN set -x \
 RUN mkdir -p /opt/action/comp && \
     cp -r actions/java-build/1.0/comp/* /opt/action/comp
 
+# newest spot agent
+RUN bash /opt/action/comp/download_spot_agent.sh
+RUN bash /opt/action/comp/download_fonts.sh
 
 FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-openjdk:v11.0.6
 
