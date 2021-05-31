@@ -1,6 +1,6 @@
 ### JavaScript Action
 
-用于编译打包 javascript 工程，产出应用镜像用于部署。
+用于编译打包 javascript 工程，产出应用镜像用于部署(Node.js版本: 12.13)。
 
 #### outputs
 
