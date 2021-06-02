@@ -27,31 +27,33 @@ import (
 )
 
 const (
-	loginAPI = "/login"
+	loginAPI       = "/login"
 	extenstionsAPI = "/api/extensions"
 )
 
 func New(host, username, password string) (*Client, error) {
 	if !strings.HasPrefix(host, "http://") || !strings.HasPrefix(host, "https://") {
-		host = "http://" + host
+		host = "https://" + host
 	}
 
 	return &Client{
 		Host:     host,
 		Username: username,
 		Password: password,
-		client:   http.Client{Timeout: time.Second * time.Duration(180)},
+		client: func() *http.Client {
+			return &http.Client{Timeout: time.Second * time.Duration(180)}
+		},
 		status: nil,
 	}, nil
 }
 
 type Client struct {
-	Host string
+	Host     string
 	Username string
 	Password string
 
 	status *StatusInfo
-	client http.Client
+	client func() *http.Client
 }
 
 func (c *Client) Logged() bool {
@@ -70,7 +72,7 @@ func (c *Client) Login() error {
 	}
 	request.Header.Set("content-type", "application/x-www-form-urlencoded")
 
-	response, err := c.client.Do(request)
+	response, err := c.client().Do(request)
 	if err != nil {
 		return errors.Wrap(err, "failed to Do request")
 	}
@@ -78,9 +80,9 @@ func (c *Client) Login() error {
 
 	var status StatusInfo
 	if err = json.NewDecoder(response.Body).Decode(&status); err != nil {
-		return errors.Wrap(err, "failed to parse login response body")
+		return errors.Wrapf(err, "failed to parse login response body, request: %v+", request)
 	}
-	expiredAt := time.Now().Add(time.Hour*12)
+	expiredAt := time.Now().Add(time.Hour * 12)
 	status.ExpiredAt = &expiredAt
 
 	c.status = &status
@@ -103,7 +105,7 @@ func (c *Client) Push(payload *apistructs.ExtensionVersionCreateRequest) error {
 		return errors.Wrap(err, "failed to Encode payload")
 	}
 
-	uri := c.Host+filepath.Join(extenstionsAPI, payload.Name)
+	uri := c.Host + filepath.Join(extenstionsAPI, payload.Name)
 	request, err := http.NewRequest(http.MethodPost, uri, body)
 	if err != nil {
 		return errors.Wrapf(err, "failed to NewRequest, url: %s", uri)
@@ -111,7 +113,7 @@ func (c *Client) Push(payload *apistructs.ExtensionVersionCreateRequest) error {
 	request.Header.Set("use-token", "true")
 	request.AddCookie(&http.Cookie{Name: "OPENAPISESSION", Value: c.status.SessionID})
 
-	response, err := c.client.Do(request)
+	response, err := c.client().Do(request)
 	if err != nil {
 		return errors.Wrapf(err, "failed to Do request, request: %+v", request)
 	}
