@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   ess-info:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/ess-info-action:20200331-f80a74a
+    image: registry.erda.cloud/erda-actions/ess-info-action:20200331-f80a74a
     resources:
       cpu: 0.2
       mem: 128

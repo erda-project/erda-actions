@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   dice:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/mobile-publish-action:20201221-b685c4dd
+    image: registry.erda.cloud/erda-actions/mobile-publish-action:20201221-b685c4dd
     resources:
       cpu: 0.2
       mem: 512

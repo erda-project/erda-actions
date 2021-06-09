@@ -1,10 +1,10 @@
 ### job 配置项
 jobs:
   java:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/java-action:20210609-8aa7050
+    image: registry.erda.cloud/erda-actions/java-action:20210609-8aa7050
     envs:
       # 详见 actions/buildpack/1.0/dice.yml
-      BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
+      BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:
       cpu: 0.5
       mem: 2048

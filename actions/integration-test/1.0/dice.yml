@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   integration-test:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/it-action:3.4.0-20190704-1765035
+    image: registry.erda.cloud/erda-actions/it-action:3.4.0-20190704-1765035
     resources:
       cpu: 0.5
       mem: 2048
