@@ -1,8 +1,8 @@
 ### job 配置项
 jobs:
   php:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/php-action:20210519-01d2811
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/php-action:20210609-595ff77
     resources:
       cpu: 0.5
       mem: 512
-      disk: 1024
+      disk: 1024 
