@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   mysql-cli:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/mysql-cli-action:20210512-821626d
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/mysql-cli-action:20210512-821626d
     envs:
       BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
     resources:

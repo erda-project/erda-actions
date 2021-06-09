@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   jsonparse:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/jsonparse-action:20210420-92996b4
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/jsonparse-action:20210420-92996b4
     envs:
       BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
     resources:

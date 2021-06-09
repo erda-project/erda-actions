@@ -1,6 +1,6 @@
 jobs:
   release:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/upgrade-edge-cluster:3.17
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/upgrade-edge-cluster:3.17
     resources:
       cpu: 0.2
       mem: 256

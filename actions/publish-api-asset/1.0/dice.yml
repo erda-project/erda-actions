@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   api:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/publish-api-asset-action:20201010-92fb804
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/publish-api-asset-action:20201010-92fb804
     resources:
       cpu: 0.2
       mem: 512

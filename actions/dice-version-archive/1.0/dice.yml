@@ -13,7 +13,7 @@
 
 jobs:
   dice-version-archive:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/dice-version-archive-action:20210422-047586e
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/dice-version-archive-action:20210422-047586e
     resource:
       cpu: 0.5
       disk: 1.24
