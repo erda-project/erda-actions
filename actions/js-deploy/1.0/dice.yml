@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   js-deploy:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/js-deploy-action:20200521-5c68300
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/js-deploy-action:20200521-5c68300
     resources:
       cpu: 1
       mem: 1024

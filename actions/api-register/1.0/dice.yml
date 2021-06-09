@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   dice:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/api-register-action:20200810-fb2ef50
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/api-register-action:20200810-fb2ef50
     resources:
       cpu: 0.2
       mem: 512

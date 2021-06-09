@@ -1,6 +1,6 @@
 jobs:
   dice:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/dice-deploy-action:20201211-13244358
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/dice-deploy-action:20201211-13244358
     resources:
       cpu: 0.2
       mem: 128

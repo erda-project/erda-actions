@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   js:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/js-script-action:20200525-401ee62
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/js-script-action:20200525-401ee62
     envs:
       BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
     resources:
