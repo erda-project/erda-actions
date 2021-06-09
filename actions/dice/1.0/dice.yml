@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   dice:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/dice-action:20201231-8a10786d
+    image: registry.erda.cloud/erda-actions/dice-action:20201231-8a10786d
     resources:
       cpu: 0.2
       mem: 512

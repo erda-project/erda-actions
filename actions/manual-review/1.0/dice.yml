@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   api-test:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/manual-review-action:20210518-26db5de
+    image: registry.erda.cloud/erda-actions/manual-review-action:20210518-26db5de
     resources:
       cpu: 0.5
       mem: 1024

@@ -1,9 +1,9 @@
 ### job 配置项
 jobs:
   js-build:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/js-build-action:20210609-29eb402
+    image: registry.erda.cloud/erda-actions/js-build-action:20210609-29eb402
     envs:
-      BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
+      BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:
       cpu: 1
       mem: 2048

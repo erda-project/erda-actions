@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   php:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/php-action:20210609-595ff77
+    image: registry.erda.cloud/erda-actions/php-action:20210609-595ff77
     resources:
       cpu: 0.5
       mem: 512

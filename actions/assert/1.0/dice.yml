@@ -1,9 +1,9 @@
 ### job 配置项
 jobs:
   assert:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/assert-action:20210519-a6835f8
+    image: registry.erda.cloud/erda-actions/assert-action:20210519-a6835f8
     envs:
-      BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
+      BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:
       cpu: 0.1
       mem: 200

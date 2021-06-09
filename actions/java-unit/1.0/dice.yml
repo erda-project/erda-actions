@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   java-unit:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/java-unit-action:20200306-ec56cdb
+    image: registry.erda.cloud/erda-actions/java-unit-action:20200306-ec56cdb
     resources:
       cpu: 1
       mem: 2048

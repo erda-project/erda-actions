@@ -1,20 +1,20 @@
 ### job 配置项
 jobs:
   buildpack-aliyun:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/buildpack-aliyun-action:20210609-dca64df
+    image: registry.erda.cloud/erda-actions/buildpack-aliyun-action:20210609-dca64df
     envs:
       # Dockerfile / Dockerfile.build 中 {{BP_DOCKER_BASE_REGISTRY}} 需要该环境变量进行文件渲染。
       # 作用：Dockerfile 里 FROM XXX，这个 XXX 镜像的 Registry 地址。
       # 具体的值视情况而定：
       # 1. 私有化部署时，若打包依赖的基础镜像已经推送到私有 Registry，则这里为私有 Registry 地址
       # 2. 否则，使用 XXX 镜像的 Registry 地址（阿里云 Registry 地址）
-      BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
+      BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
 
       # 缺省依赖缓存镜像，目前在 java-bp 的 Dockerfile 中用到
       # 镜像要求：
       # 1. 需要有 /root/.m2 目录
       # 2. 镜像拉取无需鉴权
-      DEFAULT_DEP_CACHE_IMAGE: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/terminus-maven:3-jdk-8-alpine
+      DEFAULT_DEP_CACHE_IMAGE: registry.erda.cloud/erda-actions/terminus-maven:3-jdk-8-alpine
 
     resources:
       cpu: 0.5

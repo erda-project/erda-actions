@@ -2,7 +2,7 @@ jobs:
   release:
     labels:
       PLATFORM: true
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/rmnodes:3.12
+    image: registry.erda.cloud/erda-actions/rmnodes:3.12
     resources:
       cpu: 0.2
       mem: 128

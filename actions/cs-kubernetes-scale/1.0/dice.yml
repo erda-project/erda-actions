@@ -1,6 +1,6 @@
 jobs:
   cs-kubernetes-scale:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/cs-kubernetes-scale:4.0
+    image: registry.erda.cloud/erda-actions/cs-kubernetes-scale:4.0
     resources:
       cpu: 0.2
       mem: 128

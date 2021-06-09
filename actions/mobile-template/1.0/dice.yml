@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   mobile-template:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/mobile-template-action:20200831-a252b5b
+    image: registry.erda.cloud/erda-actions/mobile-template-action:20200831-a252b5b
     resources:
       cpu: 1
       mem: 1024

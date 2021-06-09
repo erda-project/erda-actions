@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   sonar:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/sonar-action:20210513-9a072fa
+    image: registry.erda.cloud/erda-actions/sonar-action:20210513-9a072fa
     resources:
       cpu: 1
       mem: 2048

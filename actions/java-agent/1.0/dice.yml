@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   java-agent-inject:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/java-agent-action:20201106-706b7d19
+    image: registry.erda.cloud/erda-actions/java-agent-action:20201106-706b7d19
     cmd: tar -xf /resource/java-agent/spot-agent.tar.gz -C /dice
     envs:
       JAVA_AGENT_OPTS: -javaagent:/dice/spot-agent/spot-agent.jar -javaagent:/dice/spot-agent/spot-profiler.jar

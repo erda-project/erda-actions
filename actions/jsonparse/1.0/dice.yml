@@ -1,9 +1,9 @@
 ### job 配置项
 jobs:
   jsonparse:
-    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/jsonparse-action:20210420-92996b4
+    image: registry.erda.cloud/erda-actions/jsonparse-action:20210420-92996b4
     envs:
-      BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
+      BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:
       cpu: 0.1
       mem: 200
