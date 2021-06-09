@@ -50,11 +50,11 @@ push-extensions:
 
 	docker push $${image}
 
-	# auto replace dice.yml image
-	diceyml="actions/$@/$${version}/dice.yml"
-	yq eval '.jobs.[].image' -i $${diceyml}
-	git add .
-	git commit -m "Auto update image for action: $@, version: $${version}"
+#	# auto replace dice.yml image
+#	diceyml="actions/$@/$${version}/dice.yml"
+#	yq eval '.jobs.[].image' -i $${diceyml}
+#	git add .
+#	git commit -m "Auto update image for action: $@, version: $${version}"
 
 .ONESHELL:
 sonarqube:
