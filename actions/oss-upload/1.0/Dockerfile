@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-centos:base
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:base
 
 WORKDIR /opt/action
 

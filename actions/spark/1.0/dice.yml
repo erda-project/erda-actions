@@ -1,7 +1,7 @@
 ### Spark
 jobs:
   sql:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/spark:v2.4.3-cassandra
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/spark:v2.4.3-cassandra
     resources:
       cpu: 1
       mem: 1024

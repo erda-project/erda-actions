@@ -2,7 +2,7 @@ GitBranch=$(shell git rev-parse --abbrev-ref HEAD)
 GitCommit=$(shell git rev-parse --short HEAD)
 Date=$(shell date +"%Y%m%d")
 BuildTime=$(shell date '+%Y-%m-%d %T%z')
-Registry="registry.cn-hangzhou.aliyuncs.com/dice"
+Registry="erda-registry.cn-hangzhou.cr.aliyuncs.com/erda"
 
 .ONESHELL:
 echo \
@@ -52,7 +52,6 @@ push-extensions:
 
 .ONESHELL:
 sonarqube:
-
 	@set -eo pipefail
 
 	@echo start make $@

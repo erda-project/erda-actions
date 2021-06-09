@@ -1,7 +1,7 @@
 # 可选: v8.5.43-jdk8, v7.0.96-jdk8
 ARG CONTAINER_VERSION=v8.5.43-jdk8
 
-FROM {{CENTRAL_REGISTRY}}/terminus/terminus-tomcat:$CONTAINER_VERSION
+FROM {{CENTRAL_REGISTRY}}/erda/terminus-tomcat:$CONTAINER_VERSION
 
 ARG TARGET
 ARG MONITOR_AGENT=true

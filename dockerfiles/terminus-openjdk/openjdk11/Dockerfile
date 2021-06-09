@@ -1,8 +1,8 @@
-# registry.cn-hangzhou.aliyuncs.com/dice/openjdk:11
-# registry.cn-hangzhou.aliyuncs.com/dice/openjdk:11.0
-# registry.cn-hangzhou.aliyuncs.com/dice/openjdk:11.0.9
-# registry.cn-hangzhou.aliyuncs.com/dice/openjdk:11.0.9.11
-FROM registry.cn-hangzhou.aliyuncs.com/dice/terminus-centos:7
+# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:11
+# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:11.0
+# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:11.0.9
+# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:11.0.9.11
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:7
 
 LABEL maintainer="zhengdong.jzd@alibaba-inc.com"
 

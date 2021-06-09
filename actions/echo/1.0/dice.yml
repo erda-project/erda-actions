@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   echo:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/echo-action
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/echo-action
     resources:
       cpu: 0.01
       mem: 32

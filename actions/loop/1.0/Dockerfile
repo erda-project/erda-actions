@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-golang:1.14 AS builder
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 AS builder
 
 # disable CGO for ALL THE THINGS (to help ensure no libc)
 ENV CGO_ENABLED 0
@@ -11,7 +11,7 @@ WORKDIR /go/src/github.com/erda-project/erda-actions
 RUN set -x \
     	&& eval "GOOS=linux GOARCH=amd64 go build $BUILD_FLAGS -o /opt/action/run github.com/erda-project/erda-actions/actions/loop/1.0/internal"
 
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-centos:base
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:base
 
 COPY --from=builder /opt/action/run /opt/action/run
 

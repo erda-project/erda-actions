@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-golang:1.14 AS builder
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 AS builder
 
 COPY .  /erda-actions
 WORKDIR /erda-actions
@@ -10,7 +10,7 @@ RUN go mod vendor
 # go build
 RUN set -x && eval "GOOS=linux GOARCH=amd64 go build $BUILD_FLAGS -o /opt/action/run actions/jsonparse/1.0/internal/cmd/main.go"
 
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-alpine:base
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-alpine:base
 
 RUN apk add jq
 RUN apk add --update nodejs nodejs-npm

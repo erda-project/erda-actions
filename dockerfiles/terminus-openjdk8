@@ -1,6 +1,6 @@
 # Deprecated, use v1.8.0.222 instead
-# registry.cn-hangzhou.aliyuncs.com/terminus/terminus-openjdk8:1.0.1
-FROM registry.cn-hangzhou.aliyuncs.com/dice/terminus-centos:7
+# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk8:1.0.1
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:7
 
 LABEL maintainer="xgs@terminus.io"
 

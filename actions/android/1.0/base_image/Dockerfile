@@ -1,5 +1,5 @@
 # copy from androidsdk/android-29
-FROM registry.cn-hangzhou.aliyuncs.com/dice-third-party/android-29
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/android-29
 ENV SDK_HOME /usr/local
 ENV GRADLE_VERSION 6.0.1
 ENV GRADLE_SDK_URL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip

@@ -1,6 +1,6 @@
-# image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-nodejs:12.13
+# image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nodejs:12.13
 
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-centos:base
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:base
 
 LABEL maintainer="lj@terminus.io"
 

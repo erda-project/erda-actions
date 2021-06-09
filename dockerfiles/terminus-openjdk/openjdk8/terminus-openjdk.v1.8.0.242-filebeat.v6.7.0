@@ -1,5 +1,5 @@
-# registry.cn-hangzhou.aliyuncs.com/terminus/terminus-openjdk:v1.8.0.242-filebeat.v6.7.0
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-openjdk:v1.8.0.242
+# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v1.8.0.242-filebeat.v6.7.0
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v1.8.0.242
 
 ARG FILEBEAT_VERSION=6.7.0-linux-x86_64
 ENV FILEBEAT_VERSION ${FILEBEAT_VERSION}

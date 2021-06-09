@@ -1,4 +1,4 @@
-FROM {{BP_DOCKER_BASE_REGISTRY}}/terminus/terminus-nodejs:12.13
+FROM {{BP_DOCKER_BASE_REGISTRY}}/erda/terminus-nodejs:12.13
 
 ARG PACKAGE_LOCK_DIR
 

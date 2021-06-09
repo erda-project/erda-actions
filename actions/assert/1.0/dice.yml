@@ -3,7 +3,7 @@ jobs:
   assert:
     image: registry.cn-hangzhou.aliyuncs.com/dice/assert-action:20210519-a6835f8
     envs:
-      BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
+      BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
     resources:
       cpu: 0.1
       mem: 200

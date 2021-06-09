@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-golang:1.14 AS builder
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
@@ -8,7 +8,7 @@ RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run github.com/erda-project/
 RUN mkdir -p /opt/action/comp && \
     cp -r actions/js/1.0/comp/* /opt/action/comp
 
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-nodejs:12.13
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nodejs:12.13
 
 RUN yum install -y yum-utils && \
     yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && \

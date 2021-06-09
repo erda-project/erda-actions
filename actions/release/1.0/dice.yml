@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   release:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/release-action:20210305-53398316
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/release-action:20210519-01d2811
     envs:
       BASE64_SWITCH: false
     resources:

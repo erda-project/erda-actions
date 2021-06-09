@@ -1,4 +1,4 @@
-FROM {{BP_DOCKER_BASE_REGISTRY}}/terminus/dice-nginx:1.1.0
+FROM {{BP_DOCKER_BASE_REGISTRY}}/erda/dice-nginx:1.1.0
 
 # Set special timezone
 RUN echo "Asia/Shanghai" | tee /etc/timezone

@@ -1,7 +1,7 @@
 ### cdp-model-publish
 jobs:
   sql:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/cdp-model-publish:v2.0
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/cdp-model-publish:v2.0
     resources:
       cpu: 0.6
       mem: 1024

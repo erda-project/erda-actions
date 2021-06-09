@@ -1,6 +1,6 @@
 jobs:
   cs-kubernetes:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/cs-kubernetes:3.20
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/cs-kubernetes:3.20
     resources:
       cpu: 0.2
       mem: 128

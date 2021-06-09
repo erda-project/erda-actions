@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   testplan:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/testplan-action:20200608-fc571eb
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/testplan-action:20200608-fc571eb
     resources:
       cpu: 0.5
       mem: 2048

@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   ios:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/ios-action:20210323-a63216bd
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/ios-action:20210323-a63216bd
     resources:
       cpu: 1
       mem: 1024

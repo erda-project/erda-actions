@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   dockerfile:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/dockerfile-action:20200701-8c8de97
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/dockerfile-action:20200701-8c8de97
     resources:
       cpu: 1
       mem: 2048

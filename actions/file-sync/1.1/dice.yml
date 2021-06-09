@@ -1,7 +1,7 @@
 ### 文件上传/下载
 jobs:
   file-sync:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/pipeline-cloudstorage-resource:v1.1.0
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/pipeline-cloudstorage-resource:v1.1.0
     resources:
       cpu: 0.9
       mem: 1024

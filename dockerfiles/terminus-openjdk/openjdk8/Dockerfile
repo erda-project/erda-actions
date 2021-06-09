@@ -1,6 +1,6 @@
-# registry.cn-hangzhou.aliyuncs.com/dice/openjdk:8
-# registry.cn-hangzhou.aliyuncs.com/dice/openjdk:8u272
-FROM registry.cn-hangzhou.aliyuncs.com/dice/terminus-centos:7
+# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:8
+# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/openjdk:8u272
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:7
 
 LABEL maintainer="xgs@terminus.io"
 

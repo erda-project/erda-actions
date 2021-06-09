@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/dice/terraform:0.12
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terraform:0.12
 
 COPY . /go/src/terminus.io/dice/tools
 WORKDIR /go/src/terminus.io/dice/tools

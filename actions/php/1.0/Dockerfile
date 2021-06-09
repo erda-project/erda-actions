@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-golang:1.14 as builder
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 as builder
 
 MAINTAINER shenli shenli@terminus.io
 
@@ -10,7 +10,7 @@ RUN mkdir -p /opt/action/comp && \
 # go build
 RUN GOOS=linux GOARCH=amd64 go build -o /assets/run /go/src/github.com/erda-project/erda-actions/actions/php/1.0/internal/cmd/main.go
 
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-centos:base
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:base
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
  && rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm

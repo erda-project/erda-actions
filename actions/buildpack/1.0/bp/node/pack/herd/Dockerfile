@@ -1,4 +1,4 @@
-FROM {{BP_DOCKER_BASE_REGISTRY}}/terminus/terminus-herd:1.1.9-beta.1
+FROM {{BP_DOCKER_BASE_REGISTRY}}/erda/terminus-herd:1.1.9-beta.1
 
 COPY /bp/pack/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
