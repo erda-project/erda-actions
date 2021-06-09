@@ -50,6 +50,8 @@ push-extensions:
 
 	docker push $${image}
 
+	echo "action meta: $@($${version})=$${image}"
+
 #	# auto replace dice.yml image
 #	diceyml="actions/$@/$${version}/dice.yml"
 #	yq eval '.jobs.[].image' -i $${diceyml}
