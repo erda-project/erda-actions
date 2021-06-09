@@ -2,7 +2,7 @@ GitBranch=$(shell git rev-parse --abbrev-ref HEAD)
 GitCommit=$(shell git rev-parse --short HEAD)
 Date=$(shell date +"%Y%m%d")
 BuildTime=$(shell date '+%Y-%m-%d %T%z')
-Registry="erda-registry.cn-hangzhou.cr.aliyuncs.com/erda"
+Registry="erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions"
 
 .ONESHELL:
 echo \
@@ -49,6 +49,12 @@ push-extensions:
 	eval "$${dockerbuild}"
 
 	docker push $${image}
+
+	# auto replace dice.yml image
+	diceyml="actions/$@/$${version}/dice.yml"
+	yq eval '.jobs.[].image' -i $${diceyml}
+	git add .
+	git commit -m "Auto update image for action: $@, version: $${version}"
 
 .ONESHELL:
 sonarqube:
