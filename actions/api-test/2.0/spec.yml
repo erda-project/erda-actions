@@ -84,6 +84,11 @@ params:
         required: false
         desc: 值
 
+outputsFromParams:
+  - type: jq
+    keyExpr: "[.out_params[].key]"
+
+
 accessibleAPIs:
   # test env info
   - path: /api/testenv/<id>
