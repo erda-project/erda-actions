@@ -1,4 +1,4 @@
-FROM {{CENTRAL_REGISTRY}}/dice-third-party/terminus-php-apache:{{PHP_VERSION}}
+FROM {{CENTRAL_REGISTRY}}/erda/terminus-php-apache:{{PHP_VERSION}}
 ARG TARGET
 
 RUN sed -ri -e 's!/var/www/html!{{APACHE_DOCUMENT_ROOT}}!g' /etc/apache2/sites-available/*.conf

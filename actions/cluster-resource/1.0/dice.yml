@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   cluster-resource:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/cluster-resource:3.14
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/cluster-resource:3.14
     resources:
       cpu: 0.2
       mem: 200

@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   git-push:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/git-push-action:20200511-c4313d0
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/git-push-action:20200511-c4313d0
     resources:
       cpu: 1
       mem: 1024

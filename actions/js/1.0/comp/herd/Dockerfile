@@ -1,4 +1,4 @@
-FROM {{CENTRAL_REGISTRY}}/terminus/terminus-herd:1.1.8-node12
+FROM {{CENTRAL_REGISTRY}}/erda/terminus-herd:1.1.8-node12
 
 ARG DICE_VERSION
 

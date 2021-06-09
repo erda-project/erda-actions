@@ -1,0 +1,26 @@
+version: 1.1
+stages:
+- stage:
+  - git-checkout:
+      alias: repo
+      params:
+        depth: 1
+- stage:
+  - custom-script:
+      alias: buildpack
+      commands:
+      - cd ${repo}
+      - docker login registry.cn-hangzhou.aliyuncs.com --username=((registry_username)) -p ((registry_password))
+      - make buildpack
+  - custom-script:
+      alias: java
+      commands:
+      - cd ${repo}
+      - docker login registry.cn-hangzhou.aliyuncs.com --username=((registry_username)) -p ((registry_password))
+      - make java
+  - custom-script:
+      alias: java-build
+      commands:
+      - cd ${repo}
+      - docker login registry.cn-hangzhou.aliyuncs.com --username=((registry_username)) -p ((registry_password))
+      - make java-build

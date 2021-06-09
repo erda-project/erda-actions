@@ -1,9 +1,9 @@
 ### job 配置项
 jobs:
   redis-cli:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/redis-cli-action:20210512-456de5e
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/redis-cli-action:20210512-456de5e
     envs:
-      BP_DOCKER_BASE_REGISTRY: registry.cn-hangzhou.aliyuncs.com
+      BP_DOCKER_BASE_REGISTRY: erda-registry.cn-hangzhou.cr.aliyuncs.com
     resources:
       cpu: 1
       mem: 2048

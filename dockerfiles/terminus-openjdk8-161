@@ -1,6 +1,6 @@
 # see https://www.atatech.org/articles/126282
-# 打出的 image: registry.cn-hangzhou.aliyuncs.com/terminus/terminus-openjdk8-161:1.0.0
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-centos:base
+# 打出的 image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk8-161:1.0.0
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:base
 
 LABEL maintainer="xgs@terminus.io"
 

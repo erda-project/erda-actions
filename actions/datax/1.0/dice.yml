@@ -1,7 +1,7 @@
 ### datax数据同步
 jobs:
   datax:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/pipeline-datax-resource:v1.0.0
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/pipeline-datax-resource:v1.0.0
     resources:
       cpu: 0.9
       mem: 1024

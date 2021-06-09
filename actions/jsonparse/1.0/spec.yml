@@ -26,3 +26,6 @@ params:
     required: true
     desc: json 数据
 
+outputsFromParams:
+  - type: jq
+    keyExpr: "[.out_params[].key]"

@@ -1,7 +1,7 @@
 ### Spark jar包上传
 jobs:
   sql:
-    image: registry.cn-hangzhou.aliyuncs.com/terminus/pipeline-spark-resource:v1.0.0
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/pipeline-spark-resource:v1.0.0
     resources:
       cpu: 0.1
       mem: 1024

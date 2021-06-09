@@ -1,6 +1,6 @@
 jobs:
   loop:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/loop-action:20200710-d0aace2
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/loop-action:20200710-d0aace2
     resources:
       cpu: 0.01
       mem: 32

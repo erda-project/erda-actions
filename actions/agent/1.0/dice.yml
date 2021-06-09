@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   agent:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/action-agent:3.21-20210322-891e3565d
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/action-agent:3.21-20210322-891e3565d
     labels:
       # 必填字段
       MD5: 775229abe45f90fdfd8b47771b636c60

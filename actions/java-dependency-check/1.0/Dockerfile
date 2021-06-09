@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-golang:1.14 AS builder
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 AS builder
 
 LABEL maintainer="jiangzhengdong <zhengdong.jzd@alibaba-inc.com>"
 
@@ -17,7 +17,7 @@ RUN set -x \
 # 从 dockerhub 每天更新的 dcdb 镜像中获取最新的漏洞数据库
 FROM adorsys/dependency-check-db:6.0-h2 AS dcdb
 
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-maven:3-jdk-8-alpine
+FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-maven:3-jdk-8-alpine
 
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/mvn/settings.xml /opt/action/mvn/settings.xml

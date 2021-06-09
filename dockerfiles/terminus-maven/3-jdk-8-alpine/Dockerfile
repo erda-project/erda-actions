@@ -1,5 +1,5 @@
-# 升级时的备份镜像 registry.cn-hangzhou.aliyuncs.com/terminus/terminus-maven:3-jdk-8-alpine-back
-# registry.cn-hangzhou.aliyuncs.com/terminus/terminus-maven:3-jdk-8-alpine
+# 升级时的备份镜像 erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-maven:3-jdk-8-alpine-back
+# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-maven:3-jdk-8-alpine
 FROM alpine:3.12
 
 # set repository

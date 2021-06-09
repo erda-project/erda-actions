@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   api-test:
-    image: registry.cn-hangzhou.aliyuncs.com/dice/api-test-action:20210324-cc4f8a7b
+    image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/api-test-action:20210324-cc4f8a7b
     resources:
       cpu: 0.1
       mem: 32
