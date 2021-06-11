@@ -1,4 +1,4 @@
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 AS builder
+FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
@@ -8,7 +8,7 @@ RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run github.com/erda-project/
 RUN mkdir -p /opt/action/comp && \
     cp -r actions/js/1.0/comp/* /opt/action/comp
 
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nodejs:12.13
+FROM registry.erda.cloud/erda/terminus-nodejs:12.13
 
 RUN curl -sSL -q -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && \
     curl -sSL -q -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo && \

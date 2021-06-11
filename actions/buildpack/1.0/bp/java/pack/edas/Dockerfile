@@ -1,5 +1,5 @@
 # Build app image
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/edas-container:3.4.4
+FROM registry.erda.cloud/erda/edas-container:3.4.4
 
 RUN echo "Asia/Shanghai" | tee /etc/timezone
 

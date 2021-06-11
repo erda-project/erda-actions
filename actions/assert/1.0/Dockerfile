@@ -1,4 +1,4 @@
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 AS builder
+FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
 
 COPY .  /erda-actions
 WORKDIR /erda-actions
@@ -11,6 +11,6 @@ RUN go mod vendor
 
 RUN set -x && eval "GOOS=linux GOARCH=amd64 go build $BUILD_FLAGS -o /opt/action/run actions/assert/1.0/internal/cmd/main.go"
 
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-alpine:base
+FROM registry.erda.cloud/erda/terminus-alpine:base
 
 COPY --from=builder /opt/action/run /opt/action/run

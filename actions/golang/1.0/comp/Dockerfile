@@ -1,4 +1,4 @@
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14
+FROM registry.erda.cloud/erda/terminus-golang:1.14
 
 ARG TARGET
 

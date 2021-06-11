@@ -94,7 +94,7 @@ func buildCfg() *conf.Conf {
 	cfg := conf.Conf{
 		ProjectAppAbbr: "dice/release",
 		DiceOperatorId: "",
-		LocalRegistry:  "registry.cn-hangzhou.aliyuncs.com",
+		LocalRegistry:  "registry.erda.cloud",
 	}
 	return &cfg
 }

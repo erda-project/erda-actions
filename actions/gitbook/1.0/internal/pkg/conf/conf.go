@@ -15,7 +15,7 @@ type Conf struct {
 	DiceOperatorId string `env:"DICE_OPERATOR_ID" default:"terminus"`
 	DiceVersion    string `env:"DICE_VERSION"`
 	// pipeline注入，集群级别配置
-	CentralRegistry string `env:"BP_DOCKER_BASE_REGISTRY" default:"registry.cn-hangzhou.aliyuncs.com"` // 中心集群 registry, eg: registry.cn-hangzhou.aliyuncs.com
+	CentralRegistry string `env:"BP_DOCKER_BASE_REGISTRY" default:"registry.erda.cloud"` // 中心集群 registry, eg: registry.erda.cloud
 	LocalRegistry   string `env:"BP_DOCKER_ARTIFACT_REGISTRY"`                                         // 集群内 registry
 	// pipeline注入，docker build资源限制
 	CPU    float64 `env:"PIPELINE_LIMITED_CPU" default:"1"`    // 核数, eg: 1

@@ -1,4 +1,4 @@
-# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/sonar:8.4.2
+# registry.erda.cloud/erda/sonar:8.4.2
 FROM sonarqube:8.4.2-community
 
 # prevent anonymous user from accessing project data and so on

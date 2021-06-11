@@ -40,7 +40,7 @@ herd模式
           cmd: cd /root/js-build && ls && npm run dev
           copys:
             - ${js-build}:/root/
-          image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-herd:1.1.8-node12
+          image: registry.erda.cloud/erda/terminus-herd:1.1.8-node12
 ``` 
 
 spa模式
@@ -58,5 +58,5 @@ spa模式
             copys:
               - ${js-build}/dist:/usr/share/nginx/html/
               - ${js-build}/nginx.conf.template:/etc/nginx/conf.d/
-            image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nginx:0.2
+            image: registry.erda.cloud/erda/terminus-nginx:0.2
 ```

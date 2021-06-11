@@ -16,8 +16,8 @@ type Conf struct {
 	ProjectAppAbbr string `env:"DICE_PROJECT_APPLICATION"` // 用于生成用户镜像repo
 	DiceOperatorId string `env:"DICE_OPERATOR_ID" default:"terminus"`
 	// pipeline注入，集群级别配置
-	CentralRegistry       string `env:"BP_DOCKER_BASE_REGISTRY" default:"registry.cn-hangzhou.aliyuncs.com"` // 中心集群 registry
-	LocalRegistry         string `env:"BP_DOCKER_ARTIFACT_REGISTRY"`                                         // 集群内 registry
+	CentralRegistry       string `env:"BP_DOCKER_BASE_REGISTRY" default:"registry.erda.cloud"` // 中心集群 registry
+	LocalRegistry         string `env:"BP_DOCKER_ARTIFACT_REGISTRY"`                           // 集群内 registry
 	LocalRegistryUserName string `env:"BP_DOCKER_ARTIFACT_REGISTRY_USERNAME"`
 	LocalRegistryPassword string `env:"BP_DOCKER_ARTIFACT_REGISTRY_PASSWORD"`
 	// pipeline注入，docker build资源限制
