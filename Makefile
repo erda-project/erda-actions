@@ -52,11 +52,13 @@ push-extensions:
 
 	echo "action meta: $@($${version})=$${image}"
 
-#	# auto replace dice.yml image
-#	diceyml="actions/$@/$${version}/dice.yml"
-#	yq eval '.jobs.[].image' -i $${diceyml}
-#	git add .
-#	git commit -m "Auto update image for action: $@, version: $${version}"
+	# auto replace dice.yml image
+	if [[ "${AUTO_GIT_COMMIT}" == "true" ]]; then
+		diceyml="actions/$@/$${version}/dice.yml"
+		yq eval ".jobs.[].image = \"$${image}\"" -i $${diceyml}
+		git add .
+		@git commit -m "Auto update image for action: $@, version: $${version}"
+	fi
 
 .ONESHELL:
 sonarqube:
