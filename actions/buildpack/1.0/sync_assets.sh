@@ -35,3 +35,9 @@ release_4_first_version=4
 for i in {0..0}; do
     download ${release_4_first_version} ${i} ${assetsDir}
 done
+
+## release erda 1.x
+release_1_first_version=1
+for i in {1..1}; do
+    download ${release_1_first_version} ${i} ${assetsDir}
+done
