@@ -2,7 +2,7 @@ GitBranch=$(shell git rev-parse --abbrev-ref HEAD)
 GitCommit=$(shell git rev-parse --short HEAD)
 Date=$(shell date +"%Y%m%d")
 BuildTime=$(shell date '+%Y-%m-%d %T%z')
-Registry="registry.erda.cloud"
+Registry="registry.erda.cloud/erda-actions"
 
 .ONESHELL:
 echo \
