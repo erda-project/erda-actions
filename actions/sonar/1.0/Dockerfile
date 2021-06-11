@@ -1,11 +1,11 @@
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 AS builder
+FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 RUN GOOS=linux GOARCH=amd64 go build -o /assets/run actions/sonar/1.0/internal/*.go
 
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:base AS action
+FROM registry.erda.cloud/erda/terminus-centos:base AS action
 
 RUN yum install -y wget unzip
 

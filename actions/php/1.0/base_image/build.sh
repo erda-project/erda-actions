@@ -1,4 +1,4 @@
-registry="erda-registry.cn-hangzhou.cr.aliyuncs.com/erda"
+registry="registry.erda.cloud/erda"
 version="7.2"
 image="${registry}/terminus-php-apache:${version}"
 dockerfile="${version}/Dockerfile"

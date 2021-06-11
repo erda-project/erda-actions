@@ -16,7 +16,7 @@ image: xxxx
 ```yml
 - docker-push:
     params:
-      image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erdaxxx:v1.0   // 要 push 到外部镜像名称, require
+      image: registry.erda.cloud/erdaxxx:v1.0   // 要 push 到外部镜像名称, require
       from: imageResult.img                               // 应用下面的文件
       service: test-server                                // 服务名称，要与镜像文件里的module_name一致
       username: admin                                     // 外部镜像仓库用户名
@@ -28,7 +28,7 @@ image: xxxx
 ```yml
 - docker-push:
     params:
-      image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erdaxxx:v1.0   // 要 pull 的外部镜像名称, require
+      image: registry.erda.cloud/erdaxxx:v1.0   // 要 pull 的外部镜像名称, require
       service: test-server                                // 服务名称
       username: admin                                     // 外部镜像仓库用户名
       password: xxxx                                      // 外部镜像仓库用密码

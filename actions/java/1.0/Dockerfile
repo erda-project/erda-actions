@@ -1,4 +1,4 @@
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 AS builder
+FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
 
 LABEL maintainer="jiangzhengdong <zhengdong.jzd@alibaba-inc.com>"
 
@@ -21,7 +21,7 @@ RUN bash /opt/action/comp/download_spot_agent.sh
 RUN bash /opt/action/comp/download_fonts.sh
 
 
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v11.0.6
+FROM registry.erda.cloud/erda/terminus-openjdk:v11.0.6
 
 ARG USER_HOME_DIR="/root"
 

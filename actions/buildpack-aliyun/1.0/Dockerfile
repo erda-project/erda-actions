@@ -1,4 +1,4 @@
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-golang:1.14 AS builder
+FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
@@ -10,7 +10,7 @@ RUN GOOS=linux GOARCH=amd64 go build -o /assets/run github.com/erda-project/erda
 WORKDIR actions/buildpack-aliyun/1.0
 RUN bash sync_assets.sh
 
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/centos:7
+FROM registry.erda.cloud/erda/centos:7
 RUN yum install -y yum-utils && \
     yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && \
     yum -y install docker-ce-cli
