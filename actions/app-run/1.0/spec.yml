@@ -1,0 +1,39 @@
+name: app-run
+version: '1.0'
+type: action
+displayName: 应用执行
+category: deploy_management
+desc: 根据仓库中的流水线文件启动执行流水线并等待完成
+public: true
+supportedVersions:
+  - ">= 4.0"
+
+params:
+  - name: application_name
+    desc: 应用名称
+    required: true
+  - name: branch
+    desc: 分支名称
+    required: true
+  - name: pipeline_yml_name
+    desc: 流水线名称
+    required: true
+
+outputs:
+  - name: pipelineID
+    desc: 执行的 pipelineId
+  - name: status
+    desc: pipeline 的状态
+
+accessibleAPIs:
+  - path: /api/cicds/actions/pipeline-detail
+    method: GET
+    schema: http
+  - path: /api/cicds
+    method: POST
+    schema: http
+  - path: /api/applications
+    method: GET
+    schema: http
+
+

@@ -1,0 +1,45 @@
+name: app-create
+version: '1.0'
+type: action
+displayName: 应用创建
+category: deploy_management
+desc: 根据仓库地址和应用名称自动创建应用和推送代码
+public: true
+supportedVersions:
+  - ">= 4.0"
+
+params:
+  - name: application_git_repo
+    required: true
+    desc: 应用仓库地址
+  - name: application_git_username
+    desc: 应用仓库的账号
+  - name: application_git_password
+    desc: 应用仓库的密码
+  - name: application_name
+    desc: 应用名称
+    required: true
+  - name: application_type
+    desc: 应用类型 LIBRARY, SERVICE, MOBILE
+    required: true
+  - name: is_external_repo
+    desc: 是否是外置仓库，外置仓库会引用 git 地址，内置仓库会拉取并推送 git 地址的代码
+    default: false
+
+outputs:
+  - name: appId
+    desc: 创建或者查询到的 appId
+  - name: appExist
+    desc: app 是否已经存在
+
+accessibleAPIs:
+  # test env info
+  - path: /api/applications
+    method: GET
+    schema: http
+  - path: /api/applications/<applicationId>
+    method: GET
+    schema: http
+  - path: /api/applications
+    method: POST
+    schema: http

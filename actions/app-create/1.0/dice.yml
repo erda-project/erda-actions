@@ -1,0 +1,7 @@
+### job 配置项
+jobs:
+  api-run:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/app-create-action:20210615-1989294
+    resources:
+      cpu: 0.1
+      mem: 200
