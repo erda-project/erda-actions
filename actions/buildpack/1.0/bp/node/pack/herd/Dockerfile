@@ -1,4 +1,4 @@
-FROM {{BP_DOCKER_BASE_REGISTRY}}/erda/terminus-herd:1.1.9-beta.1
+FROM {{BP_DOCKER_BASE_REGISTRY}}/erda-actions/terminus-herd:1.1.9-beta.1
 
 COPY /bp/pack/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
@@ -15,6 +15,6 @@ RUN \
     bootjs=${bootjs:-'Pampasfile-default.js'} && echo ${bootjs} && \
     npm i @terminus/spot-agent@~${DICE_VERSION} -g && \
     npm link @terminus/spot-agent && \
-	spot install -r herd -s ${bootjs} || exit -1;
+    spot install -r herd -s ${bootjs} || exit -1;
 
 ENTRYPOINT ["/entrypoint.sh"]

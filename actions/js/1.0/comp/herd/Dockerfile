@@ -1,4 +1,4 @@
-FROM {{CENTRAL_REGISTRY}}/erda/terminus-herd:1.1.8-node12
+FROM {{CENTRAL_REGISTRY}}/erda-actions/terminus-herd:1.1.8-node12
 
 ARG DICE_VERSION
 
@@ -12,6 +12,6 @@ RUN bootjs=$(node -p "require('./package.json').scripts.start" | \
     bootjs=${bootjs:-'Pampasfile-default.js'} && echo ${bootjs} && \
     npm i @terminus/spot-agent@~${DICE_VERSION} -g && \
     npm link @terminus/spot-agent && \
-	spot install -r herd -s ${bootjs} || exit -1;
+    spot install -r herd -s ${bootjs} || exit -1;
 
 CMD ["npm", "run", "start"]
