@@ -5,9 +5,11 @@ displayName: api发布
 category: deploy_management
 desc: 用于Api的发布
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.15"
   - "< 3.19"
+supportedErdaVersions:
+  - "< 1.0"
 
 params:
   - name: register_id

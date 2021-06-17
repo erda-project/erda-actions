@@ -5,8 +5,10 @@ category: ops
 displayName: 云资源添加
 desc: 添加云资源
 public: false
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   # 通过terraform先创建云资源，再创建集群，需要如下参数

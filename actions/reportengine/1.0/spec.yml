@@ -5,8 +5,10 @@ type: action
 category: "monitor"
 desc: 监控平台周期性报表生成引擎，负责接收数据并渲染成报表，最终发送到用户邮箱
 public: false
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: report_id

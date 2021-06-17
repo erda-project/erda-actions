@@ -7,5 +7,7 @@ desc: 用于 java 单元测试，支持 JUnit 和 TestNg 框架，制作成为 d
 labels:
   maintainer: dengdeyang
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
+supportedErdaVersions:
+  - ">= 1.0"

@@ -7,5 +7,7 @@ desc: 针对 java 工程的代码静态检查任务，产出可运行镜像
 labels:
   maintainer: xxx
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
+supportedErdaVersions:
+  - ">= 1.0"

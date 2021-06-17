@@ -7,8 +7,10 @@ desc: 用于通过 action 自动执行指定环境的测试计划
 labels:
   maintainer: xxx
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: test_plan_id

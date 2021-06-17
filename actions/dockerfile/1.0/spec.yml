@@ -6,8 +6,10 @@ logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/dadf5a
 displayName: 容器镜像打包
 desc: 针对自定义 dockerfile 打包，产出可运行镜像
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: workdir

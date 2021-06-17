@@ -6,8 +6,10 @@ displayName: 对象存储系统文件同步
 desc: 文件同步Action允许用户从对象存储系统中上传或下载文件,当前支持Minio和阿里云OSS
 logoUrl:
 imageUrls:
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 labels:
   maintainer: cb167668@alibaba-inc.com

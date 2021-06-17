@@ -5,8 +5,10 @@ category: deploy_management
 displayName: API 文档发布
 desc: 将 API 描述文档发布到 API 集市，成为 API 资源
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.18"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: display_name

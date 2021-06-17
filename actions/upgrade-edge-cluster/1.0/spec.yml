@@ -5,8 +5,10 @@ category: ops
 displayName: 升级边缘集群
 desc: 升级边缘集群
 public: false
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: dice_version

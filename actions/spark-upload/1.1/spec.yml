@@ -7,8 +7,10 @@ desc: Spark上传 Action 允许用户上传Spark应用的jar包
 logoUrl:
 imageUrls:
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 labels:
   maintainer: cb167668@alibaba-inc.com

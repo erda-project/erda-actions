@@ -6,8 +6,10 @@ displayName: Java 工程漏洞检测
 desc: Java 依赖漏洞检测，并提供检测报告下载。
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/15/ed17ade2-6d8c-4c60-b718-d5e3a314c41a.png
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.13"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: code_dir

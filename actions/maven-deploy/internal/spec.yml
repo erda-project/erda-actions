@@ -7,8 +7,10 @@ category: version_management
 support:
   get: false
   put: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 source:
   - name: url

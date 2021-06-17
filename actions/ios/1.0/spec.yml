@@ -5,8 +5,10 @@ category: build
 displayName: ios构建
 desc: ios remote action
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: context

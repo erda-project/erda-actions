@@ -5,8 +5,10 @@ category: ops
 displayName: 阿里云Kubernetes集群
 desc: 创建阿里云容器服务 Kubernetes 集群
 public: false
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
     - name: cluster_name

@@ -6,8 +6,10 @@ displayName: go语言构建打包
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/666f1bf9-5e6d-43cb-803b-2d217361e28e.png
 desc: golang action
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: context

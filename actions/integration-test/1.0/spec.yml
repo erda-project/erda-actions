@@ -5,8 +5,10 @@ category: test_management
 displayName: 接口测试
 desc: 该 action 是针对 接口测试  的能力抽象
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: context

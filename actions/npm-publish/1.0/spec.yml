@@ -7,8 +7,10 @@ desc: 将 npm 的 package publish 到 npm 仓库，以统一和规范化 package
 labels:
   maintainer: xxx
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
 - name: package_name

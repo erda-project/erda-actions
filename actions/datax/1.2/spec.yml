@@ -7,8 +7,10 @@ desc: DataX为用户提供多种不同数据源之间的全量同步功能。
 logoUrl:
 imageUrls:
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 labels:
   maintainer: cb167668@alibaba-inc.com

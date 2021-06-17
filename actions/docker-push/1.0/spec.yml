@@ -5,5 +5,7 @@ displayName: 容器推送
 category: custom_task
 params:
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"

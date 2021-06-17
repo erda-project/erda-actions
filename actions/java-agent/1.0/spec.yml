@@ -3,5 +3,7 @@ version: '1.0'
 type: action
 desc: 监控java agent注入
 public: false
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.19"
+supportedErdaVersions:
+  - ">= 1.0"

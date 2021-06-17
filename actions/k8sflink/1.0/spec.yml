@@ -7,8 +7,10 @@ desc: 创建 Flink Job 集群
 public: true
 logoUrl:
 imageUrls:
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 1.12"
+supportedErdaVersions:
+  - ">= 1.0"
 
 labels:
   maintainer: ld269464@alibaba-inc.com

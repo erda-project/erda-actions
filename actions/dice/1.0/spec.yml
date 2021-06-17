@@ -6,8 +6,10 @@ displayName: 平台应用部署
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/fdb44148-35a3-4a91-a459-84dd197a55ae.png
 desc: 用于 dice 平台部署应用服务
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: release_id_path

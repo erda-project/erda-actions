@@ -5,8 +5,10 @@ category: ops
 displayName: ess信息
 desc: 获取ess group信息，如instance id，private ip
 public: false
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.13"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: ak

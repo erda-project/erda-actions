@@ -5,8 +5,10 @@ category: ops
 displayName: ess伸缩组机器删除
 desc: 通过instance id删除ess伸缩组中的机器
 public: false
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.13"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: ak

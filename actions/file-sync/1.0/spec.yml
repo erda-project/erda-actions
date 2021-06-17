@@ -7,8 +7,10 @@ desc: 文件同步Action允许用户从对象存储系统中上传或下载文�
 logoUrl:
 imageUrls:
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 labels:
   maintainer: cb167668@alibaba-inc.com

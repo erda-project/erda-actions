@@ -5,8 +5,10 @@ category: custom_task
 displayName: 循环操作
 desc: 循环某个操作，直至满足退出条件或超时。
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: type

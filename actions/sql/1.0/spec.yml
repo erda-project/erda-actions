@@ -7,8 +7,10 @@ desc: SQL Action执行用户配置的SQL脚本。
 logoUrl:
 imageUrls:
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 labels:
   maintainer: hxf168482@alibaba-inc.com

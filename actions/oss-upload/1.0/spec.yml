@@ -5,8 +5,10 @@ category: custom_task
 displayName: oss文件上传
 desc: 上传文件到OSS
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: access_key_id

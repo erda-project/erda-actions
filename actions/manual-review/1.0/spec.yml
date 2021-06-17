@@ -7,8 +7,10 @@ displayName: 人工确认
 category: test_management
 desc: 在流水线过程中添加人工确认步骤
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.20"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: processor

@@ -6,8 +6,10 @@ displayName: Flink上传
 desc: Flink上传 Action允许用户上传一个Flink作业的jar包
 logoUrl:
 imageUrls:
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 labels:
   maintainer: cb167668@alibaba-inc.com

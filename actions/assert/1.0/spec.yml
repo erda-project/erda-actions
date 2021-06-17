@@ -5,10 +5,12 @@ category: custom_task
 displayName: 断言
 desc: 对值进行断言
 public: true
-supportedVersions:
-  - ">= 3.21"
 labels:
   configsheet: true
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.21"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: asserts

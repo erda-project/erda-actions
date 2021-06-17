@@ -5,8 +5,10 @@ category: build_management
 displayName: gitbook构建
 desc: gitbook构建
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: workdir

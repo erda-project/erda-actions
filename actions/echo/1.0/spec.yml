@@ -5,8 +5,10 @@ category: custom_task
 displayName: echo
 desc: 回声
 public: false
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: what

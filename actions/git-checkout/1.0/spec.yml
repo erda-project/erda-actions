@@ -8,8 +8,10 @@ desc: 代码仓库克隆
 public: true
 labels:
   new_workspace: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: uri

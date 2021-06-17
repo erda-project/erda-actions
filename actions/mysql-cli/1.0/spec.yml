@@ -5,10 +5,12 @@ category: test_management
 displayName: mysql 配置单
 desc: 在对应的数据源中执行 sql 语句
 public: true
-supportedVersions:
-  - ">= 3.21"
 labels:
   configsheet: true
+supportedErdaVersions:
+  - ">= 1.0"
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.21"
 
 params:
   - name: datasource

@@ -13,8 +13,10 @@ loop:
     decline_ratio: 2
 logoUrl:
 imageUrls:
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
+supportedErdaVersions:
+  - ">= 1.0"
 
 labels:
   maintainer: shaozhong.hsz@alibaba-inc.com

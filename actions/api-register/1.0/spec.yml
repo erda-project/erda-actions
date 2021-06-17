@@ -5,8 +5,10 @@ displayName: api注册
 category: deploy_management
 desc: 用于Api的注册
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.15"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: runtime_id

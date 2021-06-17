@@ -6,8 +6,10 @@ displayName: php镜像构建
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/7f3b441c-52ca-4a7b-805d-d11b0ebc80e5.jpeg
 desc: php action
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: context

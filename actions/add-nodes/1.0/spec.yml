@@ -5,8 +5,10 @@ category: ops
 displayName: 添加节点
 desc: 添加一个或多个节点到集群中
 public: false
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: hosts

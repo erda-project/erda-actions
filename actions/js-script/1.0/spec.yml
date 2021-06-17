@@ -5,8 +5,10 @@ category: build_management
 displayNameL: 自定义 js 命令构建
 desc: 自定义js命令构建产物
 public: true
-supportedVersions:
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: workdir
