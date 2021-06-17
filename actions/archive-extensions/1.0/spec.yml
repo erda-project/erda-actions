@@ -19,7 +19,7 @@ type: action
 category: deploy_management
 desc: extension 打包归档工具，将 extensions 打包归档到 OSS
 public: true
-supportedVersion:
+supportedErdaVersions:
   - ">=1.0"
 
 params:

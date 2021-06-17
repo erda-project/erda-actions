@@ -23,7 +23,7 @@ desc: >-
   应用打包发布的制品归档到目标仓库的 <version>/releases/<snapName>/dice.yml 。
 
 public: true
-supportedVersion:
+supportedErdaVersions:
   - ">=1.0"
 
 params:
