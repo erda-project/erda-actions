@@ -72,7 +72,7 @@ func NewVersion(ctx context.Context, dirname string) (*Version, error) {
 				return nil, errors.Wrap(err, "failed to ReadFile")
 			}
 			if err = yaml.Unmarshal(version.SpecContent, version.Spec); err != nil {
-				return nil, errors.Wrap(err, "failed to parse " + fileInfo.Name())
+				return nil, errors.Wrap(err, "failed to parse "+fileInfo.Name())
 			}
 
 		case strings.EqualFold(fileInfo.Name(), "dice.yml") || strings.EqualFold(fileInfo.Name(), "dice.yaml"):
@@ -82,7 +82,7 @@ func NewVersion(ctx context.Context, dirname string) (*Version, error) {
 			version.ReadmeContent, _ = ioutil.ReadFile(filepath.Join(dirname, fileInfo.Name()))
 
 		case strings.EqualFold(fileInfo.Name(), "swagger.json") || strings.EqualFold(fileInfo.Name(), "swagger.yml") ||
-				strings.EqualFold(fileInfo.Name(), "swagger.yaml"):
+			strings.EqualFold(fileInfo.Name(), "swagger.yaml"):
 			version.SwaggerContent, _ = ioutil.ReadFile(filepath.Join(dirname, fileInfo.Name()))
 		}
 	}
@@ -105,7 +105,7 @@ func NewVersion(ctx context.Context, dirname string) (*Version, error) {
 
 // Version is a version of an Extension
 type Version struct {
-	Name string
+	Name    string
 	Dirname string
 
 	Spec          *apistructs.Spec // structure of spec.yml
@@ -114,8 +114,8 @@ type Version struct {
 	ReadmeContent []byte           // content of readme.md
 
 	SwaggerContent []byte // content of swagger.yml
-	conf *config.Config
-	client *client.Client
+	conf           *config.Config
+	client         *client.Client
 }
 
 func (v *Version) Push() error {
@@ -136,7 +136,7 @@ func (v *Version) Push() error {
 
 func replaceDiceRegistry(content []byte, typ string, dstRegistry string) ([]byte, map[string]string, error) {
 	var (
-		diceData = make(map[string]interface{})
+		diceData   = make(map[string]interface{})
 		pushImages = make(map[string]string)
 	)
 	if err := yaml.Unmarshal(content, &diceData); err != nil {
@@ -145,7 +145,7 @@ func replaceDiceRegistry(content []byte, typ string, dstRegistry string) ([]byte
 
 	var (
 		jobs = make(map[string]interface{})
-		ok bool
+		ok   bool
 	)
 	switch typ {
 	case Actions:

@@ -64,7 +64,7 @@ func main() {
 
 		if err := extensionsRepo.LoadExtensions(); err != nil {
 			err = errors.Wrapf(err, "failed to LoadExtensions from %s", repo)
-			_ = metawriter.Write(map[string]interface{}{config.Success: false,config.Err: err})
+			_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 			logrus.Fatalln(err)
 		}
 

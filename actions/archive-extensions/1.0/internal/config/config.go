@@ -14,10 +14,11 @@
 package config
 
 import (
-	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/pkg/errors"
 	"path/filepath"
 	"strings"
+
+	"github.com/erda-project/erda/pkg/envconf"
+	"github.com/pkg/errors"
 )
 
 const (

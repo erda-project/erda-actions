@@ -14,7 +14,6 @@
 package main
 
 import (
-	"github.com/erda-project/erda-actions/pkg/log"
 	"path/filepath"
 
 	"github.com/erda-project/erda/pkg/cloudstorage"
@@ -23,6 +22,7 @@ import (
 
 	"github.com/erda-project/erda-actions/actions/archive-extensions/1.0/internal/config"
 	"github.com/erda-project/erda-actions/actions/archive-extensions/1.0/internal/tar"
+	"github.com/erda-project/erda-actions/pkg/log"
 	"github.com/erda-project/erda-actions/pkg/metawriter"
 )
 
@@ -86,4 +86,3 @@ func main() {
 	_ = metawriter.Write(map[string]interface{}{config.Success: true})
 	logrus.Infoln("Archive Extensions action complete")
 }
-

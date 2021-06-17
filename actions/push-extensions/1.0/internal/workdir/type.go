@@ -13,8 +13,7 @@
 
 package workdir
 
-
 const (
-	Addons   = "addons"
-	Actions  = "actions"
+	Addons  = "addons"
+	Actions = "actions"
 )

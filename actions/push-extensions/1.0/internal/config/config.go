@@ -37,11 +37,11 @@ type Config struct {
 	Workspace         string `env:"DICE_WORKSPACE" required:"true"`
 
 	// action parameters
-	Repos []string `env:"ACTION_REPOS" required:"true"`
-	Registry string `env:"ACTION_REGISTRY" required:"false"`
-	Host string `env:"ACTION_HOST" required:"true"`
-	Username string `env:"ACTION_USERNAME" required:"true"`
-	Password string `env:"ACTION_PASSWORD" required:"true"`
+	Repos    []string `env:"ACTION_REPOS" required:"true"`
+	Registry string   `env:"ACTION_REGISTRY" required:"false"`
+	Host     string   `env:"ACTION_HOST" required:"true"`
+	Username string   `env:"ACTION_USERNAME" required:"true"`
+	Password string   `env:"ACTION_PASSWORD" required:"true"`
 
 	// other parameters
 	MetaFilename string `env:"METAFILE"`

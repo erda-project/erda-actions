@@ -15,9 +15,10 @@
 package config
 
 import (
-	"github.com/erda-project/erda/pkg/envconf"
 	"path/filepath"
 	"strings"
+
+	"github.com/erda-project/erda/pkg/envconf"
 )
 
 // metafile keys

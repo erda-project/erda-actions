@@ -14,13 +14,13 @@
 package main
 
 import (
-	"github.com/erda-project/erda-actions/pkg/log"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/config"
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/oss"
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/repo"
+	"github.com/erda-project/erda-actions/pkg/log"
 	"github.com/erda-project/erda-actions/pkg/metawriter"
 )
 
