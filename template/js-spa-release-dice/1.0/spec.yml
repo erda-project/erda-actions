@@ -31,7 +31,7 @@ template: |
                   copys:
                     - ${js-build}/(build 产出的目录):/usr/share/nginx/html/
                     - ${js-build}/nginx.conf.template:/etc/nginx/conf.d/
-                  image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-nginx:0.2
+                  image: registry.erda.cloud/erda/terminus-nginx:0.2
     - stage:
         - dice:
             alias: dice

@@ -26,7 +26,7 @@ template: |
               dice_yml: ${git-checkout}/dice.yml
               services:
                 dice.yml中的服务名:
-                  image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v11.0.6
+                  image: registry.erda.cloud/erda/terminus-openjdk:v11.0.6
                   copys:
                     - ${java-build:OUTPUT:buildPath}/target/jar包的名称:/target/jar包的名称
                   cmd: java -jar /target/jar包的名称

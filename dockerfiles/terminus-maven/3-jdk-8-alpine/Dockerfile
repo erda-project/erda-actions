@@ -1,5 +1,5 @@
-# 升级时的备份镜像 erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-maven:3-jdk-8-alpine-back
-# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-maven:3-jdk-8-alpine
+# 升级时的备份镜像 registry.erda.cloud/erda/terminus-maven:3-jdk-8-alpine-back
+# registry.erda.cloud/erda/terminus-maven:3-jdk-8-alpine
 FROM alpine:3.12
 
 # set repository
@@ -8,10 +8,10 @@ RUN echo "http://mirrors.aliyun.com/alpine/v3.12/main/" > /etc/apk/repositories 
 
 # adjust timezone
 RUN apk add --no-cache tzdata && \
-	cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-	echo "Asia/Shanghai" > /etc/timezone && \
-	date && \
-	apk del tzdata
+  cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+  echo "Asia/Shanghai" > /etc/timezone && \
+  date && \
+  apk del tzdata
 
 # add other pkgs
 RUN apk add --no-cache bash python2 python3 curl

@@ -1,5 +1,5 @@
 # copied some from https://github.com/docker-library/tomcat
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v1.8.0.181
+FROM registry.erda.cloud/erda/terminus-openjdk:v1.8.0.181
 
 ENV CATALINA_HOME /opt/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH

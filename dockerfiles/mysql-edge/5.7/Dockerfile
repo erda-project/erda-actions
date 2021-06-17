@@ -1,4 +1,4 @@
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-centos:7
+FROM registry.erda.cloud/erda/terminus-centos:7
 COPY ["entrypoint.sh","install.sh","set-pass.sh","set-replica.sh","/usr/bin/"]
 COPY ["master.cnf","slave.cnf", "/etc/mysql/"]
 RUN ["/usr/bin/install.sh"]

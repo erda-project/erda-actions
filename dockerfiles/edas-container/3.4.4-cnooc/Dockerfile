@@ -1,5 +1,5 @@
-# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/edas-container:3.4.4-cnooc
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/edas-container:3.4.4
+# registry.erda.cloud/erda/edas-container:3.4.4-cnooc
+FROM registry.erda.cloud/erda/edas-container:3.4.4
 
 RUN yum install -y unzip zip
 

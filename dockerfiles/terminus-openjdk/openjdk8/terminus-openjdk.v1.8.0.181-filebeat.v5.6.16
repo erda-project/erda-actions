@@ -1,5 +1,5 @@
-# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v1.8.0.181-filebeat.v5.6.16
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v1.8.0.181
+# registry.erda.cloud/erda/terminus-openjdk:v1.8.0.181-filebeat.v5.6.16
+FROM registry.erda.cloud/erda/terminus-openjdk:v1.8.0.181
 
 ARG FILEBEAT_VERSION=5.6.16-linux-x86_64
 ENV FILEBEAT_VERSION ${FILEBEAT_VERSION}

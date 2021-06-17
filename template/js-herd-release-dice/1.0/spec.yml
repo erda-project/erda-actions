@@ -29,7 +29,7 @@ template: |
                   cmd: cd /root/js-build && ls && npm run dev
                   copys:
                     - ${js-build}:/root/
-                  image: erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions/terminus-herd:1.1.8-node12
+                  image: registry.erda.cloud/erda-actions/terminus-herd:1.1.8-node12
     - stage:
         - dice:
             alias: dice

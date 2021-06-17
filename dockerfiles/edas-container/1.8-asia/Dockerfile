@@ -1,5 +1,5 @@
-# erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v1.8.0.242-asia
-FROM erda-registry.cn-hangzhou.cr.aliyuncs.com/erda/terminus-openjdk:v1.8.0.242
+# registry.erda.cloud/erda/terminus-openjdk:v1.8.0.242-asia
+FROM registry.erda.cloud/erda/terminus-openjdk:v1.8.0.242
 
 RUN yum install -y unzip zip
 
