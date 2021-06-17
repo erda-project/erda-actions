@@ -3,6 +3,7 @@ GitCommit=$(shell git rev-parse --short HEAD)
 Date=$(shell date +"%Y%m%d")
 BuildTime=$(shell date '+%Y-%m-%d %T%z')
 Registry="registry.erda.cloud/erda-actions"
+DevelopRegistry="registry.cn-hangzhou.aliyuncs.com/dice"
 
 .ONESHELL:
 echo \
@@ -34,7 +35,13 @@ push-extensions archive-extensions:
 	@echo expected Dockerfile: $${dockerfile}
 	if [[ ! -f $${dockerfile} ]]; then echo "expected Dockerfile not exist, stop." && exit 1; fi
 
-	image="$(Registry)/$@-action:$(Date)-${GitCommit}"
+	if [[ "$(DEVELOP_MODE)" == 'true' ]]; then
+		echo "DEVELOP_MODE == true"
+		image="$(DevelopRegistry)/$@-action:$(Date)-${GitCommit}"
+	else
+		image="$(Registry)/$@-action:$(Date)-${GitCommit}"
+	fi
+
 	@echo image=$${image}
 
 	dockerbuild="docker build . -f $${dockerfile} -t $${image} \
