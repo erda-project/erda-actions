@@ -72,6 +72,7 @@ type Config struct {
 	OssKey      string               `env:"ACTION_OSSACCESSKEYID" required:"true"`
 	OssSecret   string               `env:"ACTION_OSSACCESSKEYSECRET" required:"true"`
 	GitRef      string               `env:"ACTION_GITREF" required:"true"`
+	ReleaseName string               `env:"ACTION_RELEASENAME"`
 
 	// other parameters
 	MetaFilename string `env:"METAFILE"`
@@ -84,6 +85,13 @@ func (c Config) GetOssPath() string {
 
 	version := "v" + strings.TrimPrefix(filepath.Base(c.GitRef), "v")
 	return filepath.Join("archived-versions", version)
+}
+
+func (c Config) GetReleaseName() string {
+	if c.ReleaseName != "" {
+		return c.ReleaseName
+	}
+	return filepath.Base(c.Workdir)
 }
 
 type RegistryReplacement struct {

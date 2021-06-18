@@ -105,6 +105,5 @@ func (y *ReleasedYaml) Local() string {
 
 // Remote is like /archived-versions/{git-tag:v1.0.0}/releases/{repo-name:erda}/dice.yml
 func (y *ReleasedYaml) Remote() string {
-	repoName := filepath.Base(y.Conf.Workdir)
-	return filepath.Join(y.Conf.GetOssPath(), "releases", repoName, "dice.yml")
+	return filepath.Join(y.Conf.GetOssPath(), "releases", y.Conf.GetReleaseName(), "dice.yml")
 }

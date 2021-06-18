@@ -28,7 +28,7 @@ supportedErdaVersions:
 
 params:
   - name: workdir
-    desc: 工作目录, 默认为 ${git-checkout} , 也即源仓库所在目录。action 从仓库中读取 VERSION 文件、migrations 脚本等。
+    desc: 仓库目录, 默认为 ${git-checkout}。action 从仓库中读取 VERSION 文件、migrations 脚本等。
     default: ${git-checkout}
 
   - name: migrationsDir
@@ -79,6 +79,11 @@ params:
     type: string
     desc: OSS Access Key Secret
     required: true
+
+  - name: releaseName
+    type: string
+    desc: 制品名称, 如为空, 就以仓库名称作为制品名称
+    required: false
 
   - name: registry_replacement
     type: struct
