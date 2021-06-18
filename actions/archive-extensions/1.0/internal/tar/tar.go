@@ -30,7 +30,7 @@ func Tar(src, dst string) (string, error) {
 		dst = src + ".tar.gz"
 	}
 
-	tar := exec.Command("tar", "-zcf", dst, src)
+	tar := exec.Command("tar", "-zcf", dst, "-C", filepath.Dir(src), filepath.Base(src))
 	tar.Stdout = os.Stdout
 	tar.Stderr = os.Stderr
 	if err := tar.Run(); err != nil {

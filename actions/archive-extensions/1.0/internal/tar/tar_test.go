@@ -14,14 +14,19 @@
 package tar_test
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/erda-project/erda-actions/actions/archive-extensions/1.0/internal/tar"
 )
 
 func TestTar(t *testing.T) {
-	var src = "../../internal"
-	dst, err := tar.Tar(src, "")
+	var src = ".."
+	abs, err := filepath.Abs(src)
+	if err != nil {
+		t.Fatalf("failed to filepath.Abs: %v", err)
+	}
+	dst, err := tar.Tar(abs, "")
 	if err != nil {
 		t.Fatalf("failed to tar.Tar, src: %s: %v", src, err)
 	}
