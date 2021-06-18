@@ -14,6 +14,9 @@
 package config
 
 import (
+	"path/filepath"
+	"strings"
+
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/pkg/errors"
 )
@@ -24,28 +27,6 @@ const (
 )
 
 var conf *Config
-
-type Config struct {
-	// basic envs
-	OrgID             uint64 `env:"DICE_ORG_ID" required:"true"`
-	CiOpenapiToken    string `env:"DICE_OPENAPI_TOKEN" required:"true"`
-	DiceOpenapiPrefix string `env:"DICE_OPENAPI_ADDR" required:"true"`
-	ProjectName       string `env:"DICE_PROJECT_NAME" required:"true"`
-	AppName           string `env:"DICE_APPLICATION_NAME" required:"true"`
-	ProjectID         int64  `env:"DICE_PROJECT_ID" required:"true"`
-	AppID             uint64 `env:"DICE_APPLICATION_ID" required:"true"`
-	Workspace         string `env:"DICE_WORKSPACE" required:"true"`
-
-	// action parameters
-	Repos    []string `env:"ACTION_REPOS" required:"true"`
-	Registry string   `env:"ACTION_REGISTRY" required:"false"`
-	Host     string   `env:"ACTION_HOST" required:"true"`
-	Username string   `env:"ACTION_USERNAME" required:"true"`
-	Password string   `env:"ACTION_PASSWORD" required:"true"`
-
-	// other parameters
-	MetaFilename string `env:"METAFILE"`
-}
 
 func New() (*Config, error) {
 	if conf != nil {
@@ -58,4 +39,37 @@ func New() (*Config, error) {
 	}
 
 	return conf, nil
+}
+
+type Config struct {
+	// basic envs
+	OrgID             uint64 `env:"DICE_ORG_ID" required:"true"`
+	CiOpenapiToken    string `env:"DICE_OPENAPI_TOKEN" required:"true"`
+	DiceOpenapiPrefix string `env:"DICE_OPENAPI_ADDR" required:"true"`
+	ProjectName       string `env:"DICE_PROJECT_NAME" required:"true"`
+	AppName           string `env:"DICE_APPLICATION_NAME" required:"true"`
+	ProjectID         int64  `env:"DICE_PROJECT_ID" required:"true"`
+	AppID             uint64 `env:"DICE_APPLICATION_ID" required:"true"`
+	Workspace         string `env:"DICE_WORKSPACE" required:"true"`
+
+	// actions parameters
+	Repos       []string `env:"ACTION_REPOS" required:"true"`
+	OssEndpoint string   `env:"ACTION_OSSENDPOINT" required:"true"`
+	OssBucket   string   `env:"ACTION_OSSBUCKET" required:"true"`
+	OssPath     string   `env:"ACTION_OSSPATH" required:"false"`
+	OssKey      string   `env:"ACTION_OSSACCESSKEYID" required:"true"`
+	OssSecret   string   `env:"ACTION_OSSACCESSKEYSECRET" required:"true"`
+	GitRef      string   `env:"ACTION_GITREF" required:"true"`
+
+	// other parameters
+	MetaFilename string `env:"METAFILE"`
+}
+
+func (c Config) GetOssPath() string {
+	if c.OssPath != "" {
+		return c.OssPath
+	}
+
+	version := "v" + strings.TrimPrefix(filepath.Base(c.GitRef), "v")
+	return filepath.Join("archived-versions", version, "extensions")
 }

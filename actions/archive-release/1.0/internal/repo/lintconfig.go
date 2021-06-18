@@ -11,9 +11,30 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-package workdir
+package repo
 
-const (
-	Addons  = "addons"
-	Actions = "actions"
+import (
+	"path/filepath"
+
+	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/config"
 )
+
+type LintConfig struct {
+	conf *config.Config
+}
+
+func (l *LintConfig) Bucket() string {
+	return l.conf.OssBucket
+}
+
+// Remote is like /archived-versions/{git-tag:v1.0.0}/sqls/config.yml
+func (l *LintConfig) Remote() string {
+	return filepath.Join(l.conf.GetOssPath(), "sqls", "config.yml")
+}
+
+func (l *LintConfig) Local() string {
+	if l.conf.Workdir == "" || l.conf.LintConfig == "" {
+		return ""
+	}
+	return filepath.Join(l.conf.Workdir, l.conf.LintConfig)
+}

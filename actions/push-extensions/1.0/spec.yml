@@ -19,8 +19,8 @@ type: action
 category: deploy_management
 desc: extension 推送工具，将 extensions 仓库中的 Actions 和 Addons 推送到指定的 Erda 平台
 public: true
-supportedVersion:
-  - ">1.0"
+supportedErdaVersions:
+  - ">=1.0"
 
 params:
   - name: repos

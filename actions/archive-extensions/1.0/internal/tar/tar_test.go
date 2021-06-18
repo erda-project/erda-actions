@@ -11,9 +11,24 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-package workdir
+package tar_test
 
-const (
-	Addons  = "addons"
-	Actions = "actions"
+import (
+	"path/filepath"
+	"testing"
+
+	"github.com/erda-project/erda-actions/actions/archive-extensions/1.0/internal/tar"
 )
+
+func TestTar(t *testing.T) {
+	var src = ".."
+	abs, err := filepath.Abs(src)
+	if err != nil {
+		t.Fatalf("failed to filepath.Abs: %v", err)
+	}
+	dst, err := tar.Tar(abs, "")
+	if err != nil {
+		t.Fatalf("failed to tar.Tar, src: %s: %v", src, err)
+	}
+	t.Log(dst)
+}

@@ -19,8 +19,8 @@ type: action
 category: deploy_management
 desc: Erda MySQL Migration 工具
 public: true
-supportedVersion:
-  - ">4.0"
+supportedErdaVersions:
+  - ">=1.0"
 
 params:
   - name: workdir

@@ -11,9 +11,31 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-package workdir
+package tar
 
-const (
-	Addons  = "addons"
-	Actions = "actions"
+import (
+	"os"
+	"os/exec"
+	"path/filepath"
+
+	"github.com/pkg/errors"
 )
+
+func Tar(src, dst string) (string, error) {
+	src, err := filepath.Abs(src)
+	if err != nil {
+		return "", err
+	}
+	if dst == "" {
+		dst = src + ".tar.gz"
+	}
+
+	tar := exec.Command("tar", "-zcf", dst, "-C", filepath.Dir(src), filepath.Base(src))
+	tar.Stdout = os.Stdout
+	tar.Stderr = os.Stderr
+	if err := tar.Run(); err != nil {
+		return "", errors.Wrapf(err, "failed to tar.Run, command: %s", tar.String())
+	}
+
+	return dst, nil
+}

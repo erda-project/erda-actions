@@ -12,9 +12,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 jobs:
-  dice-version-archive:
-    image: registry.erda.cloud/erda-actions/dice-version-archive-action:20210422-047586e
+  archive-extensions:
+    image: registry.cn-hangzhou.aliyuncs.com/dice/archive-extensions-action:20210618-c9f264e
     resource:
       cpu: 0.5
-      disk: 1.24
-      mem: 1.24
+      disk: 1024
+      mem: 1024

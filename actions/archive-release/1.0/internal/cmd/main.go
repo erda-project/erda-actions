@@ -14,67 +14,62 @@
 package main
 
 import (
-	"context"
-	"os"
-
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	"github.com/erda-project/erda-actions/actions/push-extensions/1.0/internal/client"
-	"github.com/erda-project/erda-actions/actions/push-extensions/1.0/internal/config"
-	"github.com/erda-project/erda-actions/actions/push-extensions/1.0/internal/workdir"
+	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/config"
+	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/oss"
+	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/repo"
+	"github.com/erda-project/erda-actions/pkg/log"
 	"github.com/erda-project/erda-actions/pkg/metawriter"
 )
 
 func main() {
-	// load configuration and pre-check
+	log.Init()
+	logrus.Infoln("Archive Release action start working")
+
 	conf, err := config.New()
 	if err != nil {
 		err = errors.Wrap(err, "failed to config.New")
 		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalln(err)
 	}
-	if len(conf.Repos) == 0 {
-		err = errors.New("there is no repo, did you add it ?")
-		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
-		logrus.Fatalln(err)
-	}
-	if conf.Host == "" || conf.Username == "" || conf.Password == "" {
-		err = errors.New("missing parameters, did you set the openapi host, username and password ?")
-		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
-		logrus.Fatalln(err)
-	}
 
-	// make extension pushing client
-	cli, err := client.New(conf.Host, conf.Username, conf.Password)
+	// make a repo object
+	r, err := repo.New(conf)
 	if err != nil {
-		err = errors.Wrap(err, "failed to client.New")
 		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalln(err)
 	}
 
-	// make context
-	ctx := context.Background()
-	ctx = context.WithValue(ctx, workdir.CtxKeyConfig, conf)
-	ctx = context.WithValue(ctx, workdir.CtxKeyClient, cli)
+	// make a oss handle
+	uploader, err := oss.New(conf.OssEndpoint, conf.OssKey, conf.OssSecret)
+	if err != nil {
+		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
+		logrus.Fatalln(err)
+	}
 
-	// load and push all extensions from every repo
-	for _, repo := range conf.Repos {
-		extensionsRepo := workdir.New(ctx, repo)
-
-		if err := extensionsRepo.LoadExtensions(); err != nil {
-			err = errors.Wrapf(err, "failed to LoadExtensions from %s", repo)
-			_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
-			logrus.Fatalln(err)
+	// upload released yml, migration lint config file and SQLs scripts
+	if err = uploader.Upload(r.ReleaseYml); err != nil {
+		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
+		logrus.Fatalln(err)
+	}
+	if r.LintConfig.Local() != "" {
+		if err = uploader.Upload(r.LintConfig); err != nil {
+			_ = metawriter.Write(map[string]interface{}{config.Warn: err})
+			logrus.Warnln(err)
 		}
-
-		if err := extensionsRepo.Push(); err != nil {
-			err = errors.Wrapf(err, "failed to Push extensions from %s", repo)
+	}
+	if len(r.Scripts) == 0 {
+		logrus.Warnln("no migration script will be archived because there is no workdir or migrationsDir")
+	}
+	for _, script := range r.Scripts {
+		if err := uploader.Upload(script); err != nil {
 			_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 			logrus.Fatalln(err)
 		}
 	}
 
 	_ = metawriter.Write(map[string]interface{}{config.Success: true})
-	os.Exit(0)
+	logrus.Infoln("Archive Release action complete")
 }

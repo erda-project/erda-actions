@@ -17,7 +17,7 @@ COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 # go build
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/dice-version-archive/1.0/internal/cmd/main.go
+RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/archive-extensions/1.0/internal/cmd/main.go
 
 FROM centos
 
