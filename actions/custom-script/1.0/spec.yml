@@ -5,13 +5,14 @@ displayName: 自定义任务
 category: custom_task
 desc: 运行自定义命令
 public: true
-supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
-  - ">= 3.5"
-labels:supportedErdaVersions:
-  - ">= 1.0"
-
+labels:
   autotest: true
   configsheet: true
+
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
 
 params:
   - name: command
