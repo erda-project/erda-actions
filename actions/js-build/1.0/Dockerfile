@@ -7,7 +7,7 @@ RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run github.com/erda-project/
 
 SHELL ["/bin/bash", "--login", "-c"]
 
-RUN yum -y install gcc && yum -y install bzip2
+RUN yum -y install gcc bzip2 git
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
