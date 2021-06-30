@@ -7,11 +7,12 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	"github.com/erda-project/erda-actions/actions/integration-test/1.0/internal/conf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
-	"github.com/erda-project/erda/pkg/httpclient"
+	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda/pkg/qaparser"
+
+	"github.com/erda-project/erda-actions/actions/integration-test/1.0/internal/conf"
 )
 
 func Exec(cfg *conf.Conf) error {

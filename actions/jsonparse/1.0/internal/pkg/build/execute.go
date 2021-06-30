@@ -12,7 +12,7 @@ import (
 	"github.com/erda-project/erda-actions/actions/jsonparse/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/erda-project/erda/pkg/jsonparse"
+	"github.com/erda-project/erda/pkg/encoding/jsonparse"
 )
 
 func Execute() error {

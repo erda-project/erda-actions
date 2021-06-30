@@ -7,7 +7,7 @@ import (
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/conf"
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/util"
 	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/httpclient"
+	"github.com/erda-project/erda/pkg/http/httpclient"
 )
 
 func ReportCacheImage(action string) {

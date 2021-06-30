@@ -20,7 +20,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/erda-project/erda/pkg/customhttp"
+	"github.com/erda-project/erda/pkg/http/customhttp"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )

@@ -10,7 +10,7 @@ import (
 
 	"github.com/erda-project/erda-actions/actions/dice-deploy-service/1.0/dice-deploy-services"
 	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/erda-project/erda/pkg/httpclient"
+	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda/pkg/retry"
 )
 

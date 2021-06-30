@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thedevsaddam/gojsonq/v2"
 
-	"github.com/erda-project/erda/pkg/httpclient"
+	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda/pkg/strutil"
 )
 

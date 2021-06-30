@@ -7,7 +7,7 @@ import (
 
 	"github.com/erda-project/erda-actions/actions/lib-publish/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/httpclient"
+	"github.com/erda-project/erda/pkg/http/httpclient"
 )
 
 // GetAppPublishItemRelations 根据 appID 获取应用关联的发布内容
