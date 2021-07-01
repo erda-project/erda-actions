@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/erda-project/erda/pkg/httpclient"
+	"github.com/erda-project/erda/pkg/http/httpclient"
 )
 
 type LoopType string

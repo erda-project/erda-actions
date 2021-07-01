@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/erda-project/erda/pkg/customhttp"
+	"github.com/erda-project/erda/pkg/http/customhttp"
 )
 
 func RequestGet(url string, header http.Header) ([]byte, *http.Response, error) {

@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda-actions/actions/api-register/1.0/internal/conf"
-	"github.com/erda-project/erda/pkg/customhttp"
+	"github.com/erda-project/erda/pkg/http/customhttp"
 )
 
 func GetPublishStatus(cfg conf.Conf, registerId string) (bool, error) {

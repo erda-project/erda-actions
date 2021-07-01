@@ -19,9 +19,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/erda-project/erda/pkg/database/sqllint/configuration"
+	"github.com/erda-project/erda/pkg/database/sqllint/rules"
 	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/erda-project/erda/pkg/sqllint/configuration"
-	"github.com/erda-project/erda/pkg/sqllint/rules"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )

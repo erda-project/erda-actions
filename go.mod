@@ -3,7 +3,9 @@ module github.com/erda-project/erda-actions
 go 1.14
 
 replace (
+	github.com/erda-project/erda => github.com/erda-project/erda v0.0.0-20210630115114-5dd759740bad
 	github.com/influxdata/influxql => github.com/erda-project/influxql v1.1.0-ex
+	github.com/rancher/remotedialer => github.com/erda-project/remotedialer v0.2.6-0.20210618084817-52c879aadbcb
 
 	k8s.io/api => k8s.io/api v0.18.3
 	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.18.3
@@ -40,8 +42,13 @@ require (
 	github.com/caarlos0/env v3.3.1-0.20180521112546-3e0f30cbf50b+incompatible
 	github.com/cespare/trie v0.0.0-20150610204604-3fe1a95cbba9 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
-	github.com/erda-project/erda v0.0.0-20210518111439-5e375de156b8
-	github.com/hashicorp/go-multierror v1.0.0
+	github.com/elastic/cloud-on-k8s v0.0.0-20210205172912-5ce0eca90c60 // indirect
+	github.com/erda-project/erda v0.0.0
+	github.com/erda-project/erda-infra v0.0.0-20210628062952-f8dbba71489b // indirect
+	github.com/erda-project/erda-proto-go v0.0.0-20210628065747-b46fc4f14aac // indirect
+	github.com/go-logr/logr v0.4.0 // indirect
+	github.com/go-openapi/spec v0.19.8 // indirect
+	github.com/hashicorp/go-multierror v1.1.0
 	github.com/labstack/gommon v0.3.0
 	github.com/machinebox/progress v0.2.0
 	github.com/matryer/is v1.4.0 // indirect
@@ -53,8 +60,9 @@ require (
 	github.com/robertkrimen/terst v0.0.0-20140908162406-4b1c60b7cc23
 	github.com/sabhiram/go-gitignore v0.0.0-20180611051255-d3107576ba94
 	github.com/shogo82148/androidbinary v1.0.2
-	github.com/sirupsen/logrus v1.8.0
+	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0
+	github.com/tealeg/xlsx/v3 v3.2.3 // indirect
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2
 	github.com/toqueteos/trie v0.0.0-20150530104557-56fed4a05683 // indirect
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83

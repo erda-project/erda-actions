@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/erda-project/erda/pkg/customhttp"
+	"github.com/erda-project/erda/pkg/http/customhttp"
 )
 
 type HttpResponse struct {

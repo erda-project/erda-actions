@@ -4,8 +4,8 @@ import (
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/conf"
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/util"
 	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/httpclient"
-	"github.com/erda-project/erda/pkg/httpclientutil"
+	"github.com/erda-project/erda/pkg/http/httpclient"
+	"github.com/erda-project/erda/pkg/http/httpclientutil"
 )
 
 func QueryBuildArtifact(sha string) (*apistructs.BuildArtifact, error) {
