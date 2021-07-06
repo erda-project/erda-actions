@@ -15,7 +15,7 @@ import (
 	"github.com/erda-project/erda-actions/actions/app-create/1.0/internal/conf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
-	"github.com/erda-project/erda/pkg/httpclient"
+	"github.com/erda-project/erda/pkg/http/httpclient"
 )
 
 const CloneAddr = "_repo"
@@ -81,7 +81,7 @@ func handleAPIs() error {
 	// create application
 	var req apistructs.ApplicationCreateRequest
 	req.Name = conf.ParamsApplicationName()
-	req.Mode = conf.ApplicationType()
+	req.Mode = apistructs.ApplicationMode(conf.ApplicationType())
 	req.ProjectID = conf.ProjectId()
 	req.IsExternalRepo = conf.IsExternalRepo()
 	if req.IsExternalRepo {
