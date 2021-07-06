@@ -13,7 +13,6 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda/pkg/http/httputil"
@@ -21,11 +20,10 @@ import (
 )
 
 func Run() error {
-	var cfg conf
-	if err := envconf.Load(&cfg); err != nil {
+	cfg, err := HandleConf()
+	if err != nil {
 		return err
 	}
-	logrus.Infof("%+v", cfg)
 	d := &dice{conf: &cfg}
 
 	deployReq, err := prepareRequest(&cfg, cfg.AssignedWorkspace)
