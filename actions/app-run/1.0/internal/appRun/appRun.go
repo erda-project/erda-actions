@@ -13,8 +13,10 @@ import (
 
 	"github.com/erda-project/erda-actions/actions/app-run/1.0/internal/conf"
 	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/encoding/jsonparse"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
+	"github.com/erda-project/erda/pkg/strutil"
 )
 
 func handlerPipelineYmlName(ymlName string) string {
@@ -44,8 +46,8 @@ func handleAPIs() error {
 		return fmt.Errorf("not find application name %s", conf.ActionApplicationName())
 	}
 
-	// start pipeline
 	logrus.Infof("start run pipeline %s", conf.ActionPipelineYmlName())
+	// start pipeline
 	pipelineDTO, err := startPipeline(apistructs.PipelineCreateRequest{
 		AppID:             existApp.ID,
 		Branch:            conf.ActionBranch(),
@@ -57,8 +59,9 @@ func handleAPIs() error {
 	if err != nil {
 		return err
 	}
-	logrus.Infof("end run application %s", conf.ActionPipelineYmlName())
+	logrus.Infof("end run pipeline %s", conf.ActionPipelineYmlName())
 
+	logrus.Infof("wait pipeline done %s", pipelineDTO.ID)
 	// watch pipeline done
 	for {
 		dto, err := pipelineSimpleDetail(PipelineDetailRequest{
@@ -70,11 +73,44 @@ func handleAPIs() error {
 		}
 
 		if dto.Status.IsEndStatus() {
-			return storeMetaFile(dto.ID, dto.Status.String())
+			// get detail info
+			dto, err := pipelineSimpleDetail(PipelineDetailRequest{
+				PipelineID: pipelineDTO.ID,
+			})
+			if err != nil {
+				return err
+			}
+
+			logrus.Infof("pipeline %s was done status %v", pipelineDTO.ID, dto.Status.String())
+
+			runtimeIDs := getDiceTaskRuntimeIDs(dto)
+			return storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
 		}
 
 		time.Sleep(10 * time.Second)
 	}
+}
+
+func getDiceTaskRuntimeIDs(dto *apistructs.PipelineDetailDTO) []string {
+
+	var runtimeIDs []string
+	if dto == nil || dto.PipelineStages == nil {
+		return runtimeIDs
+	}
+	for _, stage := range dto.PipelineStages {
+		for _, task := range stage.PipelineTasks {
+			if task.Type != "dice" || task.Result.Metadata == nil {
+				continue
+			}
+			for _, meta := range task.Result.Metadata {
+				if meta.Name == "runtimeID" {
+					runtimeIDs = append(runtimeIDs, meta.Value)
+				}
+			}
+		}
+	}
+
+	return runtimeIDs
 }
 
 func getApplicationList() ([]apistructs.ApplicationDTO, error) {
@@ -163,7 +199,7 @@ func pipelineSimpleDetail(req PipelineDetailRequest) (*apistructs.PipelineDetail
 	return resp.Data, nil
 }
 
-func storeMetaFile(pipelineID uint64, status string) error {
+func storeMetaFile(pipelineID uint64, status string, runtimeID []string) error {
 	meta := apistructs.ActionCallback{
 		Metadata: apistructs.Metadata{
 			{
@@ -175,6 +211,18 @@ func storeMetaFile(pipelineID uint64, status string) error {
 				Value: status,
 			},
 		},
+	}
+
+	if len(runtimeID) > 0 {
+		meta.Metadata = append(meta.Metadata, apistructs.MetadataField{
+			Name:  "runtimeIDs",
+			Value: jsonparse.JsonOneLine(strutil.DedupSlice(runtimeID)),
+		})
+
+		meta.Metadata = append(meta.Metadata, apistructs.MetadataField{
+			Name:  "runtimeID",
+			Value: runtimeID[0],
+		})
 	}
 
 	b, err := json.Marshal(&meta)
