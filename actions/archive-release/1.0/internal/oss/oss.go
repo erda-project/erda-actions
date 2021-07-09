@@ -35,7 +35,6 @@ type Uploader struct {
 	client cloudstorage.Client
 }
 
-func (u *Uploader) Upload(ele OSSEle) error {
-	_, err := u.client.UploadFile(ele.Bucket(), ele.Remote(), ele.Local())
-	return err
+func (u *Uploader) Upload(ele OSSEle) (string, error) {
+	return u.client.UploadFile(ele.Bucket(), ele.Remote(), ele.Local())
 }

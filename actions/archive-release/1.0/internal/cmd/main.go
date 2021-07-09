@@ -14,8 +14,10 @@
 package main
 
 import (
+	"github.com/erda-project/erda/pkg/parser/diceyml"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v3"
 
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/config"
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/oss"
@@ -50,12 +52,13 @@ func main() {
 	}
 
 	// upload released yml, migration lint config file and SQLs scripts
-	if err = uploader.Upload(r.ReleaseYml); err != nil {
+	url, err := uploader.Upload(r.ReleaseYml)
+	if err != nil {
 		_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 		logrus.Fatalln(err)
 	}
 	if r.LintConfig.Local() != "" {
-		if err = uploader.Upload(r.LintConfig); err != nil {
+		if _, err = uploader.Upload(r.LintConfig); err != nil {
 			_ = metawriter.Write(map[string]interface{}{config.Warn: err})
 			logrus.Warnln(err)
 		}
@@ -64,12 +67,25 @@ func main() {
 		logrus.Warnln("no migration script will be archived because there is no workdir or migrationsDir")
 	}
 	for _, script := range r.Scripts {
-		if err := uploader.Upload(script); err != nil {
+		if _, err := uploader.Upload(script); err != nil {
 			_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
 			logrus.Fatalln(err)
 		}
 	}
 
-	_ = metawriter.Write(map[string]interface{}{config.Success: true})
+	// write oss download url and every service's image to meta
+	meta := map[string]interface{}{config.Success: true, "erda.yml": url, "gitref": conf.GitRef}
+	if deployable, err := r.ReleaseYml.Deployable(); err == nil {
+		var obj = new(diceyml.Object)
+		if err := yaml.Unmarshal([]byte(deployable), obj); err == nil {
+			for serviceName, service := range obj.Services {
+				if service != nil {
+					meta[serviceName] = service.Image
+				}
+			}
+		}
+	}
+
+	_ = metawriter.Write(meta)
 	logrus.Infoln("Archive Release action complete")
 }
