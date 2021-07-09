@@ -21,3 +21,10 @@ params:
   - name: org_name
     type: string
     requried: true
+  - name: monitor_addr
+    type: string
+    required: true
+  - name: eventbox_addr
+    type: string
+    required: true
+
