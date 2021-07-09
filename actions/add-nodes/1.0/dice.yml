@@ -1,6 +1,6 @@
 jobs:
   add-nodes:
-    image: registry.erda.cloud/erda-actions/add-nodes:3.21
+    image: registry.erda.cloud/erda-actions/add-nodes:1.1
     resources:
       cpu: 0.2
       mem: 128
