@@ -78,5 +78,5 @@ func HandleConf() (conf, error) {
 
 	logrus.Infof("%+v", cfg)
 
-	return conf{}, nil
+	return cfg, nil
 }
