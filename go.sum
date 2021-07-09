@@ -406,6 +406,8 @@ github.com/erda-project/erda v1.1.0-rc.0.20210709033811-1116307be209 h1:wBFuOho9
 github.com/erda-project/erda v1.1.0-rc.0.20210709033811-1116307be209/go.mod h1:4ZkrP1dk+jE6HnwpiVBxwmVkH0O60JeF8GzBXOfTJdk=
 github.com/erda-project/erda v1.1.0-rc.0.20210709063452-85cf7eff1330 h1:DNHY/SPH/5T5bpfpsyne20FY/9sERVu5bL49BTWH2M8=
 github.com/erda-project/erda v1.1.0-rc.0.20210709063452-85cf7eff1330/go.mod h1:YSDw4VsBr39T+RaFo0YDy+YlJWa4MfBu9n+KZq/CGW4=
+github.com/erda-project/erda v1.1.0-rc.0.20210709091628-aebe42239937 h1:5WWjoezXjth1zpXzknBOuvHEyI+nf1h6SzvxK+IVa5k=
+github.com/erda-project/erda v1.1.0-rc.0.20210709091628-aebe42239937/go.mod h1:YSDw4VsBr39T+RaFo0YDy+YlJWa4MfBu9n+KZq/CGW4=
 github.com/erda-project/erda-infra v0.0.0-20210406064843-766ab170fe54/go.mod h1:Ku5j0Xu0O4KT5VVW8pVz/6n2oijNpdIn+wJBXeX8L48=
 github.com/erda-project/erda-infra v0.0.0-20210414035235-9b3146052088/go.mod h1:JzDud6McvHHuTs6IO7CzxQMl4c5z50/uxiNaFeeeUkc=
 github.com/erda-project/erda-infra v0.0.0-20210429085145-aba847b668ea/go.mod h1:JzDud6McvHHuTs6IO7CzxQMl4c5z50/uxiNaFeeeUkc=
