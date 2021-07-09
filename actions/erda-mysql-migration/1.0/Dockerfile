@@ -17,10 +17,10 @@ COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 # go build action cmd
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-mysql-migration/1.0/internal/action/cmd/main.go
+RUN GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-mysql-migration/1.0/internal/action/cmd/main.go
 
 # go build local cmd
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0/internal/local/cmd/main.go
+RUN GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0/internal/local/cmd/main.go
 
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
@@ -49,6 +49,11 @@ RUN mkdir -p /migrations
 RUN chmod 777 /opt/action/*
 RUN chmod 777 /usr/bin/erda-migrate
 RUN chmod 777 /migrations
+
+RUN yum install -y mariadb-devel gcc python3-devel.x86_64
+RUN python3 -m pip --no-cache-dir install pip -U
+RUN python3 -m pip --no-cache-dir config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+RUN python3 -m pip --no-cache-dir install mysqlclient==2.0.3 django==3.2.4 pytz==2021.1 sqlparse==0.4.1
 
 VOLUME ["/migrations"]
 
