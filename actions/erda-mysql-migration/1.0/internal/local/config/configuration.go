@@ -84,8 +84,8 @@ func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 func (c Configuration) SandboxParameters() *migrator.DSNParameters {
 	return &migrator.DSNParameters{
 		Username:  "root",
-		Password:  "12345678",
-		Host:      "localhost",
+		Password:  c.envs.SandboxRootPassword,
+		Host:      "0.0.0.0",
 		Port:      3306,
 		Database:  c.Database(),
 		ParseTime: true,
@@ -182,8 +182,8 @@ type envs struct {
 	MigrationDir string `env:"MIGRATION_DIR"`
 }
 
-// ConfigFile represents the structure of ${DICE_CONFIG}/config.yaml .
-// can read mysql configurations from this.
+// ConfigFile represents the structure of ${DICE_CONFIG}/config.yaml which
+// can be read mysql configurations from .
 type ConfigFile struct {
 	Version  string `json:"version" yaml:"version"`
 	Installs struct {

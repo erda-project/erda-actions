@@ -84,7 +84,7 @@ func Configuration() *Conf {
 	conf.sandboxParameters = &migrator.DSNParameters{
 		Username:  "root",
 		Password:  "12345678",
-		Host:      "localhost",
+		Host:      "0.0.0.0",
 		Port:      3306,
 		Database:  conf.Database,
 		ParseTime: true,
