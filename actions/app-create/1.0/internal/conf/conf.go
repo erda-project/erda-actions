@@ -4,12 +4,13 @@ import "github.com/erda-project/erda/pkg/envconf"
 
 // Conf action 入参
 type Conf struct {
-	ApplicationGitRepo     string `env:"ACTION_APPLICATION_GIT_REPO" required:"true"`
-	ApplicationGitUsername string `env:"ACTION_APPLICATION_GIT_USERNAME"`
-	ApplicationGitPassword string `env:"ACTION_APPLICATION_GIT_PASSWORD"`
-	ParamsApplicationName  string `env:"ACTION_APPLICATION_NAME" required:"true"`
-	ApplicationType        string `env:"ACTION_APPLICATION_TYPE" required:"true"`
-	IsExternalRepo         bool   `env:"ACTION_IS_EXTERNAL_REPO"`
+	ApplicationGitRepo     string   `env:"ACTION_APPLICATION_GIT_REPO" required:"true"`
+	ApplicationGitUsername string   `env:"ACTION_APPLICATION_GIT_USERNAME"`
+	ApplicationGitPassword string   `env:"ACTION_APPLICATION_GIT_PASSWORD"`
+	ApplicationGitBranchs  []string `env:"ACTION_APPLICATION_GIT_BRANCHS"`
+	ParamsApplicationName  string   `env:"ACTION_APPLICATION_NAME" required:"true"`
+	ApplicationType        string   `env:"ACTION_APPLICATION_TYPE" required:"true"`
+	IsExternalRepo         bool     `env:"ACTION_IS_EXTERNAL_REPO"`
 	// env
 	MetaFile             string `env:"METAFILE"`
 	WorkDir              string `env:"WORKDIR" default:"."`
@@ -80,6 +81,10 @@ func ApplicationGitRepo() string {
 
 func ApplicationGitUsername() string {
 	return cfg.ApplicationGitUsername
+}
+
+func ApplicationGitBranchs() []string {
+	return cfg.ApplicationGitBranchs
 }
 
 func ApplicationGitPassword() string {

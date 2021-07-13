@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"os"
 	"os/exec"
 	"strconv"
@@ -36,16 +37,16 @@ func handleAPIs() error {
 	}
 
 	// if not external repo, git clone code
-	url := conf.ApplicationGitRepo()
+	repo := conf.ApplicationGitRepo()
 	if !conf.IsExternalRepo() {
 		if len(conf.ApplicationGitUsername()) > 0 && len(conf.ApplicationGitPassword()) > 0 {
 			var splitValue []string
 			var preFix = ""
-			if strings.HasPrefix(url, "http://") {
-				splitValue = strings.SplitN(url, "http://", 2)
+			if strings.HasPrefix(repo, "http://") {
+				splitValue = strings.SplitN(repo, "http://", 2)
 				preFix = "http://"
-			} else if strings.HasPrefix(url, "https://") {
-				splitValue = strings.SplitN(url, "https://", 2)
+			} else if strings.HasPrefix(repo, "https://") {
+				splitValue = strings.SplitN(repo, "https://", 2)
 				preFix = "https://"
 			} else {
 				return fmt.Errorf("application git repo addr just support http")
@@ -54,15 +55,22 @@ func handleAPIs() error {
 			if len(splitValue) != 2 {
 				return fmt.Errorf("application git repo addr append token error")
 			}
-			url = preFix + fmt.Sprintf("%s:%s@", conf.ApplicationGitUsername(), conf.ApplicationGitPassword()) + splitValue[1]
+			repo = preFix + fmt.Sprintf("%s:%s@", url.QueryEscape(conf.ApplicationGitUsername()), url.QueryEscape(conf.ApplicationGitPassword())) + splitValue[1]
 		}
 
 		logrus.Infof("start git clone url %s", conf.ApplicationGitRepo())
-		err = simpleRun("/bin/bash", "-c", fmt.Sprintf("git clone %s %s", url, CloneAddr))
+		err = runCommand(fmt.Sprintf("git clone %s %s", repo, CloneAddr), true)
 		if err != nil {
 			return fmt.Errorf("run git clone error: %v", err)
 		}
 		logrus.Infof("end git clone")
+
+		err = os.Chdir(CloneAddr)
+		if err != nil {
+			return fmt.Errorf("chdir %s error: %v", CloneAddr, err)
+		}
+
+		_ = runCommand(fmt.Sprintf("for b in `git branch -r | grep -v -- '->'`; do git branch --track ${b##origin/} $b; done\n"), true)
 	}
 
 	// check application exit
@@ -106,24 +114,23 @@ func handleAPIs() error {
 	// if not external repo push code to repo
 	if !conf.IsExternalRepo() {
 		logrus.Infof("start push code to application %s", conf.ParamsApplicationName())
-
-		err = os.Chdir(CloneAddr)
-		if err != nil {
-			return fmt.Errorf("chdir %s error: %v", CloneAddr, err)
-		}
-		err := simpleRun("/bin/bash", "-c", fmt.Sprintf("git remote add app_create_dice https://%s:%s@%s", conf.GittarUsername(), conf.GittarPassword(), dbApplication.GitRepoNew))
+		err := runCommand(fmt.Sprintf("git remote add app_create_dice https://%s:%s@%s", conf.GittarUsername(), conf.GittarPassword(), dbApplication.GitRepoNew), true)
 		if err != nil {
 			return fmt.Errorf("git remote add error: %v", err)
 		}
 
-		err = simpleRun("/bin/bash", "-c", fmt.Sprintf("git push -u app_create_dice --all"))
-		if err != nil {
-			return fmt.Errorf("git remote add error: %v", err)
-		}
-
-		err = simpleRun("/bin/bash", "-c", fmt.Sprintf("git push -u app_create_dice --tags"))
-		if err != nil {
-			return fmt.Errorf("git remote add error: %v", err)
+		if len(conf.ApplicationGitBranchs()) <= 0 {
+			err = runCommand(fmt.Sprintf("git push -u app_create_dice --all"), true)
+			if err != nil {
+				return fmt.Errorf("git remote add error: %v", err)
+			}
+		} else {
+			for _, v := range conf.ApplicationGitBranchs() {
+				err = runCommand(fmt.Sprintf("git push -u app_create_dice %v", v), true)
+				if err != nil {
+					return fmt.Errorf("git remote add error: %v", err)
+				}
+			}
 		}
 
 		logrus.Infof("end push code to application")
@@ -132,11 +139,16 @@ func handleAPIs() error {
 	return storeMetaFile(strconv.FormatUint(dbApplication.ID, 10), false)
 }
 
-func simpleRun(name string, arg ...string) error {
-	cmd := exec.Command(name, arg...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+func runCommand(cmd string, hideStdout bool) error {
+	command := exec.Command("/bin/bash", "-c", cmd)
+	if hideStdout {
+		command.Stdout = os.Stdout
+	}
+	command.Stderr = os.Stderr
+	if err := command.Run(); err != nil {
+		return err
+	}
+	return nil
 }
 
 //创建审核
