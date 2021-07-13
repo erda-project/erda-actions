@@ -28,18 +28,18 @@ supportedErdaVersions:
 
 params:
   - name: workdir
-    desc: 仓库目录, 默认为 ${git-checkout}。action 从仓库中读取 VERSION 文件、migrations 脚本等。
+    desc: 仓库目录, 默认为 ${git-checkout}。action 从仓库中读取 migrations 脚本等。
     default: ${git-checkout}
 
   - name: migrationsDir
-    desc: migrations 脚本所在目录, 默认为 .dice/migraions，也可以设置为其他目录，如 .erda/migrations 。
+    desc: migrations 脚本所在目录, 为空则不对 migrations 脚本进行归档。
     type: string
     default: ""
     required: false
     
   - name: lint_config
     type: string
-    desc: Erda MySQL Migration Lint 的配置文件
+    desc: Erda MySQL Migration Lint 的配置文件所在路径, 为空则不对配置文件进行归档。
     default: ""
     required: false
 
@@ -62,12 +62,12 @@ params:
 
   - name: ossPath
     type: string
-    desc: OSS 中存放打包后仓库的的路径, 如 archived-versions/((GIT_TAG))
+    desc: OSS 中存放打包后仓库的的路径, 如不设置，则自动配置为 archived-versions/<版本号>
     required: false
 
   - name: gitref
     type: string
-    desc: git ref, 可以是 branch, tag, commit 等，用于拼接 OSS 存放路径 archived-versions/${gitref}/extensions
+    desc: 用于生成版本号。如 v1.1.0 => v1.1.0, release/1.1 => v1.1。gitref 和 ossPath 至少应当设置一个。
     required: false
 
   - name: ossAccessKeyID

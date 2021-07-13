@@ -18,9 +18,11 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/erda-project/erda/pkg/database/sqllint/configuration"
 	"github.com/erda-project/erda/pkg/database/sqllint/rules"
+	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -49,15 +51,14 @@ type Conf struct {
 
 	// action envs
 	WorkDir       string   `env:"ACTION_WORKDIR"`
-	Database_     string   `env:"ACTION_DATABASE"`
+	Database      string   `env:"ACTION_DATABASE"`
 	MigrationDir_ string   `env:"ACTION_MIGRATIONDIR"`
 	NeedMySQLLint bool     `env:"ACTION_MYSQLLINT"`
 	LintConfig    string   `env:"ACTION_LINT_CONFIG"`
 	Modules_      []string `env:"ACTION_MODULES"`
 
-	MetaFilename_ string `env:"METAFILE"`
-
-	dsn string
+	mysqlParameters   *migrator.DSNParameters
+	sandboxParameters *migrator.DSNParameters
 }
 
 func Configuration() *Conf {
@@ -75,53 +76,49 @@ func Configuration() *Conf {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 
-	if err := conf.retrieveDSN(); err != nil {
+	conf.mysqlParameters = &migrator.DSNParameters{
+		Database:  conf.Database,
+		ParseTime: true,
+		Timeout:   time.Second * 150,
+	}
+	conf.sandboxParameters = &migrator.DSNParameters{
+		Username:  "root",
+		Password:  "12345678",
+		Host:      "0.0.0.0",
+		Port:      3306,
+		Database:  conf.Database,
+		ParseTime: true,
+		Timeout:   time.Second * 150,
+	}
+	if err := conf.retrieveMySQLParameters(); err != nil {
 		logrus.Fatalf("failed to get MySQL addon DSN: %v", err)
 	}
 
 	return conf
 }
 
-// DSN gets MySQL DSN
-func (c *Conf) DSN() string {
-	return c.dsn
+// MySQLParameters returns MySQL addon's settings
+func (c *Conf) MySQLParameters() *migrator.DSNParameters {
+	return c.mysqlParameters
 }
 
-// SandboxDSN gets sandbox DSN
-func (c *Conf) SandboxDSN() string {
-	return "root:12345678@(localhost:3306)/"
+// SandboxParameters returns sandbox's settings
+func (c *Conf) SandboxParameters() *migrator.DSNParameters {
+	return c.sandboxParameters
 }
 
-// MigrationDir gets migration scripts direction like .dice/migrations or migrations
+// MigrationDir returns migration scripts direction like .dice/migrations or migrations
 func (c *Conf) MigrationDir() string {
 	return c.MigrationDir_
 }
 
-// AppVersion gets application version
-func (c *Conf) AppVersion() string {
-	return ""
-}
-
-// BaseVersion gets base version
-func (c *Conf) BaseVersion() string {
-	return ""
-}
-
-// DebugSQL gets weather to debug SQL executing
+// DebugSQL returns weather to debug SQL executing
 func (c *Conf) DebugSQL() bool {
 	return c.PipelineDebugMode
 }
 
-func (c *Conf) Database() string {
-	return c.Database_
-}
-
 func (c *Conf) Workdir() string {
 	return c.WorkDir
-}
-
-func (c *Conf) MetaFilename() string {
-	return c.MetaFilename_
 }
 
 func (c *Conf) NeedErdaMySQLLint() bool {
@@ -154,7 +151,7 @@ func (c *Conf) Rules() []rules.Ruler {
 	return rulers
 }
 
-func (c *Conf) retrieveDSN() error {
+func (c *Conf) retrieveMySQLParameters() error {
 	// 查找项目下所有的 addon 实例
 	url := c.DiceOpenapiPrefix + fmt.Sprintf(addonListURI, strconv.FormatUint(uint64(c.ProjectID), 10))
 	header := map[string][]string{"authorization": {c.CiOpenapiToken}}
@@ -195,11 +192,14 @@ func (c *Conf) retrieveDSN() error {
 				return err
 			}
 
-			c.dsn = fmt.Sprintf("%s:%s@(%s:%s)/",
-				detail.Config.MySQLUserName,
-				detail.Config.MySQLPassword,
-				detail.Config.MySQLHost,
-				detail.Config.MySQLPort)
+			c.mysqlParameters.Username = detail.Config.MySQLUserName
+			c.mysqlParameters.Password = detail.Config.MySQLPassword
+			c.mysqlParameters.Host = detail.Config.MySQLHost
+			port, err := strconv.ParseUint(detail.Config.MySQLPort, 10, 32)
+			if err != nil {
+				return errors.Wrapf(err, "failed to parse MySQL port")
+			}
+			c.mysqlParameters.Port = int(port)
 
 			return nil
 		}

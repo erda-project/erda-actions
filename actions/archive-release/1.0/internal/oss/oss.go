@@ -14,6 +14,9 @@
 package oss
 
 import (
+	"net/url"
+	"path/filepath"
+
 	"github.com/erda-project/erda/pkg/cloudstorage"
 )
 
@@ -28,14 +31,21 @@ func New(endpoint, key, secret string) (*Uploader, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Uploader{client: client}, nil
+	return &Uploader{endpoint: endpoint, client: client}, nil
 }
 
 type Uploader struct {
-	client cloudstorage.Client
+	endpoint string
+	client   cloudstorage.Client
 }
 
-func (u *Uploader) Upload(ele OSSEle) error {
+func (u *Uploader) Upload(ele OSSEle) (string, error) {
+	s := (&url.URL{
+		Scheme: "http",
+		Host:   ele.Bucket() + "." + u.endpoint,
+		Path:   filepath.Join("/", ele.Remote()),
+	}).String()
+
 	_, err := u.client.UploadFile(ele.Bucket(), ele.Remote(), ele.Local())
-	return err
+	return s, err
 }

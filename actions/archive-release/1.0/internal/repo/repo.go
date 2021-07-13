@@ -54,7 +54,6 @@ func New(conf *config.Config) (*Repo, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to ReadScripts")
 	}
-
 	return &Repo{
 		ReleaseYml: releasedYml,
 		LintConfig: &LintConfig{conf: conf},

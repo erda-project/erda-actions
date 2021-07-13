@@ -14,13 +14,14 @@
 package config
 
 import (
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
+	"time"
 
 	configuration2 "github.com/erda-project/erda/pkg/database/sqllint/configuration"
 	"github.com/erda-project/erda/pkg/database/sqllint/rules"
+	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
 	"github.com/erda-project/erda/pkg/envconf"
 
 	"github.com/pkg/errors"
@@ -52,30 +53,44 @@ func Config() *Configuration {
 	return configuration
 }
 
-func (c Configuration) DSN() string {
+func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 	if c.envs.MySQLUsername != "" {
-		return fmt.Sprintf("%s:%s@(%s:%v)/",
-			c.envs.MySQLUsername,
-			c.envs.MySQLPassword,
-			c.envs.MySQLHost,
-			c.envs.MySQLPort,
-		)
+		return &migrator.DSNParameters{
+			Username:  c.envs.MySQLUsername,
+			Password:  c.envs.MySQLPassword,
+			Host:      c.envs.MySQLHost,
+			Port:      int(c.envs.MySQLPort),
+			Database:  c.envs.MySQlDBName,
+			ParseTime: true,
+			Timeout:   time.Second * 150,
+		}
 	}
 
 	if c.cf == nil {
-		return ""
+		return new(migrator.DSNParameters)
 	}
 
-	return fmt.Sprintf("%s:%s@(%s:%v)/",
-		c.cf.Installs.Addons.Mysql.User,
-		c.cf.Installs.Addons.Mysql.Password,
-		c.cf.Installs.Addons.Mysql.Host,
-		c.cf.Installs.Addons.Mysql.Port,
-	)
+	return &migrator.DSNParameters{
+		Username:  c.cf.Installs.Addons.Mysql.User,
+		Password:  c.cf.Installs.Addons.Mysql.Password,
+		Host:      c.cf.Installs.Addons.Mysql.Host,
+		Port:      c.cf.Installs.Addons.Mysql.Port,
+		Database:  c.cf.Installs.Addons.Mysql.Db,
+		ParseTime: true,
+		Timeout:   time.Second * 150,
+	}
 }
 
-func (c Configuration) SandboxDSN() string {
-	return fmt.Sprintf("root:%s@(localhost:3306)/", c.envs.SandboxRootPassword)
+func (c Configuration) SandboxParameters() *migrator.DSNParameters {
+	return &migrator.DSNParameters{
+		Username:  "root",
+		Password:  c.envs.SandboxRootPassword,
+		Host:      "0.0.0.0",
+		Port:      3306,
+		Database:  c.Database(),
+		ParseTime: true,
+		Timeout:   time.Second * 150,
+	}
 }
 
 func (c Configuration) Database() string {
@@ -167,8 +182,8 @@ type envs struct {
 	MigrationDir string `env:"MIGRATION_DIR"`
 }
 
-// ConfigFile represents the structure of ${DICE_CONFIG}/config.yaml .
-// can read mysql configurations from this.
+// ConfigFile represents the structure of ${DICE_CONFIG}/config.yaml which
+// can be read mysql configurations from .
 type ConfigFile struct {
 	Version  string `json:"version" yaml:"version"`
 	Installs struct {
