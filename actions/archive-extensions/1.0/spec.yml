@@ -56,4 +56,9 @@ params:
     type: string
     desc: OSS Access Key Secret
     required: true
-  
+
+  - name: ossArchivedDir
+    type: string
+    desc: releases archvied directory
+    required: true
+    default: archived-versions
