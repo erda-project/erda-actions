@@ -53,13 +53,14 @@ type Config struct {
 	Workspace         string `env:"DICE_WORKSPACE" required:"true"`
 
 	// actions parameters
-	Repos       []string `env:"ACTION_REPOS" required:"true"`
-	OssEndpoint string   `env:"ACTION_OSSENDPOINT" required:"true"`
-	OssBucket   string   `env:"ACTION_OSSBUCKET" required:"true"`
-	OssPath     string   `env:"ACTION_OSSPATH" required:"false"`
-	OssKey      string   `env:"ACTION_OSSACCESSKEYID" required:"true"`
-	OssSecret   string   `env:"ACTION_OSSACCESSKEYSECRET" required:"true"`
-	GitRef      string   `env:"ACTION_GITREF" required:"true"`
+	Repos          []string `env:"ACTION_REPOS" required:"true"`
+	OssEndpoint    string   `env:"ACTION_OSSENDPOINT" required:"true"`
+	OssBucket      string   `env:"ACTION_OSSBUCKET" required:"true"`
+	OssPath        string   `env:"ACTION_OSSPATH" required:"false"`
+	OssKey         string   `env:"ACTION_OSSACCESSKEYID" required:"true"`
+	OssSecret      string   `env:"ACTION_OSSACCESSKEYSECRET" required:"true"`
+	OssArchivedDir string   `env:"ACTION_OSSARCHIVEDDIR" required:"true"`
+	GitRef         string   `env:"ACTION_GITREF" required:"true"`
 
 	// other parameters
 	MetaFilename string `env:"METAFILE"`
@@ -69,7 +70,10 @@ func (c Config) GetOssPath() string {
 	if c.OssPath != "" {
 		return c.OssPath
 	}
+	if c.OssArchivedDir == "" {
+		c.OssArchivedDir = "archived-versions"
+	}
 
 	version := "v" + strings.TrimPrefix(filepath.Base(c.GitRef), "v")
-	return filepath.Join("archived-versions", version, "extensions")
+	return filepath.Join(c.OssArchivedDir, version, "extensions")
 }
