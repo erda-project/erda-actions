@@ -80,6 +80,12 @@ params:
     desc: OSS Access Key Secret
     required: true
 
+  - name: ossArchivedDir
+    type: string
+    desc: releases archvied directory
+    required: true
+    default: archived-versions
+
   - name: releaseName
     type: string
     desc: 制品名称, 如为空, 就以仓库名称作为制品名称

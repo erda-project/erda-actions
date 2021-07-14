@@ -61,18 +61,19 @@ type Config struct {
 	PipelineTaskID    string `env:"PIPELINE_TASK_ID"`
 
 	// action parameters
-	Workdir     string               `env:"ACTION_WORKDIR"`
-	MigDir      string               `env:"ACTION_MIGRATIONSDIR"`
-	LintConfig  string               `env:"ACTION_LINT_CONFIG"`
-	Registry    *RegistryReplacement `env:"ACTION_REGISTRY_REPLACEMENT"`
-	ReleaseID   string               `env:"ACTION_RELEASEID"`
-	OssEndpoint string               `env:"ACTION_OSSENDPOINT" required:"true"`
-	OssBucket   string               `env:"ACTION_OSSBUCKET" required:"true"`
-	OssPath     string               `env:"ACTION_OSSPATH" required:"false"`
-	OssKey      string               `env:"ACTION_OSSACCESSKEYID" required:"true"`
-	OssSecret   string               `env:"ACTION_OSSACCESSKEYSECRET" required:"true"`
-	GitRef      string               `env:"ACTION_GITREF" required:"true"`
-	ReleaseName string               `env:"ACTION_RELEASENAME"`
+	Workdir        string               `env:"ACTION_WORKDIR"`
+	MigDir         string               `env:"ACTION_MIGRATIONSDIR"`
+	LintConfig     string               `env:"ACTION_LINT_CONFIG"`
+	Registry       *RegistryReplacement `env:"ACTION_REGISTRY_REPLACEMENT"`
+	ReleaseID      string               `env:"ACTION_RELEASEID"`
+	OssEndpoint    string               `env:"ACTION_OSSENDPOINT" required:"true"`
+	OssBucket      string               `env:"ACTION_OSSBUCKET" required:"true"`
+	OssPath        string               `env:"ACTION_OSSPATH" required:"false"`
+	OssKey         string               `env:"ACTION_OSSACCESSKEYID" required:"true"`
+	OssSecret      string               `env:"ACTION_OSSACCESSKEYSECRET" required:"true"`
+	OssArchivedDir string               `env:"ACTION_OSSARCHIVEDDIR" required:"true"`
+	GitRef         string               `env:"ACTION_GITREF" required:"true"`
+	ReleaseName    string               `env:"ACTION_RELEASENAME"`
 
 	// other parameters
 	MetaFilename string `env:"METAFILE"`
@@ -82,9 +83,12 @@ func (c Config) GetOssPath() string {
 	if c.OssPath != "" {
 		return c.OssPath
 	}
+	if c.OssArchivedDir == "" {
+		c.OssArchivedDir = "archived-versions"
+	}
 
 	version := "v" + strings.TrimPrefix(filepath.Base(c.GitRef), "v")
-	return filepath.Join("archived-versions", version)
+	return filepath.Join(c.OssArchivedDir, version)
 }
 
 func (c Config) GetReleaseName() string {
