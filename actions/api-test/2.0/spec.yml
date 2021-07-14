@@ -6,6 +6,9 @@ displayName: 接口测试
 desc: 执行单个接口测试。上层可以通过 pipeline.yml 编排一组接口测试的执行顺序。
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/10/24195384-07b7-4203-93e1-666373639af4.png
 public: true
+executor:
+  kind: "APITEST"
+  name: "api-test"
 labels:
   autotest: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
