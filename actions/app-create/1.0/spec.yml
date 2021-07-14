@@ -16,6 +16,9 @@ params:
     desc: 应用仓库的账号
   - name: application_git_password
     desc: 应用仓库的密码
+  - name: application_git_branchs
+    desc: 指定应用仓库的分支，不指定将会推送所有分支代码到内置仓库
+    type: string_array
   - name: application_name
     desc: 应用名称
     required: true
