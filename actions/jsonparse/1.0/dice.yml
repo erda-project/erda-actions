@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   jsonparse:
-    image: registry.erda.cloud/erda-actions/jsonparse-action:20210715-e0d59f5
+    image: registry.erda.cloud/erda-actions/jsonparse-action:20210715-de59b6f
     envs:
       BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:
