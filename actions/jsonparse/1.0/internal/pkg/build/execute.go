@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/erda-project/erda-actions/actions/jsonparse/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/encoding/jsonparse"
@@ -16,6 +18,7 @@ import (
 func Execute() error {
 	var cfg conf.Conf
 	envconf.MustLoad(&cfg)
+	logrus.SetOutput(os.Stdout)
 
 	if err := build(cfg); err != nil {
 		return err
@@ -27,19 +30,19 @@ func Execute() error {
 func build(cfg conf.Conf) error {
 	var out bytes.Buffer
 	err := json.Indent(&out, []byte(cfg.Data), "", "\t")
-	fmt.Printf("json data:")
+	logrus.Infof("json data:")
 	if err != nil {
-		fmt.Printf("%s\n", out.String())
+		logrus.Infof("%s\n", out.String())
 	} else {
-		fmt.Printf("%s\n", cfg.Data)
+		logrus.Infof("%s\n", cfg.Data)
 	}
 	for _, express := range cfg.OutParams {
 		result := jsonparse.FilterJson([]byte(cfg.Data), express.Expression, apistructs.APIOutParamSourceBodyJson.String())
-		fmt.Printf("Out Params:")
-		fmt.Printf("  key: %v", express.Key)
-		fmt.Printf("  expr: %v", express.Expression)
-		fmt.Printf("  value: %v", jsonparse.JsonOneLine(result))
-		fmt.Printf("==========")
+		logrus.Infof("Out Params:")
+		logrus.Infof("  key: %v", express.Key)
+		logrus.Infof("  expr: %v", express.Expression)
+		logrus.Infof("  value: %v", jsonparse.JsonOneLine(result))
+		logrus.Infof("==========")
 		err := simpleRun("/bin/sh", "-c", "echo '"+express.Key+"="+jsonparse.JsonOneLine(result)+"'>> "+cfg.MetaFile)
 		if err != nil {
 			return fmt.Errorf("echod result error: %v", err)
