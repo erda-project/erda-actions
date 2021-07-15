@@ -2,6 +2,9 @@ package build
 
 import (
 	"fmt"
+	"os"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/assert/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda/pkg/assert"
@@ -12,7 +15,7 @@ import (
 func Execute() error {
 	var cfg conf.Conf
 	envconf.MustLoad(&cfg)
-
+	logrus.SetOutput(os.Stdout)
 	if err := build(cfg); err != nil {
 		return err
 	}
@@ -28,14 +31,14 @@ func build(cfg conf.Conf) error {
 			allSuccess = false
 		}
 		// to assert
-		fmt.Printf("Assert Result:")
-		fmt.Printf("  value: %v", jsonparse.JsonOneLine(v.Value))
-		fmt.Printf("  assert: %v", v.Assert)
-		fmt.Printf("  actualValue: %s", jsonparse.JsonOneLine(v.ActualValue))
-		fmt.Printf("  success: %v", success)
-		fmt.Printf("==========")
+		logrus.Infof("Assert Result:")
+		logrus.Infof("  value: %v", jsonparse.JsonOneLine(v.Value))
+		logrus.Infof("  assert: %v", v.Assert)
+		logrus.Infof("  actualValue: %s", jsonparse.JsonOneLine(v.ActualValue))
+		logrus.Infof("  success: %v", success)
+		logrus.Infof("==========")
 	}
-	fmt.Printf("AllAssert Result: %v", allSuccess)
+	logrus.Infof("AllAssert Result: %v", allSuccess)
 	if !allSuccess {
 		return fmt.Errorf("asssert faild")
 	}
