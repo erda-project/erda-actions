@@ -122,14 +122,15 @@ func (c *Client) Push(payload *apistructs.ExtensionVersionCreateRequest) error {
 
 	data, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return errors.Wrapf(err, "failed to read response body from dicehub")
+		return errors.Wrapf(err, "failed to read response body from dicehub, status: %s", response.Status)
 	}
 	if response.StatusCode/100 != 2 {
-		return errors.Errorf("response status from dicehub is not OK, response body: %s", string(data))
+		return errors.Errorf("response status from dicehub is not OK, status: %s, response body: %s",
+			response.Status, string(data))
 	}
 	var resp apistructs.ExtensionVersionCreateResponse
 	if err = json.Unmarshal(data, &resp); err != nil {
-		return errors.Wrapf(err, "failed to Decode response from dicehub, response body: %s", string(data))
+		return errors.Wrapf(err, "failed to unmarshal response body from dicehub, response body: %s", string(data))
 	}
 	if !resp.Success {
 		return errors.Errorf("the pushing is not success, response body: %s", string(data))
