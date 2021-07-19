@@ -110,7 +110,7 @@ func (c *Client) Push(payload *apistructs.ExtensionVersionCreateRequest) error {
 	if err != nil {
 		return errors.Wrapf(err, "failed to NewRequest, url: %s", uri)
 	}
-	request.Header.Set("use-token", "true")
+	request.Header.Set("Use-Token", "true")
 	request.AddCookie(&http.Cookie{Name: "OPENAPISESSION", Value: c.status.SessionID})
 
 	response, err := c.client().Do(request)
@@ -119,11 +119,17 @@ func (c *Client) Push(payload *apistructs.ExtensionVersionCreateRequest) error {
 	}
 	defer response.Body.Close()
 
+	if response.StatusCode/100 != 2 {
+		return errors.Errorf("response status from dicehub is not OK, response: %+v", response)
+	}
 	var (
 		resp apistructs.ExtensionVersionCreateResponse
 	)
 	if err = json.NewDecoder(response.Body).Decode(&resp); err != nil {
-		return errors.Wrap(err, "failed to Decode")
+		return errors.Wrapf(err, "failed to Decode response from dicehub, response: %+v", response)
+	}
+	if !resp.Success {
+		return errors.Errorf("the pushing is not success, response: %+v", resp)
 	}
 
 	return nil
