@@ -16,6 +16,7 @@ package client
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"path/filepath"
@@ -119,17 +120,19 @@ func (c *Client) Push(payload *apistructs.ExtensionVersionCreateRequest) error {
 	}
 	defer response.Body.Close()
 
-	if response.StatusCode/100 != 2 {
-		return errors.Errorf("response status from dicehub is not OK, response: %+v", response)
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return errors.Wrapf(err, "failed to read response body from dicehub")
 	}
-	var (
-		resp apistructs.ExtensionVersionCreateResponse
-	)
-	if err = json.NewDecoder(response.Body).Decode(&resp); err != nil {
-		return errors.Wrapf(err, "failed to Decode response from dicehub, response: %+v", response)
+	if response.StatusCode/100 != 2 {
+		return errors.Errorf("response status from dicehub is not OK, response body: %s", string(data))
+	}
+	var resp apistructs.ExtensionVersionCreateResponse
+	if err = json.Unmarshal(data, &resp); err != nil {
+		return errors.Wrapf(err, "failed to Decode response from dicehub, response body: %s", string(data))
 	}
 	if !resp.Success {
-		return errors.Errorf("the pushing is not success, response: %+v", resp)
+		return errors.Errorf("the pushing is not success, response body: %s", string(data))
 	}
 
 	return nil
