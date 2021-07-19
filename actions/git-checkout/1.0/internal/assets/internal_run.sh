@@ -22,12 +22,14 @@ configure_credentials
 
 # 从 环境变量 获取 params
 uri=${ACTION_URI-${GITTAR_REPO}} # 默认用 GITTAR_REPO
-
 branch=${ACTION_BRANCH-${GITTAR_BRANCH}} # 默认用 GITTAR_BRANCH
 
-# if ACTION_BRANCH and ACTION_URI is empty, mean use gittar repo
-if [ -z ${ACTION_BRANCH} ] && [ -z ${ACTION_URI} ]; then
-  branch=${GITTAR_COMMIT-${GITTAR_BRANCH}}
+# represents the current execution pipeline is retrying the failed node or retrying the entire process
+if [ "$PIPELINE_TYPE" == "rerun-failed" ] || [ "$PIPELINE_TYPE" == "rerun" ]; then
+    # gittar address can rerun
+    if [ "$uri" == "$GITTAR_REPO" ] && [ "$branch" == "$GITTAR_BRANCH" ]; then
+       branch=${GITTAR_COMMIT-${GITTAR_BRANCH}}
+    fi
 fi
 
 git_config_payload=${ACTION_GIT_CONFIG-[]}
