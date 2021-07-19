@@ -16,6 +16,7 @@ package client
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"path/filepath"
@@ -110,7 +111,7 @@ func (c *Client) Push(payload *apistructs.ExtensionVersionCreateRequest) error {
 	if err != nil {
 		return errors.Wrapf(err, "failed to NewRequest, url: %s", uri)
 	}
-	request.Header.Set("use-token", "true")
+	request.Header.Set("Use-Token", "true")
 	request.AddCookie(&http.Cookie{Name: "OPENAPISESSION", Value: c.status.SessionID})
 
 	response, err := c.client().Do(request)
@@ -119,11 +120,20 @@ func (c *Client) Push(payload *apistructs.ExtensionVersionCreateRequest) error {
 	}
 	defer response.Body.Close()
 
-	var (
-		resp apistructs.ExtensionVersionCreateResponse
-	)
-	if err = json.NewDecoder(response.Body).Decode(&resp); err != nil {
-		return errors.Wrap(err, "failed to Decode")
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return errors.Wrapf(err, "failed to read response body from dicehub, status: %s", response.Status)
+	}
+	if response.StatusCode/100 != 2 {
+		return errors.Errorf("response status from dicehub is not OK, status: %s, response body: %s",
+			response.Status, string(data))
+	}
+	var resp apistructs.ExtensionVersionCreateResponse
+	if err = json.Unmarshal(data, &resp); err != nil {
+		return errors.Wrapf(err, "failed to unmarshal response body from dicehub, response body: %s", string(data))
+	}
+	if !resp.Success {
+		return errors.Errorf("the pushing is not success, response body: %s", string(data))
 	}
 
 	return nil
