@@ -1,6 +1,6 @@
 jobs:
   cs-kubernetes:
-    image: registry.erda.cloud/erda-actions/cs-kubernetes:3.20
+    image: registry.erda.cloud/erda-actions/cs-kubernetes:1.1
     resources:
       cpu: 0.2
       mem: 128

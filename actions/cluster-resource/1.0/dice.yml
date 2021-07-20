@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   cluster-resource:
-    image: registry.erda.cloud/erda-actions/cluster-resource:3.14
+    image: registry.erda.cloud/erda-actions/cluster-resource:1.1
     resources:
       cpu: 0.2
       mem: 200
