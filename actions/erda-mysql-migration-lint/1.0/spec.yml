@@ -1,0 +1,50 @@
+# Copyright (c) 2021 Terminus, Inc.
+#
+# This program is free software: you can use, redistribute, and/or modify
+# it under the terms of the GNU Affero General Public License, version 3
+# or later ("AGPL"), as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+name: erda-mysql-migration-lint
+displayName: Erda MySQL Migration 规约检查
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/07/20/4a7a51fa-f4f6-43e7-8658-0a7a55bbb8ba.png
+version: "1.0"
+type: action
+category: deploy_management
+desc: Erda MySQL Migration 规约检查工具
+public: true
+supportedErdaVersions:
+  - ">=1.0"
+
+params:
+  - name: workdir
+    desc: 工作目录, 如 ${git-checkout}
+    default: ${git-checkout}
+  - name: migrationdir
+    type: string
+    desc: 脚本存放目录
+    default: .erda/migrations
+  - name: lint_config
+    type: string
+    desc: Erda MySQL Migration Lint 的配置文件
+    default: ""
+    required: false
+  - name: lintbase
+    type: boolean
+    desc: 是否对基线进行检查
+    default: false
+    required: false
+
+outputs:
+  - name: success
+    type: boolean
+    desc: 是否成功
+  - name: err
+    type: string
+    desc: 错误信息

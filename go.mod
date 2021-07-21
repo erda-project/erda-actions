@@ -4,7 +4,7 @@ go 1.14
 
 replace (
 	github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.5
-	github.com/erda-project/erda => github.com/erda-project/erda v1.1.0-rc.0.20210709091628-aebe42239937
+	github.com/erda-project/erda => github.com/erda-project/erda v1.1.0-rc.0.20210720112757-f5a0de103455
 	github.com/google/gnostic => github.com/googleapis/gnostic v0.4.0
 	github.com/googlecloudplatform/flink-operator => github.com/googlecloudplatform/flink-on-k8s-operator v0.0.0-20200909223554-f302312417ee
 	github.com/influxdata/influxql => github.com/erda-project/influxql v1.1.0-ex
@@ -49,7 +49,7 @@ require (
 	github.com/cespare/trie v0.0.0-20150610204604-3fe1a95cbba9 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/elastic/cloud-on-k8s v0.0.0-20210205172912-5ce0eca90c60 // indirect
-	github.com/erda-project/erda v1.1.0-rc.0.20210709091628-aebe42239937
+	github.com/erda-project/erda v1.1.0-rc.0.20210720112757-f5a0de103455
 	github.com/go-logr/logr v0.4.0 // indirect
 	github.com/go-openapi/spec v0.19.8 // indirect
 	github.com/hashicorp/go-multierror v1.1.0
@@ -66,11 +66,10 @@ require (
 	github.com/shogo82148/androidbinary v1.0.2
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0
-	github.com/tealeg/xlsx/v3 v3.2.3 // indirect
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2
 	github.com/toqueteos/trie v0.0.0-20150530104557-56fed4a05683 // indirect
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
-	golang.org/x/net v0.0.0-20210421230115-4e50805a0758
+	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
 	google.golang.org/grpc/examples v0.0.0-20210518222651-23a83dd097ec // indirect
 	gopkg.in/src-d/enry.v1 v1.6.4
 	gopkg.in/stretchr/testify.v1 v1.2.2
