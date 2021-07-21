@@ -23,12 +23,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const (
-	addonListURI       = "/api/addons?type=project&value=%s"
-	addonDetailURI     = "/api/addons/%s"
-	addonReferencesURI = "/api/addons/%s/actions/references"
-)
-
 var conf *Conf
 
 type Conf struct {

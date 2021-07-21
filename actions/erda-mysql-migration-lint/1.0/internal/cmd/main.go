@@ -135,7 +135,8 @@ func (w *walk) walk(input, suffix string) *walk {
 			w.walk(filepath.Join(input, info.Name()), suffix)
 			continue
 		}
-		if strings.ToLower(path.Ext(info.Name())) == strings.ToLower(suffix) {
+
+		if strings.EqualFold(path.Ext(info.Name()), suffix) {
 			file := filepath.Join(input, info.Name())
 			w.files = append(w.files, file)
 		}
