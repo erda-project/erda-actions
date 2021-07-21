@@ -13,7 +13,7 @@
 
 jobs:
   erda-mysql-migration:
-    image: chenzhongrun/develop:20210720-bf977cc
+    image: registry.erda.cloud/erda-actions/erda-mysql-migration-lint-action:20210721-02c4af4
     resource:
       cpu: 0.5
       disk: 1024
