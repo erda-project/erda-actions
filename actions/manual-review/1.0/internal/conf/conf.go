@@ -7,7 +7,7 @@ import (
 // Conf action 入参
 type Conf struct {
 	ProcessorId []string `env:"ACTION_PROCESSOR" required:"true"`
-	WaitingTime int      `env:"ACTION_WAITING_TIME"`
+	WaitingTime int      `env:"ACTION_WAITING_TIME" default:"5"` // 单位: S
 	// env
 	MetaFile         string `env:"METAFILE"`
 	WorkDir          string `env:"WORKDIR" default:"."`
