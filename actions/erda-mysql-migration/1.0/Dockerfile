@@ -31,6 +31,8 @@ MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
 USER root
 
+ENV TZ=Asia/Shanghai
+
 ENV MYSQL_ROOT_PASSWORD="12345678"
 ENV MYSQL_ALLOW_EMPTY_PASSWORD yes
 ENV MIGRATION_DIR=/migrations
