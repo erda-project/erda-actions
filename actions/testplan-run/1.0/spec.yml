@@ -1,0 +1,35 @@
+name: testplan-run
+version: '1.0'
+type: action
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/07/28/d23fc13f-c85e-4585-96dc-3199583d4418.png
+displayName: 自动化测试计划执行
+category: test_management
+desc: 根据自动化测试计划启动测试计划并等待完成
+public: true
+useProtocol: true
+supportedVersions:
+  - ">= 4.0"
+supportedErdaVersions:
+  - ">= 1.1"
+
+params:
+  - name: test_plan
+    desc: 测试计划名称
+    required: true
+  - name: cms
+    desc: 参数配置名称
+    required: true
+
+outputs:
+  - name: pipelineID
+    desc: 执行的 pipelineId
+  - name: status
+    desc: pipeline 的状态
+
+accessibleAPIs:
+  - path: /api/autotests/testplans/<testPlanID>/actions/execute
+    method: POST
+    schema: http
+  - path: /api/cicds/actions/pipeline-detail
+    method: GET
+    schema: http
