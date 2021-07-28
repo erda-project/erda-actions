@@ -27,7 +27,7 @@ release action 根据 dice.yml 以及其他必要信息，生成一个完整的 
             image: "openjdk:8-jre-alpine"
             copys:
               - ${java-build:OUTPUT:buildPath}/target/docker-java-app-example.jar:/target
-              - ${java-build:OUTPUT:buildPath}/spot-agent/spot-agent.jar:/spot-agent
+              - ${java-build:OUTPUT:buildPath}/spot-agent/spot-agent.jar:/spot-agent/spot-agent.jar
             cmd: java ${java-build:OUTPUT:JAVA_OPTS} -jar /target/docker-java-app-example.jar
 ```
 
@@ -37,7 +37,7 @@ release action 根据 dice.yml 以及其他必要信息，生成一个完整的 
 action 中去查看，比如 java-build 就有 spring-boot 的例子和 tomcat 的例子，上面的例子就是 spring-boot的例子
 
 说明: 上面 spring-boot 的例子都会和本地有点不一样，就是需要将对应的东西拷贝到对应的位置，比如例子中的 jar 包就是要拷贝到 /target
-中，然后还有些固定值 ${java-build:OUTPUT:JAVA_OPTS}，${java-build:OUTPUT:buildPath}/spot-agent/spot-agent.jar:/spot-agent 
+中，然后还有些固定值 ${java-build:OUTPUT:JAVA_OPTS}，${java-build:OUTPUT:buildPath}/spot-agent/spot-agent.jar:/spot-agent/spot-agent.jar 
 这些都是对应 build action 会说明的，一般加上这些固定值就可以接入平台的监控，当然不加也没事
 
 
