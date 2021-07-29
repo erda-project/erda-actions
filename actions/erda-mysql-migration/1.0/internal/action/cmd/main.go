@@ -28,20 +28,23 @@ func main() {
 	logrus.Infoln("Erda MySQL Migration start working")
 	logrus.Infof("Configuration: %+v", *migration.Configuration())
 
+	var err error
+	defer func() {
+		_ = metawriter.Write(map[string]interface{}{"success": err == nil, "error": err})
+	}()
+
 	go common.FatalError(common.StartSandbox)
 
 	mig, err := migrator.New(migration.Configuration())
 	if err != nil {
-		_ = metawriter.Write(map[string]interface{}{"success": false, "err": err})
 		logrus.Fatalf("failed to start Erda MySQL Migration: %v", err)
 	}
+
 	if err = mig.Run(); err != nil {
-		_ = metawriter.Write(map[string]interface{}{"success": false, "err": err})
 		logrus.Fatalf("failed to migrate: %v", err)
 	}
 
 	logrus.Infoln("migrate complete !")
-	_ = metawriter.Write(map[string]interface{}{"success": false})
 
 	os.Exit(0)
 }

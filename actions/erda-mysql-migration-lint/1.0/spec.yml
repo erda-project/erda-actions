@@ -35,16 +35,11 @@ params:
     desc: Erda MySQL Migration Lint 的配置文件
     default: ""
     required: false
-  - name: lintbase
-    type: boolean
-    desc: 是否对基线进行检查
-    default: false
-    required: false
 
 outputs:
   - name: success
     type: boolean
     desc: 是否成功
-  - name: err
+  - name: error
     type: string
     desc: 错误信息

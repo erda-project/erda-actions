@@ -53,7 +53,10 @@ type Conf struct {
 	WorkDir       string   `env:"ACTION_WORKDIR"`
 	Database      string   `env:"ACTION_DATABASE"`
 	MigrationDir_ string   `env:"ACTION_MIGRATIONDIR"`
-	NeedMySQLLint bool     `env:"ACTION_MYSQLLINT"`
+	SkipLint      bool     `env:"ACTION_SKIP_LINT"`
+	SkipSand      bool     `env:"ACTION_SKIP_SANDBOX"`
+	SkipPreMig    bool     `env:"ACTION_SKIP_PRE_MIGRATION"`
+	SkipMig       bool     `env:"ACTION_SKIP_MIGRATION"`
 	LintConfig    string   `env:"ACTION_LINT_CONFIG"`
 	Modules_      []string `env:"ACTION_MODULES"`
 
@@ -121,8 +124,20 @@ func (c *Conf) Workdir() string {
 	return c.WorkDir
 }
 
-func (c *Conf) NeedErdaMySQLLint() bool {
-	return c.NeedMySQLLint
+func (c *Conf) SkipMigrationLint() bool {
+	return c.SkipLint
+}
+
+func (c *Conf) SkipSandbox() bool {
+	return c.SkipSand
+}
+
+func (c *Conf) SkipPreMigrate() bool {
+	return c.SkipPreMig
+}
+
+func (c *Conf) SkipMigrate() bool {
+	return c.SkipMig
 }
 
 func (c *Conf) Modules() []string {

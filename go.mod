@@ -4,7 +4,7 @@ go 1.14
 
 replace (
 	github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.5
-	github.com/erda-project/erda => github.com/erda-project/erda v1.1.0-rc.0.20210727131239-9c58b56c60d6
+	github.com/erda-project/erda => github.com/erda-project/erda v1.1.0-rc.0.20210729082059-09729e49876f
 	github.com/google/gnostic => github.com/googleapis/gnostic v0.4.0
 	github.com/googlecloudplatform/flink-operator => github.com/googlecloudplatform/flink-on-k8s-operator v0.0.0-20200909223554-f302312417ee
 	github.com/influxdata/influxql => github.com/erda-project/influxql v1.1.0-ex
@@ -49,7 +49,7 @@ require (
 	github.com/cespare/trie v0.0.0-20150610204604-3fe1a95cbba9 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/elastic/cloud-on-k8s v0.0.0-20210205172912-5ce0eca90c60 // indirect
-	github.com/erda-project/erda v1.1.0-rc.0.20210727131239-9c58b56c60d6
+	github.com/erda-project/erda v1.1.0-rc.0.20210729082059-09729e49876f
 	github.com/go-logr/logr v0.4.0 // indirect
 	github.com/go-openapi/spec v0.19.8 // indirect
 	github.com/hashicorp/go-multierror v1.1.0
