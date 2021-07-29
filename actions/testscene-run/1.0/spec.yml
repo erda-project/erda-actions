@@ -1,0 +1,44 @@
+name: testscene-run
+version: '1.0'
+type: action
+displayName: 自动化测试场景执行
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/07/28/8e9d0fcd-691f-4a9c-a11a-b0a2e0f9e691.png
+category: test_management
+desc: 选择指定场景进行测试
+public: true
+useProtocol: true
+supportedVersions:
+  - ">= 4.0"
+supportedErdaVersions:
+  - ">= 1.1"
+
+params:
+  - name: test_space
+    desc: 空间
+    required: true
+  - name: test_scene_set
+    desc: 场景集
+    required: true
+  - name: test_scene
+    desc: 场景
+    required: true
+  - name: cms
+    desc: 参数配置名称
+    required: true
+
+outputs:
+  - name: pipelineID
+    desc: 执行的 pipelineId
+  - name: status
+    desc: pipeline 的状态
+
+accessibleAPIs:
+  - path: /api/autotests/scenes/<sceneID>/actions/execute
+    method: POST
+    schema: http
+  - path: /api/autotests/global-configs
+    method: GET
+    schema: http
+  - path: /api/cicds/actions/pipeline-detail
+    method: GET
+    schema: http
