@@ -24,7 +24,7 @@ import (
 // metafile keys
 const (
 	Success = "success"
-	Err     = "err"
+	Err     = "error"
 	Warn    = "warn"
 )
 
@@ -98,7 +98,30 @@ func (c Config) GetReleaseName() string {
 	return filepath.Base(c.Workdir)
 }
 
+func (c Config) GitRefDir() GitRefDir {
+	return GitRefDir{
+		ossBucket: c.OssBucket,
+		remote:    c.GetOssPath(),
+	}
+}
+
 type RegistryReplacement struct {
 	Old string `json:"old"`
 	New string `json:"new"`
+}
+
+type GitRefDir struct {
+	ossBucket, remote string
+}
+
+func (c GitRefDir) Bucket() string {
+	return c.ossBucket
+}
+
+func (c GitRefDir) Remote() string {
+	return c.remote
+}
+
+func (c GitRefDir) Local() string {
+	return "nothing"
 }

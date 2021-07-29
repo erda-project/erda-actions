@@ -54,13 +54,13 @@ func Config() *Configuration {
 }
 
 func (c Configuration) MySQLParameters() *migrator.DSNParameters {
-	if c.envs.MySQLUsername != "" {
+	if c.envs.MySQLUser != "" {
 		return &migrator.DSNParameters{
-			Username:  c.envs.MySQLUsername,
+			Username:  c.envs.MySQLUser,
 			Password:  c.envs.MySQLPassword,
 			Host:      c.envs.MySQLHost,
 			Port:      int(c.envs.MySQLPort),
-			Database:  c.envs.MySQlDBName,
+			Database:  c.envs.MySQLDiceDB,
 			ParseTime: true,
 			Timeout:   time.Second * 150,
 		}
@@ -94,8 +94,8 @@ func (c Configuration) SandboxParameters() *migrator.DSNParameters {
 }
 
 func (c Configuration) Database() string {
-	if c.envs.MySQlDBName != "" {
-		return c.envs.MySQlDBName
+	if c.envs.MySQLDiceDB != "" {
+		return c.envs.MySQLDiceDB
 	}
 
 	if c.cf == nil {
@@ -129,9 +129,20 @@ func (c Configuration) DebugSQL() bool {
 	return c.envs.DebugSQL
 }
 
-// NeedErdaMySQLLint returns whether the process need to lint the SQLs
-func (c Configuration) NeedErdaMySQLLint() bool {
-	return c.envs.ErdaLint
+func (c Configuration) SkipMigrationLint() bool {
+	return c.envs.SkipLint
+}
+
+func (c Configuration) SkipSandbox() bool {
+	return c.envs.SkipSandbox
+}
+
+func (c Configuration) SkipPreMigrate() bool {
+	return c.envs.SkipPreMig
+}
+
+func (c Configuration) SkipMigrate() bool {
+	return c.envs.SkipMigrate
 }
 
 // Modules returns the modules for installing
@@ -165,16 +176,22 @@ func (c *Configuration) reload() error {
 
 type envs struct {
 	ConfigPath string `env:"CONFIGPATH"` // ${DICE_CONFIG}/config.yaml
-	DiceConfig string `env:"DICE_CONFIG"`
 
-	MySQLHost     string `env:"MIGRATION_MYSQL_HOST"`
-	MySQLPort     uint64 `env:"MIGRATION_MYSQL_PORT"`
-	MySQLUsername string `env:"MIGRATION_MYSQL_USERNAME"`
-	MySQLPassword string `env:"MIGRATION_MYSQL_PASSWORD"`
-	MySQlDBName   string `env:"MIGRATION_MYSQL_DBNAME"`
-	DebugSQL      bool   `env:"MIGRATION_DEBUGSQL"`
-	ErdaLint      bool   `env:"MIGRATION_ERDA_LINT"`
-	Modules_      string `env:"MIGRATION_MODULES"`
+	// mysql server parameters
+	MySQLUser     string `env:"MYSQL_USER"`
+	MySQLPassword string `env:"MYSQL_PASSWORD"`
+	MySQLHost     string `env:"MYSQL_HOST"`
+	MySQLPort     uint64 `env:"MYSQL_PORT"`
+	MySQLDiceDB   string `env:"MYSQL_DICE_DB"`
+
+	// flow control parameters
+	SkipLint    bool `env:"MIGRATION_SKIP_LINT"`
+	SkipSandbox bool `env:"MIGRATION_SKIP_SANDBOX"`
+	SkipPreMig  bool `env:"MIGRATION_SKIP_PRE_MIGRATION"`
+	SkipMigrate bool `env:"MIGRATION_SKIP_MIGRATION"`
+
+	DebugSQL bool   `env:"MIGRATION_DEBUGSQL"`
+	Modules_ string `env:"MIGRATION_MODULES"`
 
 	SandboxRootPassword string `env:"MYSQL_ROOT_PASSWORD"`
 

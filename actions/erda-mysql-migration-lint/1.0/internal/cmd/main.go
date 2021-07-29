@@ -14,27 +14,12 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"io"
-	"io/ioutil"
-	"os"
-	"path"
-	"path/filepath"
-	"strings"
-
-	"github.com/erda-project/erda/pkg/database/sqllint"
-	"github.com/erda-project/erda/pkg/database/sqllint/configuration"
+	"github.com/erda-project/erda-actions/pkg/metawriter"
+	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
 	"github.com/sirupsen/logrus"
+	"os"
 
 	"github.com/erda-project/erda-actions/actions/erda-mysql-migration-lint/1.0/internal/config"
-	"github.com/erda-project/erda-actions/pkg/metawriter"
-)
-
-const (
-	baseScriptLabel  = "# MIGRATION_BASE"
-	baseScriptLabel2 = "-- MIGRATION_BASE"
-	baseScriptLabel3 = "/* MIGRATION_BASE */"
 )
 
 func main() {
@@ -42,111 +27,34 @@ func main() {
 	logrus.Infof("Configuration:\n%s", config.ConfigurationString())
 
 	var (
-		err     error
-		msg     string
-		c       = config.Configuration()
-		files   = new(walk).walk(filepath.Join(c.Workdir(), c.MigrationDir()), ".sql").filenames()
-		rulers  = configuration.DefaultRulers()
-		lintCfg *configuration.Configuration
+		err error
+		c   = config.Configuration()
 	)
 
-	if c.LintConfig != "" {
-		lintCfg, err = configuration.FromLocal(filepath.Join(c.Workdir(), c.LintConfig))
-		if err != nil {
-			msg = "failed to load lint configuration"
-			_ = metawriter.Write(map[string]interface{}{"success": false, "err": err, "msg": msg})
-			logrus.WithError(err).
-				WithField("lint config filename", c.LintConfig).
-				Fatalln(msg)
-		}
-		rulers, err = lintCfg.Rulers()
-		if err != nil {
-			msg = "failed to generate lint rulers from lint configuration"
-			_ = metawriter.Write(map[string]interface{}{"success": false, "err": err, "msg": msg})
-			logrus.WithError(err).
-				Fatalln(msg)
-		}
-	}
+	defer func() {
+		_ = metawriter.Write(map[string]interface{}{"success": err == nil, "error": err})
+	}()
 
-	linter := sqllint.New(rulers...)
-
-	for _, filename := range files {
-		var data []byte
-		data, err = ioutil.ReadFile(filename)
-		if err != nil {
-			msg = "failed to read script file"
-			_ = metawriter.Write(map[string]interface{}{"success": false, "err": err, "msg": msg, "filename": filename})
-			logrus.WithError(err).WithField("msg", msg).WithField("filename", filename).Fatalln(msg)
-		}
-		if !c.LintBase && isBaseScript(data) {
-			continue
-		}
-		if err = linter.Input(data, filename); err != nil {
-			msg = "failed to input script text to linter"
-			_ = metawriter.Write(map[string]interface{}{"success": false, "err": err, "msg": msg, "filename": filename})
-			logrus.WithError(err).WithField("msg", msg).WithField("filename", filename).Fatalln(msg)
-		}
-	}
-
-	if len(linter.Errors()) == 0 {
-		msg = "Erda MySQL Migration Lint ok"
-		_ = metawriter.Write(map[string]interface{}{"success": true, "msg": msg})
-		os.Exit(0)
-	}
-
-	msg = "some errors in your migrations"
-	_ = metawriter.Write(map[string]interface{}{"success": false, "msg": msg})
-
-	out := io.MultiWriter(os.Stdout, os.Stderr)
-	if _, err = fmt.Fprintln(out, linter.Report()); err != nil {
-		logrus.WithError(err).Fatalln("failed to print report")
-	}
-	for src, errs := range linter.Errors() {
-		if _, err := fmt.Fprintln(out, src); err != nil {
-			logrus.WithError(err).Fatalln("failed to print error")
-		}
-		for _, e := range errs {
-			if _, err := fmt.Fprintln(out, e); err != nil {
-				logrus.WithError(err).Fatalln("failed to print error")
-			}
-		}
-	}
-
-	logrus.Fatalln(msg)
-}
-
-type walk struct {
-	files []string
-}
-
-func (w *walk) filenames() []string {
-	return w.files
-}
-
-func (w *walk) walk(input, suffix string) *walk {
-	infos, err := ioutil.ReadDir(input)
+	scripts, err := migrator.NewScripts(c)
 	if err != nil {
-		w.files = append(w.files, input)
-		return w
+		logrus.WithError(err).Fatalln("failed to load scripts")
 	}
 
-	for _, info := range infos {
-		if info.IsDir() {
-			w.walk(filepath.Join(input, info.Name()), suffix)
-			continue
-		}
+	scripts.IgnoreMarkPending()
 
-		if strings.EqualFold(path.Ext(info.Name()), suffix) {
-			file := filepath.Join(input, info.Name())
-			w.files = append(w.files, file)
-		}
+	if err = scripts.SameNameLint(); err != nil {
+		logrus.Fatalln(err)
 	}
 
-	return w
-}
+	if err = scripts.AlterPermissionLint(); err != nil {
+		logrus.Fatalln(err)
+	}
 
-func isBaseScript(data []byte) bool {
-	return bytes.HasPrefix(data, []byte(baseScriptLabel)) ||
-		bytes.HasPrefix(data, []byte(baseScriptLabel2)) ||
-		bytes.HasPrefix(data, []byte(baseScriptLabel3))
+	if err = scripts.Lint(); err != nil {
+		logrus.Fatalln(err)
+	}
+
+	logrus.Println("Erda MySQL Migration Lint OK")
+
+	os.Exit(0)
 }

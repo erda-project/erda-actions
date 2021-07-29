@@ -26,22 +26,50 @@ params:
   - name: workdir
     desc: 工作目录, 如 ${git-checkout}
     default: ${git-checkout}
+    required: false
+
   - name: migrationdir
     type: string
     desc: 脚本存放目录
-    default: .dice/migrations
+    default: .erda/migrations
+    required: false
+
   - name: database
-    default: dice
-    required: true
-  - name: mysqllint
+    type: string
+    desc: 要执行 migration 的库名
+    default: erda
+    required: false
+
+  - name: skip_lint
     type: boolean
-    desc: true 表示要进行 Erda MySQL 规约检查. 注意标明 "MIGRATION_BASE" 的脚本总是不会被检查.
-    default: true
+    desc: 跳过 Erda MySQL 规约检查. 注意标明 "MIGRATION_BASE" 的脚本总是不会被检查.
+    default: false
+    required: false
+
+  - name: skip_sandbox
+    type: boolean
+    desc: 跳过沙盒预演
+    default: false
+    required: false
+
+  - name: skip_pre_migration
+    type: boolean
+    desc: 跳过预执行
+    default: false
+    required: false
+
+  - name: skip_migration
+    type: boolean
+    desc: 跳过预执行和正式执行
+    default: false
+    required: false
+
   - name: lint_config
     type: string
     desc: Erda MySQL Migration Lint 的配置文件
-    default: .dice/migrations/config.yml
+    default: .erda/migrations/config.yml
     required: false
+
   - name: modules
     type: string_array
     desc: 要进行数据迁移的模块, 为空时对 migrationDir 目录下的所有模块进行数据迁移
@@ -51,9 +79,6 @@ outputs:
   - name: success
     type: boolean
     desc: 是否成功
-  - name: err
-    type: string
-    desc: 错误信息
 
 accessibleAPIs:
   - path: /api/addons/<addonId>

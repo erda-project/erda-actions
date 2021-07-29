@@ -42,7 +42,6 @@ type Conf struct {
 	WorkDir       string `env:"ACTION_WORKDIR"`
 	MigrationDir_ string `env:"ACTION_MIGRATIONDIR"`
 	LintConfig    string `env:"ACTION_LINT_CONFIG"`
-	LintBase      bool   `env:"ACTION_LINTBASE"`
 }
 
 func Configuration() *Conf {
@@ -75,30 +74,29 @@ func ConfigurationString() string {
 	return string(data)
 }
 
+func (c *Conf) Workdir() string {
+	return c.WorkDir
+}
+
 // MigrationDir returns migration scripts direction like .dice/migrations or migrations
 func (c *Conf) MigrationDir() string {
 	return c.MigrationDir_
 }
 
-// DebugSQL returns weather to debug SQL executing
-func (c *Conf) DebugSQL() bool {
-	return c.PipelineDebugMode
-}
-
-func (c *Conf) Workdir() string {
-	return c.WorkDir
+func (c *Conf) Modules() []string {
+	return nil
 }
 
 func (c *Conf) Rules() []rules.Ruler {
 	configFilename := filepath.Join(c.Workdir(), c.LintConfig)
 	rulesConfig, err := configuration.FromLocal(configFilename)
 	if err != nil {
-		logrus.Warnln("failed to load migration linter configuration from local, use default")
+		logrus.WithError(err).Warnln("failed to load migration linter configuration from local, use default")
 		return configuration.DefaultRulers()
 	}
 	rulers, err := rulesConfig.Rulers()
 	if err != nil {
-		logrus.Warnln("failed to parse migration linter from local, use default")
+		logrus.WithError(err).Warnln("failed to parse migration linter from local, use default")
 		return configuration.DefaultRulers()
 	}
 	return rulers
