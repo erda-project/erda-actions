@@ -44,7 +44,7 @@ java-demo:  # 声明 service 的名称，名称对应 dice,yaml 中的 service
       # 将当前 java-build 生成的 jar 包拷贝到当前 /target 下，这样就可以配合 java -jar 直接运行
       - ${java-build:OUTPUT:buildPath}/target/docker-java-app-example.jar:/target
       # 固定加上即可，用于配合 ${java-build:OUTPUT:JAVA_OPTS} 的监控
-      - ${java-build:OUTPUT:buildPath}/spot-agent/:/spot-agent/
+      - ${java-build:OUTPUT:buildPath}/spot-agent:/
      # 项目运行的命令, ${java-build:OUTPUT:JAVA_OPTS} 是对应的监控命令，固定加上即可
      cmd: java ${java-build:OUTPUT:JAVA_OPTS} -jar /target/docker-java-app-example.jar 
 ```
@@ -65,7 +65,7 @@ java-demo:
       # 拷贝 war 包到 webapps 下
       - ${java-build:OUTPUT:buildPath}/target/docker-java-app-example.war:/usr/local/tomcat/webapps
       # 设置固定值
-      - ${java-build:OUTPUT:buildPath}/spot-agent/:/spot-agent/
+      - ${java-build:OUTPUT:buildPath}/spot-agent:/
     # 启动 catalina.sh 并设置固定值
     cmd: export JAVA_OPTS="${java-build:OUTPUT:JAVA_OPTS}" && /usr/local/tomcat/bin/catalina.sh run
 ```

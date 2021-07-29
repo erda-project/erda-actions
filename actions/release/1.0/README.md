@@ -27,7 +27,7 @@ release action 根据 dice.yml 以及其他必要信息，生成一个完整的 
             image: "openjdk:8-jre-alpine"
             copys:
               - ${java-build:OUTPUT:buildPath}/target/docker-java-app-example.jar:/target
-              - ${java-build:OUTPUT:buildPath}/spot-agent/:/spot-agent/
+              - ${java-build:OUTPUT:buildPath}/spot-agent:/
             cmd: java ${java-build:OUTPUT:JAVA_OPTS} -jar /target/docker-java-app-example.jar
 ```
 
