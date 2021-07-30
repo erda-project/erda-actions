@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   testscene-run:
-    image: registry.erda.cloud/erda-actions/testscene-run-action:20210729-25c299b
+    image: registry.erda.cloud/erda-actions/testscene-run-action:20210730-3f9db43
     resources:
       cpu: 0.5
       mem: 1024

@@ -30,6 +30,7 @@ func handleAPIs() error {
 	}
 	logrus.Info("执行计划成功")
 	logrus.Info("pipeline status %s", pipelineDTO.Status)
+
 	for {
 		dto, err := pipelineSimpleDetail(PipelineDetailRequest{
 			SimplePipelineBaseResult: true,
@@ -52,7 +53,17 @@ func handleAPIs() error {
 			logrus.Infof("pipeline %s was done status %v", pipelineDTO.ID, dto.Status.String())
 
 			runtimeIDs := getDiceTaskRuntimeIDs(dto)
-			return storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
+			err = storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
+			if err != nil {
+				return err
+			}
+
+			if dto.Status.IsFailedStatus() {
+				err = fmt.Errorf("执行失败")
+				return err
+			}
+
+			return nil
 		}
 
 		time.Sleep(10 * time.Second)

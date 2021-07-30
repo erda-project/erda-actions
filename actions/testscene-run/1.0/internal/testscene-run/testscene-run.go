@@ -25,7 +25,7 @@ func handleAPIs() error {
 		return err
 	}
 	if err != nil {
-		logrus.Info("There is a problem with the execution plan %d",conf.TestScene())
+		logrus.Info("There is a problem with the execution plan %d", conf.TestScene())
 		return err
 	}
 	logrus.Info("execute plan succeed")
@@ -52,7 +52,17 @@ func handleAPIs() error {
 			logrus.Infof("pipeline %s was done status %v", pipelineDTO.ID, dto.Status.String())
 
 			runtimeIDs := getDiceTaskRuntimeIDs(dto)
-			return storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
+			err = storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
+			if err != nil {
+				return err
+			}
+
+			if dto.Status.IsFailedStatus() {
+				err = fmt.Errorf("执行失败")
+				return err
+			}
+
+			return nil
 		}
 
 		time.Sleep(10 * time.Second)
