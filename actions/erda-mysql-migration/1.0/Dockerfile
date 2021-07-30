@@ -37,15 +37,10 @@ ENV MYSQL_ROOT_PASSWORD="12345678"
 ENV MYSQL_ALLOW_EMPTY_PASSWORD yes
 ENV MIGRATION_DIR=/migrations
 
+COPY actions/erda-mysql-migration/1.0/my.cnf /etc/my.cnf
+
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/erda-migrate /usr/bin/erda-migrate
-
-# write mysql config
-RUN bash -c "echo [mysqld]                    >  /etc/my.cnf"
-RUN bash -c "echo user=mysql                  >> /etc/my.cnf"
-RUN bash -c "echo symbolic-links = 0          >> /etc/my.cnf"
-RUN bash -c "echo skip_name_resolve           >> /etc/my.cnf"
-RUN bash -c "echo \!includedir /etc/my.cnf.d  >> /etc/my.cnf"
 
 RUN mkdir -p /migrations
 RUN chmod 777 /opt/action/*
