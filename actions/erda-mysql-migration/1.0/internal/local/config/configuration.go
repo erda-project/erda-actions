@@ -14,6 +14,7 @@
 package config
 
 import (
+	"bytes"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -127,6 +128,7 @@ func (c Configuration) MigrationDir() string {
 	if err != nil {
 		return ""
 	}
+	data = bytes.TrimRight(data, "\n")
 	migrationDir := filepath.Join(versionPackage, string(data))
 	return migrationDir
 }
