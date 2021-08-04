@@ -84,7 +84,7 @@ func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 }
 
 func (c Configuration) SandboxParameters() *migrator.DSNParameters {
-	if c.envs.ExternalSandbox {
+	if c.ExternalSandbox() {
 		return &migrator.DSNParameters{
 			Username:  c.envs.SandboxUsername,
 			Password:  c.envs.SandboxPassword,
@@ -97,7 +97,7 @@ func (c Configuration) SandboxParameters() *migrator.DSNParameters {
 	}
 	return &migrator.DSNParameters{
 		Username:  "root",
-		Password:  c.envs.SandboxRootPassword,
+		Password:  c.envs.SandboxInnerPassword,
 		Host:      "0.0.0.0",
 		Port:      3306,
 		Database:  c.Database(),
@@ -230,7 +230,8 @@ type envs struct {
 	// RetryTimout is the max duration for connection to the MySQL Server and the Sandbox
 	RetryTimout uint64 `env:"MIGRATION_RETRY_TIMEOUT"`
 
-	SandboxRootPassword string `env:"MYSQL_ROOT_PASSWORD"`
+	SandboxRootPassword  string `env:"MYSQL_ROOT_PASSWORD"`
+	SandboxInnerPassword string `env:"SANDBOX_INNER_PASSWORD"`
 
 	Workdir      string `env:"WORKDIR"`
 	MigrationDir string `env:"MIGRATION_DIR"`

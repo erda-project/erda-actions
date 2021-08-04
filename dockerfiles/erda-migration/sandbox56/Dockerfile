@@ -1,4 +1,4 @@
-FROM centos/mysql-57-centos7
+FROM centos/mysql-56-centos7
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
@@ -7,7 +7,6 @@ USER root
 ENV TZ=Asia/Shanghai
 ENV MYSQL_ROOT_PASSWORD="12345678"
 ENV MYSQL_ALLOW_EMPTY_PASSWORD yes
-ENV SANDBOX_INNER_PASSWORD="12345678"
 
 COPY dockerfiles/erda-migration/my.cnf /etc/my.cnf
 
