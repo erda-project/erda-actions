@@ -85,6 +85,18 @@ func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 
 func (c Configuration) SandboxParameters() *migrator.DSNParameters {
 	if c.envs.ExternalSandbox {
+		cmEnv := new(envsFromCluster)
+		if err := envconf.Load(cmEnv); err == nil && cmEnv.MySQLHost != "" {
+			return &migrator.DSNParameters{
+				Username:  cmEnv.MySQLUser,
+				Password:  cmEnv.MySQLPassword,
+				Host:      cmEnv.MySQLHost,
+				Port:      cmEnv.MySQLPort,
+				Database:  cmEnv.MySQLDiceDB,
+				ParseTime: true,
+				Timeout:   time.Second * 150,
+			}
+		}
 		return &migrator.DSNParameters{
 			Username:  c.envs.SandboxUsername,
 			Password:  c.envs.SandboxPassword,
@@ -223,6 +235,14 @@ type envs struct {
 
 	Workdir      string `env:"WORKDIR"`
 	MigrationDir string `env:"MIGRATION_DIR"`
+}
+
+type envsFromCluster struct {
+	MySQLUser     string `env:"MYSQL_USER"`
+	MySQLPassword string `env:"MYSQL_PASSWORD"`
+	MySQLHost     string `env:"MYSQL_HOST"`
+	MySQLPort     int    `env:"MYSQL_PORT"`
+	MySQLDiceDB   string `env:"MYSQL_DICE_DB"`
 }
 
 // ConfigFile represents the structure of ${DICE_CONFIG}/config.yaml which
