@@ -82,6 +82,17 @@ func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 }
 
 func (c Configuration) SandboxParameters() *migrator.DSNParameters {
+	if c.envs.ExternalSandbox {
+		return &migrator.DSNParameters{
+			Username:  c.envs.SandboxUsername,
+			Password:  c.envs.SandboxPassword,
+			Host:      c.envs.SandboxHost,
+			Port:      c.envs.SandboxPort,
+			Database:  c.Database(),
+			ParseTime: true,
+			Timeout:   time.Second * 150,
+		}
+	}
 	return &migrator.DSNParameters{
 		Username:  "root",
 		Password:  c.envs.SandboxRootPassword,
@@ -159,6 +170,10 @@ func (c Configuration) Rules() []rules.Ruler {
 	return configuration2.DefaultRulers()
 }
 
+func (c Configuration) ExternalSandbox() bool {
+	return c.envs.ExternalSandbox
+}
+
 // reload reloads the envs and ${DICE_CONFIG}/config.yaml
 func (c *Configuration) reload() error {
 	c.envs = new(envs)
@@ -178,11 +193,11 @@ type envs struct {
 	ConfigPath string `env:"CONFIGPATH"` // ${DICE_CONFIG}/config.yaml
 
 	// mysql server parameters
-	MySQLUser     string `env:"MYSQL_USER"`
-	MySQLPassword string `env:"MYSQL_PASSWORD"`
-	MySQLHost     string `env:"MYSQL_HOST"`
-	MySQLPort     uint64 `env:"MYSQL_PORT"`
-	MySQLDiceDB   string `env:"MYSQL_DICE_DB"`
+	MySQLUser     string `env:"MIGRATION_MYSQL_USERNAME"`
+	MySQLPassword string `env:"MIGRATION_MYSQL_PASSWORD"`
+	MySQLHost     string `env:"MIGRATION_MYSQL_HOST"`
+	MySQLPort     uint64 `env:"MIGRATION_MYSQL_PORT"`
+	MySQLDiceDB   string `env:"MIGRATION_MYSQL_DBNAME"`
 
 	// flow control parameters
 	SkipLint    bool `env:"MIGRATION_SKIP_LINT"`
@@ -192,6 +207,12 @@ type envs struct {
 
 	DebugSQL bool   `env:"MIGRATION_DEBUGSQL"`
 	Modules_ string `env:"MIGRATION_MODULES"`
+
+	ExternalSandbox bool   `env:"MIGRATION_EXTERNAL_SANDBOX"`
+	SandboxHost     string `env:"MIGRATION_SANDBOX_HOST"`
+	SandboxPort     int    `env:"MIGRATION_SANDBOX_PORT"`
+	SandboxUsername string `env:"MIGRATION_SANDBOX_USERNAME"`
+	SandboxPassword string `env:"MIMGRATION_SANDBOX_PASSWORD"`
 
 	SandboxRootPassword string `env:"MYSQL_ROOT_PASSWORD"`
 
