@@ -1,12 +1,13 @@
 ### job 配置项
 jobs:
   agent:
-    image: registry.erda.cloud/erda-actions/action-agent:3.21-20210322-891e3565d
+    image: registry.erda.cloud/erda-actions/action-agent:1.2-20210804-75232495
     labels:
       # 必填字段
-      MD5: 775229abe45f90fdfd8b47771b636c60
+      MD5: 7537cb97237f4d2a3184868bc6793a3f
     envs:
       # DEBUG mode, will produce more logs
       DEBUG: false
       # push log to collector
       ENABLE_PUSH_LOG_TO_COLLECTOR: false
+      STDERR_REGEXP_LIST: "[\"^[a-z]*can*\",\"^[a-z]*fail*\"]"
