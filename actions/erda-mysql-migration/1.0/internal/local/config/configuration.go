@@ -14,7 +14,9 @@
 package config
 
 import (
+	"bytes"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -83,18 +85,6 @@ func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 
 func (c Configuration) SandboxParameters() *migrator.DSNParameters {
 	if c.envs.ExternalSandbox {
-		cmEnv := new(envsFromCluster)
-		if err := envconf.Load(cmEnv); err == nil && cmEnv.MySQLHost != "" {
-			return &migrator.DSNParameters{
-				Username:  cmEnv.MySQLUser,
-				Password:  cmEnv.MySQLPassword,
-				Host:      cmEnv.MySQLHost,
-				Port:      cmEnv.MySQLPort,
-				Database:  cmEnv.MySQLDiceDB,
-				ParseTime: true,
-				Timeout:   time.Second * 150,
-			}
-		}
 		return &migrator.DSNParameters{
 			Username:  c.envs.SandboxUsername,
 			Password:  c.envs.SandboxPassword,
@@ -138,6 +128,7 @@ func (c Configuration) MigrationDir() string {
 	if err != nil {
 		return ""
 	}
+	data = bytes.TrimRight(data, "\n")
 	migrationDir := filepath.Join(versionPackage, string(data))
 	return migrationDir
 }
@@ -193,6 +184,7 @@ func (c *Configuration) reload() error {
 		return errors.Wrap(err, "failed to Load envs")
 	}
 
+	c.envs.ConfigPath = os.Getenv("ConfigPath")
 	if data, err := ioutil.ReadFile(c.envs.ConfigPath); err == nil {
 		c.cf = new(ConfigFile)
 		_ = yaml.Unmarshal(data, c.cf) // allows err
@@ -220,24 +212,17 @@ type envs struct {
 	DebugSQL bool   `env:"MIGRATION_DEBUGSQL"`
 	Modules_ string `env:"MIGRATION_MODULES"`
 
+	// sandbox envs
 	ExternalSandbox bool   `env:"MIGRATION_EXTERNAL_SANDBOX"`
 	SandboxHost     string `env:"MIGRATION_SANDBOX_HOST"`
 	SandboxPort     int    `env:"MIGRATION_SANDBOX_PORT"`
 	SandboxUsername string `env:"MIGRATION_SANDBOX_USERNAME"`
-	SandboxPassword string `env:"MIMGRATION_SANDBOX_PASSWORD"`
+	SandboxPassword string `env:"MIGRATION_SANDBOX_PASSWORD"`
 
 	SandboxRootPassword string `env:"MYSQL_ROOT_PASSWORD"`
 
 	Workdir      string `env:"WORKDIR"`
 	MigrationDir string `env:"MIGRATION_DIR"`
-}
-
-type envsFromCluster struct {
-	MySQLUser     string `env:"MYSQL_USER"`
-	MySQLPassword string `env:"MYSQL_PASSWORD"`
-	MySQLHost     string `env:"MYSQL_HOST"`
-	MySQLPort     int    `env:"MYSQL_PORT"`
-	MySQLDiceDB   string `env:"MYSQL_DICE_DB"`
 }
 
 // ConfigFile represents the structure of ${DICE_CONFIG}/config.yaml which
