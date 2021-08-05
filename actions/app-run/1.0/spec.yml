@@ -32,6 +32,9 @@ accessibleAPIs:
   - path: /api/cicds
     method: POST
     schema: http
+  - path: /api/cicds/<pipelineID>/actions/cancel
+    method: POST
+    schema: http
   - path: /api/applications
     method: GET
     schema: http

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -62,6 +63,12 @@ func handleAPIs() error {
 	logrus.Infof("end run pipeline %s", conf.ActionPipelineYmlName())
 
 	logrus.Infof("wait pipeline done %s", pipelineDTO.ID)
+
+	err = storePipelineInfo(pipelineDTO.ID)
+	if err != nil {
+		return err
+	}
+
 	// watch pipeline done
 	for {
 		dto, err := pipelineSimpleDetail(PipelineDetailRequest{
@@ -84,6 +91,7 @@ func handleAPIs() error {
 			logrus.Infof("pipeline %s was done status %v", pipelineDTO.ID, dto.Status.String())
 
 			runtimeIDs := getDiceTaskRuntimeIDs(dto)
+
 			return storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
 		}
 
@@ -197,6 +205,15 @@ func pipelineSimpleDetail(req PipelineDetailRequest) (*apistructs.PipelineDetail
 	}
 
 	return resp.Data, nil
+}
+
+func storePipelineInfo(pipelineID uint64) error {
+	content := fmt.Sprint("pipelineID=", pipelineID)
+	err := filehelper.CreateFile(filepath.Join(conf.WorkDir(), "pipelineInfo"), content, 0755)
+	if err != nil {
+		return errors.Wrap(err, "write file:pipelineInfo failed")
+	}
+	return nil
 }
 
 func storeMetaFile(pipelineID uint64, status string, runtimeID []string) error {

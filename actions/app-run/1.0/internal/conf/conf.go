@@ -16,6 +16,7 @@ type Conf struct {
 	OrgId                uint64 `env:"DICE_ORG_ID"`
 	TaskId               uint64 `env:"PIPELINE_TASK_ID"`
 	ProjectId            uint64 `env:"DICE_PROJECT_ID"`
+	PipelineID           uint64 `env:"PIPELINE_ID"`
 	SponsorId            string `env:"DICE_USER_ID"`
 	CommitId             string `env:"GITTAR_COMMIT"`
 	GittarUsername       string `env:"GITTAR_USERNAME"`
@@ -34,32 +35,15 @@ var (
 func Load() error {
 	return envconf.Load(&cfg)
 }
-func PipelineId() uint64 {
-	return cfg.PipelineId
-}
-func OrgId() uint64 {
-	return cfg.OrgId
-}
-func TaskId() uint64 {
-	return cfg.TaskId
-}
 
 func ProjectId() uint64 {
 	return cfg.ProjectId
 }
-func SponsorId() string {
-	return cfg.SponsorId
-}
-func CommitId() string {
-	return cfg.CommitId
-}
-func ProjectName() string {
-	return cfg.ProjectName
+
+func PipelineID() uint64 {
+	return cfg.PipelineID
 }
 
-func BranchName() string {
-	return cfg.BranchName
-}
 func DiceOpenapiToken() string {
 	return cfg.DiceOpenapiToken
 }
@@ -76,16 +60,12 @@ func DiceOpenapiPublicUrl() string {
 	return cfg.DiceOpenapiPublicUrl
 }
 
-func GittarUsername() string {
-	return cfg.GittarUsername
-}
-
-func GittarPassword() string {
-	return cfg.GittarPassword
-}
-
 func ActionBranch() string {
 	return cfg.ActionBranch
+}
+
+func WorkDir() string {
+	return cfg.WorkDir
 }
 
 func ActionApplicationName() string {

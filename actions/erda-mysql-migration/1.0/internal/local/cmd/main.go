@@ -26,7 +26,9 @@ import (
 func main() {
 	logrus.Infoln("Erda MySQL Migration start working")
 
-	go common.FatalError(common.StartSandbox)
+	if !config.Config().ExternalSandbox() {
+		go common.FatalError(common.StartSandbox)
+	}
 
 	mig, err := migrator.New(config.Config())
 	if err != nil {
