@@ -82,6 +82,10 @@ accessibleAPIs:
   - path: /api/files
     method: POST
     schema: http
+  # get app type
+  - path: /api/applications/<applicationId>
+    method: GET
+    schema: http
 
 outputs:
   - name: releaseID

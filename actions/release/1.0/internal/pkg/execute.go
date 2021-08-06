@@ -18,6 +18,7 @@ import (
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/http/httpclient"
 )
 
 var errReleaseTypeCheck = errors.New(`一个release action只能发布一种操作系统类型的移动应用，如果有多种操作系统类型，请拆分成多个release acction`)
@@ -36,6 +37,16 @@ func Execute() error {
 	var cfg conf.Conf
 	if err := initEnv(&cfg); err != nil {
 		return err
+	}
+
+	// check application mode
+	app, err := GetApp(cfg.AppID, cfg)
+	if err != nil {
+		return err
+	}
+	// project level application not support release action
+	if app.Mode == string(apistructs.ApplicationModeProjectService) {
+		return fmt.Errorf("project level application not support release action")
 	}
 
 	// generate release create request
@@ -330,4 +341,28 @@ func initEnv(cfg *conf.Conf) error {
 	}
 
 	return nil
+}
+
+func GetApp(id int64, conf conf.Conf) (*apistructs.ApplicationDTO, error) {
+
+	var resp apistructs.ApplicationFetchResponse
+
+	response, err := httpclient.New(httpclient.WithCompleteRedirect()).
+		Get(conf.DiceOpenapiPrefix).
+		Path(fmt.Sprintf("/api/applications/%d", id)).
+		Header("Authorization", conf.CiOpenapiToken).Do().JSON(&resp)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to request (%s)", err.Error())
+	}
+
+	if !response.IsOK() {
+		return nil, fmt.Errorf(fmt.Sprintf("failed to request, status-code: %d, content-type: %s", response.StatusCode(), response.ResponseHeader("Content-Type")))
+	}
+
+	if !resp.Success {
+		return nil, fmt.Errorf(fmt.Sprintf("failed to request, error code: %s, error message: %s", resp.Error.Code, resp.Error.Msg))
+	}
+
+	return &resp.Data, nil
 }
