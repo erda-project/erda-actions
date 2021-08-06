@@ -5,6 +5,8 @@ displayName: 应用创建
 category: deploy_management
 desc: 根据仓库地址和应用名称自动创建应用和推送代码
 public: true
+labels:
+  project_level_app: true
 supportedVersions:
   - ">= 4.0"
 

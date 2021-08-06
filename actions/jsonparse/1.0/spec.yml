@@ -7,6 +7,7 @@ desc: 对 json 解析值然后返回出参
 public: true
 labels:
   configsheet: true
+  project_level_app: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.21"
 supportedErdaVersions:

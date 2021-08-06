@@ -7,6 +7,7 @@ desc: 在对应的数据源中执行 redis 命令
 public: true
 labels:
   configsheet: true
+  project_level_app: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.21"
 supportedErdaVersions:

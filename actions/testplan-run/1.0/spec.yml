@@ -7,6 +7,8 @@ category: test_management
 desc: 根据自动化测试计划启动测试计划并等待完成
 public: true
 useProtocol: true
+labels:
+  project_level_app: true
 supportedVersions:
   - ">= 4.0"
 supportedErdaVersions:

@@ -7,6 +7,7 @@ logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/d74a0d
 desc: 针对 java 工程的编译打包任务
 labels:
   maintainer: xxx
+  project_level_app: true
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"

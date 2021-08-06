@@ -7,6 +7,8 @@ category: test_management
 desc: 选择指定场景进行测试
 public: true
 useProtocol: true
+labels:
+  project_level_app: true
 supportedVersions:
   - ">= 4.0"
 supportedErdaVersions:

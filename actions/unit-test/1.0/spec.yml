@@ -5,6 +5,8 @@ category: test_management
 displayName: 单元测试
 desc: 该 action 是针对 单元测试  的能力抽象，在提交代码时，会自动触发 UT 分析。
 public: true
+labels:
+  project_level_app: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:

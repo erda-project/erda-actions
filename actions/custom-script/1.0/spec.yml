@@ -8,6 +8,8 @@ public: true
 labels:
   autotest: true
   configsheet: true
+  project_level_app: true
+
 
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
