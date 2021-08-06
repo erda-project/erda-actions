@@ -1,0 +1,69 @@
+# Copyright (c) 2021 Terminus, Inc.
+#
+# This program is free software: you can use, redistribute, and/or modify
+# it under the terms of the GNU Affero General Public License, version 3
+# or later ("AGPL"), as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+name: erda-pkg-release-public
+displayName: Erda public 版本包发布
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/04/14/1a196371-6cb6-4095-9928-3595d1222e66.png
+version: 1.0
+type: action
+category: deploy_management
+desc: >-
+  release erda install package for public: erda-$erda_version.$os_arch.tar.gz
+
+public: true
+supportedVersion:
+  - ">1.0"
+
+
+params:
+  - name: erda_version
+    type: string
+    desc: the version of erda. use erda tag version
+    required: true
+
+  - name: release_type
+    type: string
+    desc: erda release type, common | tools | completely
+    required: false
+
+  - name: repo_erda_release
+    type: string
+    desc: the repository of erda-release. get from forener action git-checkout
+    required: true
+
+  - name: repo_version
+    type: string
+    desc: the repository of version. get from forener action git-checkout
+    required: true
+
+  - name: git
+    type: struct
+    desc: the auth info of erda-project in github.com needed to fix when building erda release pkg before erda to public
+    struct:
+      - { name: account, type: string, default: "", desc: "account of github" }
+      - { name: token, type: string, default: "", desc: "token of specified account" }
+
+  - name: oss
+    type: struct
+    desc: the config info of oss
+    required: true
+    struct:
+      - { name: endpoint, type: string, default: "", desc: "endpoint of oss" }
+      - { name: accessKeyID, type: string, default: "", desc: "access key of oss" }
+      - { name: accessKeySecret, type: string, default: "", desc: "secret key of oss" }
+
+outputs:
+  - name: erdaVersion
+  - name: pkgMapUrl
+    type: ToolsPkgReleaseInfo
+    desc: ToolsPkgReleaseInfo 为 json string， 可转换为 map[string]string, 键为 osArch, 值为 包的 url

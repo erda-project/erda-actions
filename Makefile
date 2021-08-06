@@ -12,7 +12,7 @@ app-create app-run git-checkout assert jsonparse redis-cli mysql-cli git-push re
 buildpack buildpack-aliyun java java-build js js-build manual-review js-deploy dockerfile docker-push php gitbook js-script\
 sonar integration-test unit-test api-test  java-lint testplan java-dependency-check golang java-unit android ios mobile-template lib-publish mobile-publish java-deploy \
 oss-upload delete-nodes ess-info loop api-register api-publish publish-api-asset mysqldump archive-release erda-mysql-migration\
-push-extensions archive-extensions testscene-run testplan-run erda-mysql-migration-lint:
+push-extensions archive-extensions testscene-run testplan-run erda-mysql-migration-lint erda-pkg-release-public erda-pkg-release-enterprise:
 
 	@set -eo pipefail
 
