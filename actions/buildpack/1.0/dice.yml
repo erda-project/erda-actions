@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   buildpack:
-    image: registry.erda.cloud/erda-actions/buildpack-action:20210806-aadc3ec
+    image: registry.erda.cloud/erda-actions/buildpack-action:20210806-aca9529
     envs:
       # Dockerfile / Dockerfile.build 中 {{BP_DOCKER_BASE_REGISTRY}} 需要该环境变量进行文件渲染。
       # 作用：Dockerfile 里 FROM XXX，这个 XXX 镜像的 Registry 地址。
