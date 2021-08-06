@@ -6,6 +6,8 @@ echo version "$version"
 IFS=. read major minor extra <<<"$version";
 echo major "$major"
 
+export USER_JAVA_OPTS="$JAVA_OPTS"
+
 # If not default limit_in_bytes in cgroup
 if [ "$limit_in_bytes" -ne "9223372036854771712" ] && [ -z "${JAVA_OPTS_DISABLE_PRESET:-}" ]
 then
@@ -44,6 +46,12 @@ then
       export JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom $JAVA_OPTS"
       export JAVA_OPTS="-XX:+UseContainerSupport -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:NewRatio=1 -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 $JAVA_OPTS"
     fi
+fi
+
+# if user add DISABLE_PRESET_JAVA_OPTS env clear erda JAVA_OPTS
+if [ "${DISABLE_PRESET_JAVA_OPTS}" = "true" ]
+then
+  export JAVA_OPTS="$USER_JAVA_OPTS"
 fi
 
 # spot java agent

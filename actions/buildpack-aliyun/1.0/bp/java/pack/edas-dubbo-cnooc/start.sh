@@ -2,6 +2,8 @@
 
 JAVA_OPTS="$JAVA_OPTS {{JAVA_OPTS}}"
 
+export USER_JAVA_OPTS="$JAVA_OPTS"
+
 limit_in_bytes=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
 
 # If not default limit_in_bytes in cgroup
@@ -44,6 +46,13 @@ then
     export JAVA_OPTS="-XX:+PrintGCDetails -XX:+PrintGCTimeStamps $JAVA_OPTS"
     echo JAVA_OPTS=$JAVA_OPTS
 fi
+
+# if user add DISABLE_PRESET_JAVA_OPTS env clear erda JAVA_OPTS
+if [ "${DISABLE_PRESET_JAVA_OPTS}" = "true" ]
+then
+  export JAVA_OPTS="$USER_JAVA_OPTS"
+fi
+
 
 # spot java agent
 if [ -f /opt/spot/spot-agent/spot-agent.jar ]; then

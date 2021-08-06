@@ -1,6 +1,8 @@
 #!/bin/bash
 limit_in_bytes=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
 
+export USER_JAVA_OPTS="$JAVA_OPTS"
+
 # If not default limit_in_bytes in cgroup
 if [ "$limit_in_bytes" -ne "9223372036854771712" ]
 then
@@ -37,6 +39,12 @@ then
 
     export JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:NewRatio=1 -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 $JAVA_OPTS"
     echo JAVA_OPTS=$JAVA_OPTS
+fi
+
+# if user add DISABLE_PRESET_JAVA_OPTS env clear erda JAVA_OPTS
+if [ "${DISABLE_PRESET_JAVA_OPTS}" = "true" ]
+then
+  export JAVA_OPTS="$USER_JAVA_OPTS"
 fi
 
 # spot java agent
