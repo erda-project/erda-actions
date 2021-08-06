@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/erda-project/erda-actions/pkg/log"
 	"os"
 
 	"github.com/sirupsen/logrus"
@@ -9,13 +10,9 @@ import (
 )
 
 func main() {
-	logrus.SetFormatter(&logrus.TextFormatter{
-		DisableColors:    true,
-		DisableTimestamp: true,
-	})
-	logrus.SetOutput(os.Stdout)
+	log.Init()
 
-	logrus.Info("Deploying...")
+	logrus.Printf("Deploying...")
 	if err := dice.Run(); err != nil {
 		logrus.Errorf("Unable to deploy application to dice, err: %v", err)
 		os.Exit(1)

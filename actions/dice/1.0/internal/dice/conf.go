@@ -1,8 +1,10 @@
 package dice
 
 import (
-	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/sirupsen/logrus"
+
+	"github.com/erda-project/erda-actions/pkg/log"
+	"github.com/erda-project/erda/pkg/envconf"
 )
 
 type conf struct {
@@ -76,7 +78,17 @@ func HandleConf() (conf, error) {
 		cfg.ClusterName = hiddenActionParams.ClusterName
 	}
 
-	logrus.Infof("%+v", cfg)
-
+	cfg.print()
 	return cfg, nil
+}
+
+func (cfg *conf) print() {
+	log.AddNewLine(1)
+	logrus.Infof("config: ")
+	logrus.Infof(" appID: %d", cfg.AppID)
+	logrus.Infof(" clusterName: %s", cfg.ClusterName)
+	logrus.Infof(" workspace: %s", cfg.Workspace)
+	logrus.Infof(" gittarBranch: %s", cfg.GittarBranch)
+	logrus.Infof(" operatorID: %s", cfg.OperatorID)
+	log.AddLineDelimiter(" ")
 }

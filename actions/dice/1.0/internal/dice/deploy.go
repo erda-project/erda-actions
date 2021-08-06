@@ -12,6 +12,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	"github.com/erda-project/erda-actions/pkg/log"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
@@ -51,6 +52,10 @@ func Run() error {
 			logrus.Warningf("Report runtimeID to ci failed.")
 		}
 	}
+	log.AddNewLine(1)
+	// add msg because of frontend will match regularly, the regular is msg=\"(.+)\"
+ 	logrus.Infof("msg=\"deploy starting... ##to_link:applicationId:%d,runtimeId:%d,deploymentId:%d\"",
+		result.ApplicationId, result.RuntimeId, result.DeploymentId)
 
 	//Set default deployment timeout is 24h.
 	timeout := cfg.TimeOut
@@ -94,20 +99,15 @@ func storeDiceInfo(deploymentId, runtimeId, wd string) error {
 func generateMetadata(conf *conf, runtimeID int64, deploymentID int64) *apistructs.Metadata {
 	return &apistructs.Metadata{
 		{
-			Name:  "project_id",
+			Name:  "projectID",
 			Value: strconv.FormatUint(conf.ProjectID, 10),
 		},
 		{
-			Name:  "app_id",
+			Name:  "appID",
 			Value: strconv.FormatUint(conf.AppID, 10),
 		},
 		{
-			Name:  apistructs.ActionCallbackRuntimeID,
-			Value: strconv.FormatInt(runtimeID, 10),
-			Type:  apistructs.ActionCallbackTypeLink,
-		},
-		{
-			Name:  "deployment_id",
+			Name:  "deploymentID",
 			Value: strconv.FormatInt(deploymentID, 10),
 		},
 	}
@@ -128,14 +128,20 @@ func storeMetaFileWithErr(conf *conf, runtimeID int64, deploymentID int64, deplo
 			Value: v,
 		})
 	}
+	// remove that the value is empty
+	newMetadata := make([]apistructs.MetadataField, 0)
+	for _, v := range *metadata {
+		if v.Value != "" {
+			newMetadata = append(newMetadata, v)
+		}
+	}
 	meta := apistructs.ActionCallback{
-		Metadata: *metadata,
+		Metadata: newMetadata,
 	}
 	b, err := json.Marshal(&meta)
 	if err != nil {
 		return err
 	}
-	logrus.Infof("storeMetaFileWithErr CreateFile body: %v", string(b))
 	if err := filehelper.CreateFile(conf.MetaFile, string(b), 0644); err != nil {
 		return errors.Wrap(err, "write file:metafile failed")
 	}
@@ -209,7 +215,7 @@ func checkDeploymentLoop(
 	timer := time.NewTimer(timeOut * time.Second)
 	deploying := true
 	var runtime interface{}
-
+	var lastDeployStatusInfo string
 	// Check if APP was deployed.
 deployloop:
 	for {
@@ -218,13 +224,11 @@ deployloop:
 			break deployloop
 		default:
 			var err error
-			deploying, runtime, err = d.Check(result, d.conf)
+			deploying, runtime, err = d.Check(result, d.conf, &lastDeployStatusInfo)
 			if err != nil {
 				logrus.Errorf("check deploying is not null")
 				if _, ok := err.(*DiceDeployError); ok {
 					logrus.Errorf("Deploy to Dice Failed: %s", err.Error())
-					logrus.Errorf("Deployment link ##to_link:applicationId:%d,runtimeId:%d,deploymentId:%d",
-						result.ApplicationId, result.RuntimeId, result.DeploymentId)
 				}
 				return nil, err
 			}
@@ -235,13 +239,10 @@ deployloop:
 
 		time.Sleep(10 * time.Second)
 	}
-	logrus.Errorf("deployloop continue")
 	if deploying {
-		logrus.Errorf("Deploying timeout( %d seconds). you can: ", timeOut)
-		logrus.Error("   1. increase timeout in pipeline.yml")
-		logrus.Error("   2. try again ")
-		logrus.Errorf("Getting deployment logs ##to_link:applicationId:%d,runtimeId:%d,deploymentId:%d",
-			result.ApplicationId, result.RuntimeId, result.DeploymentId)
+		logrus.Infof("Deploying timeout( %d seconds). you can: ", timeOut)
+		logrus.Infof("   1. increase timeout in pipeline.yml")
+		logrus.Infof("   2. try again ")
 		//logrus.Error("Now we are going to cancel the task...")
 		//cReq := &cancelReq{
 		//	DeploymentId: result.DeploymentId,
@@ -255,7 +256,6 @@ deployloop:
 		//return nil, errors.New("deployment canceled")
 		return nil, errors.New("deployment timeout")
 	}
-	logrus.Errorf("return runtime")
 	return runtime, nil
 }
 
@@ -277,8 +277,7 @@ func prepareRequest(conf *conf, workspace string) (*deployRequest, error) {
 	}
 	extra["buildId"] = conf.PipelineBuildID
 
-	logrus.Infof("<<<request deploy body:%v", req)
-
+	req.print()
 	req.Extra = extra
 
 	var releaseID string
@@ -292,7 +291,7 @@ func prepareRequest(conf *conf, workspace string) (*deployRequest, error) {
 		}
 	}
 
-	logrus.Infof("<<<releaseID:%s", releaseID)
+	logrus.Infof("releaseID: %s", releaseID)
 
 	req.ReleaseId = releaseID
 
