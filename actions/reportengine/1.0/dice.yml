@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   reportengine:
-    image: registry.erda.cloud/erda/reportengine:1.1-20210709-5488ec1
+    image: registry.erda.cloud/erda/reportengine:1.2-20210809-412d874c
     resources:
       cpu: 0.1
       mem: 128
