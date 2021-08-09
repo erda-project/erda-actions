@@ -174,7 +174,7 @@ if [ ! -d /dice-tools/versionpackage/"$DICE_VERSION" ]; then
             cp -r "$DICE_VERSION_PATH/$DICE_VERSION/migrations"/* ./dice-tools/versionpackage/"$DICE_VERSION"/
         fi
         if [ -d "$DICE_VERSION_PATH/$DICE_VERSION/sqls" ]; then
-            for dir in $(ls "$DICE_VERSION_PATH"/"$DICE_VERSION"/sqls); do
+            for dir in $(ls -A "$DICE_VERSION_PATH"/"$DICE_VERSION"/sqls); do
                 if [ -d "$DICE_VERSION_PATH"/"$DICE_VERSION"/sqls/"$dir" ]; then
                     mkdir -pv ./dice-tools/versionpackage/"$DICE_VERSION"/"$dir"
                     cp "$DICE_VERSION_PATH"/"$DICE_VERSION"/sqls/"$dir"/* ./dice-tools/versionpackage/"$DICE_VERSION"/"$dir"/
