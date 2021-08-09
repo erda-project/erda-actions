@@ -13,7 +13,7 @@
 
 jobs:
   dice-version-archive:
-    image: registry.erda.cloud/erda-actions/erda-pkg-release-enterprise-action:20210809-50c0484
+    image: registry.erda.cloud/erda-actions/erda-pkg-release-enterprise-action:20210809-a77da07
     resource:
       cpu: 0.5
       disk: 1.24
