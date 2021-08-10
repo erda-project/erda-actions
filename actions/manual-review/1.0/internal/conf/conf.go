@@ -6,8 +6,8 @@ import (
 
 // Conf action 入参
 type Conf struct {
-	ProcessorId []string `env:"ACTION_PROCESSOR" required:"true"`
-	WaitingTime int      `env:"ACTION_WAITING_TIME"`
+	ProcessorId         []string `env:"ACTION_PROCESSOR" required:"true"`
+	WaitTimeIntervalSec int      `env:"ACTION_WAIT_TIME_INTERVAL_SEC" default:"5"`
 	// env
 	MetaFile         string `env:"METAFILE"`
 	WorkDir          string `env:"WORKDIR" default:"."`
@@ -80,6 +80,6 @@ func ProcessorId() []string {
 	return cfg.ProcessorId
 }
 
-func WaitingTime() int {
-	return cfg.WaitingTime
+func WaitTimeIntervalSec() int {
+	return cfg.WaitTimeIntervalSec
 }

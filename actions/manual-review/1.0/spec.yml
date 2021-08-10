@@ -17,7 +17,7 @@ params:
     required: true
     desc: 处理人 id
     type: string_array
-  - name: waiting_time
+  - name: wain_time_interval_sec
     type: int
     desc: 等待时间
     default: 5
@@ -35,24 +35,24 @@ accessibleAPIs:
 
 
 formProps:
-- key: params
-  component: formGroup
-  group: params
-  componentProps:
-    title: 任务参数
-- label: 处理人
-  component: memberSelector
-  required: true
-  key: params.processor
-  group: params
-  componentProps:
-    scopeType: app
-    mode: multiple
-- label: wating_time
-  component: input
-  key: params.wating_time
-  componentProps:
-    placeholder: 请输入数据
-  group: params
-  defaultValue: 5
-  labelTip: 等待时间
+ - key: params
+   component: formGroup
+   group: params
+   componentProps:
+     title: 任务参数
+ - label: 处理人
+   component: memberSelector
+   required: true
+   key: params.processor
+   group: params
+   componentProps:
+     scopeType: app
+     mode: multiple
+ - label: wain_time_interval_sec
+   component: input
+   key: params.wating_time
+   componentProps:
+     placeholder: 请输入数据
+   group: params
+   defaultValue: 5
+   labelTip: 等待时间

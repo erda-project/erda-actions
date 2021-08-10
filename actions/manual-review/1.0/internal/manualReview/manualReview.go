@@ -12,10 +12,10 @@ import (
 
 	"github.com/erda-project/erda-actions/actions/manual-review/1.0/internal/conf"
 	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/encoding/jsonparse"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda/pkg/http/httpserver/errorresp"
-	"github.com/erda-project/erda/pkg/encoding/jsonparse"
 )
 
 func handleAPIs() error {
@@ -60,7 +60,7 @@ func handleAPIs() error {
 
 		var approvalStatus string
 
-		waitingTime := conf.WaitingTime()
+		waitingTime := conf.WaitTimeIntervalSec()
 		for true {
 			time.Sleep(time.Duration(waitingTime) * time.Second)
 			approvalStatus, _ = getReview(conf.TaskId())
