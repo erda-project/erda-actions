@@ -60,6 +60,11 @@ RUN python3 -m pip --no-cache-dir install mysqlclient==2.0.3 django==3.2.4 pytz=
 
 RUN echo 'export LC_ALL="en_US.utf8"' >> /etc/bashrc
 RUN echo 'export TZ="Asia/Shanghai"'  >> /etc/bashrc
+RUN source /etc/bashrc
+RUN yum install kde-l10n-Chinese -y
+RUN yum install glibc-common -y
+RUN localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
+ENV LC_ALL zh_CN.UTF-8
 
 VOLUME ["/migrations"]
 
