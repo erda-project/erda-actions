@@ -58,6 +58,9 @@ RUN python3 -m pip --no-cache-dir install pip -U
 RUN python3 -m pip --no-cache-dir config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 RUN python3 -m pip --no-cache-dir install mysqlclient==2.0.3 django==3.2.4 pytz==2021.1 sqlparse==0.4.1
 
+RUN echo 'export LC_ALL="en_US.utf8"' >> /etc/bashrc
+RUN echo 'export TZ="Asia/Shanghai"'  >> /etc/bashrc
+
 VOLUME ["/migrations"]
 
 ENTRYPOINT ["erda-migrate"]
