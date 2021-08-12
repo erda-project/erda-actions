@@ -19,16 +19,36 @@ import (
 
 func handleAPIs() error {
 
-	logrus.Info("开始执行")
+	logrus.Info("start execution")
 	pipelineDTO, err := ExecuteDiceAutotestTestPlans(conf.TestPlan(), conf.Cms())
 	if err != nil {
+		logrus.Info("Failed execution of the plan")
 		return err
 	}
-	if err != nil {
-		logrus.Info("执行计划出问题了")
-		return err
+	if !conf.WaitingResult() {
+		for {
+			dto, err := pipelineSimpleDetail(PipelineDetailRequest{
+				SimplePipelineBaseResult: true,
+				PipelineID:               pipelineDTO.ID,
+			})
+			if err != nil {
+				return err
+			}
+
+			if dto.Status.IsRunningStatus() || dto.Status.IsEndStatus() {
+				logrus.Info("pipeline status %s", pipelineDTO.Status)
+
+				runtimeIDs := getDiceTaskRuntimeIDs(dto)
+				err = storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
+				if err != nil {
+					return err
+				}
+				return nil
+			}
+			time.Sleep(10 * time.Second)
+		}
 	}
-	logrus.Info("执行计划成功")
+	logrus.Info("test plan is running")
 	logrus.Info("pipeline status %s", pipelineDTO.Status)
 
 	for {

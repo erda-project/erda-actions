@@ -21,6 +21,9 @@ params:
   - name: cms
     desc: 参数配置名称
     required: true
+  - name: waiting_result
+    desc: 等待执行结果,等待 或者 不等待
+    required: false
 
 outputs:
   - name: pipelineID
