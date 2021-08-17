@@ -85,7 +85,6 @@ func build(cfg conf.Conf) error {
 	err = cmd.Run()
 	if err != nil {
 		fmt.Println(fmt.Errorf("exec sql error %v", err))
-		return err
 	}
 
 	// error 信息大于 0
