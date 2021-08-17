@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   mysql-cli:
-    image: registry.erda.cloud/erda-actions/mysql-cli-action:20210802-d4011c5
+    image: registry.erda.cloud/erda-actions/mysql-cli-action:20210817-b275aad
     envs:
       BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:
