@@ -1,3 +1,5 @@
+# syntax = docker/dockerfile:1.2
+
 # Copyright (c) 2021 Terminus, Inc.
 #
 # This program is free software: you can use, redistribute, and/or modify
@@ -17,10 +19,14 @@ COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 # go build action cmd
-RUN GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-mysql-migration/1.0/internal/action/cmd/main.go
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    --mount=type=cache,target=/go/pkg/mod \
+    GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-mysql-migration/1.0/internal/action/cmd/main.go
 
 # go build local cmd
-RUN GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0/internal/local/cmd/main.go
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    --mount=type=cache,target=/go/pkg/mod \
+    GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0/internal/local/cmd/main.go
 
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
