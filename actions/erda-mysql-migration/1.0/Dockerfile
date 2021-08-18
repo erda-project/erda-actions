@@ -31,7 +31,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
 
-FROM docker.io/erdaproject/erda-mysql-migration-sandbox:20210818-194800
+FROM erdaproject/erda-mysql-migration-sandbox:20210818-194800
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
