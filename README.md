@@ -32,14 +32,14 @@ desc: execute cmds   # 对 Ext 的简单文字描述
 
 # 参数声明，主要用于图形化编辑
 # type: 参数类型，前端图形化编辑时会根据参数类型使用不同的输入框样式，并渲染出对应的文本。
-	# 支持的类型列表，具体用法请参见下方示例
-	# - string (默认值，不填写时即为 string 类型)
-	# - string_array
-	# - struct
-	# - struct_array
-	# - float
-	# - int
-	# - map
+# 支持的类型列表，具体用法请参见下方示例
+# - string (默认值，不填写时即为 string 类型)
+# - string_array
+# - struct
+# - struct_array
+# - float
+# - int
+# - map
 params:
   - name: command
     desc: 运行的命令
@@ -67,12 +67,12 @@ params:
 accessibleAPIs: # 声明可访问的 OPENAPI 列表
   # push release
   - path: /api/releases
-	method: POST
-	schema: http
+    method: POST
+    schema: http
 
 outputs: # 声明 action 的输出，可被后续 Action 通过 ${alias:OUTPUT:key} 方式引用
   - name: image
-	desc: 输出的镜像
+    desc: 输出的镜像
 ...
 ```
 
