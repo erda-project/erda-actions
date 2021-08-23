@@ -52,6 +52,7 @@ push-extensions archive-extensions testscene-run testplan-run erda-mysql-migrati
 	if [[ $@ == "buildpack" || $@ == "java" || $@ == "java-build" || $@ == "java-agent" ]]; then
 		dockerbuild="$${dockerbuild} --no-cache"
 	fi
+	if [[ $@ == "golang" ]]; then dockerbuild="$${dockerbuild} --build-arg GO_VERSION=${GO_VERSION}"; fi
 	@echo $${dockerbuild}
 	eval "$${dockerbuild}"
 
