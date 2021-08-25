@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   agent:
-    image: registry.erda.cloud/erda-actions/action-agent:1.2-20210804-75232495
+    image: registry.erda.cloud/erda-actions/action-agent:1.2-20210823-bfb30d73
     labels:
       # 必填字段
       MD5: 7537cb97237f4d2a3184868bc6793a3f
@@ -11,3 +11,4 @@ jobs:
       # push log to collector
       ENABLE_PUSH_LOG_TO_COLLECTOR: false
       STDERR_REGEXP_LIST: "[\"^[a-z]*can*\",\"^[a-z]*fail*\"]"
+      ENCRYPTED_VAlUE_MIN_LEN: 6
