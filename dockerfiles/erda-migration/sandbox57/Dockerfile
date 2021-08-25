@@ -21,3 +21,7 @@ RUN yum install kde-l10n-Chinese -y
 RUN yum install glibc-common -y
 RUN localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
 ENV LC_ALL zh_CN.UTF-8
+
+# add healthy probe
+RUN mkdir /logs
+RUN touch /logs/healthy

@@ -37,8 +37,7 @@ MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
 USER root
 
-VOLUME ["/log"]
-VOLUME ["/migrations"]
+VOLUME ["/logs", "/migrations"]
 ENV MIGRATION_DIR=/migrations
 
 COPY --from=builder /opt/action/run /opt/action/run
