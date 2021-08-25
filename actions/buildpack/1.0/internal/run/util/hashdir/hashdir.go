@@ -47,10 +47,7 @@ func Create(dir string, hashAlgorithm string, ignorePatterns []string) (string, 
 		return "", nil
 	}
 
-	gitignore, err := ignore.CompileIgnoreLines(ignorePatterns...)
-	if err != nil {
-		return "", nil
-	}
+	gitignore := ignore.CompileIgnoreLines(ignorePatterns...)
 
 	err = filepath.Walk(dir, func(absPath string, info os.FileInfo, err error) error {
 		if err != nil {
