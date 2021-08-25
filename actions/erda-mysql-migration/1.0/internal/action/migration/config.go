@@ -59,6 +59,7 @@ type Conf struct {
 	SkipMig       bool     `env:"ACTION_SKIP_MIGRATION"`
 	LintConfig    string   `env:"ACTION_LINT_CONFIG"`
 	Modules_      []string `env:"ACTION_MODULES"`
+	RetryTimeout_ uint64   `env:"ACTION_RETRY_TIMEOUT"`
 
 	mysqlParameters   *migrator.DSNParameters
 	sandboxParameters *migrator.DSNParameters
@@ -164,6 +165,14 @@ func (c *Conf) Rules() []rules.Ruler {
 		return configuration.DefaultRulers()
 	}
 	return rulers
+}
+
+func (c *Conf) RetryTimeout() uint64 {
+	return c.RetryTimeout_
+}
+
+func (c *Conf) SQLCollectorDir() string {
+	return "/log"
 }
 
 func (c *Conf) retrieveMySQLParameters() error {

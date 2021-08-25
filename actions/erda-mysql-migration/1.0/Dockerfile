@@ -31,14 +31,14 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
 
-FROM erdaproject/erda-mysql-migration-sandbox:20210818-194800
+FROM erdaproject/erda-mysql-migration-sandbox:20210825
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
 USER root
 
-RUN mkdir -p /migrations
-RUN chmod 777 /migrations
+VOLUME ["/log"]
+VOLUME ["/migrations"]
 ENV MIGRATION_DIR=/migrations
 
 COPY --from=builder /opt/action/run /opt/action/run
@@ -47,4 +47,5 @@ COPY --from=builder /opt/action/erda-migrate /usr/bin/erda-migrate
 RUN chmod 777 /opt/action/*
 RUN chmod 777 /usr/bin/erda-migrate
 
-ENTRYPOINT ["erda-migrate"]
+ENTRYPOINT ["container-entrypoint"]
+CMD ["erda-migrate"]
