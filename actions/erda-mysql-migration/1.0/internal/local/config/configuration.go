@@ -167,6 +167,14 @@ func (c Configuration) Modules() []string {
 	return strings.Split(c.envs.Modules_, ",")
 }
 
+func (c *Configuration) RetryTimeout() uint64 {
+	return c.envs.RetryTimout
+}
+
+func (c *Configuration) SQLCollectorDir() string {
+	return "/log"
+}
+
 // Rules returns Erda MySQL linters
 // note: hard code here
 func (c Configuration) Rules() []rules.Ruler {
@@ -218,6 +226,9 @@ type envs struct {
 	SandboxPort     int    `env:"MIGRATION_SANDBOX_PORT"`
 	SandboxUsername string `env:"MIGRATION_SANDBOX_USERNAME"`
 	SandboxPassword string `env:"MIGRATION_SANDBOX_PASSWORD"`
+
+	// RetryTimout is the max duration for connection to the MySQL Server and the Sandbox
+	RetryTimout uint64 `env:"MIGRATION_RETRY_TIMEOUT"`
 
 	SandboxRootPassword string `env:"MYSQL_ROOT_PASSWORD"`
 

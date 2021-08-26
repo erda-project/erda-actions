@@ -31,33 +31,20 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
 
-FROM centos/mysql-57-centos7
+FROM erdaproject/erda-mysql-migration-sandbox:20210825
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
 USER root
 
-ENV TZ=Asia/Shanghai
-
-ENV MYSQL_ROOT_PASSWORD="12345678"
-ENV MYSQL_ALLOW_EMPTY_PASSWORD yes
+VOLUME ["/log", "/migrations"]
 ENV MIGRATION_DIR=/migrations
-
-COPY actions/erda-mysql-migration/1.0/my.cnf /etc/my.cnf
 
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/erda-migrate /usr/bin/erda-migrate
 
-RUN mkdir -p /migrations
 RUN chmod 777 /opt/action/*
 RUN chmod 777 /usr/bin/erda-migrate
-RUN chmod 777 /migrations
 
-RUN yum install -y mariadb-devel gcc python3-devel.x86_64
-RUN python3 -m pip --no-cache-dir install pip -U
-RUN python3 -m pip --no-cache-dir config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-RUN python3 -m pip --no-cache-dir install mysqlclient==2.0.3 django==3.2.4 pytz==2021.1 sqlparse==0.4.1
-
-VOLUME ["/migrations"]
-
-ENTRYPOINT ["erda-migrate"]
+ENTRYPOINT ["container-entrypoint"]
+CMD ["erda-migrate"]

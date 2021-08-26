@@ -75,6 +75,12 @@ params:
     desc: 要进行数据迁移的模块, 为空时对 migrationDir 目录下的所有模块进行数据迁移
     required: false
 
+  - name: retry_timeout
+    type: int
+    desc: 连接数据库最长超时时间
+    default: 150
+    required: false
+
 outputs:
   - name: success
     type: boolean

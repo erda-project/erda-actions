@@ -4,7 +4,7 @@ go 1.14
 
 replace (
 	github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.5
-	github.com/erda-project/erda => github.com/dspo/erda v0.0.0-20210818103011-1d6d29d9c47f
+	github.com/erda-project/erda => github.com/dspo/erda v0.0.0-20210825162505-deb53c4b3060
 	github.com/google/gnostic => github.com/googleapis/gnostic v0.4.0
 	github.com/googlecloudplatform/flink-operator => github.com/googlecloudplatform/flink-on-k8s-operator v0.0.0-20200909223554-f302312417ee
 	github.com/influxdata/influxql => github.com/erda-project/influxql v1.1.0-ex
