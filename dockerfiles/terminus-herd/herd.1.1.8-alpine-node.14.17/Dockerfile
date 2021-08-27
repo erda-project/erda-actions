@@ -5,7 +5,7 @@
 # /etc/os-release: Alpine Linux v3.14
 # Kernel(uname -a): Linux 55f39d8cbcc0 5.10.47-linuxkit Sat Jul 3 21:51:47 2021 x86_64
 # Build cmd: docker build . -t terminus/alpine-node.14-herd.1.1.8
-# Other tags: terminus/alpine-node.14.lts:herd.1.1.8,terminus/alpine-node.14.17:herd.1.1.8
+# Other tags: terminus/alpine-herd:1.1.8-n14.17,terminus/alpine-herd:1.1.8
 FROM node:14.17.5-alpine3.14
 
 LABEL maintainer=hustcer<majun@terminus.io>
@@ -18,6 +18,7 @@ ENV SASS_BINARY_SITE="https://npm.taobao.org/mirrors/node-sass"
 RUN echo "https://mirrors.aliyun.com/alpine/v3.14/main/" > /etc/apk/repositories \
     && echo "https://mirrors.aliyun.com/alpine/v3.14/community/" >> /etc/apk/repositories \
     && apk update \
+    && apk upgrade \
     && apk add tzdata \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone
@@ -28,6 +29,10 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && apk add --no-cache busybox-extras bash \
        # Dev related: install libstdc++ libc6-compat to fix node-canvas related issue
        gcc make g++ vim git git-subtree python2 libstdc++ libc6-compat \
+       # Fix: Error loading shared library libuuid.so.1
+       libuuid \
+       # Fix: Fontconfig error: Cannot load default config file
+       fontconfig fontconfig-dev \
        # Network related utils
        curl tcpdump \
        # SEE: https://github.com/BurntSushi/ripgrep
@@ -35,6 +40,8 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
        tree fd htop ripgrep \
     # Fix: Error loading shared library ld-linux-x86-64.so.2: No such file or directory
     && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 \
+    # Fix: Error loading shared library libresolv.so.2
+    && ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2 \
     # Change default shell from ash to bash
     && sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd \
     # Setup root alias

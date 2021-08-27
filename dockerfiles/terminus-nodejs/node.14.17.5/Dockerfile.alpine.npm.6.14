@@ -4,7 +4,7 @@
 # /etc/os-release: Alpine Linux v3.14
 # Kernel(uname -a): Linux 55f39d8cbcc0 5.10.47-linuxkit Sat Jul 3 21:51:47 2021 x86_64
 # Build cmd: docker build . -t terminus/alpine-node-14.17 -f Dockerfile.alpine.npm.6.14
-# Other tags: terminus/alpine:node.14.17,terminus/alpine:node.14.17.lts
+# Other tags: terminus/alpine-node:14.17-lts,terminus/alpine-node:14.17
 FROM node:14.17.5-alpine3.14
 
 LABEL maintainer=hustcer<majun@terminus.io>
@@ -17,12 +17,19 @@ ENV SASS_BINARY_SITE="https://npm.taobao.org/mirrors/node-sass"
 RUN echo "https://mirrors.aliyun.com/alpine/v3.14/main/" > /etc/apk/repositories \
     && echo "https://mirrors.aliyun.com/alpine/v3.14/community/" >> /etc/apk/repositories \
     && apk update \
+    && apk upgrade \
     && apk add tzdata \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
-    && apk add --no-cache busybox-extras bash gcc make g++ libstdc++ libc6-compat curl openssh-client vim git git-subtree python2 \
+    && apk add --no-cache busybox-extras bash curl openssh-client vim git git-subtree python2 \
+       # Fix: Error loading shared library libuuid.so.1
+       libuuid gcc make g++ libstdc++ libc6-compat \
+       # Fix: Fontconfig error: Cannot load default config file
+       fontconfig fontconfig-dev \
     # Fix: Error loading shared library ld-linux-x86-64.so.2: No such file or directory
     && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 \
+    # Fix: Error loading shared library libresolv.so.2
+    && ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2 \
     # Change default shell from ash to bash
     && sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd \
     && rm -rf /var/cache/apk/*
