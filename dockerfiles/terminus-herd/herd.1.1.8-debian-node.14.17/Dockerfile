@@ -21,7 +21,7 @@ RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak \
     && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
     && echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen \
-    # Fix: copy and paste CJK characters.
+    # Fix: copy and paste CJK characters in terminal.
     && echo 'set input-meta on' > /root/.inputrc \
     && echo 'set output-meta on' > /root/.inputrc \
     && echo 'set convert-meta off' > /root/.inputrc \
@@ -48,8 +48,16 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     # Make /bin/sh symlink to bash instead of dash:
     && echo "dash dash/sh boolean false" | debconf-set-selections \
     && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash \
-    # Setup global alias
-    && echo "# Globally added user alias" >> /root/.bashrc \
+    # fnm --- Reserved expansion point:
+    # See: https://github.com/Schniz/fnm, Fast and simple Node version manager
+    # Make it easier and faster to switch to other node versions in the future
+    # Just do: fnm install 16 && fnm use 16, will finish in 10 seconds.
+    && curl -fsSL https://fnm.vercel.app/install | bash \
+    # Fix: fnm can't infer your shell based on the process tree.
+    && sed -i 's/fnm env/fnm env --shell=bash/' /root/.bashrc \
+    # Setup root alias
+    && echo "# Setup user alias" >> /root/.bashrc \
+    && echo "alias ..='cd ..'" >> /root/.bashrc \
     && echo "alias fd='fdfind'" >> /root/.bashrc \
     && echo "alias ls='ls --color'" >> /root/.bashrc \
     && echo "alias ll='ls -l --color'" >> /root/.bashrc \
