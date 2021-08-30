@@ -25,31 +25,8 @@ func handleAPIs() error {
 		logrus.Info("Failed execution of the plan")
 		return err
 	}
-	if !conf.WaitingResult() {
-		for {
-			dto, err := pipelineSimpleDetail(PipelineDetailRequest{
-				SimplePipelineBaseResult: true,
-				PipelineID:               pipelineDTO.ID,
-			})
-			if err != nil {
-				return err
-			}
-
-			if dto.Status.IsRunningStatus() || dto.Status.IsEndStatus() {
-				logrus.Info("pipeline status %s", pipelineDTO.Status)
-
-				runtimeIDs := getDiceTaskRuntimeIDs(dto)
-				err = storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
-				if err != nil {
-					return err
-				}
-				return nil
-			}
-			time.Sleep(10 * time.Second)
-		}
-	}
-	logrus.Info("test plan is running")
-	logrus.Info("pipeline status %s", pipelineDTO.Status)
+	logrus.Info("test plan is being executed")
+	logrus.Info("pipeline status ", pipelineDTO.Status)
 
 	for {
 		dto, err := pipelineSimpleDetail(PipelineDetailRequest{
@@ -57,9 +34,12 @@ func handleAPIs() error {
 			PipelineID:               pipelineDTO.ID,
 		})
 		if err != nil {
+			if conf.IsContinueExecution() {
+				return nil
+			}
 			return err
 		}
-		logrus.Info("pipeline status %s", pipelineDTO.Status)
+		logrus.Info("pipeline status ", pipelineDTO.Status)
 
 		if dto.Status.IsEndStatus() {
 			// get detail info
@@ -67,6 +47,9 @@ func handleAPIs() error {
 				PipelineID: pipelineDTO.ID,
 			})
 			if err != nil {
+				if conf.IsContinueExecution() {
+					return nil
+				}
 				return err
 			}
 
@@ -75,11 +58,17 @@ func handleAPIs() error {
 			runtimeIDs := getDiceTaskRuntimeIDs(dto)
 			err = storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
 			if err != nil {
+				if conf.IsContinueExecution() {
+					return nil
+				}
 				return err
 			}
 
 			if dto.Status.IsFailedStatus() {
 				err = fmt.Errorf("执行失败")
+				if conf.IsContinueExecution() {
+					return nil
+				}
 				return err
 			}
 

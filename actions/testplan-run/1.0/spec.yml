@@ -21,8 +21,8 @@ params:
   - name: cms
     desc: 参数配置名称
     required: true
-  - name: waiting_result
-    desc: 等待执行结果,等待 或者 不等待
+  - name: is_continue_execution
+    desc: 失败后是否继续执行,执行 或者 不执行
     required: false
 
 outputs:

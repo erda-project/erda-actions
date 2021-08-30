@@ -4,9 +4,9 @@ import "github.com/erda-project/erda/pkg/envconf"
 
 // Conf action 入参
 type Conf struct {
-	TestPlan      uint64 `env:"ACTION_TEST_PLAN" required:"true"`
-	Cms           string `env:"ACTION_CMS" required:"true"`
-	WaitingResult bool   `env:"ACTION_WAITING_RESULT" required:"false" default:"false"`
+	TestPlan            uint64 `env:"ACTION_TEST_PLAN" required:"true"`
+	Cms                 string `env:"ACTION_CMS" required:"true"`
+	IsContinueExecution bool   `env:"ACTION_IS_CONTINUE_EXECUTION" required:"false" default:"true"`
 	// env
 	MetaFile             string `env:"METAFILE"`
 	WorkDir              string `env:"WORKDIR" default:"."`
@@ -92,8 +92,8 @@ func Cms() string {
 	return cfg.Cms
 }
 
-func WaitingResult() bool {
-	return cfg.WaitingResult
+func IsContinueExecution() bool {
+	return cfg.IsContinueExecution
 }
 
 func DiceClusterName() string {
