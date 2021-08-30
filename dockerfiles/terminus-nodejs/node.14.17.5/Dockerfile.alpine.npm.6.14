@@ -25,7 +25,7 @@ RUN echo "https://mirrors.aliyun.com/alpine/v3.14/main/" > /etc/apk/repositories
        # Fix: Error loading shared library libuuid.so.1
        libuuid gcc make g++ libstdc++ libc6-compat \
        # Fix: Fontconfig error: Cannot load default config file
-       # fontconfig fontconfig-dev \
+       fontconfig \
     # Fix: Error loading shared library ld-linux-x86-64.so.2: No such file or directory
     && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 \
     # Fix: Error loading shared library libresolv.so.2

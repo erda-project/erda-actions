@@ -14,12 +14,13 @@ ENV LANG=en_US.UTF-8
 ENV NODEJS_ORG_MIRROR="https://npm.taobao.org/dist"
 ENV SASS_BINARY_SITE="https://npm.taobao.org/mirrors/node-sass"
 
-# Use aliyun repo
+# Use aliyun repo to speed up installation
+# Testing repo: https://mirrors.aliyun.com/alpine/edge/testing/
 RUN echo "https://mirrors.aliyun.com/alpine/v3.14/main/" > /etc/apk/repositories \
     && echo "https://mirrors.aliyun.com/alpine/v3.14/community/" >> /etc/apk/repositories \
     && apk update \
     && apk upgrade \
-    && apk add tzdata \
+    && apk add --no-cache tzdata \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone
 
@@ -32,9 +33,9 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
        # Fix: Error loading shared library libuuid.so.1
        libuuid \
        # Fix: Fontconfig error: Cannot load default config file
-       fontconfig fontconfig-dev \
+       fontconfig \
        # Network related utils
-       curl tcpdump \
+       curl tcpdump ca-certificates \
        # SEE: https://github.com/BurntSushi/ripgrep
        # SEE: https://github.com/sharkdp/fd#installation
        tree fd htop ripgrep \
@@ -46,6 +47,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd \
     # Setup root alias
     && echo "alias vi='vim'" >> /root/.bashrc \
+    && echo "alias ..='cd ..'" >> /root/.bashrc \
     && echo "alias ll='ls -l'" >> /root/.bashrc \
     # Add --unsafe-perm to fix 'Error: EACCES: permission denied, mkdir...' issue while install node-sass
     && npm i -g --unsafe-perm @terminus/herd@1.1.8 \

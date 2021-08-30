@@ -1,4 +1,5 @@
 # Git: git version 2.30.2
+# gcc version 10.2.1 20210110 (Debian 10.2.1-6)
 # Node: 14.17.5 LTS, npm: 6.14.14, yarn: 1.22.5, herd: 1.1.8
 # /etc/os-release: Debian: Debian GNU/Linux 11 (bullseye)
 # Kernel: Linux 08f4f27793e7 5.10.47-linuxkit Sat Jul 3 21:51:47 2021 x86_64
