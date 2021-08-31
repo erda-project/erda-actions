@@ -16,9 +16,9 @@ import (
 
 var SupportNodeVersionFormatMap = map[string]string{
 	"8":  "v8.17.0",
-	"10": "v10.22.1",
-	"12": "v12.18.4",
-	"14": "v14.11.0",
+	"10": "v10.24.1",
+	"12": "v12.22.5",
+	"14": "v14.17.5",
 }
 
 func Execute() error {
