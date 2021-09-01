@@ -3,6 +3,8 @@ set -e
 set -u
 set -o pipefail
 
+# refer to erda.cloud erda-release repo, pipeline: deploy-action-dockerfiles.yml
+
 registry="${DOCKER_REGISTRY-}"
 username="${DOCKER_USERNAME-}"
 password="${DOCKER_PASSWORD-}"
