@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eo pipefail
 
 image=registry.erda.cloud/erda-actions/terminus-alpine-herd:1.1.8
 
