@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eo pipefail
 
 image=registry.erda.cloud/erda-actions/terminus-debian-herd:1.1.8-n14.17
 
