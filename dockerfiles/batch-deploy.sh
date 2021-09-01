@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 set -u
-set -x
 set -o pipefail
 
 registry="${DOCKER_REGISTRY-}"
@@ -21,7 +20,7 @@ fi
 # find all deploy.sh and deploy
 deployFiles=$(find "$(cd $(dirname "$0"); pwd)" -type f -name deploy.sh)
 for f in $deployFiles; do
-    echo begin execute "$f"
+    echo -e "\n\n\nbegin execute: "$f"\n"
     cd "$(dirname "$f")"
     bash deploy.sh
 done
