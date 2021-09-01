@@ -40,7 +40,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && apt update \
     && apt install -y --no-install-recommends --no-install-suggests \
        # Network related utils
-       wget curl telnet tcpdump net-tools dnsutils \
+       wget curl telnet tcpdump net-tools dnsutils iputils-ping \
        # Dev related
        git gcc make g++ vim \
        # SEE: https://github.com/BurntSushi/ripgrep
