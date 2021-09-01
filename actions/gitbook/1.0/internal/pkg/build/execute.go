@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/render"
 
 	"github.com/labstack/gommon/random"
@@ -30,6 +31,13 @@ func Execute() error {
 	var cfg conf.Conf
 	envconf.MustLoad(&cfg)
 	fmt.Fprintln(os.Stdout, "sucessfully loaded action config")
+
+	// docker login
+	if cfg.LocalRegistryUserName != "" {
+		if err := docker.Login(cfg.LocalRegistry, cfg.LocalRegistryUserName, cfg.LocalRegistryPassword); err != nil {
+			return err
+		}
+	}
 
 	cfgMap := make(map[string]string)
 	cfgMap["CENTRAL_REGISTRY"] = cfg.CentralRegistry
