@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -17,12 +16,17 @@ import (
 	"strings"
 
 	"github.com/andrianbdn/iospng"
+	"github.com/pkg/errors"
 	"github.com/shogo82148/androidbinary/apk"
 	"github.com/sirupsen/logrus"
 	"howett.net/plist"
 
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/template"
+)
+
+const (
+	AndroidManifestXML = "AndroidManifest.xml"
 )
 
 var (
@@ -83,6 +87,12 @@ func GetAndroidAppInfo(appFilePath string) (*AndroidAppInfo, error) {
 		info.Icon = icon
 	}
 	return info, nil
+}
+
+// TODO complete this method, extract the package name from the aab file
+// Maybe you can refer to https://github.com/chenquincy/app-info-parser/issues/63
+func GetAndroidAppBundleInfo(appFilePath string) (*AndroidAppInfo, error) {
+	return nil, nil
 }
 
 func SaveImageToFile(icon image.Image, logoPath string) error {

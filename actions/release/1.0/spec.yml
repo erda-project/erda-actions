@@ -72,6 +72,11 @@ params:
   - name: services
     type: map
     desc: 项目基于那个镜像运行，运行命令是什么
+  
+  - name: aab_info
+    type: map
+    desc: 等做完 aab 里的 AndroidManifest.xml 解析后，可删除该参数
+    required: false
 
 accessibleAPIs:
   # push release
