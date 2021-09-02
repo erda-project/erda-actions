@@ -173,10 +173,7 @@ func packAndPushAppImage(cfg conf.Conf) error {
 	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
 
 	// docker push 业务镜像至集群 registry
-	appPushCmd := exec.Command("docker", "push", repo)
-	appPushCmd.Stdout = os.Stdout
-	appPushCmd.Stderr = os.Stderr
-	if err := appPushCmd.Run(); err != nil {
+	if err := docker.PushByCmd(repo, ""); err != nil {
 		return err
 	}
 	fmt.Fprintf(os.Stdout, "successfully push app image: %s\n", repo)

@@ -16,6 +16,7 @@ import (
 	"github.com/erda-project/erda-actions/actions/buildpack-aliyun/1.0/internal/run/bplog"
 	"github.com/erda-project/erda-actions/actions/buildpack-aliyun/1.0/internal/run/conf"
 	"github.com/erda-project/erda-actions/actions/buildpack-aliyun/1.0/internal/run/langdetect/types"
+	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/dockerfile"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/strutil"
@@ -180,11 +181,9 @@ func dockerPackBuild() ([]byte, error) {
 	if err := filehelper.CreateFile(tagPushScriptPath, strings.Join(tagPushScript, "\n"), 075); err != nil {
 		return nil, err
 	}
-	cmd := exec.Command("/bin/sh", tagPushScriptPath)
-	cmd.Dir = wd
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
+
+	// push image
+	if err = docker.PushByShell(tagPushScriptPath, wd); err != nil {
 		return nil, err
 	}
 
