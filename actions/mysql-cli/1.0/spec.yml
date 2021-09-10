@@ -24,6 +24,41 @@ params:
     required: true
     desc: sql 语句
 
+formProps:
+  - key: params
+    component: formGroup
+    group: params
+    componentProps:
+      title: 任务参数
+  - label: datasource
+    component: dataSourceSelector
+    required: true
+    key: params.datasource
+    group: params
+    componentProps:
+      projectId: ''
+      dataSourceType: mysql
+    labelTip: 数据源
+  - label: database
+    component: input
+    required: true
+    key: params.database
+    group: params
+    componentProps:
+      placeholder: 请输入数据
+    labelTip: 数据库名称
+  - label: sql
+    component: textarea
+    required: true
+    key: params.sql
+    group: params
+    componentProps:
+      autoSize:
+        minRows: 2
+        maxRows: 12
+      placeholder: 请输入数据
+    labelTip: sql语句
+
 outputs:
   - name: result
     desc: 查询结果
