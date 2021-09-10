@@ -22,6 +22,7 @@ FROM registry.erda.cloud/erda/terminus-maven:3-jdk-8-alpine
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/mvn/settings.xml /opt/action/mvn/settings.xml
 COPY --from=dcdb /usr/share/nginx/html /opt/action/dependency-check
+RUN mvn org.owasp:dependency-check-maven:6.3.1:update-only -DdataDirectory=/opt/action/dependency-check
 
 
 CMD ["/opt/action/run"]

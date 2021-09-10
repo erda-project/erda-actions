@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 GitBranch=$(shell git rev-parse --abbrev-ref HEAD)
 GitCommit=$(shell git rev-parse --short HEAD)
 Date=$(shell date +"%Y%m%d")

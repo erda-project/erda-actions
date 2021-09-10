@@ -16,3 +16,21 @@ params:
     type: string
     desc: 代码目录，例如 ${git-checkout}
     required: true
+  - name: debug
+    type: bool
+    desc: 打开插件调试模式，显示更多日志
+    required: false
+    default: false
+  - name: auto_update_nvd
+    type: bool
+    desc: 自动更新 NVD 漏洞数据库；内置数据库已为最新，一般情况下无需打开该选项。该选项需要联网，网络不畅会导致更新失败。
+    required: false
+    default: false
+  - name: maven_plugin_version
+    type: string
+    desc: 用于漏洞扫描的 Maven 插件版本。可以通过 https://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html 获取最新版本。
+    required: false
+    default: "6.3.1"
+  - name: maven_settings_xml_path
+    type: string
+    desc: 用户自定义的 Maven 配置文件路径。若未指定，则使用内置的配置文件。
