@@ -42,7 +42,7 @@ func scan(cfg conf.Conf) error {
 
 	// render mvn settings.xml
 	if len(cfg.MavenSettingsXMLPath) > 0 {
-		fmt.Fprintf(os.Stdout, "use use specified maven settings file: %s\n", cfg.MavenSettingsXMLPath)
+		fmt.Fprintf(os.Stdout, "use user specified maven settings file: %s\n", cfg.MavenSettingsXMLPath)
 		mvnSettingsXMLFilePath = cfg.MavenSettingsXMLPath
 	}
 	if err := render.RenderTemplate(filepath.Dir(mvnSettingsXMLFilePath), map[string]string{
