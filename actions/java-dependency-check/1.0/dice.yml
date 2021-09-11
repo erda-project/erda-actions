@@ -1,10 +1,10 @@
 ### job 配置项
 jobs:
   java-sec:
-    image: registry.erda.cloud/erda-actions/java-dependency-check-action:20201015-1f314fe
+    image: registry.erda.cloud/erda-actions/java-dependency-check-action:20210911-e3ae3a2
     resources:
       cpu: 1
       mem: 4096
     binds:
-    # maven 依赖缓存
-    - ((storageMountPoint))/devops/actions/java-dependency-check/maven-cache/.m2:/root/.m2
+      # maven 依赖缓存
+      - ((storageMountPoint))/devops/actions/java-dependency-check/maven-cache/.m2:/root/.m2
