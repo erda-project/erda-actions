@@ -74,6 +74,7 @@ type Config struct {
 	OssArchivedDir string               `env:"ACTION_OSSARCHIVEDDIR" required:"true"`
 	GitRef         string               `env:"ACTION_GITREF" required:"true"`
 	ReleaseName    string               `env:"ACTION_RELEASENAME"`
+	SecurityCtx    []string             `env:"ACTION_SECURITYCONTEXT"`
 
 	// other parameters
 	MetaFilename string `env:"METAFILE"`
