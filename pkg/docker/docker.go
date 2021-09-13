@@ -46,9 +46,9 @@ func PushByCmd(imageName string, workDir string) error {
 
 	// error 信息大于 0
 	if errors.Len() > 0 {
-		var newError string
-		if strings.Contains(errors.String(), "error parsing HTTP 405 response body: invalid character 'M' looking for beginning of value: \"Method not allowed\\n\"") {
-			newError = strings.ReplaceAll(errors.String(), "error parsing HTTP 405 response body: invalid character 'M' looking for beginning of value: \"Method not allowed\\n\"", "Docker registry 正在 gc ，请耐心等待 gc 完成")
+		newError := errors.String()
+		if strings.Contains(newError, "error parsing HTTP 405 response body: invalid character 'M' looking for beginning of value: \"Method not allowed\\n\"") {
+			newError = strings.ReplaceAll(newError, "error parsing HTTP 405 response body: invalid character 'M' looking for beginning of value: \"Method not allowed\\n\"", "Docker registry 正在 gc ，请耐心等待 gc 完成")
 		}
 		return fmt.Errorf("%v", newError)
 	}
@@ -71,9 +71,9 @@ func PushByShell(pushScriptPath string, workDir string) error {
 
 	// error 信息大于 0
 	if errors.Len() > 0 {
-		var newError string
-		if strings.Contains(errors.String(), "error parsing HTTP 405 response body: invalid character 'M' looking for beginning of value: \"Method not allowed\\n\"") {
-			newError = strings.ReplaceAll(errors.String(), "error parsing HTTP 405 response body: invalid character 'M' looking for beginning of value: \"Method not allowed\\n\"", "Docker registry 正在 gc ，请耐心等待 gc 完成")
+		newError := errors.String()
+		if strings.Contains(newError, "error parsing HTTP 405 response body: invalid character 'M' looking for beginning of value: \"Method not allowed\\n\"") {
+			newError = strings.ReplaceAll(newError, "error parsing HTTP 405 response body: invalid character 'M' looking for beginning of value: \"Method not allowed\\n\"", "Docker registry 正在 gc ，请耐心等待 gc 完成")
 		}
 		return fmt.Errorf("%v", newError)
 	}
