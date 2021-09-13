@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   echo:
-    image: registry.erda.cloud/erda-actions/echo-action
+    image: registry.erda.cloud/erda-actions/echo-action:v1.0
     resources:
       cpu: 0.01
       mem: 32
