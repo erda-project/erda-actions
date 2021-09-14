@@ -25,6 +25,9 @@ type Conf struct {
 	MigrationDir           string `env:"ACTION_MIGRATION_DIR"`
 	MigrationMysqlDatabase string `env:"ACTION_MIGRATION_MYSQL_DATABASE"`
 	CrossCluster           bool   `env:"ACTION_CROSS_CLUSTER" default:"false"`
+	AABInfoStr             string `env:"ACTION_AAB_INFO"`
+	AABInfo                AABInfo
+
 	// env
 	OrgID              int64  `env:"DICE_ORG_ID" required:"true"`
 	OrgName            string `env:"DICE_ORG_NAME" required:"true"`
@@ -66,4 +69,10 @@ type Service struct {
 type MobileData struct {
 	Files   []string `json:"files"`
 	Version string   `json:"version"`
+}
+
+type AABInfo struct {
+	PackageName string `json:"packageName"`
+	VersionCode string `json:"versionCode"`
+	VersionName string `json:"versionName"`
 }

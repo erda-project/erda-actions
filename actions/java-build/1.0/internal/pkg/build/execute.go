@@ -15,6 +15,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/render"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/strutil"
@@ -51,6 +52,14 @@ func Execute() error {
 	// 加载环境变量配置，配置来源: 1. 用户指定 2. pipeline指定
 	var cfg conf.Conf
 	envconf.MustLoad(&cfg)
+
+	// docker login
+	if cfg.LocalRegistryUserName != "" {
+		if err := docker.Login(cfg.LocalRegistry, cfg.LocalRegistryUserName, cfg.LocalRegistryPassword); err != nil {
+			return err
+		}
+	}
+
 	jdkVersion := "8"
 	if cfg.JDKVersion != nil {
 		jdkVersion = fmt.Sprintf("%v", cfg.JDKVersion)

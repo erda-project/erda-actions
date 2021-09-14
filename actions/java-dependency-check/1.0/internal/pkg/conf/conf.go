@@ -12,8 +12,10 @@ type Conf struct {
 
 	Memory float64 `env:"PIPELINE_LIMITED_MEM"`
 
-	Debug bool `env:"DEBUG" default:"false"`
-
 	// 用户指定
-	CodeDir string `env:"ACTION_CODE_DIR" required:"true"`
+	CodeDir              string `env:"ACTION_CODE_DIR" required:"true"`
+	Debug                bool   `env:"ACTION_DEBUG" default:"false"`
+	AutoUpdateNVD        bool   `env:"ACTION_AUTO_UPDATE_NVD" default:"false"`
+	MavenPluginVersion   string `env:"ACTION_MAVEN_PLUGIN_VERSION" default:"6.3.1"`
+	MavenSettingsXMLPath string `env:"ACTION_MAVEN_SETTINGS_XML_PATH" required:"false"`
 }

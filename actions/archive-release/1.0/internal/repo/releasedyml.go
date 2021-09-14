@@ -21,7 +21,8 @@ import (
 	"github.com/erda-project/erda/pkg/parser/diceyml"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v2"
+	v1 "k8s.io/api/core/v1"
+	"sigs.k8s.io/yaml"
 
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/config"
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/oapi"
@@ -55,15 +56,20 @@ func (y *ReleasedYaml) Deployable() (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "failed to NewDeployable")
 	}
-	return y.replaceRegistry(deployable)
+
+	obj := deployable.Obj()
+	PatchSecurityContextPrivileged(obj, y.Conf.SecurityCtx...)
+	return y.replaceRegistry(obj)
 }
 
-func (y *ReleasedYaml) replaceRegistry(dice *diceyml.DiceYaml) (string, error) {
+func (y *ReleasedYaml) replaceRegistry(obj *diceyml.Object) (string, error) {
 	if y.ReplaceNew == "" {
-		return dice.YAML()
+		out, err := yaml.Marshal(obj)
+		if err != nil {
+			return "", err
+		}
+		return string(out), nil
 	}
-
-	obj := dice.Obj()
 	if y.ReplaceOld == "" {
 		for name, service := range obj.Services {
 			oldImage := service.Image
@@ -106,4 +112,19 @@ func (y *ReleasedYaml) Local() string {
 // Remote is like /archived-versions/{git-tag:v1.0.0}/releases/{repo-name:erda}/dice.yml
 func (y *ReleasedYaml) Remote() string {
 	return filepath.Join(y.Conf.GetOssPath(), "releases", y.Conf.GetReleaseName(), "dice.yml")
+}
+
+func PatchSecurityContextPrivileged(obj *diceyml.Object, services ...string) {
+	b := true
+	for _, serviceName := range services {
+		if service := obj.Services[serviceName]; service != nil {
+			service.K8SSnippet = &diceyml.K8SSnippet{
+				Container: &diceyml.ContainerSnippet{
+					SecurityContext: &v1.SecurityContext{
+						Privileged: &b,
+					},
+				},
+			}
+		}
+	}
 }

@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/bplog"
@@ -172,16 +173,9 @@ func dockerBuild() error {
 	}
 	bplog.Printf("ReTag 缓存镜像成功：%s -> %s\n", conf.EasyUse().DockerImageFromBuild, conf.EasyUse().CalculatedCacheImage)
 	// push cache image
-	dockerPush := exec.Command("docker", "push", conf.EasyUse().CalculatedCacheImage)
-	dockerPush.Dir = conf.PlatformEnvs().WorkDir
-	dockerPush.Stdout = os.Stdout
-	dockerPush.Stderr = os.Stderr
-	if err := dockerPush.Run(); err != nil {
-		bplog.Printf("推送缓存镜像失败，请忽略。镜像：%s，失败原因：%v\n", conf.EasyUse().CalculatedCacheImage, err)
-		return nil
+	if err = docker.PushByCmd(conf.EasyUse().CalculatedCacheImage, conf.PlatformEnvs().WorkDir); err != nil {
+		return err
 	}
-	bplog.Printf("推送缓存镜像成功：%s\n", conf.EasyUse().CalculatedCacheImage)
-
 	// 上报缓存镜像
 	buildcache.ReportCacheImage("push")
 

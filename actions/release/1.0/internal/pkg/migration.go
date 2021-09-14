@@ -18,6 +18,7 @@ import (
 
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/diceyml"
+	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
 )
@@ -131,10 +132,7 @@ func packAndPushAppImage(cfg *conf.Conf) (string, error) {
 	fmt.Fprintf(os.Stdout, "migration build, successfully build app image: %s\n", repo)
 
 	// docker push 业务镜像至集群 registry
-	appPushCmd := exec.Command("docker", "push", repo)
-	appPushCmd.Stdout = os.Stdout
-	appPushCmd.Stderr = os.Stderr
-	if err := appPushCmd.Run(); err != nil {
+	if err := docker.PushByCmd(repo, ""); err != nil {
 		return "", err
 	}
 	// upload metadata

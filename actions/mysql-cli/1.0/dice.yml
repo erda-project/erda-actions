@@ -5,5 +5,5 @@ jobs:
     envs:
       BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:
-      cpu: 1
-      mem: 2048
+      cpu: 0.2
+      mem: 256

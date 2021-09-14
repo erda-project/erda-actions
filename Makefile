@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 GitBranch=$(shell git rev-parse --abbrev-ref HEAD)
 GitCommit=$(shell git rev-parse --short HEAD)
 Date=$(shell date +"%Y%m%d")
@@ -8,7 +9,7 @@ DevelopRegistry="registry.cn-hangzhou.aliyuncs.com/dice"
 .ONESHELL:
 echo \
 custom-script java-agent \
-app-create app-run git-checkout assert jsonparse redis-cli mysql-cli git-push release dice dice-deploy dice-deploy-addon dice-deploy-service dice-deploy-domain dice-deploy-release dice-deploy-redeploy dice-deploy-rollback \
+mysql-assert app-create app-run git-checkout assert jsonparse redis-cli mysql-cli git-push release dice dice-deploy dice-deploy-addon dice-deploy-service dice-deploy-domain dice-deploy-release dice-deploy-redeploy dice-deploy-rollback \
 buildpack buildpack-aliyun java java-build js js-build manual-review js-deploy dockerfile docker-push php gitbook js-script\
 sonar integration-test unit-test api-test  java-lint testplan java-dependency-check golang java-unit android ios mobile-template lib-publish mobile-publish java-deploy \
 oss-upload delete-nodes ess-info loop api-register api-publish publish-api-asset mysqldump archive-release erda-mysql-migration\
@@ -37,9 +38,9 @@ push-extensions archive-extensions testscene-run testplan-run erda-mysql-migrati
 
 	if [[ "$(DEVELOP_MODE)" == 'true' ]]; then
 		echo "DEVELOP_MODE == true"
-		image="$(DevelopRegistry)/$@-action:$(Date)-${GitCommit}"
+		image="$(DevelopRegistry)/$@-action:$${version}-$(Date)-${GitCommit}"
 	else
-		image="$(Registry)/$@-action:$(Date)-${GitCommit}"
+		image="$(Registry)/$@-action:$${version}-$(Date)-${GitCommit}"
 	fi
 
 	@echo image=$${image}

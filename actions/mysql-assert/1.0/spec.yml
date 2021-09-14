@@ -1,0 +1,112 @@
+name: mysql-assert
+version: '1.0'
+type: action
+category: test_management
+displayName: mysql 配置单
+desc: 在对应的数据源中执行 sql 语句且可以断言和出参
+public: true
+useProtocol: true
+labels:
+  configsheet: true
+  project_level_app: true
+supportedErdaVersions:
+  - ">= 1.0"
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.21"
+
+params:
+  - name: datasource
+    required: true
+    desc: 数据源
+  - name: database
+    required: true
+    desc: 数据库名称
+  - name: sql
+    required: true
+    desc: sql 语句
+  - name: out_params
+    required: false
+    desc: 出参且断言
+    type: struct_array
+    struct:
+      - name: key
+        required: true
+        desc: 出参名
+      - name: expression
+        required: true
+        desc: 支持 linux jq 表达式 以 . 开头，支持 jackson 以 $. 开头
+      - name: value
+        desc: 值
+      - name: assert
+        desc: 断言，可填写 等于:=,不等于:!=,小于等于:<=,大于等于:>=,大于:>,小于:<,包含:contains,不包含:not_contains,属于:belong,不属于:not_belong,为空:empty,不为空:not_empty,存在:exist,不存在:not_exist
+
+formProps:
+  - key: params
+    component: formGroup
+    group: params
+    componentProps:
+      title: 任务参数
+  - label: 数据源
+    component: dataSourceSelector
+    required: true
+    key: params.datasource
+    group: params
+    componentProps:
+      projectId: ''
+      dataSourceType: mysql
+    labelTip: 数据源
+  - label: 库名称
+    component: input
+    required: true
+    key: params.database
+    group: params
+    componentProps:
+      placeholder: 请输入数据
+    labelTip: 数据库名称
+  - label: sql语句
+    component: textarea
+    required: true
+    key: params.sql
+    group: params
+    componentProps:
+      autoSize:
+        minRows: 2
+        maxRows: 12
+      placeholder: 请输入数据
+    labelTip: sql语句
+  - label: 出参且断言
+    component: arrayObj
+    key: params.out_params
+    group: params
+    componentProps:
+      objItems:
+        - key: key
+          label: 出参名
+          labelTip: 出参名
+          required: true
+        - key: expression
+          label: 出参表达式
+          labelTip: 出参表达式
+          required: true
+        - key: value
+          label: 断言的值
+          labelTip: 断言的值
+        - key: assert
+          label: 断言
+          labelTip: >-
+            断言，可填写 =, !=, <=, >=, >, <, contains, not_contains, belong,
+            not_belong, empty, not_empty, exist, not_exist
+          component: select
+          options: >-
+             =:等于;!=:不等于;<=:小于等于;>=:大于等于;>:大于;<:小于;contains:包含;not_contains:不包含;belong:属于;not_belong:不属于;empty:为空;not_empty:不为空;exist:存在;not_exist:不存在
+    labelTip: 出参且断言
+
+outputsFromParams:
+  - type: jq
+    keyExpr: 'try  [.out_params[].key,"result"] catch ["result"]'
+
+
+accessibleAPIs:
+  - path: /api/addons/<addonId>
+    method: GET
+    schema: http

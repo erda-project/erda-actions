@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/render"
 
 	"github.com/labstack/gommon/random"
@@ -30,6 +31,13 @@ func Execute() error {
 	var cfg conf.Conf
 	envconf.MustLoad(&cfg)
 	fmt.Fprintln(os.Stdout, "sucessfully loaded action config")
+
+	// docker login
+	if cfg.LocalRegistryUserName != "" {
+		if err := docker.Login(cfg.LocalRegistry, cfg.LocalRegistryUserName, cfg.LocalRegistryPassword); err != nil {
+			return err
+		}
+	}
 
 	cfgMap := make(map[string]string)
 	cfgMap["CENTRAL_REGISTRY"] = cfg.CentralRegistry
@@ -118,13 +126,9 @@ func packAndPushImage(cfg conf.Conf) error {
 	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
 
 	// docker push 业务镜像至集群 registry
-	appPushCmd := exec.Command("docker", "push", repo)
-	appPushCmd.Stdout = os.Stdout
-	appPushCmd.Stderr = os.Stderr
-	if err := appPushCmd.Run(); err != nil {
+	if err := docker.PushByCmd(repo, ""); err != nil {
 		return err
 	}
-
 	// upload metadata
 	if err := storeMetaFile(&cfg, repo); err != nil {
 		return err

@@ -26,7 +26,7 @@ func Execute() error {
 	return nil
 }
 
-const (
+var (
 	mvnSettingsXMLFilePath = "/opt/action/mvn/settings.xml"
 )
 
@@ -41,6 +41,10 @@ func scan(cfg conf.Conf) error {
 	}
 
 	// render mvn settings.xml
+	if len(cfg.MavenSettingsXMLPath) > 0 {
+		fmt.Fprintf(os.Stdout, "use user specified maven settings file: %s\n", cfg.MavenSettingsXMLPath)
+		mvnSettingsXMLFilePath = cfg.MavenSettingsXMLPath
+	}
 	if err := render.RenderTemplate(filepath.Dir(mvnSettingsXMLFilePath), map[string]string{
 		"NEXUS_URL":      cfg.NexusURL,
 		"NEXUS_USERNAME": cfg.NexusUsername,
@@ -57,9 +61,9 @@ func scan(cfg conf.Conf) error {
 	}
 
 	scanCmd := exec.Command("mvn",
-		"org.owasp:dependency-check-maven:check",
+		"org.owasp:dependency-check-maven:"+cfg.MavenPluginVersion+":check",
 		"-e", "-B", "--fail-never",
-		"-DautoUpdate=false",
+		"-DautoUpdate="+strconv.FormatBool(cfg.AutoUpdateNVD),
 		"-DretireJsAnalyzerEnabled=false",
 		"-DnodeAnalyzerEnabled=false",
 		"-DassemblyAnalyzerEnabled=false",
@@ -70,6 +74,9 @@ func scan(cfg conf.Conf) error {
 		// "-DoutputDirectory="+cfg.UploadDir, // auto upload report dir for download, but this maven-plugin has bug yet: https://github.com/jeremylong/DependencyCheck/issues/1686
 		"-s", mvnSettingsXMLFilePath,
 	) // use `mvn org.owasp:dependency-check-maven:help -Ddetail=true -Dgoal=check` to see more options
+	if cfg.Debug {
+		scanCmd.Args = append(scanCmd.Args, "-X")
+	}
 	scanCmd.Env = append(scanCmd.Env, fmt.Sprintf("-Xmx%sm", strconv.FormatFloat(cfg.Memory-32, 'f', 0, 64)))
 	fmt.Printf("executing: %v\n", scanCmd.Args)
 	scanCmd.Stdout = os.Stdout
@@ -79,8 +86,10 @@ func scan(cfg conf.Conf) error {
 	}
 
 	// copy result to uploadDir
-	if err := exec.Command("/bin/sh", "-c", "cp target/dependency-check-* "+cfg.UploadDir).Run(); err != nil {
-		return fmt.Errorf("failed to copy report for download, err: %v", err)
+	targetUploadDir := filepath.Join(cfg.UploadDir, "result")
+	copyCmd := fmt.Sprintf("mkdir -p %s; cp -a target/. %s", targetUploadDir, targetUploadDir)
+	if output, err := exec.Command("/bin/bash", "-c", copyCmd).CombinedOutput(); err != nil {
+		return fmt.Errorf("failed to copy report for download, err: %v, output: %s", err, string(output))
 	}
 
 	return nil

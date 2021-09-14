@@ -92,6 +92,8 @@ func Execute() error {
 			ext := filepath.Ext(appFilePath)
 			if ext == ".apk" {
 				resourceType = apistructs.ResourceTypeAndroid
+			} else if ext == ".aab" {
+				resourceType = apistructs.ResourceTypeAndroidAppBundle
 			} else if ext == ".ipa" {
 				resourceType = apistructs.ResourceTypeIOS
 			} else if ext == "" && filepath.Base(appFilePath) == "dist" {
@@ -137,6 +139,29 @@ func Execute() error {
 					cfg.ReleaseMobile.Version = version
 				}
 				req.Version = version
+			}
+
+			// TODO Change get information from configuration to extract from abb file
+			if resourceType == apistructs.ResourceTypeAndroidAppBundle {
+				// info, err := GetAndroidAppBundleInfo(appFilePath)
+				// if err != nil {
+				// 	return err
+				// }
+				if cfg.AABInfo.PackageName == "" {
+					return errors.Errorf("aab's package name is empty")
+				}
+				versionCode := cfg.PipelineID
+				if cfg.AABInfo.VersionCode != "" {
+					versionCode = cfg.AABInfo.VersionCode
+				}
+				meta["packageName"] = cfg.AABInfo.PackageName
+				meta["version"] = cfg.AABInfo.VersionName
+				meta["buildID"] = versionCode
+				meta["displayName"] = cfg.AABInfo.VersionName
+				if cfg.ReleaseMobile.Version == "" {
+					cfg.ReleaseMobile.Version = cfg.AABInfo.VersionName
+				}
+				req.Version = cfg.AABInfo.VersionName
 			}
 
 			if resourceType == apistructs.ResourceTypeIOS {
@@ -336,6 +361,12 @@ func initEnv(cfg *conf.Conf) error {
 	// docker login
 	if cfg.LocalRegistryUserName != "" {
 		if err := docker.Login(cfg.LocalRegistry, cfg.LocalRegistryUserName, cfg.LocalRegistryPassword); err != nil {
+			return err
+		}
+	}
+
+	if cfg.AABInfoStr != "" {
+		if err := json.Unmarshal([]byte(cfg.AABInfoStr), &cfg.AABInfo); err != nil {
 			return err
 		}
 	}

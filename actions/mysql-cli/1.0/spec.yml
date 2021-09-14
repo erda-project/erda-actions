@@ -24,16 +24,6 @@ params:
     required: true
     desc: sql 语句
 
-outputs:
-  - name: result
-    desc: 查询结果
-
-
-accessibleAPIs:
-  - path: /api/addons/<addonId>
-    method: GET
-    schema: http
-
 formProps:
   - key: params
     component: formGroup
@@ -68,3 +58,13 @@ formProps:
         maxRows: 12
       placeholder: 请输入数据
     labelTip: sql语句
+
+outputs:
+  - name: result
+    desc: 查询结果
+
+
+accessibleAPIs:
+  - path: /api/addons/<addonId>
+    method: GET
+    schema: http

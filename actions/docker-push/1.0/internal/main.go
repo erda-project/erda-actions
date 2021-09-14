@@ -93,7 +93,8 @@ func pushImage(cfg Conf) ([]byte, error) {
 		}
 	}
 
-	if err := simpleRun("docker", "push", cfg.Image); err != nil {
+	// push image
+	if err = docker.PushByCmd(cfg.Image, ""); err != nil {
 		return nil, err
 	}
 

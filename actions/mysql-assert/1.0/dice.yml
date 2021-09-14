@@ -1,0 +1,9 @@
+### job 配置项
+jobs:
+  mysql-assert:
+    image: registry.erda.cloud/erda-actions/mysql-assert-action:20210910-713594b
+    envs:
+      BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
+    resources:
+      cpu: 0.2
+      mem: 256
