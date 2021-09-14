@@ -21,12 +21,12 @@ WORKDIR /go/src/github.com/erda-project/erda-actions
 # go build action cmd
 RUN --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/go/pkg/mod \
-    GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-mysql-migration/1.0/internal/action/cmd/main.go
+    GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-mysql-migration/1.0-57/internal/action/cmd/main.go
 
 # go build local cmd
 RUN --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/go/pkg/mod \
-    GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0/internal/local/cmd/main.go
+    GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0-57/internal/local/cmd/main.go
 
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
