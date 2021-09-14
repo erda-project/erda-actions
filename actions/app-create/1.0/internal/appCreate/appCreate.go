@@ -114,7 +114,7 @@ func handleAPIs() error {
 	// if not external repo push code to repo
 	if !conf.IsExternalRepo() {
 		logrus.Infof("start push code to application %s", conf.ParamsApplicationName())
-		err := runCommand(fmt.Sprintf("git remote add app_create_dice https://%s:%s@%s", conf.GittarUsername(), conf.GittarPassword(), dbApplication.GitRepoNew), true)
+		err := runCommand(fmt.Sprintf("git remote add app_create_dice https://%s:%s@%s", url.QueryEscape(conf.GittarUsername()), url.QueryEscape(conf.GittarPassword()), dbApplication.GitRepoNew), true)
 		if err != nil {
 			return fmt.Errorf("git remote add error: %v", err)
 		}
