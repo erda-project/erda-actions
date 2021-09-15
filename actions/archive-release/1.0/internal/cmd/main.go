@@ -79,8 +79,13 @@ func main() {
 
 	// write oss download url and every service's image to meta
 	_ = metawriter.Write(map[string]interface{}{"erda.yml": url, "gitref": conf.GitRef})
+	if obj := r.ReleaseYml.Obj(); obj != nil {
+		 for serviceName, service := range obj.Services {
+			 _ = metawriter.Write()
+		 }
+	}
 	meta := make(map[string]interface{})
-	if deployable, err := r.ReleaseYml.Deployable(); err == nil {
+	if deployable, err := r.ReleaseYml.deployable(); err == nil {
 		var obj = new(diceyml.Object)
 		if err := yaml.Unmarshal([]byte(deployable), obj); err == nil {
 			for serviceName, service := range obj.Services {

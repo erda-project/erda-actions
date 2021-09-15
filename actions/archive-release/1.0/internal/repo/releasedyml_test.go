@@ -33,7 +33,7 @@ func TestPatch(t *testing.T) {
 		t.Fatal(err)
 	}
 	obj := deployable.Obj()
-	repo.PatchSecurityContextPrivileged(obj, "cluster-agent")
+	repo.patchSecurityContextPrivileged(obj, "cluster-agent")
 	clusterAgent := obj.Services["cluster-agent"]
 	if clusterAgent == nil {
 		t.Fatal("cluster-agent can not be nil")

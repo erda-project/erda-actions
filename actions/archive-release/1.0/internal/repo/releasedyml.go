@@ -18,63 +18,77 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/erda-project/erda/pkg/parser/diceyml"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	v1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/yaml"
+
+	"github.com/erda-project/erda/pkg/parser/diceyml"
 
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/config"
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/oapi"
 )
 
 type ReleasedYaml struct {
-	Conf       *config.Config
-	ReplaceOld string
-	ReplaceNew string
-	text       []byte
+	conf       *config.Config
+	replaceOld string
+	replaceNew string
+	obj *diceyml.Object
 }
 
-func (y *ReleasedYaml) ReadFromDiceHub(api *oapi.AccessAPI) error {
+func NewReleasedYaml(conf*config.Config) *ReleasedYaml {
+	return &ReleasedYaml{conf: conf}
+}
+
+func (y *ReleasedYaml) SetReplacement(src, dst string) {
+	y.replaceOld = src
+	y.replaceNew = dst
+}
+
+// ReadFromDiceHub read dice.yml from dicehub and make it deployable
+func (y *ReleasedYaml) ReadFromDiceHub(api *oapi.AccessAPI) (string, error) {
 	if api == nil {
-		return errors.New("AccessAPI is nil")
+		return "", errors.New("AccessAPI is nil")
 	}
 
 	header := api.RequestHeader()
 	header.Add("Accept", "application/x-yaml")
 	data, _, err := oapi.RequestGet(api.GetDiceURL(), header)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	y.text = data
-	return nil
+	return y.deployable(data)
 }
 
-func (y *ReleasedYaml) Deployable() (string, error) {
-	deployable, err := diceyml.NewDeployable(y.text, diceyml.WS_PROD, false)
+// deployable dose
+// - make make dice.yml deployable for WS_PROD;
+// - patch securityContext.privileged=true to the specified service;
+// - replace registry for every service's image
+func (y *ReleasedYaml) deployable(text []byte) (string, error) {
+	deployable, err := diceyml.NewDeployable(text, diceyml.WS_PROD, false)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to NewDeployable")
 	}
 
-	obj := deployable.Obj()
-	PatchSecurityContextPrivileged(obj, y.Conf.SecurityCtx...)
-	return y.replaceRegistry(obj)
+	y.obj = deployable.Obj()
+	patchSecurityContextPrivileged(y.obj, y.conf.SecurityCtx...)
+	return y.replaceRegistry(y.obj)
 }
 
 func (y *ReleasedYaml) replaceRegistry(obj *diceyml.Object) (string, error) {
-	if y.ReplaceNew == "" {
+	if y.replaceNew == "" {
 		out, err := yaml.Marshal(obj)
 		if err != nil {
 			return "", err
 		}
 		return string(out), nil
 	}
-	if y.ReplaceOld == "" {
+	if y.replaceOld == "" {
 		for name, service := range obj.Services {
 			oldImage := service.Image
 			if firstSlashIndex := strings.Index(service.Image, "/"); firstSlashIndex >= 0 {
-				service.Image = y.ReplaceNew + service.Image[firstSlashIndex:]
+				service.Image = y.replaceNew + service.Image[firstSlashIndex:]
 			}
 			logrus.WithFields(logrus.Fields{
 				"service name": name,
@@ -85,7 +99,7 @@ func (y *ReleasedYaml) replaceRegistry(obj *diceyml.Object) (string, error) {
 	} else {
 		for name, service := range obj.Services {
 			oldImage := service.Image
-			service.Image = strings.ReplaceAll(service.Image, y.ReplaceOld, y.ReplaceNew)
+			service.Image = strings.ReplaceAll(service.Image, y.replaceOld, y.replaceNew)
 			logrus.WithFields(logrus.Fields{
 				"service name": name,
 				"old":          oldImage,
@@ -101,8 +115,13 @@ func (y *ReleasedYaml) replaceRegistry(obj *diceyml.Object) (string, error) {
 	return string(out), nil
 }
 
+// Obj returns the dice.yml structure
+func (y *ReleasedYaml) Obj() *diceyml.Object {
+	return y.obj
+}
+
 func (y *ReleasedYaml) Bucket() string {
-	return y.Conf.OssBucket
+	return y.conf.OssBucket
 }
 
 func (y *ReleasedYaml) Local() string {
@@ -111,10 +130,10 @@ func (y *ReleasedYaml) Local() string {
 
 // Remote is like /archived-versions/{git-tag:v1.0.0}/releases/{repo-name:erda}/dice.yml
 func (y *ReleasedYaml) Remote() string {
-	return filepath.Join(y.Conf.GetOssPath(), "releases", y.Conf.GetReleaseName(), "dice.yml")
+	return filepath.Join(y.conf.GetOssPath(), "releases", y.conf.GetReleaseName(), "dice.yml")
 }
 
-func PatchSecurityContextPrivileged(obj *diceyml.Object, services ...string) {
+func patchSecurityContextPrivileged(obj *diceyml.Object, services ...string) {
 	b := true
 	for _, serviceName := range services {
 		if service := obj.Services[serviceName]; service != nil {
