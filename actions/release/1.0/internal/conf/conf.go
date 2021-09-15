@@ -72,7 +72,7 @@ type MobileData struct {
 }
 
 type AABInfo struct {
-	PackageName string `json:"packageName"`
-	VersionCode string `json:"versionCode"`
-	VersionName string `json:"versionName"`
+	PackageName interface{} `json:"packageName"`
+	VersionCode interface{} `json:"versionCode"`
+	VersionName interface{} `json:"versionName"`
 }

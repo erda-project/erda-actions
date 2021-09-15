@@ -19,6 +19,7 @@ import (
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
+	"github.com/erda-project/erda/pkg/strutil"
 )
 
 var errReleaseTypeCheck = errors.New(`一个release action只能发布一种操作系统类型的移动应用，如果有多种操作系统类型，请拆分成多个release acction`)
@@ -152,16 +153,16 @@ func Execute() error {
 				}
 				versionCode := cfg.PipelineID
 				if cfg.AABInfo.VersionCode != "" {
-					versionCode = cfg.AABInfo.VersionCode
+					versionCode = strutil.String(cfg.AABInfo.VersionCode)
 				}
 				meta["packageName"] = cfg.AABInfo.PackageName
 				meta["version"] = cfg.AABInfo.VersionName
 				meta["buildID"] = versionCode
 				meta["displayName"] = cfg.AABInfo.VersionName
 				if cfg.ReleaseMobile.Version == "" {
-					cfg.ReleaseMobile.Version = cfg.AABInfo.VersionName
+					cfg.ReleaseMobile.Version = strutil.String(cfg.AABInfo.VersionName)
 				}
-				req.Version = cfg.AABInfo.VersionName
+				req.Version = strutil.String(cfg.AABInfo.VersionName)
 			}
 
 			if resourceType == apistructs.ResourceTypeIOS {
