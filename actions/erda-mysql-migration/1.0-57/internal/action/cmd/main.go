@@ -19,23 +19,23 @@ import (
 	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
 	"github.com/sirupsen/logrus"
 
-	"github.com/erda-project/erda-actions/actions/erda-mysql-migration/1.0/internal/action/migration"
-	"github.com/erda-project/erda-actions/actions/erda-mysql-migration/1.0/internal/common"
+	migration2 "github.com/erda-project/erda-actions/actions/erda-mysql-migration/1.0-57/internal/action/migration"
+	common2 "github.com/erda-project/erda-actions/actions/erda-mysql-migration/1.0-57/internal/common"
 	"github.com/erda-project/erda-actions/pkg/metawriter"
 )
 
 func main() {
 	logrus.Infoln("Erda MySQL Migration start working")
-	logrus.Infof("Configuration: %+v", *migration.Configuration())
+	logrus.Infof("Configuration: %+v", *migration2.Configuration())
 
 	var err error
 	defer func() {
 		_ = metawriter.Write(map[string]interface{}{"success": err == nil, "error": err})
 	}()
 
-	go common.FatalError(common.StartSandbox)
+	go common2.FatalError(common2.StartSandbox)
 
-	mig, err := migrator.New(migration.Configuration())
+	mig, err := migrator.New(migration2.Configuration())
 	if err != nil {
 		logrus.Fatalf("failed to start Erda MySQL Migration: %v", err)
 	}

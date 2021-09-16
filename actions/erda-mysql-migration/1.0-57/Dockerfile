@@ -15,7 +15,7 @@
 
 FROM golang:1.15 AS builder
 
-COPY . /go/src/github.com/erda-project/erda-actions
+COPY ../1.0 /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 # go build action cmd
