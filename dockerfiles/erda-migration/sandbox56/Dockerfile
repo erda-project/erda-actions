@@ -1,4 +1,4 @@
-FROM centos/mysql-57-centos7
+FROM centos/mysql-56-centos7
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
