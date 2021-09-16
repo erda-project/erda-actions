@@ -1,8 +1,8 @@
 # Git: git version 2.30.2
-# gcc version 10.2.1 20210110 (Debian 10.2.1-6)
+# gcc version (Debian 10.2.1-6) 10.2.1 20210110
 # Node: v12.22.6 LTS, npm: 6.14.15, yarn: 1.22.5, herd: 1.1.10
 # /etc/os-release: Debian: Debian GNU/Linux 11 (bullseye)
-# Kernel: Linux 08f4f27793e7 5.10.47-linuxkit Sat Jul 3 21:51:47 2021 x86_64
+# Kernel: Linux 96308879da7b 5.10.47-linuxkit #1 SMP Sat Jul 3 21:51:47 x86_64
 # Build cmd: docker build . -t terminus/debian-node.12-herd.1.1.10
 # Other tags: terminus/debian-herd:1.1.10-n12.22,terminus/debian-herd:1.1.10
 FROM node:12.22-bullseye-slim
