@@ -36,6 +36,11 @@ func Write(m map[string]interface{}) (err error) {
 	return New(os.Getenv(metafile)).Write(m)
 }
 
+// WriteKV is the shortcut for New(filename).Write(key, value)
+func WriteKV(k string, v interface{}) error {
+	return New(os.Getenv(metafile)).WriteKV(k, v)
+}
+
 type Writer struct {
 	filename string
 }
@@ -50,6 +55,14 @@ func (w Writer) Write(m map[string]interface{}) error {
 		mt.Metadata = append(mt.Metadata, ele{k, fmt.Sprintf("%v", v)})
 	}
 	data, err := json.Marshal(mt)
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(w.filename, data, 0644)
+}
+
+func (w Writer) WriteKV(k string, v interface{}) error {
+	data, err := json.Marshal(meta{Metadata: []ele{{Name: k, Value: fmt.Sprintf("%v", v)}}})
 	if err != nil {
 		return err
 	}
