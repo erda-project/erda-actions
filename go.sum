@@ -369,8 +369,8 @@ github.com/docker/spdystream v0.0.0-20181023171402-6480d4af844c/go.mod h1:Qh8CwZ
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
 github.com/dsnet/compress v0.0.1/go.mod h1:Aw8dCMJ7RioblQeTqt88akK31OvO8Dhf5JflhBbQEHo=
 github.com/dsnet/golib v0.0.0-20171103203638-1ea166775780/go.mod h1:Lj+Z9rebOhdfkVLjJ8T6VcRQv3SXugXy999NBtR9aFY=
-github.com/dspo/erda v0.0.0-20210917073345-1082445d888a h1:EzBil7EdBH6QHLX055/EnKLtWLsNwH28MQCh4raU3JI=
-github.com/dspo/erda v0.0.0-20210917073345-1082445d888a/go.mod h1:8dEiqmUvX+9ZhYrMirumCOcudO87UbvAVIq+1yeKw6Y=
+github.com/dspo/erda v0.0.0-20210917091452-c495e577c69a h1:fTK83+dcj+fIXQiFRFnjHs+VfHUQioKcGHMlacBOGoo=
+github.com/dspo/erda v0.0.0-20210917091452-c495e577c69a/go.mod h1:8dEiqmUvX+9ZhYrMirumCOcudO87UbvAVIq+1yeKw6Y=
 github.com/dustin/go-humanize v0.0.0-20171111073723-bb3d318650d4/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
 github.com/dustin/go-humanize v0.0.0-20180421182945-02af3965c54e/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
 github.com/dustin/go-humanize v1.0.0 h1:VSnTsYCnlFHaM2/igO1h6X3HA71jcobQuxemgkq4zYo=
