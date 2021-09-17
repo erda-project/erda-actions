@@ -8,7 +8,7 @@ ENV TZ=Asia/Shanghai
 ENV MYSQL_ROOT_PASSWORD="12345678"
 ENV MYSQL_ALLOW_EMPTY_PASSWORD yes
 
-COPY dockerfiles/erda-migration/my.cnf /etc/my.cnf
+COPY dockerfiles/erda-migration/sandbox56/my.cnf /etc/my.cnf
 
 # install python3
 RUN yum install -y mariadb-devel gcc python3-devel.x86_64
