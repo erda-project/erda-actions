@@ -38,9 +38,9 @@ push-extensions archive-extensions testscene-run testplan-run erda-mysql-migrati
 
 	if [[ "$(DEVELOP_MODE)" == 'true' ]]; then
 		echo "DEVELOP_MODE == true"
-		image="$(DevelopRegistry)/$@-action:$(Date)-${GitCommit}"
+		image="$(DevelopRegistry)/$@-action:$${version}-$(Date)-${GitCommit}"
 	else
-		image="$(Registry)/$@-action:$(Date)-${GitCommit}"
+		image="$(Registry)/$@-action:$${version}-$(Date)-${GitCommit}"
 	fi
 
 	@echo image=$${image}

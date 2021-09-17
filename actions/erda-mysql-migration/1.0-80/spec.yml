@@ -14,7 +14,7 @@
 name: erda-mysql-migration
 displayName: Erda MySQL 数据迁移
 logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/03/31/5ad6b5a6-23a7-4b3b-9b43-ef8e896e687d.png
-version: "1.0"
+version: "1.0-80"
 type: action
 category: deploy_management
 desc: Erda MySQL Migration 工具
@@ -79,6 +79,30 @@ params:
     type: int
     desc: 连接数据库最长超时时间
     default: 150
+    required: false
+
+  - name: mysql_host
+    type: string
+    desc: mysql 服务地址
+    default: ""
+    required: false
+
+  - name: mysql_port
+    type: int
+    desc: mysql 服务端口
+    default: 3306
+    required: false
+
+  - name: mysql_username
+    type: string
+    desc: mysql 用户名
+    default: "root"
+    required: false
+
+  - name: mysql_password
+    type: string
+    desc: mysql 密码
+    default: ""
     required: false
 
 outputs:

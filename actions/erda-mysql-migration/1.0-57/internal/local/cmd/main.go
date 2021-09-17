@@ -19,18 +19,18 @@ import (
 	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
 	"github.com/sirupsen/logrus"
 
-	"github.com/erda-project/erda-actions/actions/erda-mysql-migration/1.0/internal/common"
-	"github.com/erda-project/erda-actions/actions/erda-mysql-migration/1.0/internal/local/config"
+	common2 "github.com/erda-project/erda-actions/actions/erda-mysql-migration/1.0-57/internal/common"
+	config2 "github.com/erda-project/erda-actions/actions/erda-mysql-migration/1.0-57/internal/local/config"
 )
 
 func main() {
 	logrus.Infoln("Erda MySQL Migration start working")
 
-	if !config.Config().ExternalSandbox() {
-		go common.FatalError(common.StartSandbox)
+	if !config2.Config().ExternalSandbox() {
+		go common2.FatalError(common2.StartSandbox)
 	}
 
-	mig, err := migrator.New(config.Config())
+	mig, err := migrator.New(config2.Config())
 	if err != nil {
 		logrus.Fatalf("failed to start Erda MySQL Migration: %v", err)
 	}

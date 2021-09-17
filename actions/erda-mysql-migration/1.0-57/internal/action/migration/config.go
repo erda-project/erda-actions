@@ -51,7 +51,6 @@ type Conf struct {
 
 	// action envs
 	WorkDir       string   `env:"ACTION_WORKDIR"`
-	Database      string   `env:"ACTION_DATABASE"`
 	MigrationDir_ string   `env:"ACTION_MIGRATIONDIR"`
 	SkipLint      bool     `env:"ACTION_SKIP_LINT"`
 	SkipSand      bool     `env:"ACTION_SKIP_SANDBOX"`
@@ -61,8 +60,34 @@ type Conf struct {
 	Modules_      []string `env:"ACTION_MODULES"`
 	RetryTimeout_ uint64   `env:"ACTION_RETRY_TIMEOUT"`
 
+	SandboxInnerPassword string `env:"SANDBOX_INNER_PASSWORD"`
+
 	mysqlParameters   *migrator.DSNParameters
 	sandboxParameters *migrator.DSNParameters
+}
+
+type ActionMySQLSettings struct {
+	Host     string `env:"ACTION_MYSQL_HOST"`
+	Port     int    `env:"ACTION_MYSQL_PORT"`
+	Username string `env:"ACTION_MYSQL_USERNAME"`
+	Password string `env:"ACTION_MYSQL_PASSWORD"`
+	Database string `env:"ACTION_DATABASE"`
+}
+
+func (s ActionMySQLSettings) Valid() bool {
+	return !(s.Host == "" || s.Port == 0 || s.Username == "" || s.Password == "")
+}
+
+type PipelineMySQLSettings struct {
+	Host     string `env:"PIPELINE_MIGRATION_HOST"`
+	Port     int    `env:"PIPELINE_MIGRATION_PORT"`
+	Username string `env:"PIPELINE_MIGRATION_USERNAME"`
+	Password string `env:"PIPELINE_MIGRATION_PASSWORD"`
+	Database string `env:"PIPELINE_MIGRATION_DATABASE"`
+}
+
+func (s PipelineMySQLSettings) Valid() bool {
+	return !(s.Host == "" || s.Port == 0 || s.Username == "" || s.Password == "")
 }
 
 func Configuration() *Conf {
@@ -81,16 +106,14 @@ func Configuration() *Conf {
 	}
 
 	conf.mysqlParameters = &migrator.DSNParameters{
-		Database:  conf.Database,
 		ParseTime: true,
 		Timeout:   time.Second * 150,
 	}
 	conf.sandboxParameters = &migrator.DSNParameters{
 		Username:  "root",
-		Password:  "12345678",
+		Password:  conf.SandboxInnerPassword,
 		Host:      "0.0.0.0",
 		Port:      3306,
-		Database:  conf.Database,
 		ParseTime: true,
 		Timeout:   time.Second * 150,
 	}
@@ -175,7 +198,43 @@ func (c *Conf) SQLCollectorDir() string {
 	return "/log"
 }
 
+// retrieveMySQLParameters retrieves the mysql parameters from action configuration, pipeline configuration, or the addon mysql.
+// the priority is action > pipeline > addon.
 func (c *Conf) retrieveMySQLParameters() error {
+	var (
+		actionMySQLSettings   ActionMySQLSettings
+		pipelineMySQLSettings PipelineMySQLSettings
+	)
+	envconf.Load(&actionMySQLSettings)
+	if actionMySQLSettings.Valid() {
+		c.mysqlParameters.Host = actionMySQLSettings.Host
+		c.mysqlParameters.Port = actionMySQLSettings.Port
+		c.mysqlParameters.Username = actionMySQLSettings.Username
+		c.mysqlParameters.Password = actionMySQLSettings.Password
+		c.mysqlParameters.Database = actionMySQLSettings.Database
+		c.sandboxParameters.Database = actionMySQLSettings.Database
+		return nil
+	}
+	envconf.Load(&pipelineMySQLSettings)
+	if pipelineMySQLSettings.Valid() {
+		c.mysqlParameters.Host = pipelineMySQLSettings.Host
+		c.mysqlParameters.Port = pipelineMySQLSettings.Port
+		c.mysqlParameters.Username = pipelineMySQLSettings.Username
+		c.mysqlParameters.Password = pipelineMySQLSettings.Password
+		c.mysqlParameters.Database = pipelineMySQLSettings.Database
+		c.sandboxParameters.Database = pipelineMySQLSettings.Database
+		return nil
+	}
+
+	if database := pipelineMySQLSettings.Database; database != "" {
+		c.mysqlParameters.Database = database
+		c.sandboxParameters.Database = database
+	}
+	if database := actionMySQLSettings.Database; database != "" {
+		c.mysqlParameters.Database = database
+		c.sandboxParameters.Database = database
+	}
+
 	// 查找项目下所有的 addon 实例
 	url := c.DiceOpenapiPrefix + fmt.Sprintf(addonListURI, strconv.FormatUint(uint64(c.ProjectID), 10))
 	header := map[string][]string{"authorization": {c.CiOpenapiToken}}

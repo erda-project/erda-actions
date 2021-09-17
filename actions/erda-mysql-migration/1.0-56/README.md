@@ -1,7 +1,7 @@
-### Erda MySQL Migration
+# Erda MySQL Migration
 Erda MySQL 数据库迁移工具
 
-#### 功能
+## 功能
 该 Action 用于将代码仓库中的 SQLs 脚本更新到数据库中。
 用户需要将用于 migration 的 SQLs 脚本提交到某个目录，并按模块进行分门别类。
 如指定 `.erda/migrations` 目录为存放脚本的目录，那么目录结构为
@@ -26,16 +26,54 @@ module 目录下存放 SQLs 脚本。
 
 Erda MySQL Migration Action 会读取所有脚本，将安装到数据库中。
 
-#### 参数说明
+## 参数说明
 - workdir: 工作目录, 对应仓库根目录, 默认为 ${git-checkout}
 - migrationdir: SQLs 脚本存放目录, 如上文提到的 `.erda/migrations`
-- database: 库名, 即 MySQL schema 名称
 - mysqllint: 是否要对即将安装的脚本进行规约检查
 - lint_config: 进行规约检查时的规约配置文件, 如果不填则使用默认配置
 - modules: 要执行 migrate 的模块列表, 如果不填则执行 migrationdir 目录下的所有模块
 
+### MySQL 设置
+Action 可以从三处获取 MySQL 设置, 分别是 Action 参数, Pipeline 参数, 以及 Addon MySQL.
+优先级是 Action > Pipeline > Addon MySQL.
+
+#### 从 Action 参数获取 MySLQ 设置
+在 stage 的 params 中设置 MySQL 参数, 拥有最高的优先级. 注意 `mysql_host`, `mysql_port`, `mysql_username`, `mysql_password`
+中有任意一个参数是空值, 那么这一组参数都是无效的, action 会到下一优先级的参数中获取参数. 
+```yaml
+  - stage:
+      - erda-mysql-migration:
+          alias: erda-mysql-migration
+          description: Erda MySQL Migration 工具
+          version: "1.0"
+          params:
+            lint_config: .erda/migrations/config.yml
+            migrationdir: .erda/migrations
+            skip_pre_migration: true
+            workdir: ${github}
+            mysql_host: my.mysql.host         # mysql 参数
+            mysql_port: 3306                  # mysql 参数
+            mysql_username: root              # mysql 参数
+            mysql_password: my-mysql-password # mysql 参数
+            database: erda                    # mysql 参数
+```
+
+#### 从 Pipeline 参数获取 MySQL 设置
+如果 action 没有在 Action 参数里获取到完整的 MySQL 设置, 则会尝试从流水线参数中获取 MySQL 设置.
+相应的流水线参数名分别为:
+- `migration_host`
+- `migration_port`
+- `migration_username`
+- `migration_password`
+- `migration_database`
+
+#### 从 Addon MySQL 获取 MySQL 设置
+如果 action 没有在 Action 参数和流水线参数中获取到完整的 MySQL 设置, 则会将对应环境下的 runtime
+引用的 Addon MySQL 作为 MySQL 服务.
+注意, 要使用的数据库名仍要在 Action 参数或流水线参数中配置.
+如果 runtime 没有引用任何 Addon MySQL, 该 stage 会失败.
+
 #### 注意事项
-- 该 Action 连接的是 MySQL Addon, 如果 runtime 下没有 MySQL Addon, 会执行失败。
 - 如果第一次使用该 Action 之前, 数据库中已经存在业务表了, 要将这部分业务表结构和初始化数据整理成基线 SQL 脚本并在脚本首行标记`# MIGRATION_BASE`。
 - 指定的 `database` 如果不存在，该 Action 会自动创建。
 - Action 执行模块内的 SQLs 脚本时，首先执行所有的标记了`# MIGRATION_BASE`的基线脚本，基线脚本有多个时，按字符序执行；然后执行其他脚本，其他脚本也是按字符序执行。所以为脚本命名时，务必注意按一定的字符序。建议命名方式为`日期+数字序号+feature描述`。脚本文件名后缀应当为`.sql`。
