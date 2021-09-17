@@ -1,11 +1,11 @@
 
 # Git: git version 2.30.2
 # gcc: 10.3.1 20210424
-# Node: 14.17.5 LTS, npm: 6.14.14, yarn: 1.22.5, herd: 1.1.8
+# Node: 14.17.5 LTS, npm: 6.14.14, yarn: 1.22.5, herd: 1.1.11
 # /etc/os-release: Alpine Linux v3.14
 # Kernel(uname -a): Linux 55f39d8cbcc0 5.10.47-linuxkit Sat Jul 3 21:51:47 2021 x86_64
-# Build cmd: docker build . -t terminus/alpine-node.14-herd.1.1.8
-# Other tags: terminus/alpine-herd:1.1.8-n14.17,terminus/alpine-herd:1.1.8
+# Build cmd: docker build . -t terminus/alpine-node.14-herd.1.1.11
+# Other tags: terminus/alpine-herd:1.1.11-n14.17,terminus/alpine-herd:1.1.11
 # Notice: 由于Alpine使用musl libc而不是glibc，而大多数流行的发行版使用后者，
 #         为了避免兼容性问题现阶段不建议在Alpine里面构建或者部署Node应用
 FROM node:14.17.5-alpine3.14
@@ -54,7 +54,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && echo "alias ..='cd ..'" >> /root/.bashrc \
     && echo "alias ll='ls -l'" >> /root/.bashrc \
     # Add --unsafe-perm to fix 'Error: EACCES: permission denied, mkdir...' issue while install node-sass
-    && npm i -g --unsafe-perm @terminus/herd@1.1.8 \
+    && npm i -g --unsafe-perm @terminus/herd@1.1.11 \
     && rm -rf /var/cache/apk/* \
     && echo "" > /root/.ash_history \
     # Add dice and erda user and create home dir, Don't assign a password
