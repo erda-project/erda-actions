@@ -33,10 +33,10 @@ type ReleasedYaml struct {
 	conf       *config.Config
 	replaceOld string
 	replaceNew string
-	obj *diceyml.Object
+	obj        *diceyml.Object
 }
 
-func NewReleasedYaml(conf*config.Config) *ReleasedYaml {
+func NewReleasedYaml(conf *config.Config) *ReleasedYaml {
 	return &ReleasedYaml{conf: conf}
 }
 
