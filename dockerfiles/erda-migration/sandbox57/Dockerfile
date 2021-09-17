@@ -7,6 +7,7 @@ USER root
 ENV TZ=Asia/Shanghai
 ENV MYSQL_ROOT_PASSWORD="12345678"
 ENV MYSQL_ALLOW_EMPTY_PASSWORD yes
+ENV SANDBOX_INNER_PASSWORD="12345678"
 
 COPY dockerfiles/erda-migration/my.cnf /etc/my.cnf
 

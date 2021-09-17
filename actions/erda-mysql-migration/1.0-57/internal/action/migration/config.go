@@ -60,6 +60,8 @@ type Conf struct {
 	Modules_      []string `env:"ACTION_MODULES"`
 	RetryTimeout_ uint64   `env:"ACTION_RETRY_TIMEOUT"`
 
+	SandboxInnerPassword string `env:"SANDBOX_INNER_PASSWORD"`
+
 	mysqlParameters   *migrator.DSNParameters
 	sandboxParameters *migrator.DSNParameters
 }
@@ -109,7 +111,7 @@ func Configuration() *Conf {
 	}
 	conf.sandboxParameters = &migrator.DSNParameters{
 		Username:  "root",
-		Password:  "",
+		Password:  conf.SandboxInnerPassword,
 		Host:      "0.0.0.0",
 		Port:      3306,
 		ParseTime: true,
