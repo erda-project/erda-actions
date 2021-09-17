@@ -70,22 +70,20 @@ func main() {
 		logrus.Warnln("no migration script will be archived because there is no workdir or migrationsDir")
 	}
 	for _, script := range r.Scripts {
-		if _, err := client.Upload(script); err != nil {
+		if _, err = client.Upload(script); err != nil {
 			logrus.WithError(err).WithField("filename", script.Filename).Fatalln("failed to migration script")
 		}
 	}
 
 	// write oss download url and every service's image to meta
 	meta := map[string]interface{}{"erda.yml": url, "gitref": conf.GitRef}
-	if err := metawriter.Write(meta); err != nil {
-		logrus.WithFields(meta).Warnln("failed to write info to meta")
-	}
 	if obj := r.ReleaseYml.Obj(); obj != nil {
 		for serviceName, service := range obj.Services {
-			if err := metawriter.WriteKV(serviceName, service.Image); err != nil {
-				logrus.WithField(serviceName, service.Image).Warnln("failed to write into to meta")
-			}
+			meta[serviceName] = service.Image
 		}
+	}
+	if err := metawriter.Write(meta); err != nil {
+		logrus.WithFields(meta).Warnln("failed to write info to meta")
 	}
 
 	logrus.Infoln("Archive Release action complete")
