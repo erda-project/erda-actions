@@ -36,7 +36,10 @@ func Write(m map[string]interface{}) (err error) {
 	return New(os.Getenv(metafile)).Write(m)
 }
 
-
+// WriteKV is the shortcut for New(filename).Write(key, value)
+func WriteKV(k string, v interface{}) error {
+	return New(os.Getenv(metafile)).WriteKV(k, v)
+}
 
 type Writer struct {
 	filename string

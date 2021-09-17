@@ -61,6 +61,24 @@ func (y *ReleasedYaml) ReadFromDiceHub(api *oapi.AccessAPI) (string, error) {
 	return y.deployable(data)
 }
 
+// Obj returns the dice.yml structure
+func (y *ReleasedYaml) Obj() *diceyml.Object {
+	return y.obj
+}
+
+func (y *ReleasedYaml) Bucket() string {
+	return y.conf.OssBucket
+}
+
+func (y *ReleasedYaml) Local() string {
+	return "dice.yml"
+}
+
+// Remote is like /archived-versions/{git-tag:v1.0.0}/releases/{repo-name:erda}/dice.yml
+func (y *ReleasedYaml) Remote() string {
+	return filepath.Join(y.conf.GetOssPath(), "releases", y.conf.GetReleaseName(), "dice.yml")
+}
+
 // deployable dose
 // - make make dice.yml deployable for WS_PROD;
 // - patch securityContext.privileged=true to the specified service;
@@ -113,24 +131,6 @@ func (y *ReleasedYaml) replaceRegistry(obj *diceyml.Object) (string, error) {
 		return "", err
 	}
 	return string(out), nil
-}
-
-// Obj returns the dice.yml structure
-func (y *ReleasedYaml) Obj() *diceyml.Object {
-	return y.obj
-}
-
-func (y *ReleasedYaml) Bucket() string {
-	return y.conf.OssBucket
-}
-
-func (y *ReleasedYaml) Local() string {
-	return "dice.yml"
-}
-
-// Remote is like /archived-versions/{git-tag:v1.0.0}/releases/{repo-name:erda}/dice.yml
-func (y *ReleasedYaml) Remote() string {
-	return filepath.Join(y.conf.GetOssPath(), "releases", y.conf.GetReleaseName(), "dice.yml")
 }
 
 func patchSecurityContextPrivileged(obj *diceyml.Object, services ...string) {

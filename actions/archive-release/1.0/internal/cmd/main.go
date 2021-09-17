@@ -14,9 +14,7 @@
 package main
 
 import (
-	"github.com/erda-project/erda/pkg/parser/diceyml"
 	"github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v3"
 
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/config"
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/oss"
@@ -52,7 +50,7 @@ func main() {
 	}
 
 	// delete the git ref dir before all uploading
-	if err = client.DeleteRemote(conf.GitRefDir()); err != nil {
+	if err = client.DeleteRemoteRecursively(conf.GitRefDir()); err != nil {
 		logrus.WithError(err).WithField("path", conf.GitRefDir().Remote()).
 			Fatalln("failed to remove the path from OSS")
 	}
@@ -78,24 +76,17 @@ func main() {
 	}
 
 	// write oss download url and every service's image to meta
-	_ = metawriter.Write(map[string]interface{}{"erda.yml": url, "gitref": conf.GitRef})
-	if obj := r.ReleaseYml.Obj(); obj != nil {
-		 for serviceName, service := range obj.Services {
-			 _ = metawriter.Write()
-		 }
+	meta := map[string]interface{}{"erda.yml": url, "gitref": conf.GitRef}
+	if err := metawriter.Write(meta); err != nil {
+		logrus.WithFields(meta).Warnln("failed to write info to meta")
 	}
-	meta := make(map[string]interface{})
-	if deployable, err := r.ReleaseYml.deployable(); err == nil {
-		var obj = new(diceyml.Object)
-		if err := yaml.Unmarshal([]byte(deployable), obj); err == nil {
-			for serviceName, service := range obj.Services {
-				if service != nil {
-					meta[serviceName] = service.Image
-				}
+	if obj := r.ReleaseYml.Obj(); obj != nil {
+		for serviceName, service := range obj.Services {
+			if err := metawriter.WriteKV(serviceName, service.Image); err != nil {
+				logrus.WithField(serviceName, service.Image).Warnln("failed to write into to meta")
 			}
 		}
 	}
-	_ = metawriter.Write(meta)
 
 	logrus.Infoln("Archive Release action complete")
 }
