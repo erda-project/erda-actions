@@ -13,9 +13,11 @@ RUN mkdir -p /opt/action/comp/migration/sql && \
 RUN set -x \
     	&& eval "GOOS=linux GOARCH=amd64 go build $BUILD_FLAGS -o /assets/run github.com/erda-project/erda-actions/actions/release/1.0/internal/cmd"
 
-FROM docker:latest AS action
+FROM registry.erda.cloud/erda/terminus-alpine:base
+
 RUN echo "http://mirrors.aliyun.com/alpine/v3.12/main/" > /etc/apk/repositories && \
-    echo "http://mirrors.aliyun.com/alpine/v3.12/community/" >> /etc/apk/repositories
+    echo "http://mirrors.aliyun.com/alpine/v3.12/community/" >> /etc/apk/repositories && \
+    apk update && apk add --no-cache docker
 RUN apk add --no-cache bash tar
 
 COPY --from=builder /assets /opt/action

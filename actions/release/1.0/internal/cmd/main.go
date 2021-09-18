@@ -10,6 +10,7 @@ import (
 func main() {
 	if err := pkg.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
+		fmt.Println(fmt.Sprintf("err info: %v", err))
 		os.Exit(1)
 	}
 }

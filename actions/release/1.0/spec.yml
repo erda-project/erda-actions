@@ -72,11 +72,17 @@ params:
   - name: services
     type: map
     desc: 项目基于那个镜像运行，运行命令是什么
-  
+
   - name: aab_info
     type: map
     desc: 等做完 aab 里的 AndroidManifest.xml 解析后，可删除该参数
     required: false
+  - name: release_mobile
+    type: struct
+    desc: 移动端打包
+    struct:
+      - {name: files, type: string_array, desc: 打包文件 }
+      - {name: version, type: string, desc: 版本 }
 
 accessibleAPIs:
   # push release

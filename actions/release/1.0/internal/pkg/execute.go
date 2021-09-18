@@ -32,7 +32,6 @@ const (
 
 // Execute release action 执行逻辑
 func Execute() error {
-	//time.Sleep(time.Minute*30)
 	logrus.SetOutput(os.Stdout)
 
 	var cfg conf.Conf
@@ -56,7 +55,6 @@ func Execute() error {
 	if err != nil {
 		return err
 	}
-
 	//image和services是release的两种模式，一种是用户传入image，然后release做些其他处理，
 	//一种就是传入service，然后release根据配置进行构建出imageAddr, 然后把imageAddr设置进images属性中
 	//这里就是新加的service，根据service构建，然后塞入image中
@@ -71,7 +69,7 @@ func Execute() error {
 			return err
 		}
 		req.Resources = releaseResources
-		logrus.Infof("uploaded release resources: %+v", releaseResources)
+		fmt.Println(fmt.Sprintf("uploaded release resources: %+v", releaseResources))
 	}
 
 	if cfg.ReleaseMobile != nil {
@@ -141,7 +139,6 @@ func Execute() error {
 				}
 				req.Version = version
 			}
-
 			// TODO Change get information from configuration to extract from abb file
 			if resourceType == apistructs.ResourceTypeAndroidAppBundle {
 				// info, err := GetAndroidAppBundleInfo(appFilePath)
@@ -206,7 +203,6 @@ func Execute() error {
 				}
 				req.Version = version
 			}
-
 			if resourceType == apistructs.ResourceTypeH5 {
 				var h5VersionInfo apistructs.H5VersionInfo
 				f, err := ioutil.ReadFile(appFilePath + "/mobileBuild.cfg")
@@ -226,7 +222,7 @@ func Execute() error {
 				if err != nil {
 					return err
 				}
-				logrus.Infof("H5VersionInfo is %v", h5VersionInfo)
+				fmt.Println(fmt.Sprintf("H5VersionInfo is %v", h5VersionInfo))
 
 				version := h5VersionInfo.Version
 				buildID := h5VersionInfo.BuildID
@@ -256,14 +252,13 @@ func Execute() error {
 			})
 		}
 	}
-
 	// 填充 dice.yml(合并对应环境dice.yml & 填充dice.yml镜像)
 	diceYml, err := fillDiceYml(&cfg, storage)
 	if err != nil && cfg.ReleaseMobile == nil {
 		return err
 	}
 	req.Dice = diceYml
-	logrus.Infof("composed & filled dice.yml: %v", req.Dice)
+	fmt.Println(fmt.Sprintf("composed & filled dice.yml: %v", req.Dice))
 
 	// migration sql release
 	migrationReleaseID, err := migration(&cfg)
@@ -288,13 +283,12 @@ func Execute() error {
 	if err != nil {
 		return err
 	}
-	logrus.Infof("releaseId: %s", releaseID)
+	fmt.Println(fmt.Sprintf("releaseId: %s", releaseID))
 
 	// create dicehub_release file in nfs, store releaseID
 	if err = ioutil.WriteFile("dicehub_release", []byte(releaseID), 0644); err != nil {
 		return errors.Wrap(err, "failed to store release id")
 	}
-
 	// write metafile
 	metaInfos := make([]apistructs.MetadataField, 0, 1)
 	metaInfos = append(metaInfos, apistructs.MetadataField{
