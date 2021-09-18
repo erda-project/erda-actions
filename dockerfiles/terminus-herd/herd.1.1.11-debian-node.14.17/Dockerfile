@@ -1,10 +1,10 @@
 # Git: git version 2.30.2
 # gcc version 10.2.1 20210110 (Debian 10.2.1-6)
-# Node: 14.17.5 LTS, npm: 6.14.14, yarn: 1.22.5, herd: 1.1.10
+# Node: 14.17.5 LTS, npm: 6.14.14, yarn: 1.22.5, herd: 1.1.11
 # /etc/os-release: Debian: Debian GNU/Linux 11 (bullseye)
 # Kernel: Linux 08f4f27793e7 5.10.47-linuxkit Sat Jul 3 21:51:47 2021 x86_64
-# Build cmd: docker build . -t terminus/debian-node.14-herd.1.1.10
-# Other tags: terminus/debian-herd:1.1.10-n14.17,terminus/debian-herd:1.1.10
+# Build cmd: docker build . -t terminus/debian-node.14-herd.1.1.11
+# Other tags: terminus/debian-herd:1.1.11-n14.17,terminus/debian-herd:1.1.11
 FROM node:14.17.5-bullseye-slim
 
 LABEL maintainer=hustcer<majun@terminus.io>
@@ -66,7 +66,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && echo 'set enc=utf8' >> /etc/vim/vimrc \
     && echo 'set fencs=utf8,gbk,gb2312,gb18030' >> /etc/vim/vimrc \
     # Add --unsafe-perm to fix 'Error: EACCES: permission denied, mkdir...' issue while install node-sass
-    && npm i -g --unsafe-perm @terminus/herd@1.1.10 \
+    && npm i -g --unsafe-perm @terminus/herd@1.1.11 \
     && rm -rf /var/lib/apt/lists/* && apt autoremove -y \
     # Add dice and erda user and create home dir
     && useradd -m -s /bin/bash dice \
