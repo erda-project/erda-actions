@@ -3,7 +3,7 @@ jobs:
     image: registry.erda.cloud/erda-actions/upgrade-edge-cluster:3.17
     resources:
       cpu: 0.2
-      mem: 256
+      mem: 600
     binds:
        - ((storageMountPoint))/dice-ops/dice-config:/opt/dice-config
        - ((storageMountPoint))/dice-ops/dice-config/kube-config:/root/.kube/config

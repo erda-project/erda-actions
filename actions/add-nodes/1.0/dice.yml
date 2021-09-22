@@ -3,7 +3,7 @@ jobs:
     image: registry.erda.cloud/erda-actions/add-nodes:1.1
     resources:
       cpu: 0.2
-      mem: 128
+      mem: 600
     binds:
     - ((storageMountPoint))/dice-ops/dice-config:/opt/dice-config:rw
     - ((storageMountPoint))/dice-ops/dice-config/kube-config:/root/.kube/config
