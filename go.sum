@@ -369,8 +369,8 @@ github.com/docker/spdystream v0.0.0-20181023171402-6480d4af844c/go.mod h1:Qh8CwZ
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
 github.com/dsnet/compress v0.0.1/go.mod h1:Aw8dCMJ7RioblQeTqt88akK31OvO8Dhf5JflhBbQEHo=
 github.com/dsnet/golib v0.0.0-20171103203638-1ea166775780/go.mod h1:Lj+Z9rebOhdfkVLjJ8T6VcRQv3SXugXy999NBtR9aFY=
-github.com/dspo/erda v0.0.0-20210923114807-a90b0469e7e3 h1:zTJf9myNSp5WFuORh5UacWqr18PYoAE5yyFGWMB353k=
-github.com/dspo/erda v0.0.0-20210923114807-a90b0469e7e3/go.mod h1:A02sjI73f3ERxaGZ4KvQTk0DKhEWSKlySVD2515+kfc=
+github.com/dspo/erda v0.0.0-20210926022523-0c35e51c8a84 h1:UvG4pL5VRdaRD3P/1/MX1D+vXwRW7Ak1xCjSRLGgrp8=
+github.com/dspo/erda v0.0.0-20210926022523-0c35e51c8a84/go.mod h1:A02sjI73f3ERxaGZ4KvQTk0DKhEWSKlySVD2515+kfc=
 github.com/dspo/erda/api/proto-go v0.0.0-20210923114807-a90b0469e7e3 h1:HydVjbe3uyVEoR9T/74JW/9E9nWm4uMjloEzjQmlFgo=
 github.com/dspo/erda/api/proto-go v0.0.0-20210923114807-a90b0469e7e3/go.mod h1:l2AY7V/D+y7n0n2Vd/giV2ma3WrxSBMN6NKeU16q1tk=
 github.com/dustin/go-humanize v0.0.0-20171111073723-bb3d318650d4/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
