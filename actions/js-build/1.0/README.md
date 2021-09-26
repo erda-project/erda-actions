@@ -56,7 +56,7 @@ spa 模式
           cmd: sed -i "s^server_name .*^^g" /etc/nginx/conf.d/nginx.conf.template && envsubst "`printf '$%s' $(bash -c "compgen -e")`" < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && /usr/local/openresty/bin/openresty -g 'daemon off;'
           # 固定值，注意 dist 是构建生成的产物
           copys:
-            - ${js-build}/dist:/usr/share/nginx/html/
+            - ${js-build}/dist:/usr/share/nginx/html/   # dist 是使用 npm run build 生成出来的目录，常见的目录有：public、dist 等
             - ${js-build}/nginx.conf.template:/etc/nginx/conf.d/
           image: registry.erda.cloud/erda/terminus-nginx:0.2
 ```

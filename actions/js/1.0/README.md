@@ -36,7 +36,7 @@ Examples:
     dependency_cmd: npm ci
     build_cmd: npm run build
     container_type: spa
-    dest_dir: public
+    dest_dir: public # public 是使用 npm run build 生成出来的目录，常见的目录有：public、dist 等
     npm_registry: <registry addr>
     npm_username: <npm username>
     npm_password: <npm password>
@@ -78,5 +78,5 @@ server {
     workdir: ${git-checkout}
     build_cmd: npm run build
     container_type: herd
-    dest_dir: public
+    dest_dir: public # public 是使用 npm run build 生成出来的目录，常见的目录有：public、dist 等
 ```
