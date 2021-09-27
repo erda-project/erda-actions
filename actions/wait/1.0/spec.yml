@@ -13,6 +13,6 @@ supportedErdaVersions:
   - ">= 1.2"
 
 params:
-  - name: wait_time
+  - name: wait_time_sec
     required: true
     desc: 等待时间(秒)
