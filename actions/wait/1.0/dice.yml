@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  wait:
+    image: registry.erda.cloud/erda-actions/wait:20210926-7d68e4ab
+    resources:
+      cpu: 0.1
+      mem: 100
+      disk: 100
