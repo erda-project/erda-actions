@@ -1,6 +1,4 @@
-FROM alpine:3.8 AS tunnelbuilder
-RUN echo "http://mirrors.aliyun.com/alpine/v3.8/main/" > /etc/apk/repositories && \
-    echo "http://mirrors.aliyun.com/alpine/v3.8/community/" >> /etc/apk/repositories
+FROM alpine:3.14 AS tunnelbuilder
 RUN apk --no-cache add git make gcc g++ libressl-dev
 
 WORKDIR /root
@@ -9,9 +7,7 @@ RUN git clone https://github.com/proxytunnel/proxytunnel.git
 WORKDIR /root/proxytunnel
 RUN make
 
-FROM alpine:3.8 AS resource
-RUN echo "http://mirrors.aliyun.com/alpine/v3.8/main/" > /etc/apk/repositories && \
-    echo "http://mirrors.aliyun.com/alpine/v3.8/community/" >> /etc/apk/repositories
+FROM alpine:3.14 AS resource
 
 RUN apk --no-cache add \
   bash \
