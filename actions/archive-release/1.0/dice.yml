@@ -13,7 +13,7 @@
 
 jobs:
   archive-release:
-    image: registry.erda.cloud/erda-actions/archive-release-action:20210917-e5ac685
+    image: registry.erda.cloud/erda-actions/archive-release-action:20210913-14ea9c7
     resource:
       cpu: 0.5
       disk: 1024
