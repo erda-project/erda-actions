@@ -19,6 +19,7 @@ RUN chmod +x /pre_start.sh
 
 COPY comp/fonts /usr/share/fonts/custom
 COPY comp/arthas-boot.jar /
+COPY comp/jacocoagent.jar /opt/jacoco/jacocoagent.jar
 
 ARG DICE_VERSION
 COPY comp/spot-agent/${DICE_VERSION}/spot-agent.tar.gz /tmp/spot-agent.tar.gz

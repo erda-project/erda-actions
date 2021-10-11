@@ -25,6 +25,8 @@ RUN \
         mkdir -p /opt/spot; tar -xzf /tmp/spot-agent.tar.gz -C /opt/spot; \
 	fi && rm -rf /tmp/spot-agent.tar.gz
 
+COPY comp/jacocoagent.jar /opt/jacoco/jacocoagent.jar
+
 WORKDIR /
 
 RUN cd ${CATALINA_HOME}/webapps/ && rm -fr *

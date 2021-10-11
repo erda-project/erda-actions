@@ -59,6 +59,17 @@ fi
 #    export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent/spot-profiler.jar"
 #fi
 
+if [ "${OPEN_JACOCO_AGENT}" = "true" ]
+then
+  echo "OPEN_JACOCO_AGENT"
+  export JACOCO_PORT=${JACOCO_PORT-"6300"}
+  export JACOCO_INCLUDES=${JACOCO_INCLUDES-"*"}
+  export JACOCO_EXCLUDES=${JACOCO_EXCLUDES}
+  export JACOCO_INCLBOOTSTRAPCLASSES=${JACOCO_INCLBOOTSTRAPCLASSES-"false"}
+  export JACOCO_INCLNOLOCATIONCLASSES=${JACOCO_INCLNOLOCATIONCLASSES-"false"}
+  export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/jacoco/jacocoagent.jar=address=*,port=$JACOCO_PORT,dumponexit=false,output=tcpserver,includes=$JACOCO_INCLUDES,excludes=$JACOCO_EXCLUDES,inclbootstrapclasses=$JACOCO_INCLBOOTSTRAPCLASSES,inclnolocationclasses=$JACOCO_INCLNOLOCATIONCLASSES"
+fi
+
 bash /pre_start.sh ${SCRIPT_ARGS}
 
 exec && /opt/tomcat/bin/catalina.sh run

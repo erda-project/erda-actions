@@ -14,6 +14,7 @@ ARG USE_PREVIEW_AGENT=false
 ARG DICE_VERSION
 COPY /assets/java-agent/${DICE_VERSION}/spot-agent.tar.gz /tmp/spot-agent.tgz
 COPY /bp/pack/arthas-boot.jar /
+COPY /bp/pack/jacocoagent.jar /opt/jacoco/jacocoagent.jar
 
 RUN \
     if [ $USE_AGENT = true ]; then \
