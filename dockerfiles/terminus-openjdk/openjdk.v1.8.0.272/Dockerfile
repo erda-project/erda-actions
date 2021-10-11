@@ -1,18 +1,14 @@
-# registry.erda.cloud/erda/openjdk:11
-# registry.erda.cloud/erda/openjdk:11.0
-# registry.erda.cloud/erda/openjdk:11.0.9
-# registry.erda.cloud/erda/openjdk:11.0.9.11
 FROM registry.erda.cloud/erda/terminus-centos:7
 
-LABEL maintainer="zhengdong.jzd@alibaba-inc.com"
+LABEL maintainer="xgs@terminus.io"
 
-ENV JAVA_VERSION java11-openjdk
+ENV JAVA_VERSION openjdk-8u272
 ENV JAVA_HOME /usr/lib/jvm/java
 ENV LANG en_US.UTF-8
 
 RUN yum update -y && \
     yum install -y wget && \
-    yum install -y java-11-openjdk-11.0.9.11-0.el7_9.x86_64 java-11-openjdk-devel-11.0.9.11-0.el7_9.x86_64 && \
+    yum install -y java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64 java-1.8.0-openjdk-devel-1.8.0.272.b10-1.el7_9.x86_64 && \
     yum install -y git && \
     yum install -y unzip && \
     yum clean all

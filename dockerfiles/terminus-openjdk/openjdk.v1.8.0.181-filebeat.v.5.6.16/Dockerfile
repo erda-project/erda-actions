@@ -1,4 +1,3 @@
-# registry.erda.cloud/erda/terminus-openjdk:v1.8.0.181-filebeat.v5.6.16
 FROM registry.erda.cloud/erda/terminus-openjdk:v1.8.0.181
 
 ARG FILEBEAT_VERSION=5.6.16-linux-x86_64
