@@ -1,5 +1,5 @@
 name: echo
-version: "1.0"
+version: "1.3"
 type: action
 category: custom_task
 displayName: echo
