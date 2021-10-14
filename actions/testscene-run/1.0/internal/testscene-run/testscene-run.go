@@ -36,7 +36,9 @@ func handleAPIs() error {
 			PipelineID:               pipelineDTO.ID,
 		})
 		if err != nil {
-			return err
+			fmt.Printf(" get pipelineSimpleDetail error %v \n", err)
+			time.Sleep(10*time.Second)
+			continue
 		}
 		logrus.Info("pipeline status %s", pipelineDTO.Status)
 
@@ -46,7 +48,9 @@ func handleAPIs() error {
 				PipelineID: pipelineDTO.ID,
 			})
 			if err != nil {
-				return err
+				fmt.Printf(" get pipelineDetail error %v \n", err)
+				time.Sleep(10*time.Second)
+				continue
 			}
 
 			logrus.Infof("pipeline %s was done status %v", pipelineDTO.ID, dto.Status.String())

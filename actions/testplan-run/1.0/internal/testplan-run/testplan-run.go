@@ -34,10 +34,9 @@ func handleAPIs() error {
 			PipelineID:               pipelineDTO.ID,
 		})
 		if err != nil {
-			if conf.IsContinueExecution() {
-				return nil
-			}
-			return err
+			fmt.Printf(" get pipelineSimpleDetail error %v \n", err)
+			time.Sleep(10*time.Second)
+			continue
 		}
 		logrus.Info("pipeline status ", pipelineDTO.Status)
 
@@ -47,10 +46,9 @@ func handleAPIs() error {
 				PipelineID: pipelineDTO.ID,
 			})
 			if err != nil {
-				if conf.IsContinueExecution() {
-					return nil
-				}
-				return err
+				fmt.Printf(" get pipelineDetail error %v \n", err)
+				time.Sleep(10*time.Second)
+				continue
 			}
 
 			logrus.Infof("pipeline %s was done status %v", pipelineDTO.ID, dto.Status.String())
@@ -58,6 +56,7 @@ func handleAPIs() error {
 			runtimeIDs := getDiceTaskRuntimeIDs(dto)
 			err = storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
 			if err != nil {
+				err = fmt.Errorf("上报执行信息失败")
 				if conf.IsContinueExecution() {
 					return nil
 				}
@@ -77,7 +76,6 @@ func handleAPIs() error {
 
 		time.Sleep(10 * time.Second)
 	}
-	return nil
 }
 
 // 执行计划
