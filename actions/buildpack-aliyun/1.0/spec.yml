@@ -1,7 +1,7 @@
 name: buildpack-aliyun
 version: "1.0"
 type: action
-displayName: 统一构建器
+displayName: 统一构建器(包含阿里云 Java Agent)
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/23/c5867d7a-ba0e-4357-bec7-6d7599889a2c.png
 category: build_management
 desc: |-
