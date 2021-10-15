@@ -72,12 +72,11 @@ func handleAPIs() error {
 	// watch pipeline done
 	for {
 		dto, err := pipelineSimpleDetail(PipelineDetailRequest{
-			SimplePipelineBaseResult: true,
-			PipelineID:               pipelineDTO.ID,
+			PipelineID: pipelineDTO.ID,
 		})
 		if err != nil {
 			fmt.Printf(" get pipelineSimpleDetail error %v \n", err)
-			time.Sleep(10*time.Second)
+			time.Sleep(10 * time.Second)
 			continue
 		}
 
@@ -88,7 +87,7 @@ func handleAPIs() error {
 			})
 			if err != nil {
 				fmt.Printf(" get pipelineDetail error %v \n", err)
-				time.Sleep(10*time.Second)
+				time.Sleep(10 * time.Second)
 				continue
 			}
 

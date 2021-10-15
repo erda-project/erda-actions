@@ -41,6 +41,6 @@ accessibleAPIs:
   - path: /api/autotests/global-configs
     method: GET
     schema: http
-  - path: /api/cicds/actions/pipeline-detail
+  - path: /api/cicds-project/actions/pipeline-detail
     method: GET
     schema: http

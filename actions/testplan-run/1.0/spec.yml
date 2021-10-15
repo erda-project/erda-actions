@@ -35,6 +35,6 @@ accessibleAPIs:
   - path: /api/autotests/testplans/<testPlanID>/actions/execute
     method: POST
     schema: http
-  - path: /api/cicds/actions/pipeline-detail
+  - path: /api/cicds-project/actions/pipeline-detail
     method: GET
     schema: http

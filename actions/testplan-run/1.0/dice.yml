@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   testplan-run:
-    image: registry.erda.cloud/erda-actions/testplan-run-action:1.0-20211014-a75a66f
+    image: registry.erda.cloud/erda-actions/testplan-run-action:1.0-20211015-642a763
     resources:
       cpu: 0.5
       mem: 1024
