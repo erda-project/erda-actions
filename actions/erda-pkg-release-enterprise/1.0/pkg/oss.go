@@ -45,6 +45,7 @@ type Oss struct {
 	OssEndPoint        string `json:"endpoint"`
 	OssAccessKeyId     string `json:"accessKeyID"`
 	OssAccessKeySecret string `json:"accessKeySecret"`
+	OssBasePath        string `json:"basePath"`
 }
 
 // OSS object release to erda-pkg-release action
@@ -82,7 +83,6 @@ func NewOSS(o *Oss, erdaVersion, releaseType, actionPath string, osArch bool) *O
 		oss:                   o,
 		erdaVersion:           erdaVersion,
 		archiveBucket:         OssArchiveBucket,
-		archiveBasePath:       OssArchivePath,
 		releaseBucket:         OssPkgReleaseBucket,
 		releaseType:           releaseType,
 		osArch:                osArch,
@@ -121,7 +121,11 @@ func (o *OSS) InitOssConfig() error {
 }
 
 func (o *OSS) GenArchivePath() string {
-	return fmt.Sprintf("%s/%s", o.archiveBasePath, o.erdaVersion)
+	basePath := o.oss.OssBasePath
+	if basePath == "" {
+		basePath = OssArchivePath
+	}
+	return fmt.Sprintf("%s/%s", basePath, o.erdaVersion)
 }
 
 // GenReleasePath generate base release path
