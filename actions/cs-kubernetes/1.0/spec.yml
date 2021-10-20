@@ -8,7 +8,7 @@ public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
 supportedErdaVersions:
-  - ">= 1.0"
+  - ">= 1.4"
 
 params:
     - name: cluster_name

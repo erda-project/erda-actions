@@ -1,6 +1,6 @@
 jobs:
   release:
-    image: registry.erda.cloud/erda-actions/upgrade-edge-cluster:1.3
+    image: registry.erda.cloud/erda-actions/upgrade-edge-cluster:1.4
     resources:
       cpu: 0.2
       mem: 600
