@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   java:
-    image: registry.erda.cloud/erda-actions/java-action:1.0-20211020-3787c6d
+    image: registry.erda.cloud/erda-actions/java-action:1.0-20211021-676a4b0
     envs:
       # 详见 actions/buildpack/1.0/dice.yml
       BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
