@@ -1,0 +1,36 @@
+name: IMAGE CHECK
+
+on:
+  push:
+    branches: [ master,develop,release/* ]
+  pull_request:
+
+jobs:
+  IMAGE-CHECK:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check image
+        env:
+          EXT_FILE_NAME: dice.yml
+          ERDA_REGISTRY: registry.erda.cloud
+        run: |
+          repo_name=`echo ${{ github.repository }} | awk -F "/" '{print $2}'`
+          echo "standard image format: $ERDA_REGISTRY/$repo_name/extension_name:tag"
+
+          failed=false
+
+          for file in `find . -name $EXT_FILE_NAME`; do
+              res=$(cat $file | grep "image:" | grep -vi "$ERDA_REGISTRY/$repo_name/" | awk '{print $2}')
+              if [ -n "$res" ]; then
+                  failed=true
+                  echo "[FAILED] illegal image: $res, path: $file"
+              fi
+          done
+
+          if [ "$failed" == "true" ]; then
+              echo "please do check it"
+              exit 1
+          fi
+
+          echo "check done"
