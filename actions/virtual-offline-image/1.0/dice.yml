@@ -39,7 +39,7 @@ jobs:
   terminus-herd-1-1-5:
     image: registry.erda.cloud/erda-actions/terminus-herd:1.1.5
   terminus-herd-1-1-9-beta-1:
-    image: registry.erda.cloud/terminus-herd:1.1.9-beta.1
+    image: registry.erda.cloud/erda-actions/terminus-herd:1.1.9-beta.1
   bp-node:
     image: registry.erda.cloud/erda-actions/terminus-nodejs:12.13
   js-herd:
