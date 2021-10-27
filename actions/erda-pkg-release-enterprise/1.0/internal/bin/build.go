@@ -151,7 +151,7 @@ cp -r /tmp/"$DICE_VERSION"/extensions/erda-addons/addons ./dice-tools/versionpac
 cp -r /tmp/"$DICE_VERSION"/extensions/erda-addons-enterprise/addons/* ./dice-tools/versionpackage/extensions/addons
 
 ## 下载 dice cli
-curl -o ./dice-tools/bin/dice http://terminus-dice.oss.aliyuncs.com/installer/dice-${MAIN_BETA_VERSION}
+curl -f -o ./dice-tools/bin/dice http://erda-release.oss-cn-hangzhou.aliyuncs.com/cli/linux/erda-${MAIN_BETA_VERSION}
 chmod 755 ./dice-tools/bin/dice
 
 ## 下载 dcos 安装工具，以后干掉
