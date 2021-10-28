@@ -4,7 +4,7 @@ type: action
 category: deploy_management
 displayName: 平台应用部署
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/fdb44148-35a3-4a91-a459-84dd197a55ae.png
-desc: 用于 dice 平台部署应用服务
+desc: 用于 Erda 平台部署应用服务
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
@@ -12,18 +12,19 @@ supportedErdaVersions:
   - ">= 1.0"
 
 params:
-  - name: release_id_path
-    desc: dicehub-resource releasdse时存放的releaseId路径，dice-resource需要到此路径去取。若pipeline.yml里没有写dicehub，pipeline.yml里会自动插入到dice-resource的source里。若pipeline.yml里写了dicehub，则release_id_path必填，其值为dicehub-resource的Name
-  - name: callback
-    desc: 回调地址，仅支持 POST 方法,用于通知部署结果
-  - name: edge_location
-    desc: 边缘集群
-  - name: workspace
-    desc: 环境
+  - name: release_id
+    desc: 制品 ID，一般通过表达式语法从前置 Release-Action 获取。
+    default: ${release:OUTPUT:releaseID}
   - name: time_out
     type: int
-    desc: 部署超时时间
-    default: 86400
+    desc: 部署超时时间(秒)
+    default: 1800
+  - name: workspace
+    desc: 环境(DEV/TEST/STAGING/PROD)，一般情况下无需指定。Erda 根据制品自动选择环境。
+  - name: callback
+    desc: 回调地址，仅支持 POST 方法，用于通知部署结果
+  - name: release_id_path
+    desc: <废弃，请使用 release_id 参数> 包含 dicehub_release 文件的目录地址(dicehub_release 文件由 Release-Action 生成)。例如：${release}
 
 accessibleAPIs:
   # runtime create

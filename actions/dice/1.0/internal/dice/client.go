@@ -44,8 +44,7 @@ type deployRequest struct {
 	Operator     string                 `json:"operator"`
 	Source       string                 `json:"source"`
 	ReleaseId    string                 `json:"releaseId"`
-	EdgeLocation string                 `json:"edgeLocation"`
-	Extra        map[string]interface{} `json:"extra, omitempty"`
+	Extra        map[string]interface{} `json:"extra,omitempty"`
 }
 
 func (req *deployRequest) print() {
@@ -54,7 +53,6 @@ func (req *deployRequest) print() {
 	logrus.Infof(" clusterName: %s", req.ClusterName)
 	logrus.Infof(" name: %s", req.Name)
 	logrus.Infof(" operator: %s", req.Operator)
-	logrus.Infof(" edgeLocation: %s", req.EdgeLocation)
 	logrus.Infof(" releaseId: %s", req.ReleaseId)
 	logrus.Infof(" source: %s", req.Source)
 	logrus.Infof(" extra: %v", req.Extra)
