@@ -20,6 +20,7 @@ RUN mkdir -p /opt/action/comp && \
 RUN bash /opt/action/comp/download_spot_agent.sh
 RUN bash /opt/action/comp/download_fonts.sh
 
+FROM yannishuber/openjfx8 AS openjfx
 
 FROM registry.erda.cloud/erda/terminus-openjdk:v11.0.6
 
@@ -43,3 +44,12 @@ ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/comp /opt/action/comp
+
+COPY --from=openjfx /docker-java-home/jre/lib/ext/jfxrt.jar /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/jre/lib/ext/
+COPY --from=openjfx /docker-java-home/jre/lib/javafx.properties /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/jre/lib/
+#COPY --from=openjfx /docker-java-home/jre/lib/amd64/libprism_* /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/lib/amd64/
+#COPY --from=openjfx /docker-java-home/jre/lib/amd64/libglass.so /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/lib/amd64/
+COPY --from=openjfx /docker-java-home/jre/lib/amd64/libjavafx_font_pango.so /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/jre/lib/amd64/
+COPY --from=openjfx /docker-java-home/jre/lib/amd64/libjavafx_font.so /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/jre/lib/amd64/
+COPY --from=openjfx /docker-java-home/jre/lib/amd64/libjavafx_font_freetype.so /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/jre/lib/amd64/
+COPY --from=openjfx /docker-java-home/jre/lib/amd64/libjavafx_iio.so /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/jre/lib/amd64/
