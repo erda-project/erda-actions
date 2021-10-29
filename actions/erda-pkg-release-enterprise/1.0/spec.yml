@@ -14,7 +14,7 @@
 name: erda-pkg-release-enterprise
 displayName: Erda enterprise 版本包发布
 logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/04/14/1a196371-6cb6-4095-9928-3595d1222e66.png
-version: 1.0
+version: "1.0"
 type: action
 category: deploy_management
 desc: >-
