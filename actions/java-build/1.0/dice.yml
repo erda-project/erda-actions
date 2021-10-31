@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   java-build:
-    image: registry.erda.cloud/erda-actions/java-build-action:1.0-20211025-1b98828
+    image: registry.erda.cloud/erda-actions/java-build-action:1.0-20211030-7c36756
     resources:
       cpu: 0.5
       mem: 2048
