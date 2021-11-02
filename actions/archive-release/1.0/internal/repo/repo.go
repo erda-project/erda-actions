@@ -32,13 +32,18 @@ func New(conf *config.Config) (*Repo, error) {
 	)
 
 	// read released yml from dicehub, make it deployable, and write it local
-	releasedYml := NewReleasedYaml(conf)
+	releasedYml := new(ReleasedYaml)
+	releasedYml.Conf = conf
 	if replacement := conf.Registry; replacement != nil {
-		releasedYml.SetReplacement(replacement.Old, replacement.New)
+		releasedYml.ReplaceOld = replacement.Old
+		releasedYml.ReplaceNew = replacement.New
 	}
-	deployableContent, err := releasedYml.ReadFromDiceHub(api)
-	if err != nil {
+	if err := releasedYml.ReadFromDiceHub(api); err != nil {
 		return nil, errors.Wrap(err, "failed to ReadFromDiceHub")
+	}
+	deployableContent, err := releasedYml.Deployable()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to make released yml Deployable")
 	}
 	if err = writeReleasedYml(releasedYml.Local(), deployableContent); err != nil {
 		return nil, errors.Wrap(err, "failed to write released yml to local")
