@@ -11,6 +11,6 @@ FROM registry.erda.cloud/erda/terminus-nodejs:12.13
 ENV NODE_OPTIONS=--max_old_space_size=1024
 
 RUN  yum install -y java-11-openjdk
-RUN npm i -g @terminus/trnw-cli@2.2.22
+RUN npm i -g @terminus/trnw-cli@2.6.6
 
 COPY --from=builder /opt/action/run /opt/action/run
