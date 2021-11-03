@@ -7,7 +7,7 @@ RUN git clone https://github.com/proxytunnel/proxytunnel.git
 WORKDIR /root/proxytunnel
 RUN make
 
-FROM alpine:3.14 AS resource
+FROM alpine:3.12 AS resource
 
 RUN apk --no-cache add \
   bash \
