@@ -1,4 +1,4 @@
-FROM alpine:3.14 AS tunnelbuilder
+FROM alpine:3.12 AS tunnelbuilder
 RUN apk --no-cache add git make gcc g++ libressl-dev
 
 WORKDIR /root
