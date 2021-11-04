@@ -20,7 +20,7 @@ RUN mkdir -p /opt/action/comp && \
 RUN bash /opt/action/comp/download_spot_agent.sh
 RUN bash /opt/action/comp/download_fonts.sh
 
-FROM yannishuber/openjfx8 AS openjfx
+FROM registry.erda.cloud/retag/yannishuber-openjfx8:v1 AS openjfx
 
 FROM registry.erda.cloud/erda/terminus-openjdk:v11.0.6
 
