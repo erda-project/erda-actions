@@ -168,6 +168,7 @@ github.com/aryann/difflib v0.0.0-20170710044230-e206f873d14a/go.mod h1:DAHtR1m6l
 github.com/asaskevich/govalidator v0.0.0-20180720115003-f9ffefc3facf/go.mod h1:lB+ZfQJz7igIIfQNfa7Ml4HSf2uFQQRzpGGRXenZAgY=
 github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a/go.mod h1:lB+ZfQJz7igIIfQNfa7Ml4HSf2uFQQRzpGGRXenZAgY=
 github.com/asaskevich/govalidator v0.0.0-20200428143746-21a406dcc535/go.mod h1:oGkLhpf+kjZl6xBf758TQhh5XrAeiJv/7FRz/2spLIg=
+github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d/go.mod h1:WaHUgvxTVq04UNunO+XhnAqY/wQc+bxr74GqbsZ/Jqw=
 github.com/auth0/go-jwt-middleware v0.0.0-20170425171159-5493cabe49f7/go.mod h1:LWMyo4iOLWXHGdBki7NIht1kHru/0wM179h+d3g8ATM=
 github.com/aws/aws-lambda-go v1.13.3/go.mod h1:4UKl9IzQMoD+QF79YdCuzCwp8VbmG4VAQwij/eHl5CU=
 github.com/aws/aws-sdk-go v1.13.20/go.mod h1:ZRmQr0FajVIyZ4ZzBYKG5P3ZqPz9IHG41ZoMu1ADI3k=
@@ -369,8 +370,8 @@ github.com/docker/spdystream v0.0.0-20181023171402-6480d4af844c/go.mod h1:Qh8CwZ
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
 github.com/dsnet/compress v0.0.1/go.mod h1:Aw8dCMJ7RioblQeTqt88akK31OvO8Dhf5JflhBbQEHo=
 github.com/dsnet/golib v0.0.0-20171103203638-1ea166775780/go.mod h1:Lj+Z9rebOhdfkVLjJ8T6VcRQv3SXugXy999NBtR9aFY=
-github.com/dspo/erda v0.0.0-20211103105750-8f77adae3c5c h1:G/dqDVbQYteJKV/T2aSbGqGsKUxf9ZgwDr53DqddmFg=
-github.com/dspo/erda v0.0.0-20211103105750-8f77adae3c5c/go.mod h1:6TvYQbtPAk1TJFPdew3FBvWvuzqqSnzOBUmmBd3q81Q=
+github.com/dspo/erda v0.0.0-20211105074024-126d927eb0da h1:hi9Gq3zdFx7iLCqlFPS0ouzRSL+wk8qMgULAjAZ0FXY=
+github.com/dspo/erda v0.0.0-20211105074024-126d927eb0da/go.mod h1:5wCyK22MpSjNK5PFhLFLfyJHNDpwns0Q2nI5/p4v2wk=
 github.com/dspo/erda/api/proto-go v0.0.0-20210923114807-a90b0469e7e3 h1:HydVjbe3uyVEoR9T/74JW/9E9nWm4uMjloEzjQmlFgo=
 github.com/dspo/erda/api/proto-go v0.0.0-20210923114807-a90b0469e7e3/go.mod h1:l2AY7V/D+y7n0n2Vd/giV2ma3WrxSBMN6NKeU16q1tk=
 github.com/dustin/go-humanize v0.0.0-20171111073723-bb3d318650d4/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
@@ -401,8 +402,8 @@ github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7
 github.com/erda-project/elastic v0.0.1-ex/go.mod h1:iAVsas6fcmt9pxtge1+dErMhecv+RLSXlD4rnZRJVW0=
 github.com/erda-project/erda-infra v0.0.0-20210706133120-0a742437972c/go.mod h1:TUQYSZ60w9dk7m0q3U3AVg7U74APj/sdEVvRWR3wYv8=
 github.com/erda-project/erda-infra v0.0.0-20210916043803-3d23fdfef26c/go.mod h1:Aec8FrEVnfzqeAjQSQDnBuRJ/AFJjpHYEG/QpKqVeHk=
-github.com/erda-project/erda-infra v0.0.0-20211026075554-5e78560095f1 h1:raqPONJVkFwY7INtUrAd94RKGY1gov8c0+B1OBEPoSw=
-github.com/erda-project/erda-infra v0.0.0-20211026075554-5e78560095f1/go.mod h1:YWl4gg86UMFLrr160Jba/4yhovqC/t7Vi6cpGqx1TrY=
+github.com/erda-project/erda-infra v0.0.0-20211103123843-dd949cf5688a h1:NdAhlhv5Lq12rBAp8YJQp+A7vXo4ybJyesOJYlSGwc0=
+github.com/erda-project/erda-infra v0.0.0-20211103123843-dd949cf5688a/go.mod h1:YWl4gg86UMFLrr160Jba/4yhovqC/t7Vi6cpGqx1TrY=
 github.com/erda-project/erda-oap-thirdparty-protocol v0.0.0-20210907135609-15886a136d5b/go.mod h1:H/f81Thef2Tnz4nUeLt0r4VwHdOznthpyXBwT9vDWo0=
 github.com/erda-project/erda-proto-go v0.0.0-20210820073528-bcd612c2efb7/go.mod h1:rSETXX3nKxxIhgrVn7fKDM3mla1nNlWcPz4AkepixaU=
 github.com/erda-project/erda-sourcecov v0.1.0/go.mod h1:eOMWjU0sXF9sLFqh6MkPpzuo+FkdQW7UCQ0rj3h+sXw=
@@ -870,6 +871,7 @@ github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869/go.mod h1:cJ6Cj
 github.com/jellevandenhooff/dkim v0.0.0-20150330215556-f50fe3d243e1/go.mod h1:E0B/fFc00Y+Rasa88328GlI/XbtyysCtTHZS8h7IrBU=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/jimstudt/http-authentication v0.0.0-20140401203705-3eca13d6893a/go.mod h1:wK6yTYYcgjHE1Z1QtXACPDjcFJyBskHEdagmnq3vsP8=
+github.com/jinzhu/copier v0.3.2/go.mod h1:24xnZezI2Yqac9J61UC6/dG/k76ttpq0DdJI3QmUvro=
 github.com/jinzhu/gorm v1.9.11/go.mod h1:bu/pK8szGZ2puuErfU0RwyeNdsf3e6nCX/noXaVxkfw=
 github.com/jinzhu/gorm v1.9.12/go.mod h1:vhTjlKSJUTWNtcbQtrMBFCxy7eXTzeCAzfL5fBZT/Qs=
 github.com/jinzhu/gorm v1.9.16 h1:+IyIjPEABKRpsu/F8OvDPy9fyQlgsg2luMV2ZIH5i5o=
@@ -1611,6 +1613,7 @@ github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8/go.mod h1:VFNgLljT
 github.com/ugorji/go/codec v1.1.5-pre/go.mod h1:tULtS6Gy1AE1yCENaw4Vb//HLH5njI2tfCQDUqRd8fI=
 github.com/ugorji/go/codec v1.1.7/go.mod h1:Ax+UKWsSmolVDwsd+7N3ZtXu+yMGCf907BLYF3GoBXY=
 github.com/ulikunitz/xz v0.5.6/go.mod h1:2bypXElzHzzJZwzH67Y6wb67pO62Rzfn7BSiF4ABRW8=
+github.com/ulikunitz/xz v0.5.10/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
 github.com/ultraware/funlen v0.0.1/go.mod h1:Dp4UiAus7Wdb9KUZsYWZEWiRzGuM2kXM1lPbfaF6xhA=
 github.com/ultraware/funlen v0.0.2/go.mod h1:Dp4UiAus7Wdb9KUZsYWZEWiRzGuM2kXM1lPbfaF6xhA=
 github.com/unrolled/render v0.0.0-20171102162132-65450fb6b2d3/go.mod h1:tu82oB5W2ykJRVioYsB+IQKcft7ryBr7w12qMBUPyXg=
@@ -1991,8 +1994,8 @@ golang.org/x/sys v0.0.0-20210423082822-04245dca01da/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20210510120138-977fb7262007/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20210603081109-ebe580a85c40/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20210819135213-f52c844e1c1c/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
-golang.org/x/sys v0.0.0-20210908233432-aa78b53d3365 h1:6wSTsvPddg9gc/mVEEyk9oOAoxn+bT4Z9q1zx+4RwA4=
-golang.org/x/sys v0.0.0-20210908233432-aa78b53d3365/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20210915083310-ed5796bab164 h1:7ZDGnxgHAMw7thfC5bEos0RDAccZKxioiWBhfIe+tvw=
+golang.org/x/sys v0.0.0-20210915083310-ed5796bab164/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/term v0.0.0-20201117132131-f5c789dd3221/go.mod h1:Nr5EML6q2oocZ2LXRh80K7BxOlk5/8JxuGnuhpl+muw=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d h1:SZxvLBoTP5yHO3Frd4z4vrF+DBX9vMVanchswa69toE=
