@@ -94,7 +94,7 @@ func ReadScripts(conf *config.Config) ([]*Script, error) {
 func (s Script) Module() Module {
 	return Module{
 		bucket: s.Bucket(),
-		remote: filepath.Base(s.Remote()),
+		remote: filepath.Dir(s.Remote()),
 	}
 }
 
