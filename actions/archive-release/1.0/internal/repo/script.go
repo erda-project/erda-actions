@@ -90,3 +90,23 @@ func ReadScripts(conf *config.Config) ([]*Script, error) {
 
 	return scripts, nil
 }
+
+func (s Script) Module() Module {
+	return Module{
+		bucket: s.Bucket(),
+		remote: filepath.Dir(s.Remote()),
+	}
+}
+
+type Module struct {
+	bucket string
+	remote string
+}
+
+func (m Module) Bucket() string {
+	return m.bucket
+}
+
+func (m Module) Remote() string {
+	return m.remote
+}
