@@ -49,7 +49,7 @@ require (
 	github.com/caarlos0/env v3.3.1-0.20180521112546-3e0f30cbf50b+incompatible
 	github.com/cespare/trie v0.0.0-20150610204604-3fe1a95cbba9 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
-	github.com/erda-project/erda v1.3.0-rc.0.20211028024216-0e4c425aa177 // indirect
+	github.com/erda-project/erda v1.3.0-rc.0.20211108074900-5d8520924cfc
 	github.com/hashicorp/go-multierror v1.1.0
 	github.com/labstack/gommon v0.3.0
 	github.com/machinebox/progress v0.2.0
@@ -66,12 +66,8 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2
 	github.com/toqueteos/trie v0.0.0-20150530104557-56fed4a05683 // indirect
-	github.com/ulikunitz/xz v0.5.10 // indirect
-	go.uber.org/atomic v1.8.0 // indirect
-	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2
 	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8
-	golang.org/x/sys v0.0.0-20210908233432-aa78b53d3365 // indirect
 	gopkg.in/src-d/enry.v1 v1.6.4
 	gopkg.in/stretchr/testify.v1 v1.2.2
 	gopkg.in/toqueteos/substring.v1 v1.0.2 // indirect
