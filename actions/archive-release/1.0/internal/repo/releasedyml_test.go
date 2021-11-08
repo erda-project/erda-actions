@@ -11,7 +11,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-package repo_test
+package repo
 
 import (
 	"io/ioutil"
@@ -19,8 +19,6 @@ import (
 
 	"github.com/erda-project/erda/pkg/parser/diceyml"
 	"sigs.k8s.io/yaml"
-
-	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/repo"
 )
 
 func TestPatch(t *testing.T) {
@@ -33,7 +31,7 @@ func TestPatch(t *testing.T) {
 		t.Fatal(err)
 	}
 	obj := deployable.Obj()
-	repo.PatchSecurityContextPrivileged(obj, "cluster-agent")
+	patchSecurityContextPrivileged(obj, "cluster-agent")
 	clusterAgent := obj.Services["cluster-agent"]
 	if clusterAgent == nil {
 		t.Fatal("cluster-agent can not be nil")

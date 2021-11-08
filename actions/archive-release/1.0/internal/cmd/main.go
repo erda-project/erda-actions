@@ -15,9 +15,6 @@ package main
 
 import (
 	"github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v3"
-
-	"github.com/erda-project/erda/pkg/parser/diceyml"
 
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/config"
 	"github.com/erda-project/erda-actions/actions/archive-release/1.0/internal/oss"
@@ -32,7 +29,9 @@ func main() {
 
 	var err error
 	defer func() {
-		_ = metawriter.Write(map[string]interface{}{config.Success: err == nil, config.Err: err})
+		if err != nil {
+			_ = metawriter.Write(map[string]interface{}{config.Success: false, config.Err: err})
+		}
 	}()
 
 	conf, err := config.New()
@@ -46,52 +45,59 @@ func main() {
 		logrus.WithError(err).Fatalln("failed to read repo")
 	}
 
-	// make a oss handle
+	// make an oss handler
 	client, err := oss.New(conf.OssEndpoint, conf.OssKey, conf.OssSecret)
 	if err != nil {
 		logrus.WithError(err).Fatalln("failed to make an OSS client")
 	}
 
-	// delete the git ref dir before all uploading
-	if err = client.DeleteRemote(conf.GitRefDir()); err != nil {
-		logrus.WithError(err).WithField("path", conf.GitRefDir().Remote()).
-			Fatalln("failed to remove the path from OSS")
-	}
-
-	// upload released yml, migration lint config file and SQLs scripts
+	// upload released yml
 	url, err := client.Upload(r.ReleaseYml)
 	if err != nil {
 		logrus.WithError(err).Fatalln("failed to upload release yaml file")
 	}
+
+	// if there is a migration lint configuration file, upload it
 	if r.LintConfig.Local() != "" {
 		if _, err = client.Upload(r.LintConfig); err != nil {
 			_ = metawriter.Write(map[string]interface{}{config.Warn: err})
 			logrus.WithError(err).Warnln("failed to upload Erda MySQL Migration Lint config file")
 		}
 	}
+
+	// if there is migration scripts, upload them
 	if len(r.Scripts) == 0 {
 		logrus.Warnln("no migration script will be archived because there is no workdir or migrationsDir")
 	}
+	var deletedModules = make(map[string]repo.Module)
 	for _, script := range r.Scripts {
-		if _, err := client.Upload(script); err != nil {
+		// before the first time upload the script, must remove the module
+		module := script.Module()
+		if _, ok := deletedModules[module.Remote()]; !ok {
+			if err := client.DeleteRemoteRecursively(module); err != nil {
+				logrus.WithError(err).WithField("bucket", module.Bucket()).WithField("path", module.Remote()).
+					Fatalln("failed to remove the path from OSS")
+			}
+			deletedModules[module.Remote()] = module
+		}
+		if _, err = client.Upload(script); err != nil {
 			logrus.WithError(err).WithField("filename", script.Filename).Fatalln("failed to migration script")
 		}
 	}
 
 	// write oss download url and every service's image to meta
-	_ = metawriter.Write(map[string]interface{}{"erda.yml": url, "gitref": conf.GitRef})
-	meta := make(map[string]interface{})
-	if deployable, err := r.ReleaseYml.Deployable(); err == nil {
-		var obj = new(diceyml.Object)
-		if err := yaml.Unmarshal([]byte(deployable), obj); err == nil {
-			for serviceName, service := range obj.Services {
-				if service != nil {
-					meta[serviceName] = service.Image
-				}
-			}
+	meta := map[string]interface{}{"erda.yml": url, "gitref": conf.GitRef, config.Success: true}
+	logrus.Infoln("erda.yml", url)
+	logrus.Infoln("gitref", conf.GitRef)
+	if obj := r.ReleaseYml.Obj(); obj != nil {
+		for serviceName, service := range obj.Services {
+			logrus.Infoln(serviceName, service.Image)
+			meta[serviceName] = service.Image
 		}
 	}
-	_ = metawriter.Write(meta)
+	if err := metawriter.Write(meta); err != nil {
+		logrus.WithFields(meta).Warnln("failed to write info to meta")
+	}
 
 	logrus.Infoln("Archive Release action complete")
 }
