@@ -1,4 +1,4 @@
-FROM centos/mysql-57-centos7
+FROM registry.erda.cloud/retag/mysql-57-centos7
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 

@@ -21,14 +21,14 @@ import (
 	"strings"
 	"time"
 
-	configuration2 "github.com/erda-project/erda/pkg/database/sqllint/configuration"
-	"github.com/erda-project/erda/pkg/database/sqllint/rules"
-	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
-	"github.com/erda-project/erda/pkg/envconf"
-
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
+
+	"github.com/erda-project/erda-actions/pkg/envconf"
+	configuration2 "github.com/erda-project/erda/pkg/database/sqllint/configuration"
+	"github.com/erda-project/erda/pkg/database/sqllint/rules"
+	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
 )
 
 const (
@@ -55,6 +55,9 @@ func Config() *Configuration {
 	return configuration
 }
 
+// MySQLParameters 返回要应用数据库迁移的 MySQL Server 的 DSN 信息.
+// 如果从环境变量中读取的 DSN 信息有效，则返回环境变量中的 DSN 信息;
+// 否则返回从配置文件中读取到的 MySQL Addon 的 DSN 信息.
 func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 	if c.envs.MySQLUser != "" {
 		return &migrator.DSNParameters{
@@ -205,11 +208,12 @@ type envs struct {
 	ConfigPath string `env:"CONFIGPATH"` // ${DICE_CONFIG}/config.yaml
 
 	// mysql server parameters
-	MySQLUser     string `env:"MIGRATION_MYSQL_USERNAME"`
-	MySQLPassword string `env:"MIGRATION_MYSQL_PASSWORD"`
-	MySQLHost     string `env:"MIGRATION_MYSQL_HOST"`
-	MySQLPort     uint64 `env:"MIGRATION_MYSQL_PORT"`
-	MySQLDiceDB   string `env:"MIGRATION_MYSQL_DBNAME"`
+	// Preferred to use env from ConfigMap dice-addons-info
+	MySQLUser     string `env:"MIGRATION_MYSQL_USERNAME:MYSQL_USERNAME"`
+	MySQLPassword string `env:"MIGRATION_MYSQL_PASSWORD:MYSQL_PASSWORD"`
+	MySQLHost     string `env:"MIGRATION_MYSQL_HOST:MYSQL_HOST"`
+	MySQLPort     uint64 `env:"MIGRATION_MYSQL_PORT:MYSQL_PORT"`
+	MySQLDiceDB   string `env:"MIGRATION_MYSQL_DBNAME:MYSQL_DATABASE"`
 
 	// flow control parameters
 	SkipLint    bool `env:"MIGRATION_SKIP_LINT"`
