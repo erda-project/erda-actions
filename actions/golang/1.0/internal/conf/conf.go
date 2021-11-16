@@ -27,4 +27,5 @@ type Conf struct {
 	// pipeline注入，docker build资源限制
 	CPU    float64 `env:"PIPELINE_LIMITED_CPU" default:"0.5"`  // 核数, eg: 0.5
 	Memory int     `env:"PIPELINE_LIMITED_MEM" default:"2048"` // 单位: M
+	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
 }

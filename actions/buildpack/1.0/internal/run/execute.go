@@ -15,6 +15,7 @@ import (
 func Execute() error {
 
 	var artifact *apistructs.BuildArtifact
+	var packResult []byte
 
 	defer func() {
 		// store ${METAFILE}
@@ -43,8 +44,14 @@ func Execute() error {
 	}
 
 	// build
-	if err := build.Build(); err != nil {
-		return errors.Errorf("failed to build your code, err: %v", err)
+	if conf.Params().BuildkitEnable == "true" {
+		if err := build.BuildkitBuild(); err != nil {
+			return errors.Errorf("failed to build your code, err: %v", err)
+		}
+	} else {
+		if err := build.Build(); err != nil {
+			return errors.Errorf("failed to build your code, err: %v", err)
+		}
 	}
 
 	if conf.Params().OnlyBuild {
@@ -52,9 +59,16 @@ func Execute() error {
 	}
 
 	// pack
-	packResult, err := pack.Pack()
-	if err != nil {
-		return errors.Errorf("failed to pack image, err: %v", err)
+	if conf.Params().BuildkitEnable == "true" {
+		packResult, err = pack.PackForBuildkit()
+		if err != nil {
+			return errors.Errorf("failed to pack image, err: %v", err)
+		}
+	} else {
+		packResult, err = pack.Pack()
+		if err != nil {
+			return errors.Errorf("failed to pack image, err: %v", err)
+		}
 	}
 
 	bplog.Printf("开始注册构建产物，SHA: %s\n", artifactSHA)
