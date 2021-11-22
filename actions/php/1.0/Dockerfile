@@ -1,3 +1,4 @@
+FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
 FROM registry.erda.cloud/erda/terminus-golang:1.14 as builder
 
 MAINTAINER shenli shenli@terminus.io
@@ -12,6 +13,7 @@ RUN GOOS=linux GOARCH=amd64 go build -o /assets/run /go/src/github.com/erda-proj
 
 FROM registry.erda.cloud/erda/terminus-centos:base
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
  && rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 RUN yum install -y  php72w-cli php72w-mysql php72w-pdo php72w-xml php72w-mbstring php72w-gd

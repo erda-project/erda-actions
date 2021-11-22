@@ -6,14 +6,20 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
+
+	"github.com/erda-project/erda/pkg/envconf"
+	"github.com/erda-project/erda/pkg/filehelper"
 
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/pack"
-	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/erda-project/erda/pkg/filehelper"
 )
+
+var getRegistry = func(image string) string { return strings.Split(image, "/")[0] }
 
 type Conf struct {
 	WorkDir string `env:"WORKDIR"`
@@ -32,6 +38,10 @@ type Conf struct {
 	LocalRegistry         string `env:"BP_DOCKER_ARTIFACT_REGISTRY"` // 集群内 registry
 	LocalRegistryUserName string `env:"BP_DOCKER_ARTIFACT_REGISTRY_USERNAME"`
 	LocalRegistryPassword string `env:"BP_DOCKER_ARTIFACT_REGISTRY_PASSWORD"`
+
+	// BuildKit params
+	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
+	BuildkitdAddr  string `env:"BUILDKITD_ADDR" default:"tcp://buildkitd.default.svc.cluster.local:1234"`
 }
 
 func run() error {
@@ -58,6 +68,7 @@ func run() error {
 	}
 
 	if err != nil {
+		fmt.Fprintf(os.Stdout, "failed to process image: %v\n", err)
 		return err
 	}
 
@@ -76,26 +87,35 @@ func pushImage(cfg Conf) ([]byte, error) {
 	fmt.Fprintf(os.Stdout, "image from: %s\n", fromImage)
 	fmt.Fprintf(os.Stdout, "image to: %s\n", cfg.Image)
 
-	if err := simpleRun("docker", "pull", fromImage); err != nil {
-		return nil, err
-	}
-
-	if err := simpleRun("docker", "tag", fromImage, cfg.Image); err != nil {
-		return nil, err
-	}
-
 	if cfg.Username != "" {
 		// login
-		getRegistry := func(image string) string { return strings.Split(image, "/")[0] }
-		if err := simpleRun("docker", "login", "-u", cfg.Username, "-p", cfg.Password, getRegistry(cfg.Image)); err != nil {
-			return nil, fmt.Errorf("docker login failed, image: %s, username: %s, password: %s, err: %v",
-				cfg.Image, cfg.Username, cfg.Password, err)
+		if err := docker.Login(getRegistry(cfg.Image), cfg.Username, cfg.Password); err != nil {
+			return nil, fmt.Errorf("failed to login, error: %v", err)
 		}
 	}
 
-	// push image
-	if err = docker.PushByCmd(cfg.Image, ""); err != nil {
-		return nil, err
+	if cfg.BuildkitEnable == "true" {
+		imageFile := path.Join(os.TempDir(), strconv.FormatInt(time.Now().Unix(), 10))
+		if err := simpleRun("gcrane", "pull", fromImage, imageFile); err != nil {
+			return nil, err
+		}
+
+		if err := simpleRun("gcrane", "push", imageFile, cfg.Image); err != nil {
+			return nil, err
+		}
+	} else {
+		if err := simpleRun("docker", "pull", fromImage); err != nil {
+			return nil, err
+		}
+
+		if err := simpleRun("docker", "tag", fromImage, cfg.Image); err != nil {
+			return nil, err
+		}
+
+		// push image
+		if err = docker.PushByCmd(cfg.Image, ""); err != nil {
+			return nil, err
+		}
 	}
 
 	imageResult := make([]pack.ModuleImage, 0)
@@ -111,23 +131,33 @@ func pullImage(cfg Conf) ([]byte, error) {
 
 	if cfg.Username != "" {
 		// login
-		getRegistry := func(image string) string { return strings.Split(image, "/")[0] }
-		if err := simpleRun("docker", "login", "-u", cfg.Username, "-p", cfg.Password, getRegistry(cfg.Image)); err != nil {
-			return nil, fmt.Errorf("docker login failed, image: %s, username: %s, password: %s, err: %v",
-				cfg.Image, cfg.Username, cfg.Password, err)
+		if err := docker.Login(getRegistry(cfg.Image), cfg.Username, cfg.Password); err != nil {
+			return nil, fmt.Errorf("failed to login, error: %v", err)
 		}
 	}
 
-	if err := simpleRun("docker", "pull", cfg.Image); err != nil {
-		return nil, err
-	}
+	if cfg.BuildkitEnable == "true" {
+		imageFile := path.Join(os.TempDir(), strconv.FormatInt(time.Now().Unix(), 10))
 
-	if err := simpleRun("docker", "tag", cfg.Image, toImage); err != nil {
-		return nil, err
-	}
+		if err := simpleRun("gcrane", "pull", cfg.Image, imageFile); err != nil {
+			return nil, err
+		}
 
-	if err := simpleRun("docker", "push", toImage); err != nil {
-		return nil, err
+		if err := simpleRun("gcrane", "push", imageFile, toImage); err != nil {
+			return nil, err
+		}
+	} else {
+		if err := simpleRun("docker", "pull", cfg.Image); err != nil {
+			return nil, err
+		}
+
+		if err := simpleRun("docker", "tag", cfg.Image, toImage); err != nil {
+			return nil, err
+		}
+
+		if err := simpleRun("docker", "push", toImage); err != nil {
+			return nil, err
+		}
 	}
 
 	imageResult := make([]pack.ModuleImage, 0)

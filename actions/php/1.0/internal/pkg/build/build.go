@@ -12,15 +12,16 @@ import (
 	"strings"
 	"time"
 
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/envconf"
+	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/strutil"
 	"github.com/labstack/gommon/random"
 
 	"github.com/erda-project/erda-actions/actions/php/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/pack"
 	"github.com/erda-project/erda-actions/pkg/render"
-	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/erda-project/erda/pkg/filehelper"
 )
 
 const (
@@ -98,26 +99,19 @@ func packAndPushAppImage(cfg conf.Conf) error {
 
 	// docker build 出业务镜像
 	repo := getRepo(cfg)
-	packCmd := exec.Command("docker", "build",
-		"--build-arg", fmt.Sprintf("TARGET=%s", "."),
-		"--cpu-quota", strconv.FormatFloat(cfg.CPU*100000, 'f', 0, 64),
-		"--memory", strconv.FormatInt(int64(cfg.Memory*apistructs.MB), 10),
-		"-t", repo,
-		"-f", fmt.Sprintf("Dockerfile"), ".")
 
-	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
-	packCmd.Stdout = os.Stdout
-	packCmd.Stderr = os.Stderr
-	if err := packCmd.Run(); err != nil {
-		return err
+	if cfg.BuildkitEnable == "true" {
+		if err := packWithBuildkit(cfg, repo); err != nil {
+			fmt.Fprintf(os.Stdout, "failed to pack with buildkit, %v\n", err)
+			return err
+		}
+	} else {
+		if err := packWithDocker(cfg, repo); err != nil {
+			fmt.Fprintf(os.Stdout, "failed to pack with docker, %v\n", err)
+			return err
+		}
 	}
-	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
 
-	// docker push 业务镜像至集群 registry
-	if err := docker.PushByCmd(repo, ""); err != nil {
-		return err
-	}
-	fmt.Fprintf(os.Stdout, "successfully push app image: %s\n", repo)
 	// upload metadata
 	if err := storeMetaFile(&cfg, repo); err != nil {
 		return err
@@ -147,6 +141,60 @@ func getRepo(cfg conf.Conf) string {
 	tag := fmt.Sprintf("%s-%v", cfg.TaskName, time.Now().UnixNano())
 
 	return strings.ToLower(fmt.Sprintf("%s/%s:%s", filepath.Clean(cfg.LocalRegistry), repository, tag))
+}
+
+func packWithDocker(cfg conf.Conf, repo string) error {
+	packCmd := exec.Command("docker", "build",
+		"--build-arg", fmt.Sprintf("TARGET=%s", "."),
+		"--cpu-quota", strconv.FormatFloat(cfg.CPU*100000, 'f', 0, 64),
+		"--memory", strconv.FormatInt(int64(cfg.Memory*apistructs.MB), 10),
+		"-t", repo,
+		"-f", fmt.Sprintf("Dockerfile"), ".")
+
+	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
+	packCmd.Stdout = os.Stdout
+	packCmd.Stderr = os.Stderr
+	if err := packCmd.Run(); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
+
+	// docker push 业务镜像至集群 registry
+	if err := docker.PushByCmd(repo, ""); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stdout, "successfully push app image: %s\n", repo)
+	return nil
+}
+
+func packWithBuildkit(cfg conf.Conf, repo string) error {
+	buildCmdArgs := []string{
+		"--addr", cfg.BuildkitdAddr,
+		"--tlscacert=/.buildkit/ca.pem",
+		"--tlscert=/.buildkit/cert.pem",
+		"--tlskey=/.buildkit/key.pem",
+		"build",
+		"--frontend", "dockerfile.v0",
+		"--opt", "build-arg" + fmt.Sprintf("TARGET=%s", "."),
+	}
+
+	buildCmdArgs = append(buildCmdArgs,
+		"--local", "context="+cfg.Context,
+		"--local", "dockerfile="+compPrefix,
+		"--output", "type=image,name="+repo+",push=true,registry.insecure=true",
+	)
+
+	buildkitCmd := exec.Command("buildctl", buildCmdArgs...)
+	fmt.Println(strutil.Join(buildkitCmd.Args, " ", false))
+
+	buildkitCmd.Dir = cfg.WorkDir
+	buildkitCmd.Stdout = os.Stdout
+	buildkitCmd.Stderr = os.Stderr
+	if err := buildkitCmd.Run(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func storeMetaFile(cfg *conf.Conf, image string) error {
