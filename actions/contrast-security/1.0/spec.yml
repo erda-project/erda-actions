@@ -1,11 +1,11 @@
 name: contrast-secutiry
 version: "1.0"
 type: action
-category: ops
+category: test_management
 displayName: contrast扫描
 desc: contrast扫描
 logo: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/11/22/832fac9a-d4d1-4ee4-87c2-f94b1f57d59a.jpg
-public: false
+public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
 supportedErdaVersions:
