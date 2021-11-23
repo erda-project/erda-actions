@@ -1,0 +1,31 @@
+name: email
+version: "1.0"
+type: action
+category: custom_task
+displayName: 邮件发送
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/11/18/29ed35ad-0f44-46d7-8ece-e287dc17406e.jpeg
+desc: 邮件发送
+public: true
+supportedVersions:
+  - ">= 3.9"
+supportedErdaVersions:
+  - ">= 1.0"
+
+params:
+  - name: email_template_addr
+    type: string
+    desc: 邮件模板文件地址
+    required: true
+  - name: email_template_object
+    type: string
+    desc: 邮件模板渲染对象
+    required: true
+  - name: to_email
+    desc: 接收人
+    type: string_array
+    required: true
+
+accessibleAPIs:
+  - path: /api/dice/eventbox/actions/get-smtp-info
+    method: GET
+    schema: http
