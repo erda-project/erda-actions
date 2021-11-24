@@ -179,7 +179,8 @@ func (o *OSS) PreparePatchRelease() error {
 
 	// download release from oss
 	archivePath := o.GenArchivePath()
-	if err := o.oss.DownloadDir("/tmp", o.archiveBucket, archivePath); err != nil {
+	// end '/' to replace dir name
+	if err := o.oss.DownloadDir("/tmp/"+o.ErdaVersion(), o.archiveBucket, archivePath+"/"); err != nil {
 		return errors.WithMessage(err, "cp release patch to /tmp/")
 	}
 
@@ -192,7 +193,7 @@ func (o *OSS) PreparePatchRelease() error {
 
 	// tar release
 	for _, tar := range tars {
-		if _, err := ExecCmd(os.Stdout, os.Stderr, fmt.Sprintf("/tmp/%s/extensions", o.PkgVersion()),
+		if _, err := ExecCmd(os.Stdout, os.Stderr, fmt.Sprintf("/tmp/%s/extensions", o.ErdaVersion()),
 			"tar", "-zxvf", tar); err != nil {
 			return errors.WithMessage(err, fmt.Sprintf("decompress %s failed", tar))
 		}
