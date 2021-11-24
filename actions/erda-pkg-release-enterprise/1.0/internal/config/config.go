@@ -68,7 +68,13 @@ func configuration() *config {
 	return c
 }
 
-func ErdaVersion() string {
+func ErdaVersion(pkg ...bool) string {
+	if len(pkg) > 0 && pkg[0] {
+		pkgVersion := configuration().OSS.OssPkgVersion
+		if pkgVersion != "" {
+			return pkgVersion
+		}
+	}
 	return configuration().ErdaVersion
 }
 
