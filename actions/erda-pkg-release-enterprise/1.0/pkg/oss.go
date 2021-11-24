@@ -46,6 +46,7 @@ type Oss struct {
 	OssAccessKeyId     string `json:"accessKeyID"`
 	OssAccessKeySecret string `json:"accessKeySecret"`
 	OssBasePath        string `json:"basePath"`
+	OssPkgVersion      string `json:"pkgVersion"`
 }
 
 // OSS object release to erda-pkg-release action
@@ -125,7 +126,11 @@ func (o *OSS) GenArchivePath() string {
 	if basePath == "" {
 		basePath = OssArchivePath
 	}
-	return fmt.Sprintf("%s/%s", basePath, o.erdaVersion)
+	pkgVersion := o.oss.OssPkgVersion
+	if pkgVersion == "" {
+		pkgVersion = o.erdaVersion
+	}
+	return fmt.Sprintf("%s/%s", basePath, pkgVersion)
 }
 
 // GenReleasePath generate base release path
