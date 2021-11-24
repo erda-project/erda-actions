@@ -33,7 +33,7 @@ func Execute() error {
 
 func build(cfg conf.Conf) error {
 	if len(cfg.Severities) == 0 {
-		cfg.Severities = []string{"MEDIUM", "HIGH", "CRITICAL", "LOW"}
+		cfg.Severities = []string{"MEDIUM", "HIGH", "CRITICAL"}
 	}
 	tr := &http.Transport{
 		IdleConnTimeout:   30 * time.Second,
@@ -44,15 +44,18 @@ func build(cfg conf.Conf) error {
 	if err != nil {
 		return err
 	}
-	req.URL.Query().Add("expand", cfg.Expand)
-	req.URL.Query().Add("status", cfg.Status)
+	q := req.URL.Query()
+	q.Add("expand", cfg.Expand)
+	q.Add("status", cfg.Status)
+	q.Add("limit", "999")
 	for _, severity := range cfg.Severities {
-		req.URL.Query().Add("severities", severity)
+		q.Add("severities", severity)
 	}
 	auth := fmt.Sprintf("%s:%s", cfg.Username, cfg.ServiceKey)
 	auth = base64.StdEncoding.EncodeToString([]byte(auth))
 	req.Header.Set("Authorization", auth)
 	req.Header.Set("API-Key", cfg.ApiKey)
+	req.URL.RawQuery = q.Encode()
 	logrus.Info("Contrast Security doing api")
 	resp, err := client.Do(req)
 	if err != nil {
