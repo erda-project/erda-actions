@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"fmt"
+	"github.com/erda-project/erda-actions/actions/erda-pkg-release-enterprise/1.0/internal/config"
 	"io/ioutil"
 	"os"
 	"os/user"
@@ -139,12 +140,19 @@ func (o *OSS) GenArchivePath() string {
 
 // GenReleasePath generate base release path
 func (o *OSS) GenReleasePath(osArch, path string) string {
+	fileName := fmt.Sprintf("dice-tools.%s.tar.gz", config.ErdaVersion())
+	if path == fileName {
+		// refine pkgVersion of fileName
+		fileName = fmt.Sprintf("dice-tools.%s.tar.gz", o.PkgVersion())
+	} else {
+		fileName = path
+	}
 	// policy of release pkg, decide if osArch type as a dir
 	if o.osArch {
-		return fmt.Sprintf("%s/%s/%s/%s", o.releaseType, o.actionReleaseBasePath, osArch, path)
+		return fmt.Sprintf("%s/%s/%s/%s", o.releaseType, o.actionReleaseBasePath, osArch, fileName)
 	}
 
-	return fmt.Sprintf("%s/%s/%s", o.releaseType, o.actionReleaseBasePath, path)
+	return fmt.Sprintf("%s/%s/%s", o.releaseType, o.actionReleaseBasePath, fileName)
 }
 
 // GenReleaseUrl generate erda release pkg url which can be used to get erda release package when access in browser

@@ -83,9 +83,9 @@ func ErdaPkgRelease() (map[string]string, map[string]string, error) {
 
 		// enterprise
 		releasePkgPathInfo[osArch] = path.Join(TmpRepoToolsPath(), fmt.Sprintf(
-			"dice-tools.%s.tar.gz", config.ErdaVersion(true)))
+			"dice-tools.%s.tar.gz", config.ErdaVersion()))
 
-		releasePkgInfo[osArch] = fmt.Sprintf("dice-tools.%s.tar.gz", config.ErdaVersion(true))
+		releasePkgInfo[osArch] = fmt.Sprintf("dice-tools.%s.tar.gz", config.ErdaVersion())
 	}
 
 	return releasePkgPathInfo, releasePkgInfo, nil
