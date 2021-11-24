@@ -121,16 +121,20 @@ func (o *OSS) InitOssConfig() error {
 	return o.oss.InitOssConfig()
 }
 
+func (o *OSS) PkgVersion() string {
+	pkgVersion := o.oss.OssPkgVersion
+	if pkgVersion == "" {
+		pkgVersion = o.erdaVersion
+	}
+	return pkgVersion
+}
+
 func (o *OSS) GenArchivePath() string {
 	basePath := o.oss.OssBasePath
 	if basePath == "" {
 		basePath = OssArchivePath
 	}
-	pkgVersion := o.oss.OssPkgVersion
-	if pkgVersion == "" {
-		pkgVersion = o.erdaVersion
-	}
-	return fmt.Sprintf("%s/%s", basePath, pkgVersion)
+	return fmt.Sprintf("%s/%s", basePath, o.PkgVersion())
 }
 
 // GenReleasePath generate base release path
@@ -188,7 +192,7 @@ func (o *OSS) PreparePatchRelease() error {
 
 	// tar release
 	for _, tar := range tars {
-		if _, err := ExecCmd(os.Stdout, os.Stderr, fmt.Sprintf("/tmp/%s/extensions", o.erdaVersion),
+		if _, err := ExecCmd(os.Stdout, os.Stderr, fmt.Sprintf("/tmp/%s/extensions", o.PkgVersion()),
 			"tar", "-zxvf", tar); err != nil {
 			return errors.WithMessage(err, fmt.Sprintf("decompress %s failed", tar))
 		}
