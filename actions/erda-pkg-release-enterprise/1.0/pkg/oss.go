@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"fmt"
-	"github.com/erda-project/erda-actions/actions/erda-pkg-release-enterprise/1.0/internal/config"
 	"io/ioutil"
 	"os"
 	"os/user"
@@ -140,7 +139,7 @@ func (o *OSS) GenArchivePath() string {
 
 // GenReleasePath generate base release path
 func (o *OSS) GenReleasePath(osArch, path string) string {
-	fileName := fmt.Sprintf("dice-tools.%s.tar.gz", config.ErdaVersion())
+	fileName := fmt.Sprintf("dice-tools.%s.tar.gz", o.ErdaVersion())
 	if path == fileName {
 		// refine pkgVersion of fileName
 		fileName = fmt.Sprintf("dice-tools.%s.tar.gz", o.PkgVersion())
