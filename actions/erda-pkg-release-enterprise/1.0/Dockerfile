@@ -13,7 +13,7 @@
 
 
 ## action 编译
-FROM golang:1.15 AS builder
+FROM registry.erda.cloud/retag/golang:1.15 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
@@ -23,7 +23,7 @@ RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-pkg-release
 
 
 ## work image
-FROM centos
+FROM registry.erda.cloud/erda/terminus-centos:7
 
 ## maintainer
 MAINTAINER xujie "xj236673@alibaba-inc.com"

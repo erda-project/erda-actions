@@ -46,6 +46,7 @@ type Oss struct {
 	OssAccessKeyId     string `json:"accessKeyID"`
 	OssAccessKeySecret string `json:"accessKeySecret"`
 	OssBasePath        string `json:"basePath"`
+	OssPkgVersion      string `json:"pkgVersion"`
 }
 
 // OSS object release to erda-pkg-release action
@@ -120,22 +121,37 @@ func (o *OSS) InitOssConfig() error {
 	return o.oss.InitOssConfig()
 }
 
+func (o *OSS) PkgVersion() string {
+	pkgVersion := o.oss.OssPkgVersion
+	if pkgVersion == "" {
+		pkgVersion = o.erdaVersion
+	}
+	return pkgVersion
+}
+
 func (o *OSS) GenArchivePath() string {
 	basePath := o.oss.OssBasePath
 	if basePath == "" {
 		basePath = OssArchivePath
 	}
-	return fmt.Sprintf("%s/%s", basePath, o.erdaVersion)
+	return fmt.Sprintf("%s/%s", basePath, o.PkgVersion())
 }
 
 // GenReleasePath generate base release path
 func (o *OSS) GenReleasePath(osArch, path string) string {
+	fileName := fmt.Sprintf("dice-tools.%s.tar.gz", o.ErdaVersion())
+	if path == fileName {
+		// refine pkgVersion of fileName
+		fileName = fmt.Sprintf("dice-tools.%s.tar.gz", o.PkgVersion())
+	} else {
+		fileName = path
+	}
 	// policy of release pkg, decide if osArch type as a dir
 	if o.osArch {
-		return fmt.Sprintf("%s/%s/%s/%s", o.releaseType, o.actionReleaseBasePath, osArch, path)
+		return fmt.Sprintf("%s/%s/%s/%s", o.releaseType, o.actionReleaseBasePath, osArch, fileName)
 	}
 
-	return fmt.Sprintf("%s/%s/%s", o.releaseType, o.actionReleaseBasePath, path)
+	return fmt.Sprintf("%s/%s/%s", o.releaseType, o.actionReleaseBasePath, fileName)
 }
 
 // GenReleaseUrl generate erda release pkg url which can be used to get erda release package when access in browser
@@ -170,7 +186,8 @@ func (o *OSS) PreparePatchRelease() error {
 
 	// download release from oss
 	archivePath := o.GenArchivePath()
-	if err := o.oss.DownloadDir("/tmp", o.archiveBucket, archivePath); err != nil {
+	// end '/' to replace dir name
+	if err := o.oss.DownloadDir("/tmp/"+o.ErdaVersion(), o.archiveBucket, archivePath+"/"); err != nil {
 		return errors.WithMessage(err, "cp release patch to /tmp/")
 	}
 
@@ -183,7 +200,7 @@ func (o *OSS) PreparePatchRelease() error {
 
 	// tar release
 	for _, tar := range tars {
-		if _, err := ExecCmd(os.Stdout, os.Stderr, fmt.Sprintf("/tmp/%s/extensions", o.erdaVersion),
+		if _, err := ExecCmd(os.Stdout, os.Stderr, fmt.Sprintf("/tmp/%s/extensions", o.ErdaVersion()),
 			"tar", "-zxvf", tar); err != nil {
 			return errors.WithMessage(err, fmt.Sprintf("decompress %s failed", tar))
 		}
