@@ -2,33 +2,29 @@ package docker
 
 import (
 	"bytes"
-	"encoding/base64"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/docker/cli/cli/config"
+	"github.com/docker/cli/cli/config/types"
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
 )
 
 const (
-	BUILDKIT_ENABLE = "BUILDKIT_ENABLE"
+	BUILDKIT_ENABLE             = "BUILDKIT_ENABLE"
+	registryDefaultDomain       = "docker.io"
+	registryLegacyDefaultDomain = "index.docker.io"
 )
 
-type AuthConfig struct {
-	// key: registry address, value: auth info
-	Auths map[string]RegistryAuthInfo `json:"auths"`
-}
-
-type RegistryAuthInfo struct {
-	// auth info format: base64(username:password)
-	Auth string `json:"auth"`
-}
+var (
+	registryDefaultAuthAddr = fmt.Sprintf("https://%s/v1/", registryLegacyDefaultDomain)
+)
 
 func GetInnerRepoAddr(repo, operatorID, TaskName, localRegistry string) string {
 	repository := repo
@@ -42,7 +38,7 @@ func GetInnerRepoAddr(repo, operatorID, TaskName, localRegistry string) string {
 
 func Login(registry, username, password string) error {
 	if os.Getenv(BUILDKIT_ENABLE) == "true" {
-		return GenerateAuthConfig(registry, username, password)
+		return LoginWithoutCli(registry, username, password)
 	}
 
 	login := exec.Command("docker", "login", "-u", username, "-p", password, registry)
@@ -53,55 +49,37 @@ func Login(registry, username, password string) error {
 	return nil
 }
 
-func GenerateAuthConfig(registry, username, password string) error {
-	authConfigDir := os.Getenv("DOCKER_CONFIG")
-	if authConfigDir == "" {
-		userHomeDir, err := os.UserHomeDir()
-		if err != nil {
-			return fmt.Errorf("get current user home dir failed: %v", err)
-		}
-
-		authConfigDir = fmt.Sprintf("%s/.docker", userHomeDir)
-	}
-
-	authConfigPath := fmt.Sprintf("%s/%s", authConfigDir, "config.json")
-
-	// create docker config dir if it doesn't exist.
-	authConfig, err := ioutil.ReadFile(authConfigPath)
+func LoginWithoutCli(registry, username, password string) error {
+	u, err := url.Parse("//" + registry)
 	if err != nil {
-		if !os.IsNotExist(err) {
-			return fmt.Errorf("failed to stat docker config file, err: %v", err)
-		}
-		if err := os.MkdirAll(authConfigDir, 0755); err != nil {
-			return fmt.Errorf("failed to create docker config dir, err: %v", err)
-		}
+		return fmt.Errorf("failed to parse registry: %v", err)
 	}
 
-	ac := AuthConfig{
-		Auths: map[string]RegistryAuthInfo{},
+	serverAddr := u.Host
+
+	if serverAddr == registryDefaultDomain || serverAddr == registryLegacyDefaultDomain {
+		serverAddr = registryDefaultAuthAddr
 	}
 
-	// unmarshal current docker config auth info if existed.
-	if len(authConfig) != 0 {
-		if err := json.Unmarshal(authConfig, &ac); err != nil {
-			return fmt.Errorf("failed to unmarshal docker config, err: %v", err)
-		}
-	}
-
-	// append new auth info
-	ac.Auths[registry] = RegistryAuthInfo{
-		Auth: base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", username, password))),
-	}
-
-	// marshal new auth info
-	configJson, err := json.Marshal(ac)
+	dc, err := config.Load(os.Getenv("DOCKER_CONFIG"))
 	if err != nil {
-		return fmt.Errorf("marshal docker config json error: %v", err)
+		return fmt.Errorf("failed to load docker config, err: %v", err)
 	}
 
-	if err := ioutil.WriteFile(authConfigPath, configJson, 0644); err != nil {
-		return fmt.Errorf("failed to write docker config json, path: %s, err: %v", authConfigDir, err)
+	credentials := dc.GetCredentialsStore(serverAddr)
+	if err := credentials.Store(types.AuthConfig{
+		Username:      username,
+		Password:      password,
+		ServerAddress: serverAddr,
+	}); err != nil {
+		return err
 	}
+
+	if err := dc.Save(); err != nil {
+		return err
+	}
+
+	fmt.Printf("refresh %s credential to config", registry)
 
 	return nil
 }
