@@ -85,8 +85,11 @@ func Execute() error {
 	// 打包本地context环境
 	logrus.Infof("package local context tar")
 	os.Chdir(cfg.PipelineContext)
-
-	err := Tar(localTarFilePath, ".")
+	err := runCommand("rm ", "-rf", ".git")
+	if err != nil {
+		fmt.Printf("remove .git dir error %v", err)
+	}
+	err = Tar(localTarFilePath, ".")
 	if err != nil {
 		return err
 	}
