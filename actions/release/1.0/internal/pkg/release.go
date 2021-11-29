@@ -48,6 +48,10 @@ func genReleaseRequest(cfg *conf.Conf) *apistructs.ReleaseCreateRequest {
 		release.Version = cfg.ReleaseTag
 	}
 
+	if cfg.TagVersion != "" {
+		release.Version = cfg.TagVersion
+	}
+
 	return release
 }
 

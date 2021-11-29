@@ -22,6 +22,8 @@ type Conf struct {
 	ServicesStr            string `env:"ACTION_SERVICES"`
 	Services               map[string]Service
 	CheckDiceyml           bool   `env:"ACTION_CHECK_DICEYML" default:"true"`
+	TagVersion             string `env:"ACTION_TAG_VERSION"`
+	MigrationType          string `env:"ACTION_MIGRATION_TYPE"`
 	MigrationDir           string `env:"ACTION_MIGRATION_DIR"`
 	MigrationMysqlDatabase string `env:"ACTION_MIGRATION_MYSQL_DATABASE"`
 	CrossCluster           bool   `env:"ACTION_CROSS_CLUSTER" default:"false"`

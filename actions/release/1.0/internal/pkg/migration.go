@@ -10,11 +10,10 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/yaml.v2"
-
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
 
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/diceyml"
@@ -28,6 +27,9 @@ func migration(cfg *conf.Conf) (string, error) {
 	if cfg.MigrationDir == "" {
 		logrus.Info("empty migration dir.")
 		return "", nil
+	}
+	if cfg.MigrationType == "erda" {
+		return migrationErda(cfg)
 	}
 	if cfg.MigrationMysqlDatabase == "" {
 		logrus.Info("migraion database must not be null.")
