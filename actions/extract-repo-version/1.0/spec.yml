@@ -1,0 +1,24 @@
+name: extract-repo-version
+version: "1.0"
+type: action
+category: build_management
+desc: Extract repo version in git dir
+public: true
+supportedErdaVersions:
+  - ">= 1.5"
+
+params:
+  - name: git_dir
+    desc: git dir for extract
+
+accessibleAPIs:
+  # deploy addons
+  - path: /api/deployments/<deploymentID>/actions/deploy-addons
+    method: POST
+    schema: http
+  # deployment status
+  - path: /api/deployments/<deploymentId>/status
+    method: GET
+    schema: http
+
+outputs:
