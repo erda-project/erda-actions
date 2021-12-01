@@ -11,14 +11,10 @@ params:
   - name: git_dir
     desc: git dir for extract
 
-accessibleAPIs:
-  # deploy addons
-  - path: /api/deployments/<deploymentID>/actions/deploy-addons
-    method: POST
-    schema: http
-  # deployment status
-  - path: /api/deployments/<deploymentId>/status
-    method: GET
-    schema: http
-
 outputs:
+  - name: version
+    desc: full version of the repo
+  - name: major_minor_version
+    desc: only majar.minor part of version
+  - name: image_tag
+    desc: version plus time & commit
