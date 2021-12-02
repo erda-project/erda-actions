@@ -14,3 +14,4 @@ RUN set -x \
 FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-golang:1.14
 
 COPY --from=builder /opt/action/run /opt/action/run
+COPY --from=builder /go/src/github.com/erda-project/erda-actions/actions/email/1.0/internal/pkg/files/sendmail.py /app/files/sendmail.py
