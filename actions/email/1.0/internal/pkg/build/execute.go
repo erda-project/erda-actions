@@ -10,6 +10,8 @@ import (
 	"net"
 	"net/smtp"
 	"os"
+	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/erda-project/erda-actions/actions/email/1.0/internal/pkg/conf"
@@ -83,6 +85,7 @@ func Execute() error {
 	}
 
 	var host, port, email, password string
+	var isSSL = true
 	data, err := erdaSmtpInfo()
 	if err != nil {
 		fmt.Printf("get erda smtp info error %v", err)
@@ -91,6 +94,7 @@ func Execute() error {
 		port = data.Port
 		email = data.User
 		password = data.Password
+		isSSL = data.IsSSL
 	}
 
 	if os.Getenv("SMTP_HOST") != "" {
@@ -109,6 +113,10 @@ func Execute() error {
 		password = os.Getenv("SMTP_PASSWORD")
 	}
 
+	if os.Getenv("SMTP_NOT_SSL") != "" {
+		isSSL = false
+	}
+
 	fmt.Printf("smtp_host %v, smtp_port %v, smtp_email %v \n", host, port, email)
 
 	header := make(map[string]string)
@@ -121,18 +129,43 @@ func Execute() error {
 		message += fmt.Sprintf("%s: %s\r\n", k, v)
 	}
 	message += "\r\n" + buf.String()
+
 	auth := smtp.PlainAuth(
 		"",
 		email,
 		password,
 		host,
 	)
+	if os.Getenv("SMTP_GSSAPI") != "" {
+		os.Setenv("python_smtp_host", host)
+		os.Setenv("python_smtp_sender", email)
+		os.Setenv("python_smtp_receivers", strings.Join(cfg.ToMail, ","))
+		os.Setenv("python_smtp_message", message)
 
-	err = SendMailUsingTLS(fmt.Sprintf("%s:%s", host, port), auth, email, cfg.ToMail, true, []byte(message))
+		err = simpleRun("python2.7", "/app/files/sendmail.py")
+		if err != nil {
+			return err
+		}
+	} else {
+		if isSSL {
+			err = SendMailUsingTLS(fmt.Sprintf("%s:%s", host, port), auth, email, cfg.ToMail, true, []byte(message))
+		} else {
+			err = smtp.SendMail(fmt.Sprintf("%s:%s", host, port), auth, email, cfg.ToMail, []byte(message))
+		}
+	}
+
 	if err != nil {
 		return fmt.Errorf("error to send email, error %v", err)
 	}
 	return nil
+}
+
+func simpleRun(name string, arg ...string) error {
+	fmt.Fprintf(os.Stdout, "Run: %s, %v\n", name, arg)
+	cmd := exec.Command(name, arg...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 type MailSubscriberInfo struct {
