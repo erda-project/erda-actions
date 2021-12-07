@@ -1,0 +1,53 @@
+# usage
+# erda-cli build --host <your_openapi_domain> \
+#  -u <your_account> -p <your_password> \
+#  -r <the_repo_you_want_to_run_pipeline_on> \
+#  -b <the_branch_you_want_to_run_pipeline_on> \
+#  -f .dice/pipelines/build-erda-mysql-migration.yaml
+#
+# e.g.
+# erda-cli build --host https://openapi.erda.cloud -r 'https://erda.cloud/erda/dop/erda-project/erda-release' -b develop -f .dice/pipelines/build-erda-mysql-migration.yaml
+
+version: "1.1"
+stages:
+  - stage:
+      - git-checkout:
+          alias: erda-actions
+          description: 代码仓库克隆
+          params:
+            branch: ((branch)) # git rev-parse --abbrev-ref HEAD
+            depth: 1
+            uri: ((remote.origin)) # git config --get remote.origin.url
+  - stage:
+      - custom-script:
+          alias: make-erda-actions-56
+          description: 运行自定义命令
+          commands:
+            - cd ${erda-actions}
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - make DOCKER_BUILDKIT=1 VERSION='1.0-56' erda-mysql-migration
+          resources:
+            cpu: 0.5
+            mem: 2048
+
+      - custom-script:
+          alias: make-erda-actions-57
+          description: 运行自定义命令
+          commands:
+            - cd ${erda-actions}
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - make DOCKER_BUILDKIT=1 VERSION='1.0-57' erda-mysql-migration
+          resources:
+            cpu: 0.5
+            mem: 2048
+
+      - custom-script:
+          alias: make-erda-actions-80
+          description: 运行自定义命令
+          commands:
+            - cd ${erda-actions}
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - make DOCKER_BUILDKIT=1 VERSION='1.0-80' erda-mysql-migration
+          resources:
+            cpu: 0.5
+            mem: 2048
