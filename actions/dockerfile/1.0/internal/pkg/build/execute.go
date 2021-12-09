@@ -36,6 +36,12 @@ func Execute() error {
 		}
 	}
 
+	if cfg.Registry != nil && cfg.Registry.Username != "" {
+		if err := docker.Login(cfg.Registry.URL, cfg.Registry.Username, cfg.Registry.Password); err != nil {
+			return err
+		}
+	}
+
 	// docker build & push 业务镜像
 	if err := packAndPushImage(cfg); err != nil {
 		return err
@@ -120,13 +126,26 @@ func packAndPushImage(cfg conf.Conf) error {
 
 // 生成业务镜像名称
 func getRepo(cfg conf.Conf) string {
-	repository := cfg.ProjectAppAbbr
-	if repository == "" {
-		repository = fmt.Sprintf("%s/%s", cfg.DiceOperatorId, random.String(8, random.Lowercase, random.Numeric))
+	// registry url
+	registry := cfg.LocalRegistry
+	if cfg.Registry != nil && cfg.Registry.URL != "" {
+		registry = cfg.Registry.URL
 	}
+	// image name
+	name := cfg.ProjectAppAbbr
+	if name == "" {
+		name = fmt.Sprintf("%s/%s", cfg.DiceOperatorId, random.String(8, random.Lowercase, random.Numeric))
+	}
+	if cfg.Image != nil && cfg.Image.Name != "" {
+		name = cfg.Image.Name
+	}
+	// image tag
 	tag := fmt.Sprintf("%s-%v", cfg.TaskName, time.Now().UnixNano())
+	if cfg.Image != nil && cfg.Image.Tag != "" {
+		tag = cfg.Image.Tag
+	}
 
-	return strings.ToLower(fmt.Sprintf("%s/%s:%s", filepath.Clean(cfg.LocalRegistry), repository, tag))
+	return strings.ToLower(fmt.Sprintf("%s/%s:%s", filepath.Clean(registry), name, tag))
 }
 
 func storeMetaFile(cfg *conf.Conf, image string) error {
