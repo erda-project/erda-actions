@@ -25,6 +25,12 @@ params:
   - name: build_args
     type: map
     desc: Dockerfile build args，在这里填写的键值对 会被渲染成为 Dockerfile 中的 ARG
+  - name: image
+    type: map
+    desc: image.name & image.tag
+  - name: registry
+    type: map
+    desc: registry.url & registry.username & registry.password
 
 outputs:
   - name: image
