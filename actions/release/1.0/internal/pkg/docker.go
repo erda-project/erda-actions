@@ -3,6 +3,7 @@ package pkg
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -95,22 +96,22 @@ func buildDockerReturnImage(service conf.Service, cfg *conf.Conf) (bool, string)
 
 	imageName := getRepoName(cfg, service.Name)
 	logrus.Infof(" build docker image name %v ", imageName)
-	if !buildDockerFile(service, imageName) {
+	if !buildDockerFile(service, imageName, cfg) {
 		logrus.Errorf(" build dockerfile fail ")
 		return false, ""
 	}
-
-	if !pushDockerFile(service, imageName) {
-		logrus.Errorf(" push dockerfile fail ")
-		return false, ""
-	}
+	//
+	//if !pushDockerFile(service, imageName) {
+	//	logrus.Errorf(" push dockerfile fail ")
+	//	return false, ""
+	//}
 
 	return true, imageName
 
 }
 
 //根据service和image的名称，用docker build构建其image
-func buildDockerFile(service conf.Service, imageName string) bool {
+func buildDockerFile(service conf.Service, imageName string, cfg *conf.Conf) bool {
 	dockerFileAddr := getDockerFileAddrByName(service.Name)
 
 	//根据service种的cps，先将其需要拷贝到内容拷贝到当前目录
@@ -144,14 +145,52 @@ func buildDockerFile(service conf.Service, imageName string) bool {
 	}
 
 	//build
+	if cfg.BuildkitEnable == "true" {
+		return buildWithBuildkit(imageName, dockerFileAddr, service)
+	} else {
+		return buildWithDocker(imageName, dockerFileAddr, service)
+	}
+}
+
+
+func buildWithDocker(imageName string, dockerFileAddr string, service conf.Service) bool {
 	cmd := fmt.Sprintf(" docker build -t %s -f %s ./%s", imageName, dockerFileAddr, getServiceTempPath(service.Name))
 	fmt.Println("build cmd :", cmd)
 	if err := runCommand(cmd); err != nil {
 		logrus.Errorf(" services %v:  docker run build error: %v ", service.Name, err)
 		return false
 	}
+
+	if err := runCommand(fmt.Sprintf(" docker push %s", imageName)); err != nil {
+		logrus.Errorf(" services %v:  docker run push error: %v ", service.Name, err)
+		return false
+	}
 	return true
 }
+
+func buildWithBuildkit(imageName string, dockerFileAddr string, service conf.Service) bool {
+	packCmd := exec.Command("buildctl",
+		"--addr",
+		"tcp://buildkitd.default.svc.cluster.local:1234",
+		"--tlscacert=/.buildkit/ca.pem",
+		"--tlscert=/.buildkit/cert.pem",
+		"--tlskey=/.buildkit/key.pem",
+		"build",
+		"--frontend", "dockerfile.v0",
+		"--local", "context=./" + getServiceTempPath(service.Name),
+		"--local", "dockerfile=" + filepath.Dir(dockerFileAddr),
+		"--output", "type=image,name=" + imageName + ",push=true,registry.insecure=true")
+
+	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
+	packCmd.Stdout = os.Stdout
+	packCmd.Stderr = os.Stderr
+	if err := packCmd.Run(); err != nil {
+		logrus.Errorf(" services %v:  build image from buildkit error: %v ", service.Name, err)
+		return false
+	}
+	return  true
+}
+
 
 func getServiceTempPath(serviceName string) string {
 	return serviceName + "_temp/"
@@ -164,17 +203,16 @@ func getRepoName(cfg *conf.Conf, serviceName string) string {
 		repository = fmt.Sprintf("%s/%s", cfg.DiceOperatorId, random.String(8, random.Lowercase, random.Numeric))
 	}
 	tag := fmt.Sprintf("%s-%v", serviceName, time.Now().UnixNano())
-
 	return strings.ToLower(fmt.Sprintf("%s/%s:%s", filepath.Clean(cfg.LocalRegistry), repository, tag))
 }
 
-func pushDockerFile(service conf.Service, imageName string) bool {
-	if err := runCommand(fmt.Sprintf(" docker push %s", imageName)); err != nil {
-		logrus.Errorf(" services %v:  docker run push error: %v ", service.Name, err)
-		return false
-	}
-	return true
-}
+//func pushDockerFile(service conf.Service, imageName string) bool {
+//	if err := runCommand(fmt.Sprintf(" docker push %s", imageName)); err != nil {
+//		logrus.Errorf(" services %v:  docker run push error: %v ", service.Name, err)
+//		return false
+//	}
+//	return true
+//}
 
 //根据service中的值，构建对应的Dockerfile文件和内容
 func createDockerFile(service conf.Service) bool {
@@ -200,7 +238,8 @@ func getDockerFileAddrByName(fileName string) string {
 
 //根据服务名称获取其Dockerfile所属文件夹的绝对路径
 func getDockerFileDirByName(fileName string) string {
-	return fmt.Sprintf("`pwd`/%s/dockerfiles_temp_2020_/%s", getServiceTempPath(fileName), fileName)
+	pwd, _ := os.Getwd()
+	return fmt.Sprintf("%s/%s/dockerfiles_temp_2020_/%s", pwd, getServiceTempPath(fileName), fileName)
 }
 
 //根据服务名称，追加写入命令到对应的Dockerfile中

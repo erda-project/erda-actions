@@ -69,6 +69,7 @@ type params struct {
 	ForceBuildpack bool `env:"ACTION_FORCE_BUILDPACK"`
 
 	JavaOpts string `env:"ACTION_JAVA_OPTS"`
+	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
 }
 
 type Module struct {

@@ -59,6 +59,7 @@ type Conf struct {
 
 	DiceVersion  string `env:"DICE_VERSION"`
 	Base64Switch bool   `env:"BASE64_SWITCH"` // base64 开关
+	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
 }
 
 type Service struct {

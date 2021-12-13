@@ -157,6 +157,31 @@ func packAndPushAppImage(cfg conf.Conf) error {
 
 	// docker build 出业务镜像
 	repo := getRepo(cfg)
+
+	if cfg.BuildkitEnable == "true" {
+		if err := packWithBuildkit(repo); err != nil {
+			return err
+		}
+	} else {
+		if err := packWithDocker(repo); err != nil {
+			return err
+		}
+	}
+	// upload metadata
+	if err := storeMetaFile(&cfg, repo); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stdout, "successfully upload metafile\n")
+
+	if err := storePackResult(cfg, repo); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stdout, "successfully write pack-result\n")
+
+	return nil
+}
+
+func packWithDocker(repo string) error {
 	packCmd := exec.Command("docker", "build",
 		"--build-arg", fmt.Sprintf("TARGET=%s", "target"),
 		"--cpu-quota", strconv.FormatFloat(cfg.CPU*100000, 'f', 0, 64),
@@ -177,19 +202,31 @@ func packAndPushAppImage(cfg conf.Conf) error {
 		return err
 	}
 	fmt.Fprintf(os.Stdout, "successfully push app image: %s\n", repo)
+	return  nil
+}
 
-	// upload metadata
-	if err := storeMetaFile(&cfg, repo); err != nil {
+func packWithBuildkit(repo string) error {
+	packCmd := exec.Command("buildctl",
+		"--addr",
+		"tcp://buildkitd.default.svc.cluster.local:1234",
+		"--tlscacert=/.buildkit/ca.pem",
+		"--tlscert=/.buildkit/cert.pem",
+		"--tlskey=/.buildkit/key.pem",
+		"build",
+		"--frontend", "dockerfile.v0",
+		"--opt", "build-arg:TARGET=target",
+		"--local", "context=" + cfg.WorkDir,
+		"--local", "dockerfile=" + cfg.WorkDir,
+		"--output", "type=image,name=" + repo + ",push=true,registry.insecure=true")
+
+	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
+	packCmd.Stdout = os.Stdout
+	packCmd.Stderr = os.Stderr
+	if err := packCmd.Run(); err != nil {
 		return err
 	}
-	fmt.Fprintf(os.Stdout, "successfully upload metafile\n")
-
-	if err := storePackResult(cfg, repo); err != nil {
-		return err
-	}
-	fmt.Fprintf(os.Stdout, "successfully write pack-result\n")
-
-	return nil
+	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
+	return  nil
 }
 
 func getRepo(cfg conf.Conf) string {

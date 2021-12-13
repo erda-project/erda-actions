@@ -213,27 +213,15 @@ func packAndPushImage(cfg conf.Conf) error {
 
 	// docker build 业务镜像
 	repo := getRepo(cfg)
-	packCmd := exec.Command("docker", "build",
-		"--build-arg", fmt.Sprintf("DSTDIR=%s", cfg.DestDir),
-		"--build-arg", fmt.Sprintf("DICE_VERSION=%s", cfg.DiceVersion),
-		"--cpu-quota", strconv.FormatFloat(float64(cfg.CPU*100000), 'f', 0, 64),
-		"--memory", strconv.FormatInt(int64(cfg.Memory*apistructs.MB), 10),
-		"-t", repo,
-		"-f", fmt.Sprintf("%s/%s/Dockerfile", filepath.Base(compPrefix), cfg.ContainerType),
-		".")
-	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
-	packCmd.Stdout = os.Stdout
-	packCmd.Stderr = os.Stderr
-	if err := packCmd.Run(); err != nil {
-		return err
+	if cfg.BuildkitEnable == "true" {
+		if err := packWithBuildkit(repo, cfg); err != nil {
+			return err
+		}
+	} else {
+		if err := packWithDocker(repo, cfg); err != nil {
+			return err
+		}
 	}
-	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
-
-	// docker push 业务镜像至集群 registry
-	if err := docker.PushByCmd(repo, ""); err != nil {
-		return err
-	}
-
 	// upload metadata
 	if err := storeMetaFile(&cfg, repo); err != nil {
 		return err
@@ -261,6 +249,55 @@ func packAndPushImage(cfg conf.Conf) error {
 	}
 
 	return nil
+}
+
+func packWithDocker(repo string, cfg conf.Conf) error {
+	packCmd := exec.Command("docker", "build",
+		"--build-arg", fmt.Sprintf("DSTDIR=%s", cfg.DestDir),
+		"--build-arg", fmt.Sprintf("DICE_VERSION=%s", cfg.DiceVersion),
+		"--cpu-quota", strconv.FormatFloat(float64(cfg.CPU*100000), 'f', 0, 64),
+		"--memory", strconv.FormatInt(int64(cfg.Memory*apistructs.MB), 10),
+		"-t", repo,
+		"-f", fmt.Sprintf("%s/%s/Dockerfile", filepath.Base(compPrefix), cfg.ContainerType),
+		".")
+	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
+	packCmd.Stdout = os.Stdout
+	packCmd.Stderr = os.Stderr
+	if err := packCmd.Run(); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
+
+	// docker push 业务镜像至集群 registry
+	if err := docker.PushByCmd(repo, ""); err != nil {
+		return err
+	}
+	return nil
+}
+
+func packWithBuildkit(repo string, cfg conf.Conf) error {
+	packCmd := exec.Command("buildctl",
+		"--addr",
+		"tcp://buildkitd.default.svc.cluster.local:1234",
+		"--tlscacert=/.buildkit/ca.pem",
+		"--tlscert=/.buildkit/cert.pem",
+		"--tlskey=/.buildkit/key.pem",
+		"build",
+		"--frontend", "dockerfile.v0",
+		"--opt", "build-arg:" + fmt.Sprintf("DSTDIR=%s", cfg.DestDir),
+		"--opt", "build-arg:" + fmt.Sprintf("DICE_VERSION=%s", cfg.DiceVersion),
+		"--local", "context=" +  cfg.WorkDir,
+		"--local", "dockerfile=" + fmt.Sprintf("%s/%s", filepath.Base(compPrefix), cfg.ContainerType),
+		"--output", "type=image,name=" + repo + ",push=true,registry.insecure=true")
+
+	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
+	packCmd.Stdout = os.Stdout
+	packCmd.Stderr = os.Stderr
+	if err := packCmd.Run(); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
+	return  nil
 }
 
 // 生成业务镜像名称

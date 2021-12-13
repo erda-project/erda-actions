@@ -1,3 +1,4 @@
+FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
 FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
@@ -20,4 +21,5 @@ RUN gitbook install highlight search sharing font-settings && rm -rf /tmp/*
 
 #highlight search sharing font-settings
 COPY --from=builder /opt/action/run /opt/action/run
+COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 COPY --from=builder /opt/action/comp /opt/action/comp
