@@ -14,7 +14,7 @@ set -o errexit
 function get_version() {
   [[ -n "${VERSION}" ]] && echo "${VERSION/v/}" && return
   [[ -f VERSION ]] && ver=$(head -n 1 VERSION) || ver=0.0
-  ALPHA=${ver}-alpha
+  ALPHA="${ver}-alpha.$(git rev-parse --short HEAD)"
   HEAD_TAG=$(git tag --points-at HEAD |head -n1)
   # remove prefix v when present
   [[ -n "${HEAD_TAG}" ]] && echo "${HEAD_TAG/v/}" && return
@@ -23,10 +23,14 @@ function get_version() {
 
   if [[ "${BRANCH_PREFIX}" =~ release/[[:digit:]]+\.* ]]; then
     VERSION=${BRANCH_PREFIX//release\//}
-    # some case branch already have greek version, like: release/1.0-beta2
+    # some case branch already have greek version, like: release/1.0-beta.2
     if ! [[ "${BRANCH_PREFIX}" =~ - ]]; then
       VERSION="${VERSION}-beta"
     fi
+  fi
+
+  if [[ "${BRANCH_PREFIX}" == "master" ]]; then
+    VERSION=${ver}-master
   fi
 
   echo ${VERSION:-${ALPHA}}

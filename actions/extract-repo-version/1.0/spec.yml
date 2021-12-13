@@ -1,7 +1,7 @@
 name: extract-repo-version
 version: "1.0"
 type: action
-category: build_management
+category: version_management
 desc: Extract repo version in git dir
 public: true
 supportedErdaVersions:
