@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   buildpack-aliyun:
-    image: registry.erda.cloud/erda-actions/buildpack-aliyun-action:1.0-20211207-a5d5a1e
+    image: registry.erda.cloud/erda-actions/buildpack-aliyun-action:1.0-20211214-201e39d
     envs:
       # Dockerfile / Dockerfile.build 中 {{BP_DOCKER_BASE_REGISTRY}} 需要该环境变量进行文件渲染。
       # 作用：Dockerfile 里 FROM XXX，这个 XXX 镜像的 Registry 地址。
