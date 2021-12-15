@@ -1,3 +1,4 @@
+FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
 FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
 
 LABEL maintainer="jiangzhengdong <zhengdong.jzd@alibaba-inc.com>"
@@ -42,6 +43,7 @@ RUN  yum install -y yum-utils java-1.8.0-openjdk-devel-1:1.8.0.272.b10-1.el7_9.x
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
+COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/comp /opt/action/comp
 

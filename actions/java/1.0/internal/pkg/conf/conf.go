@@ -47,6 +47,11 @@ type Conf struct {
 	NexusAddr             string `env:"BP_NEXUS_URL"`
 	NexusUsername         string `env:"BP_NEXUS_USERNAME"`
 	NexusPassword         string `env:"BP_NEXUS_PASSWORD"`
+
+	// BuildKit params
+	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
+	BuildkitdAddr  string `env:"BUILDKITD_ADDR" default:"tcp://buildkitd.default.svc.cluster.local:1234"`
+
 	// pipeline注入，docker build资源限制
 	CPU    float64 `env:"PIPELINE_LIMITED_CPU" default:"0.5"`  // 核数, eg: 0.5
 	Memory int     `env:"PIPELINE_LIMITED_MEM" default:"2048"` // 单位: M

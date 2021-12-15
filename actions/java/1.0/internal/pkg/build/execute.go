@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/filehelper"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -11,9 +13,9 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 
-	"github.com/labstack/gommon/random"
+	"github.com/erda-project/erda/pkg/envconf"
+	"github.com/erda-project/erda/pkg/strutil"
 	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda-actions/actions/java/1.0/internal/pkg/conf"
@@ -21,10 +23,6 @@ import (
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/pack"
 	"github.com/erda-project/erda-actions/pkg/render"
-	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/erda-project/erda/pkg/filehelper"
-	"github.com/erda-project/erda/pkg/strutil"
 )
 
 const (
@@ -287,174 +285,7 @@ func build(cfg conf.Conf) error {
 	return nil
 }
 
-// docker build & docker push 业务镜像
-func packAndPushAppImage(cfg conf.Conf) error {
-	// 切换工作目录
-	if err := os.Chdir(cfg.WorkDir); err != nil {
-		return err
-	}
-	// copy assets
-	if err := cp(compPrefix, "."); err != nil {
-		return err
-	}
-	if cfg.Assets != "" {
-		if err := mustDir(cfg.Assets); err != nil {
-			return err
-		}
-		// copy assets
-		if err := cp(cfg.Assets, "./assets"); err != nil {
-			return err
-		}
-	} else {
-		// no assets exist, but need create an empty dir
-		if err := os.Mkdir("./assets", 0755); err != nil {
-			return err
-		}
-	}
-	// check container exist
-	ct := fmt.Sprintf("%s/%s", compPrefix, cfg.ContainerType)
-	if err := mustDir(ct); err != nil {
-		fmt.Fprintf(os.Stdout, "container type: %s not exist", cfg.ContainerType)
-		return err
-	}
-	dockerFilePath := fmt.Sprintf("%s/%s/Dockerfile", compPrefix, cfg.ContainerType)
-
-	dockerCopyCmds := []string{}
-	if len(cfg.CopyAssets) > 0 {
-		rand := random.New()
-		for _, asset := range cfg.CopyAssets {
-			idx := strings.Index(asset, ":")
-			if idx > 0 {
-				source := asset[0:idx]
-				if len(asset) == idx {
-					// 模板文件路径为空不处理
-					fmt.Fprintf(os.Stdout, "invalid asset: %s ", asset)
-					continue
-				}
-				dest := asset[idx+1:]
-				absSource := path.Join(cfg.Context, source)
-				if strings.Index(source, "/") == 0 {
-					//绝对路径
-					absSource = source
-				}
-				sourceTarget := rand.String(6, random.Alphanumeric)
-				if err := cp(absSource, sourceTarget); err != nil {
-					return err
-				}
-
-				dockerCopyCmds = append(dockerCopyCmds, fmt.Sprintf("COPY %s %s", sourceTarget, dest))
-			} else {
-				if err := cp(path.Join(cfg.Context, asset), "target/"+asset); err != nil {
-					return err
-				}
-			}
-		}
-	}
-	if len(dockerCopyCmds) > 0 {
-		dockerFileBytes, _ := ioutil.ReadFile(dockerFilePath)
-		for _, cmd := range dockerCopyCmds {
-			dockerFileBytes = append(dockerFileBytes, []byte("\n"+cmd)...)
-		}
-		ioutil.WriteFile(dockerFilePath, dockerFileBytes, os.ModePerm)
-	}
-
-	// jar包生成 & docker build 出业务镜像
-	repo := getRepo(cfg)
-	packCmd := exec.Command("docker", "build",
-		"--build-arg", fmt.Sprintf("TARGET=%s", "target"),
-		"--build-arg", fmt.Sprintf("MONITOR_AGENT=%s", cfg.MonitorAgent),
-		"--build-arg", fmt.Sprintf("SPRING_PROFILES_ACTIVE=%s", cfg.Profile), // TODO: 非 spring 定制
-		"--build-arg", fmt.Sprintf("DICE_VERSION=%s", cfg.DiceVersion),
-		"--cpu-quota", strconv.FormatFloat(float64(cfg.CPU*100000), 'f', 0, 64),
-		"--memory", strconv.FormatInt(int64(cfg.Memory*apistructs.MB), 10),
-		"-t", repo,
-		"-f", fmt.Sprintf("%s/%s/Dockerfile", compPrefix, cfg.ContainerType), ".")
-	if cfg.ContainerVersion != "" {
-		packCmd.Args = append(packCmd.Args, "--build-arg", fmt.Sprintf("CONTAINER_VERSION=%s", cfg.ContainerVersion))
-	}
-
-	// 获取用户指定脚本命令
-	scriptFile, err := os.Create("pre_start.sh")
-	defer scriptFile.Close()
-	if err != nil {
-		return err
-	}
-
-	if cfg.PreStartScript != "" {
-		fileInfo, err := os.Stat(cfg.PreStartScript)
-		if err != nil {
-			return err
-		}
-
-		if fileInfo.IsDir() {
-			return errors.New("is directory, not pre start script file")
-		}
-
-		input, err := ioutil.ReadFile(cfg.PreStartScript)
-		if err != nil {
-			return err
-		}
-
-		err = ioutil.WriteFile("pre_start.sh", input, 0644)
-		if err != nil {
-			return err
-		}
-	}
-
-	packCmd.Args = append(packCmd.Args, "--build-arg", fmt.Sprintf("SCRIPT_ARGS=%s", cfg.PreStartArgs))
-	packCmd.Args = append(packCmd.Args, "--build-arg", fmt.Sprintf("WEB_PATH=%s", cfg.WebPath))
-
-	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
-	packCmd.Stdout = os.Stdout
-	packCmd.Stderr = os.Stderr
-	if err := packCmd.Run(); err != nil {
-		return err
-	}
-	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
-
-	// docker push 业务镜像至集群 registry
-	if err = docker.PushByCmd(repo, ""); err != nil {
-		return err
-	}
-
-	// upload metadata
-	if err := storeMetaFile(&cfg, repo); err != nil {
-		return err
-	}
-	fmt.Fprintf(os.Stdout, "successfully upload metafile\n")
-	if cfg.Service != "" {
-		// TODO Deprecated: 使用 ${java:OUTPUT:image}
-		// 写应用镜像信息至 pack-result, 供 release action 读取 & 填充dice.yml
-		imageResult := make([]pack.ModuleImage, 0)
-		imageResult = append(imageResult, pack.ModuleImage{ModuleName: cfg.Service, Image: repo})
-		resultBytes, err := json.MarshalIndent(imageResult, "", "  ")
-		if err != nil {
-			return err
-		}
-		if err := filehelper.CreateFile(filepath.Join(cfg.WorkDir, "pack-result"), string(resultBytes), 0644); err != nil {
-			return err
-		}
-		fmt.Fprintf(os.Stdout, "successfully write image action: %s\n", repo)
-	}
-
-	if err := simpleRun("rm", "-rf", "comp", "target", "assets"); err != nil {
-		fmt.Fprintf(os.Stdout, "warning, cleanup failed: %v", err)
-	}
-
-	return nil
-}
-
-// 生成业务镜像名称
-func getRepo(cfg conf.Conf) string {
-	repository := cfg.ProjectAppAbbr
-	if repository == "" {
-		repository = fmt.Sprintf("%s/%s", cfg.DiceOperatorId, random.String(8, random.Lowercase, random.Numeric))
-	}
-	tag := fmt.Sprintf("%s-%v", cfg.TaskName, time.Now().UnixNano())
-
-	return strings.ToLower(fmt.Sprintf("%s/%s:%s", filepath.Clean(cfg.LocalRegistry), repository, tag))
-}
-
+// storeMetaFile store meta data
 func storeMetaFile(cfg *conf.Conf, image string) error {
 	meta := apistructs.ActionCallback{
 		Metadata: apistructs.Metadata{
