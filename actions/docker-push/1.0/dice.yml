@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   buildpack:
-    image: registry.erda.cloud/erda-actions/docker-push-action:20200701-f4cb9d8
+    image: registry.erda.cloud/erda-actions/docker-push-action:1.0-20211216-e309e43
     resources:
       cpu: 0.5
       mem: 512
