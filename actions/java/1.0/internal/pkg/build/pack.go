@@ -137,11 +137,11 @@ func packAndPushAppImage(cfg conf.Conf) error {
 	}
 
 	if cfg.ContainerVersion != "" {
-		buildArgs["CONTAINER_VERSION]"] = cfg.ContainerVersion
+		buildArgs["CONTAINER_VERSION"] = cfg.ContainerVersion
 	}
 
 	if cfg.PreStartScript != "" {
-		buildArgs["SCRIPT_ARGS]"] = cfg.PreStartArgs
+		buildArgs["SCRIPT_ARGS"] = cfg.PreStartArgs
 	}
 
 	// witch the build method
