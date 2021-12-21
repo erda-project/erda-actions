@@ -181,7 +181,7 @@ func packWithBuildkit(cfg conf.Conf, repo string) error {
 	buildCmdArgs = append(buildCmdArgs,
 		"--local", "context="+cfg.Context,
 		"--local", "dockerfile="+compPrefix,
-		"--output", "type=image,name="+repo+",push=true,registry.insecure=true",
+		"--output", "type=image,name="+repo+",push=true",
 	)
 
 	buildkitCmd := exec.Command("buildctl", buildCmdArgs...)
