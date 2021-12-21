@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   js:
-    image: registry.erda.cloud/erda-actions/js-action:1.0-20211216-287f54a
+    image: registry.erda.cloud/erda-actions/js-action:1.0-20211221-a0c89e1
     envs:
       BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:

@@ -1,8 +1,8 @@
 ### job 配置项
 jobs:
   php:
-    image: registry.erda.cloud/erda-actions/php-action:1.0-20211216-ab093d7
+    image: registry.erda.cloud/erda-actions/php-action:1.0-20211221-24089d6
     resources:
       cpu: 0.5
       mem: 512
-      disk: 1024 
+      disk: 1024
