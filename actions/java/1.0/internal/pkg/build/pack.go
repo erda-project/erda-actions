@@ -208,7 +208,7 @@ func packWithBuildKit(cfg conf.Conf, repo string, args map[string]string) error 
 	buildCmdArgs = append(buildCmdArgs,
 		"--local", "context="+cfg.WorkDir,
 		"--local", "dockerfile="+fmt.Sprintf("%s/%s", compPrefix, cfg.ContainerType),
-		"--output", "type=image,name="+repo+",push=true,registry.insecure=true",
+		"--output", "type=image,name="+repo+",push=true",
 	)
 
 	buildkitCmd := exec.Command("buildctl", buildCmdArgs...)

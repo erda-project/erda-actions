@@ -172,7 +172,7 @@ func packWithBuildkit(repo string) error {
 		"--frontend", "dockerfile.v0",
 		"--local", "context=/opt/action/comp/migration",
 		"--local", "dockerfile=/opt/action/comp/migration",
-		"--output", "type=image,name=" + repo + ",push=true,registry.insecure=true")
+		"--output", "type=image,name=" + repo + ",push=true")
 
 	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
 	packCmd.Stdout = os.Stdout

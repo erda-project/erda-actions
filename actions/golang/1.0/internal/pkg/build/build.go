@@ -217,7 +217,7 @@ func packWithBuildkit(repo string) error {
 		"--opt", "build-arg:TARGET=target",
 		"--local", "context=" + cfg.WorkDir,
 		"--local", "dockerfile=" + cfg.WorkDir,
-		"--output", "type=image,name=" + repo + ",push=true,registry.insecure=true")
+		"--output", "type=image,name=" + repo + ",push=true")
 
 	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
 	packCmd.Stdout = os.Stdout

@@ -179,7 +179,7 @@ func buildWithBuildkit(imageName string, dockerFileAddr string, service conf.Ser
 		"--frontend", "dockerfile.v0",
 		"--local", "context=./" + getServiceTempPath(service.Name),
 		"--local", "dockerfile=" + filepath.Dir(dockerFileAddr),
-		"--output", "type=image,name=" + imageName + ",push=true,registry.insecure=true")
+		"--output", "type=image,name=" + imageName + ",push=true")
 
 	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
 	packCmd.Stdout = os.Stdout
