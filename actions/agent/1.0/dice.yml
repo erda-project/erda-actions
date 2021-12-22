@@ -1,10 +1,10 @@
 ### job 配置项
 jobs:
   agent:
-    image: registry.erda.cloud/erda-actions/action-agent:1.5.0-alpha-20211122191954-c87a1f81
+    image: registry.erda.cloud/erda-actions/action-agent:1.6-alpha-20211222175630-22f1e31d
     labels:
       # 必填字段
-      MD5: 3ed35f6ac2e4bad519e6d15c80dffb34
+      MD5: e1acc05920c0ad7347989b234dba30de
     envs:
       # DEBUG mode, will produce more logs
       DEBUG: false
