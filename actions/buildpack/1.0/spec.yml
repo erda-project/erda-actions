@@ -54,6 +54,15 @@ params:
   - name: only_build
     desc: 只编译应用，不制作镜像
     type: bool
+  - name: language
+    desc: 指定某种语言
+    type: string
+  - name: build_type
+    desc: 指定构建类型
+    type: string
+  - name: container_type
+    desc: 指定容器类型
+    type: string
 
 
 labels:
