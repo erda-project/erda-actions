@@ -1,0 +1,64 @@
+name: contrast-secutiry
+version: "1.0"
+type: action
+category: test_management
+displayName: contrast扫描
+desc: contrast扫描
+logo: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/11/22/832fac9a-d4d1-4ee4-87c2-f94b1f57d59a.jpg
+public: true
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.12"
+supportedErdaVersions:
+  - ">= 1.1"
+
+params:
+  - name: username
+    type: string
+    desc: 用户名
+    required: true
+
+  - name: service_key
+    type: string
+    desc: ServiceKey
+    required: true
+
+  - name: api_key
+    type: string
+    desc: ApiKey
+    required: true
+
+  - name: org_id
+    type: string
+    desc: OrgID
+    required: true
+
+  - name: app_id
+    type: string
+    desc: AppID
+    required: true
+
+  - name: severities
+    type: string_array
+    desc: 等级
+    default:
+
+  - name: status
+    type: string
+    desc: 状态
+    default: Reported
+
+  - name: expand
+    type: string
+    desc: 扩展
+    default: vulnerability_instances
+
+  - name: assert_count
+    type: int
+    desc: 总数断言(>=)
+    default: 0
+
+outputs:
+  - name: count
+    desc: 漏洞总数
+  - name: traces
+    desc: 漏洞扫描信息

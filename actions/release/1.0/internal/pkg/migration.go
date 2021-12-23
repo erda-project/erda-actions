@@ -10,11 +10,10 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/yaml.v2"
-
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
 
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/diceyml"
@@ -28,6 +27,9 @@ func migration(cfg *conf.Conf) (string, error) {
 	if cfg.MigrationDir == "" {
 		logrus.Info("empty migration dir.")
 		return "", nil
+	}
+	if cfg.MigrationType == "erda" {
+		return migrationErda(cfg)
 	}
 	if cfg.MigrationMysqlDatabase == "" {
 		logrus.Info("migraion database must not be null.")
@@ -120,21 +122,17 @@ func packAndPushAppImage(cfg *conf.Conf) (string, error) {
 		return "", err
 	}
 	repo := getRepo(*cfg)
-	packCmd := exec.Command("docker", "build",
-		"-t", repo,
-		"-f", "Dockerfile", ".")
-	fmt.Fprintf(os.Stdout, "migration build, packCmd: %v\n", packCmd.Args)
-	packCmd.Stdout = os.Stdout
-	packCmd.Stderr = os.Stderr
-	if err := packCmd.Run(); err != nil {
-		return "", err
-	}
-	fmt.Fprintf(os.Stdout, "migration build, successfully build app image: %s\n", repo)
 
-	// docker push 业务镜像至集群 registry
-	if err := docker.PushByCmd(repo, ""); err != nil {
-		return "", err
+	if cfg.BuildkitEnable == "true" {
+		if err := packWithBuildkit(repo); err != nil {
+			return "", err
+		}
+	} else {
+		if err := packWithDocker(repo); err != nil {
+			return "", err
+		}
 	}
+
 	// upload metadata
 	if err := storeMigrationMetaFile(cfg, repo); err != nil {
 		return "", err
@@ -142,6 +140,48 @@ func packAndPushAppImage(cfg *conf.Conf) (string, error) {
 	fmt.Fprintf(os.Stdout, "successfully upload migration metafile\n")
 
 	return repo, nil
+}
+
+func packWithDocker(repo string) error {
+	packCmd := exec.Command("docker", "build",
+		"-t", repo,
+		"-f", "Dockerfile", ".")
+	fmt.Fprintf(os.Stdout, "migration build, packCmd: %v\n", packCmd.Args)
+	packCmd.Stdout = os.Stdout
+	packCmd.Stderr = os.Stderr
+	if err := packCmd.Run(); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stdout, "migration build, successfully build app image: %s\n", repo)
+
+	// docker push 业务镜像至集群 registry
+	if err := docker.PushByCmd(repo, ""); err != nil {
+		return err
+	}
+	return nil
+}
+
+func packWithBuildkit(repo string) error {
+	packCmd := exec.Command("buildctl",
+		"--addr",
+		"tcp://buildkitd.default.svc.cluster.local:1234",
+		"--tlscacert=/.buildkit/ca.pem",
+		"--tlscert=/.buildkit/cert.pem",
+		"--tlskey=/.buildkit/key.pem",
+		"build",
+		"--frontend", "dockerfile.v0",
+		"--local", "context=/opt/action/comp/migration",
+		"--local", "dockerfile=/opt/action/comp/migration",
+		"--output", "type=image,name=" + repo + ",push=true")
+
+	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
+	packCmd.Stdout = os.Stdout
+	packCmd.Stderr = os.Stderr
+	if err := packCmd.Run(); err != nil {
+		return err
+	}
+	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
+	return  nil
 }
 
 // storeMetaFile upload metadata

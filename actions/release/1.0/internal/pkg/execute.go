@@ -270,9 +270,13 @@ func Execute() error {
 		req.Resources = []apistructs.ReleaseResource{}
 	}
 	if migrationReleaseID != "" {
+		name := apistructs.MigrationResourceKey
+		if cfg.MigrationType == "erda" {
+			name = "erda-migration"
+		}
 		migResource := apistructs.ReleaseResource{
 			Type: apistructs.ResourceTypeMigration,
-			Name: apistructs.MigrationResourceKey,
+			Name: name,
 			URL:  migrationReleaseID,
 		}
 		req.Resources = append(req.Resources, migResource)

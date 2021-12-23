@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   custom-script:
-    image: registry.erda.cloud/erda-actions/custom-script-action:20210519-01d2811
+    image: registry.erda.cloud/erda-actions/custom-script-action:1.0-20211216-b1d5635
     resources:
       cpu: 0.1
       mem: 1024

@@ -1,3 +1,4 @@
+FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
 FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
@@ -15,6 +16,7 @@ RUN yum install -y yum-utils && \
     yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && \
     yum -y install docker-ce-cli
 COPY actions/buildpack-aliyun/1.0/bp /opt/action/bp
+COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 COPY --from=builder /assets /opt/action
 
 # $ tree /opt/action/

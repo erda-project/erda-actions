@@ -49,6 +49,7 @@ require (
 	github.com/caarlos0/env v3.3.1-0.20180521112546-3e0f30cbf50b+incompatible
 	github.com/cespare/trie v0.0.0-20150610204604-3fe1a95cbba9 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
+	github.com/docker/cli v20.10.5+incompatible
 	github.com/erda-project/erda v1.3.0-rc.0.20211108074900-5d8520924cfc
 	github.com/hashicorp/go-multierror v1.1.0
 	github.com/labstack/gommon v0.3.0

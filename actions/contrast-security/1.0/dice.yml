@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  contrast-security:
+    image: registry.erda.cloud/erda-actions/contrast-security-action:1.0-20211124-0a035fd
+    resources:
+      cpu: 0.1
+      mem: 512
+      disk: 512

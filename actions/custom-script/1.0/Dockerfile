@@ -1,3 +1,4 @@
+FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
 FROM registry.erda.cloud/erda/git-golang-image:1.1
 
 ENV GOPATH /go
@@ -5,6 +6,8 @@ ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 ENV GOPROXY=https://goproxy.cn/
 ENV GO111MODULE=on
+
+COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 
 RUN go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.27.0
 

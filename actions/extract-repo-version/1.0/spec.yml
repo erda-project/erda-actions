@@ -1,0 +1,20 @@
+name: extract-repo-version
+version: "1.0"
+type: action
+category: version_management
+desc: Extract repo version in git dir
+public: true
+supportedErdaVersions:
+  - ">= 1.5"
+
+params:
+  - name: git_dir
+    desc: git dir for extract
+
+outputs:
+  - name: version
+    desc: full version of the repo
+  - name: major_minor_version
+    desc: only majar.minor part of version
+  - name: image_tag
+    desc: version plus time & commit
