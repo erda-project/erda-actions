@@ -3,11 +3,11 @@ FROM {{BP_DOCKER_BASE_REGISTRY}}/erda/dice-nginx:1.1.0
 # Set special timezone
 RUN echo "Asia/Shanghai" | tee /etc/timezone
 
-ARG PUBLIC_DIR="public/"
+ARG PUBLIC_DIR="public"
 
 ADD /app /app
 
-COPY /app/${PUBLIC_DIR} /usr/share/nginx/html
+RUN mkdir -p /usr/share/nginx/html && cp -r /app/${PUBLIC_DIR}/* /usr/share/nginx/html
 # TODO add default template
 RUN cp /app/nginx.conf.template /etc/nginx/conf.d/nginx.conf.template
 
