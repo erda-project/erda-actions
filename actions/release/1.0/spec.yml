@@ -77,12 +77,15 @@ params:
     type: map
     desc: 等做完 aab 里的 AndroidManifest.xml 解析后，可删除该参数
     required: false
+  - name: tag_version
+    type: string
+    desc: 版本号
   - name: release_mobile
     type: struct
     desc: 移动端打包
     struct:
       - {name: files, type: string_array, desc: 打包文件 }
-      - {name: version, type: string, desc: 版本 }
+      - {name: version, type: string, desc: 移动包版本 }
 
 accessibleAPIs:
   # push release
