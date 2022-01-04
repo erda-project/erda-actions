@@ -22,21 +22,29 @@ public: true
 supportedErdaVersions:
   - ">=1.0"
 
+locale:
+  zh-CN:
+    displayName: "extension 推送工具"
+    desc: "extension 推送工具，将 extensions 仓库中的 Actions 和 Addons 推送到指定的 Erda 平台"
+  en-US:
+    displayName: "extension push tool"
+    desc: "Extension push tool, push Actions and Addons in the extensions repository to the specified Erda platform"
+
 params:
   - name: repos
     type: string_array
     desc: extensions 仓库列表, 如 ${git-checkout}
-    
+
   - name: host
     type: string
     desc: erda host to visit, format <org>.<wildcard domain>, e.g. https://terminus-org.app.terminus.io
     required: true
-    
+
   - name: username
     type: string
     desc: erda username to authenticate
     required: true
-    
+
   - name: password
     type: string
     desc: erda password to authenticate

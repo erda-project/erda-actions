@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Spark应用jar包上传"
+    desc: "Spark应用jar包上传"
+  en-US:
+    displayName: "Spark application jar package upload"
+    desc: "Spark application jar package upload"
+
 labels:
   maintainer: cb167668@alibaba-inc.com
 

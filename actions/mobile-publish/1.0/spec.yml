@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "移动应用内容发布"
+    desc: 用于移动应用发布到发布内容
+  en-US:
+    displayName: "Mobile application content publishing"
+    desc: Used for mobile application publishing to publishing content
+
 params:
   - name: release_id
     desc: release_id值 eg:${release:OUTPUT:releaseID}

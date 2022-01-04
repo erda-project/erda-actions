@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "oss文件上传"
+    desc: "上传文件到OSS"
+  en-US:
+    displayName: "oss file upload"
+    desc: "Upload files to OSS"
+
 params:
   - name: access_key_id
     required: true

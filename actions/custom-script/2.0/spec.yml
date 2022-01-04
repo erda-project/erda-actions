@@ -10,6 +10,13 @@ labels:
   configsheet: true
   project_level_app: true
 
+locale:
+  zh-CN:
+    displayName: "自定义任务"
+    desc: "运行自定义命令"
+  en-US:
+    displayName: "Custom task"
+    desc: "Run custom commands"
 
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"

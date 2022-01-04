@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Spark作业"
+    desc: "Spark作业"
+  en-US:
+    displayName: "Spark job"
+    desc: "Spark job"
+
 labels:
   maintainer: cb167668@alibaba-inc.com
 

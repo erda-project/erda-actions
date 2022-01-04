@@ -26,6 +26,19 @@ public: true
 supportedErdaVersions:
   - ">=1.0"
 
+locale:
+  zh-CN:
+    displayName: "Erda 制品归档"
+    desc: >-
+      从源仓库将制品快照和数据迁移脚本归档到目标（version）仓库。源仓库一般就是当前仓库。
+      当前仓库的 <.dice|.erda>/migrations 归档到目标仓库的 <version>/sqls 。
+      应用打包发布的制品归档到目标仓库的 <version>/releases/<snapName>/dice.yml 。
+  en-US:
+    displayName: "Erda product archive"
+    desc: >-
+      Archive product snapshots and data migration scripts from the source warehouse to the target (version) warehouse. The source warehouse is generally the current warehouse.
+      Archive the <.dice|.erda>/migrations of the current warehouse to <version>/sqls of the target warehouse.
+      The products released by application packaging are archived to <version>/releases/<snapName>/dice.yml of the target warehouse.
 params:
   - name: workdir
     desc: 仓库目录, 默认为 ${git-checkout}。action 从仓库中读取 migrations 脚本等。
@@ -36,7 +49,7 @@ params:
     type: string
     default: ""
     required: false
-    
+
   - name: lint_config
     type: string
     desc: Erda MySQL Migration Lint 的配置文件所在路径, 为空则不对配置文件进行归档。

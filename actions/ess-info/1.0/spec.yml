@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "ess信息"
+    desc: "获取ess group信息，如instance id，private ip"
+  en-US:
+    displayName: "ess information"
+    desc: "Get ess group information, such as instance id, private ip"
+
 params:
   - name: ak
     type: string

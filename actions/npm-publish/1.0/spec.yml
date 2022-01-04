@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "NPM 包推送"
+    desc: "将 npm 的 package publish 到 npm 仓库，以统一和规范化 package 管理"
+  en-US:
+    displayName: "NPM package push"
+    desc: "Publish npm's package to npm repository to unify and standardize package management"
+
 params:
 - name: package_name
   required: true

@@ -9,12 +9,20 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "dice-deploy-release"
+    desc: 用于 dice 平台部署应用服务
+  en-US:
+    displayName: "dice-deploy-release"
+    desc: "Used for dice platform deployment application service"
+
 params:
   - name: release_id
     desc: release id
   - name: workspaces
     desc: 环境
-    
+
 accessibleAPIs:
   # deploy addons
   - path: /api/runtimes/actions/deploy-release-action

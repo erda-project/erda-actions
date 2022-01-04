@@ -24,6 +24,13 @@ public: true
 supportedVersion:
   - ">1.0"
 
+locale:
+  zh-CN:
+    displayName: "Erda public 版本包发布"
+    desc: "release erda install package for public: erda-$erda_version.$os_arch.tar.gz"
+  en-US:
+    displayName: "Erda public version package released"
+    desc: "release erda install package for public: erda-$erda_version.$os_arch.tar.gz"
 
 params:
   - name: erda_version

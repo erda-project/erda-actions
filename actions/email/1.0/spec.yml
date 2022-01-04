@@ -11,6 +11,14 @@ supportedVersions:
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "邮件发送"
+    desc: 邮件发送
+  en-US:
+    displayName: "send mail"
+    desc: "send mail"
+
 params:
   - name: email_template_addr
     type: string

@@ -7,6 +7,14 @@ public: true
 supportedErdaVersions:
   - ">= 1.5"
 
+locale:
+  zh-CN:
+    displayName: "extract-repo-version"
+    desc: "Extract repo version in git dir"
+  en-US:
+    displayName: "extract-repo-version"
+    desc: "Extract repo version in git dir"
+
 params:
   - name: git_dir
     desc: git dir for extract

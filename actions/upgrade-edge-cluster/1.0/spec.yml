@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.4"
 
+locale:
+  zh-CN:
+    displayName: "升级边缘集群"
+    desc: 升级边缘集群
+  en-US:
+    displayName: "Upgrade Edge Cluster"
+    desc: Upgrade edge cluster
+
 params:
   - name: dice_version
     type: string

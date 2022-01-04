@@ -13,6 +13,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "容器镜像打包"
+    desc: 针对自定义 dockerfile 打包，产出可运行镜像
+  en-US:
+    displayName: "Container image packaging"
+    desc: "For custom dockerfile packaging, the output can run the image"
+
 params:
   - name: workdir
     type: string

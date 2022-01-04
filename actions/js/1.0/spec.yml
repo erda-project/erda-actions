@@ -11,6 +11,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Node.js 工程打包"
+    desc: "针对 nodejs 工程的编译打包任务，产出可运行镜像"
+  en-US:
+    displayName: "Node.js project packaging"
+    desc: "For the compilation and packaging tasks of the nodejs project, the output can be run image"
+
 params:
   - name: workdir
     type: string

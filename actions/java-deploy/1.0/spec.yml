@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Java Jar 包推送"
+    desc: "推送 java library 至远程 registry"
+  en-US:
+    displayName: "Java Jar package push"
+    desc: "Push java library to remote registry"
+
 params:
   - name: workdir
     type: string

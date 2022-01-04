@@ -9,12 +9,20 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "dice-deploy-rollback"
+    desc: 用于 dice 平台部署应用服务
+  en-US:
+    displayName: "dice-deploy-rollback"
+    desc: "Used for dice platform deployment application service"
+
 params:
   - name: runtime_id
   - name: deployment_id
-  
+
 accessibleAPIs:
-  # redeploy 
+  # redeploy
   - path: /api/runtimes/<runtimeId>/actions/rollback-action
     method: POST
     schema: http

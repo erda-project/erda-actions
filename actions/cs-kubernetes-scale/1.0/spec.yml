@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "阿里云Kubernetes集群扩容"
+    desc: "扩容阿里云容器服务 Kubernetes 集群"
+  en-US:
+    displayName: "Alibaba Cloud Kubernetes cluster expansion"
+    desc: "Expanding the Alibaba Cloud Container Service Kubernetes cluster"
+
 params:
     - name: cluster_name
       type: string

@@ -9,3 +9,11 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead. # Dep
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
+
+locale:
+  zh-CN:
+    displayName: "action agent"
+    desc: "action agent"
+  en-US:
+    displayName: "action agent"
+    desc: "action agent"

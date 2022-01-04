@@ -14,6 +14,14 @@ supportedVersions:
 supportedErdaVersions:
   - ">= 1.1"
 
+locale:
+  zh-CN:
+    displayName: "自动化测试场景执行"
+    desc: 选择指定场景进行测试
+  en-US:
+    displayName: "Automated test scenario execution"
+    desc: select the specified scene to test
+
 params:
   - name: test_space
     desc: 空间

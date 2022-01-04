@@ -11,3 +11,12 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
 supportedErdaVersions:
   - ">= 1.0"
+
+
+locale:
+  zh-CN:
+    displayName: "Java 工程静态检查"
+    desc: "针对 java 工程的代码静态检查任务，产出可运行镜像"
+  en-US:
+    displayName: "Java project static check"
+    desc: "For static code inspection tasks of java projects, runnable images are produced"

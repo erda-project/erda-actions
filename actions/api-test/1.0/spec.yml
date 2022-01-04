@@ -11,6 +11,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "api测试"
+    desc: "api测试"
+  en-US:
+    displayName: "API testing"
+    desc: "API testin"
+
 params:
   - name: api_id
   - name: api_info

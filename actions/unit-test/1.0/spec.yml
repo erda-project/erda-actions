@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "单元测试"
+    desc: 该 action 是针对 单元测试  的能力抽象，在提交代码时，会自动触发 UT 分析。
+  en-US:
+    displayName: "Unit Test"
+   desc: This action is an abstraction for the capability of unit testing. When the code is submitted, it will automatically trigger UT analysis.
+
 params:
   - name: context
     required: true

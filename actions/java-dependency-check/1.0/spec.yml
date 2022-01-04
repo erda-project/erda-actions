@@ -11,6 +11,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Java 工程漏洞检测"
+    desc: "Java 依赖漏洞检测，并提供检测报告下载。"
+  en-US:
+    displayName: "Java engineering vulnerability detection"
+    desc: "Java relies on vulnerability detection and provides detection reports for download."
+
 params:
   - name: code_dir
     type: string

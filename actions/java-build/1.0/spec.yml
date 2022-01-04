@@ -14,6 +14,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Java 工程编译打包"
+    desc: "针对 java 工程的编译打包任务"
+  en-US:
+    displayName: "Java project compilation and packaging"
+    desc: "Compilation and packaging tasks for java projects"
+
 params:
   - name: jdk_version
     desc: 构建使用的jdk版本,支持8,11

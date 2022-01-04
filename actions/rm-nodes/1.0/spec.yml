@@ -10,6 +10,13 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "下线节点"
+    desc: "下线节点"
+  en-US:
+    displayName: "offline node"
+    desc: "offline node"
 params:
   - name: hosts
     type: array

@@ -12,6 +12,14 @@ supportedVersions:
 supportedErdaVersions:
   - ">= 1.2"
 
+locale:
+  zh-CN:
+    displayName: "等待"
+    desc: 执行等待操作
+  en-US:
+    displayName: "Waiting"
+    desc: perform a wait operation
+
 params:
   - name: wait_time_sec
     required: true

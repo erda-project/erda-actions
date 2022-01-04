@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "sftp server交互"
+    desc: "与sftp server交互的工具。"
+  en-US:
+    displayName: "sftp server interaction"
+    desc: "Tool to interact with sftp server."
+
 labels:
   maintainer: jiejin.ljj@alibaba-inc.com
 

@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "代码推送"
+    desc: 推送代码至远程仓库
+  en-US:
+    displayName: "Code push"
+    desc: "Push code to remote warehouse"
+
 params:
   - name: workdir
     type: string

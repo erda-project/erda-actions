@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "循环操作"
+    desc: 循环某个操作，直至满足退出条件或超时。
+  en-US:
+    displayName: "Loop operation"
+    desc: Loop an operation until the exit condition is met or it times out.
+
 params:
   - name: type
     type: string

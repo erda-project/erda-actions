@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "ess伸缩组机器删除"
+    desc: "通过instance id删除ess伸缩组中的机器"
+  en-US:
+    displayName: "ess telescopic group machine delete"
+    desc: "Delete the machine in the ess scaling group through the instance id"
+
 params:
   - name: ak
     type: string

@@ -14,6 +14,14 @@ supportedVersions:
 supportedErdaVersions:
   - ">= 1.1"
 
+locale:
+  zh-CN:
+    displayName: "测试计划"
+    desc: 根据自动化测试计划启动测试计划并等待完成
+  en-US:
+    displayName: "Test Plan"
+    desc: Start the test plan according to the automated test plan and wait for completion
+
 params:
   - name: test_plan
     desc: 测试计划名称

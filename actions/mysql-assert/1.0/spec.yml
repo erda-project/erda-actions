@@ -14,6 +14,14 @@ supportedErdaVersions:
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.21"
 
+locale:
+  zh-CN:
+    displayName: "mysql 配置单断言"
+    desc: 在对应的数据源中执行 sql 语句且可以断言和出参
+  en-US:
+    displayName: "mysql configuration single assertion"
+    desc: Execute sql statement in the corresponding data source and can assert and output parameters
+
 params:
   - name: datasource
     required: true

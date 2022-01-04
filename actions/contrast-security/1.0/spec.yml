@@ -11,6 +11,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.1"
 
+locale:
+  zh-CN:
+    displayName: "contrast扫描"
+    desc: "contrast扫描"
+  en-US:
+    displayName: "contrast scan"
+    desc: "contrast scan"
+
 params:
   - name: username
     type: string

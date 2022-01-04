@@ -10,9 +10,17 @@ supportedErdaVersions:
   - ">= 1.0"
 
 params:
-    
+
+locale:
+  zh-CN:
+    displayName: "dice-deploy-redeploy"
+    desc: 用于 dice 平台部署应用服务
+  en-US:
+    displayName: "dice-deploy-redeploy"
+    desc: "Used for dice platform deployment application service"
+
 accessibleAPIs:
-  # redeploy 
+  # redeploy
   - path: /api/runtimes/<runtimeId>/actions/redeploy-action
     method: POST
     schema: http

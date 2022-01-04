@@ -22,6 +22,14 @@ params:
     desc: redis 语句
 
 
+locale:
+  zh-CN:
+    displayName: "redis 配置单"
+    desc: "在对应的数据源中执行 redis 命令"
+  en-US:
+    displayName: "redis configuration sheet"
+    desc: "Execute the redis command in the corresponding data source"
+
 accessibleAPIs:
   - path: /api/addons/<addonId>
     method: GET

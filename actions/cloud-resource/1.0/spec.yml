@@ -10,6 +10,13 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "云资源添加"
+    desc: "添加云资源"
+  en-US:
+    displayName: "Cloud resource addition"
+    desc: "Cloud resource addition"
 params:
   # 通过terraform先创建云资源，再创建集群，需要如下参数
   - name: cloud_vendor

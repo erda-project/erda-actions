@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "边缘集群资源"
+    desc: "创建边缘集群所有云资源"
+  en-US:
+    displayName: "Edge cluster resources"
+    desc: "Create all cloud resources of the edge cluster"
+
 params:
   # 通过terraform先创建云资源，再创建集群，需要如下参数
   # 企业相关信息

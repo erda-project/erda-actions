@@ -14,6 +14,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "代码克隆"
+    desc: 代码仓库克隆
+  en-US:
+    displayName: "Code clone"
+    desc: "Code repository clone"
+
 params:
   - name: uri
     required: false

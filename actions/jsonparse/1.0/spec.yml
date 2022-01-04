@@ -13,6 +13,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "json 解析"
+    desc: "对 json 解析值然后返回出参"
+  en-US:
+    displayName: "json parsing"
+    desc: "Analyze the value of json and return the output parameter"
+
 params:
   - name: out_params
     required: false

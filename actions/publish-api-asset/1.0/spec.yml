@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "API 文档发布"
+    desc: "将 API 描述文档发布到 API 集市，成为 API 资源"
+  en-US:
+    displayName: "API document release"
+    desc: "Publish the API description document to the API market and become an API resource"
+
 params:
   - name: display_name
     desc: API 资源的展现名称, 不填时使用 asset_id
@@ -20,10 +28,10 @@ params:
     desc: API 资源版本，需要使用 X.Y.Z 的格式，不填时自动生成
   - name: spec_path
     desc: API 描述文档的路径，eg:${java}/swagger/swagger.json
-    required: true    
+    required: true
   - name: runtime_id
     desc: runtime_id 值，eg:${dice:OUTPUT:runtimeID}
-    required: true    
+    required: true
   - name: service_name
     desc: 服务名称，需要和 dice.yml 中的一致
     required: true

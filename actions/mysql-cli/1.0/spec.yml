@@ -13,6 +13,14 @@ supportedErdaVersions:
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.21"
 
+locale:
+  zh-CN:
+    displayName: "mysql 配置单"
+    desc: 在对应的数据源中执行 sql 语句
+  en-US:
+    displayName: "mysql configuration sheet"
+    desc: execute sql statement in the corresponding data source
+
 params:
   - name: datasource
     required: true

@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "库应用内容发布"
+    desc: 用于库应用发布到发布内容
+  en-US:
+    displayName: "Release of library application content"
+    desc: Used for library application to publish content
+
 params:
   - name: workdir
     desc: spec.yml & README.md 文件所在目录

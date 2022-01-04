@@ -9,6 +9,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "dice-deploy-service"
+    desc: 用于 dice 平台部署应用服务
+  en-US:
+    displayName: "dice-deploy-service"
+    desc: "Used for dice platform deployment application service"
+
 params:
   - name: deployment_id
     desc: 部署单 id

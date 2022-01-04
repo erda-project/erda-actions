@@ -18,6 +18,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "标签计算"
+    desc: "标签计算"
+  en-US:
+    displayName: "Label Calculation"
+    desc: "label calculation"
+
 labels:
   maintainer: shaozhong.hsz@alibaba-inc.com
 

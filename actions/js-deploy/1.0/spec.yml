@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "npm 包推送"
+    desc: "推送 npm library 至远程 registry"
+  en-US:
+    displayName: "npm package push"
+    desc: "Push npm library to remote registry"
+
 params:
   - name: workdir
     type: string

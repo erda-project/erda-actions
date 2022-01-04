@@ -12,5 +12,13 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Flink-Job 集群"
+    desc: "创建 Flink Job 集群"
+  en-US:
+    displayName: "Flink-Job cluster"
+    desc: "Create Flink Job Cluster"
+
 labels:
   maintainer: ld269464@alibaba-inc.com

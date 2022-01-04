@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "api注册"
+    desc: "用于Api的注册"
+  en-US:
+    displayName: "api registration"
+    desc: "For Api registration"
+
 params:
   - name: runtime_id
     desc: runtime_id值 eg:${dice:OUTPUT:runtimeID}

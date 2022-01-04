@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "android"
+    desc: "android action"
+  en-US:
+    displayName: "android"
+    desc: "android action"
+
 params:
   - name: context
     desc: 代码路径

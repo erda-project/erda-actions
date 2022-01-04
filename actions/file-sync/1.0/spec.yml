@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "对象存储系统文件同步"
+    desc: "文件同步Action允许用户从对象存储系统中上传或下载文件,当前支持Minio和阿里云OSS"
+  en-US:
+    displayName: "Object storage system file synchronization"
+    desc: "File synchronization Action allows users to upload or download files from the object storage system, currently supports Minio and Alibaba Cloud OSS"
+
 labels:
   maintainer: cb167668@alibaba-inc.com
 

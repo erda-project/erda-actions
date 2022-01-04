@@ -22,6 +22,14 @@ public: true
 supportedErdaVersions:
   - ">=1.0"
 
+locale:
+  zh-CN:
+    displayName: "Erda Extensions 归档"
+    desc: "extension 打包归档工具，将 extensions 打包归档到 OSS"
+  en-US:
+    displayName: "Erda Extensions archive"
+    desc: "Extension package archive tool, package and archive extensions to OSS"
+
 params:
   - name: repos
     type: string_array

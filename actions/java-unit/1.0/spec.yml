@@ -11,3 +11,11 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
 supportedErdaVersions:
   - ">= 1.0"
+
+locale:
+  zh-CN:
+    displayName: "Java 工程单元测试"
+    desc: "用于 java 单元测试，支持 JUnit 和 TestNg 框架，制作成为 docker image 用于运行服务"
+  en-US:
+    displayName: "Java engineering unit testing"
+    desc: "Used for java unit testing, supporting JUnit and TestNg frameworks, made into docker image for running services"

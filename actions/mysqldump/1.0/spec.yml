@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "mysqldump"
+    desc: "mysqldump"
+  en-US:
+    displayName: "mysqldump"
+    desc: "mysqldump"
+
 params:
   - name: mysql_host
     required: true

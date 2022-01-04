@@ -17,6 +17,13 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "接口测试"
+    desc: "执行单个接口测试。上层可以通过 pipeline.yml 编排一组接口测试的执行顺序。"
+  en-US:
+    displayName: "api test"
+    desc: "Perform a single interface test. The upper layer can arrange the execution sequence of a group of interface tests through pipeline.yml."
 params:
   - name: name
     required: false

@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "添加节点"
+    desc: "添加一个或多个节点到集群中"
+  en-US:
+    displayName: "Add node"
+    desc: "Add one or more nodes to the cluster"
+
 params:
   - name: hosts
     type: array

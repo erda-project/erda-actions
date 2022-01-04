@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Flink上传"
+    desc: "Flink上传 Action允许用户上传一个Flink作业的jar包"
+  en-US:
+    displayName: "Flink upload"
+    desc: "Flink upload Action allows users to upload a jar package of a Flink job"
+
 labels:
   maintainer: cb167668@alibaba-inc.com
 

@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "自定义 js 命令构建"
+    desc: "自定义js命令构建产物"
+  en-US:
+    displayName: "Custom js command build"
+    desc: "Custom js command build product"
+
 params:
   - name: workdir
     type: string

@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "人工确认"
+    desc: 在流水线过程中添加人工确认步骤
+  en-US:
+    displayName: "Manual confirmation"
+    desc: Add a manual confirmation step in the pipeline process
+
 params:
   - name: processor
     required: true

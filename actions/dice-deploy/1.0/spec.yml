@@ -9,6 +9,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "dice-deploy"
+    desc: "用于 dice 平台部署应用服务"
+  en-US:
+    displayName: "dice-deploy"
+    desc: "Used for dice platform deployment application service"
+
 params:
   - name: release_id_path
     desc: dicehub-resource release时存放的releaseId路径，dice-resource需要到此路径去取。若pipeline.yml里没有写dicehub，pipeline.yml里会自动插入到dice-resource的source里。若pipeline.yml里写了dicehub，则release_id_path必填，其值为dicehub-resource的Name

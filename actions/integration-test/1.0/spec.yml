@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "接口测试"
+    desc: "该 action 是针对接口测试的能力抽象"
+  en-US:
+    displayName: "Interface test"
+    desc: "The action is an abstraction for the ability of interface testing"
+
 params:
   - name: context
     required: true

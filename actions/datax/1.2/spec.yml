@@ -12,6 +12,16 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+
+locale:
+  zh-CN:
+    displayName: "数据源同步"
+    desc: "DataX为用户提供多种不同数据源之间的全量同步功能"
+  en-US:
+    displayName: "Data source synchronization"
+    desc: "DataX provides users with full synchronization functions between a variety of different data sources"
+
+
 labels:
   maintainer: cb167668@alibaba-inc.com
 

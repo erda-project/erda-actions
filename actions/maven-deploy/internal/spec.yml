@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Maven 构建发布"
+    desc: "将构建产物发布到 Maven 仓库"
+  en-US:
+    displayName: "Mave˚n build publish"
+    desc: "publish build products to Maven warehouse"
+
 source:
   - name: url
     required: true

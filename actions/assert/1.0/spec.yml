@@ -13,6 +13,13 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "断言"
+    desc: "对值进行断言"
+  en-US:
+    displayName: "assertion"
+    desc: "Assert the value"
 params:
   - name: asserts
     required: false

@@ -11,6 +11,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "平台应用部署"
+    desc: "用于 Erda 平台部署应用服务"
+  en-US:
+    displayName: "Platform application deployment"
+    desc: "Used to deploy application services on the Erda platform"
+
 params:
   - name: release_id
     desc: 制品 ID，一般通过表达式语法从前置 Release-Action 获取。

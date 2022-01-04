@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "移动端代码模板初始化"
+    desc: 移动端代码模板初始化
+  en-US:
+    displayName: "Mobile terminal code template initialization"
+    desc: Initialization of mobile code template
+
 params:
   - name: display_name
     type: string

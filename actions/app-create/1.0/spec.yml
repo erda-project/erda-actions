@@ -10,6 +10,13 @@ labels:
 supportedVersions:
   - ">= 4.0"
 
+locale:
+  zh-CN:
+    displayName: "应用创建"
+    desc: "根据仓库地址和应用名称自动创建应用和推送代码"
+  en-US:
+    displayName: "Application creation"
+    desc: "Automatically create applications and push codes based on warehouse address and application name"
 params:
   - name: application_git_repo
     required: true

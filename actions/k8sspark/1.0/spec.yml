@@ -12,5 +12,13 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "Spark-Job 集群"
+    desc: "创建 Spark-Job 集群"
+  en-US:
+    displayName: "Spark-Job cluster"
+    desc: "Create Spark-Job cluster"
+
 labels:
   maintainer: ld269464@alibaba-inc.com

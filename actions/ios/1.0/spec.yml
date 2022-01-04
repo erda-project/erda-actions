@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "ios构建"
+    desc: "ios remote action"
+  en-US:
+    displayName: "ios build"
+    desc: "ios remote action"
+
 params:
   - name: context
     desc: 代码路径

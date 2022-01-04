@@ -18,6 +18,14 @@ imageUrls:
 labels:
   maintainer: shaozhong.hsz@alibaba-inc.com
 
+locale:
+  zh-CN:
+    displayName: "python执行"
+    desc: "python执行"
+  en-US:
+    displayName: "python execution"
+    desc: "python execution"
+
 params:
   - name: config
     required: false

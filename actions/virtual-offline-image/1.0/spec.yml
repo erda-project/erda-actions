@@ -9,3 +9,12 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
+
+
+locale:
+  zh-CN:
+    displayName: "离线部署时需要安装的镜像"
+    desc: 离线部署时需要安装的镜像，是 Action 依赖的镜像。
+  en-US:
+    displayName: "The image that needs to be installed during offline deployment"
+    desc: The image that needs to be installed during offline deployment is the image that Action depends on.

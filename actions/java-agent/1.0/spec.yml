@@ -7,3 +7,11 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.19"
 supportedErdaVersions:
   - ">= 1.0"
+
+locale:
+  zh-CN:
+    displayName: "java-agent"
+    desc: "监控java agent注入"
+  en-US:
+    displayName: "java-agent"
+    desc: "Monitor java agent injection"

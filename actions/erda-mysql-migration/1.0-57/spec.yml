@@ -22,6 +22,15 @@ public: true
 supportedErdaVersions:
   - ">=1.0"
 
+locale:
+  zh-CN:
+    displayName: "Erda MySQL 数据迁移"
+    desc: Erda MySQL Migration 工具
+  en-US:
+    displayName: "Erda MySQL data migration"
+    desc: "Erda MySQL data migration"
+
+
 params:
   - name: workdir
     desc: 工作目录, 如 ${git-checkout}

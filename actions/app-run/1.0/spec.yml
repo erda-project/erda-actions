@@ -10,6 +10,14 @@ labels:
 supportedVersions:
   - ">= 4.0"
 
+locale:
+  zh-CN:
+    displayName: "应用执行"
+    desc: "根据仓库中的流水线文件启动执行流水线并等待完成"
+  en-US:
+    displayName: "Application pipeline execution"
+    desc: "Start the execution pipeline according to the pipeline file in the warehouse and wait for it to complete"
+
 params:
   - name: application_name
     desc: 应用名称

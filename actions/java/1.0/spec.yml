@@ -8,6 +8,15 @@ desc: 针对 java 工程的编译打包任务，产出可运行镜像
 labels:
   maintainer: xxx
 public: true
+
+locale:
+  zh-CN:
+    displayName: "Java 工程编译打包镜像构建"
+    desc: "针对 java 工程的编译打包任务，产出可运行镜像"
+  en-US:
+    displayName: "Java project compilation, packaging, mirroring construction"
+    desc: "For the compilation and packaging tasks of the java project, the output can be run image"
+
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
 supportedErdaVersions:

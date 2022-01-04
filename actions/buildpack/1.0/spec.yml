@@ -17,6 +17,26 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "统一构建器"
+    desc: >-
+      平台内置的应用构建逻辑。
+      目前支持：
+      1. Java
+      2. NodeJS(Herd)
+      3. Single Page Application(SPA)
+      4. Dockerfile
+  en-US:
+    displayName: "Unity builder"
+    desc: >-
+        The built-in application construction logic of the platform.
+        Currently supports:
+        1. Java
+        2. NodeJS(Herd)
+        3. Single Page Application(SPA)
+        4. Dockerfile
+
 params:
   - name: context
     required: true

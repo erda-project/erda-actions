@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "sql脚本执行器"
+    desc: "SQL Action执行用户配置的SQL脚本。"
+  en-US:
+    displayName: "sql script executor"
+    desc: "SQL Action executes the SQL script configured by the user."
+
 labels:
   maintainer: hxf168482@alibaba-inc.com
 

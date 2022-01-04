@@ -10,6 +10,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "gitbook构建"
+    desc: gitbook构建
+  en-US:
+    displayName: "gitbook build"
+    desc: gitbook build
+
 params:
   - name: workdir
     type: string

@@ -11,6 +11,13 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "php镜像构建"
+    desc: "php镜像构建"
+  en-US:
+    displayName: "php mirror construction"
+    desc: "php mirror construction"
 params:
   - name: context
     desc: 代码路径

@@ -12,6 +12,14 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+locale:
+  zh-CN:
+    displayName: "测试计划执行"
+    desc: 用于通过 action 自动执行指定环境的测试计划
+  en-US:
+    displayName: "Test plan execution"
+    desc: The test plan used to automatically execute the specified environment through action
+
 params:
   - name: test_plan_id
     required: true
