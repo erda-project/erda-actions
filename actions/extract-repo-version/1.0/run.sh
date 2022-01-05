@@ -29,7 +29,8 @@ function get_version() {
     fi
   fi
 
-  if [[ "${BRANCH_PREFIX}" == "master" ]]; then
+  # TODO: [hack] Delete the judgment logic of the release/master
+  if [[ "${BRANCH_PREFIX}" == "master" || "${BRANCH_PREFIX}" == "release/master" ]]; then
     VERSION=${ver}-master
   fi
 
