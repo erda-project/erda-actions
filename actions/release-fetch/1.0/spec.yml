@@ -1,0 +1,27 @@
+name: release-fetch
+version: "1.0"
+type: action
+category: deploy_management
+desc: Fetch release by query
+public: true
+supportedErdaVersions:
+  - ">= 1.5"
+
+params:
+  - name: application_name
+    desc: The name of the application
+  - name: branch
+    desc: git branch to fetch first matching release
+
+outputs:
+  - name: release_id
+    desc: release id got from query
+
+accessibleAPIs:
+  - path: /api/applications
+    method: GET
+    schema: http
+
+  - path: /api/releases
+    method: GET
+    schema: http
