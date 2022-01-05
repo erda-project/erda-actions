@@ -14,7 +14,7 @@ set -o errexit
 function get_version() {
   [[ -n "${VERSION}" ]] && echo "${VERSION/v/}" && return
   [[ -f VERSION ]] && ver=$(head -n 1 VERSION) || ver=0.0
-  ALPHA="${ver}-alpha.$(git rev-parse --short HEAD)"
+  ALPHA="${ver}-alpha"
   HEAD_TAG=$(git tag --points-at HEAD |head -n1)
   # remove prefix v when present
   [[ -n "${HEAD_TAG}" ]] && echo "${HEAD_TAG/v/}" && return
@@ -58,7 +58,7 @@ fi
 
 cd $dir
 
-VER=$(get_version)
+VER=$(get_version)-$(date '+%Y%m%d%H%M%S')
 MAJOR_MINOR_VER=`echo $VER | sed -e 's/\([0-9]\+\.[0-9]\+\).*/\1/g'`
 
 echo "action meta: version=$VER"
