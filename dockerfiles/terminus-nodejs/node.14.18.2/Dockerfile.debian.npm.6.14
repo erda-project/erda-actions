@@ -5,7 +5,7 @@
 # Kernel(uname -a): Linux 7a69d4252d82 5.10.76-linuxkit #1 SMP Mon Nov 8 10:21:19 UTC 2021 x86_64
 # Build cmd: docker build . -t terminus/debian-node-14.18 -f Dockerfile.debian.npm.6.14
 # Other tags: terminus/debian-node:14.18-lts,terminus/debian-node:14.18
-FROM node:14.18.2-bullseye-slim
+FROM registry.erda.cloud/retag/node:14.18.2-bullseye-slim
 
 LABEL maintainer=hustcer<majun@terminus.io>
 
