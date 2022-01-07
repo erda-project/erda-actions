@@ -54,7 +54,7 @@ func Run() error {
 	}
 	log.AddNewLine(1)
 	// add msg because of frontend will match regularly, the regular is msg=\"(.+)\"
- 	logrus.Infof("msg=\"deploy starting... ##to_link:applicationId:%d,runtimeId:%d,deploymentId:%d\"",
+	logrus.Infof("msg=\"deploy starting... ##to_link:applicationId:%d,runtimeId:%d,deploymentId:%d\"",
 		result.ApplicationId, result.RuntimeId, result.DeploymentId)
 
 	//Set default deployment timeout is 24h.
@@ -260,25 +260,18 @@ deployloop:
 }
 
 func prepareRequest(conf *conf, workspace string) (*deployRequest, error) {
-	req := new(deployRequest)
-	req.ClusterName = conf.ClusterName
-	req.Name = conf.GittarBranch
-	req.Operator = conf.OperatorID
-	req.Source = "PIPELINE"
-	req.EdgeLocation = conf.EdgeLocation
-
-	extra := make(map[string]interface{})
-	extra["orgId"] = int(conf.OrgID)
-	extra["projectId"] = int(conf.ProjectID)
-	extra["applicationId"] = int(conf.AppID)
-	extra["workspace"] = conf.Workspace
-	if workspace != "" {
-		extra["workspace"] = workspace
+	if conf.Workspace != "" {
+		workspace = conf.Workspace
 	}
-	extra["buildId"] = conf.PipelineBuildID
+	req := new(deployRequest)
+	req.Operator = conf.OperatorID
+	req.Type = "PIPELINE"
+	req.OrgID = conf.OrgID
+	req.Workspace = workspace
+	req.ReleaseId = conf.ReleaseID
+	req.AutoRun = true
 
 	req.print()
-	req.Extra = extra
 
 	var releaseID string
 	if conf.ReleaseID != "" {

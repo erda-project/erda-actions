@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
@@ -20,9 +19,9 @@ type dice struct {
 }
 
 type DiceResponse struct {
-	Success bool        `json:"success"`
-	Data    interface{} `json:"data,omitempty"`
-	Err     Err         `json:"err,omitempty"`
+	Success bool           `json:"success"`
+	Data    DeployResponse `json:"data,omitempty"`
+	Err     Err            `json:"err,omitempty"`
 }
 
 type Err struct {
@@ -31,31 +30,43 @@ type Err struct {
 	Ctx     map[string]interface{} `json:"ctx,omitempty"`
 }
 
+type DeploymentCreateResponseDTO struct {
+	DeploymentID  int64 `json:"deploymentId"`
+	ApplicationID int64 `json:"applicationId"`
+	RuntimeID     int64 `json:"runtimeId"`
+}
+
+type DeployResponse struct {
+	DeploymentOrderId string                                 `json:"id"`
+	Operator          string                                 `json:"operator"`
+	Deployments       map[uint64]DeploymentCreateResponseDTO `json:"deployments"`
+}
+
 type DeployResult struct {
-	DeploymentId  int64  `json:"deploymentId"`
-	ApplicationId int64  `json:"applicationId"`
-	RuntimeId     int64  `json:"runtimeId"`
-	Operator      string `json:"operator"`
+	DeploymentId  int64
+	ApplicationId int64
+	RuntimeId     int64
+	Operator      string
 }
 
 type deployRequest struct {
-	ClusterName  string                 `json:"clusterName"`
-	Name         string                 `json:"name"`
-	Operator     string                 `json:"operator"`
-	Source       string                 `json:"source"`
-	ReleaseId    string                 `json:"releaseId"`
-	Extra        map[string]interface{} `json:"extra,omitempty"`
+	OrgID     uint64 `json:"orgId,omitempty"`
+	Type      string `json:"type,omitempty"`
+	ReleaseId string `json:"releaseId"`
+	Workspace string `json:"workspace,omitempty"`
+	Operator  string `json:"operator"`
+	AutoRun   bool   `json:"autoRun"`
 }
 
 func (req *deployRequest) print() {
 	log.AddNewLine(1)
 	logrus.Infof("request deploy body: ")
-	logrus.Infof(" clusterName: %s", req.ClusterName)
-	logrus.Infof(" name: %s", req.Name)
+	logrus.Infof(" orgId: %d", req.OrgID)
 	logrus.Infof(" operator: %s", req.Operator)
 	logrus.Infof(" releaseId: %s", req.ReleaseId)
-	logrus.Infof(" source: %s", req.Source)
-	logrus.Infof(" extra: %v", req.Extra)
+	logrus.Infof(" type: %s", req.Type)
+	logrus.Infof(" worspace: %s", req.Workspace)
+	logrus.Infof(" autoRun: %v", req.AutoRun)
 	log.AddLineDelimiter(" ")
 }
 
@@ -67,26 +78,36 @@ func (e *DiceDeployError) Error() string {
 	return e.s
 }
 
-const Authorization = "Authorization"
+const (
+	Authorization              = "Authorization"
+	DeploymentOrderRequestPath = "/api/deployment-orders"
+)
 
 func (d *dice) Deploy(deployReq *deployRequest, conf *conf) (*DeployResult, error) {
 	var diceResp DiceResponse
 	err := retry.DoWithInterval(func() error {
-
-		r, err := httpclient.New(httpclient.WithCompleteRedirect()).Post(conf.DiceOpenapiPrefix).Path("/api/runtimes").
+		r, err := httpclient.New(httpclient.WithCompleteRedirect()).Post(conf.DiceOpenapiPrefix).Path(DeploymentOrderRequestPath).
 			Header(Authorization, conf.DiceOpenapiToken).JSONBody(&deployReq).Do().JSON(&diceResp)
 		if err != nil {
+			logrus.Errorf("failed to create http client, err: %v", err)
 			return err
 		}
+
 		if !r.IsOK() {
-			return errors.Errorf("create a dice deploy failed, statusCode: %d, diceResp:%+v",
+			reqErr := fmt.Errorf("create a dice deploy failed, statusCode: %d, diceResp:%+v",
 				r.StatusCode(), diceResp)
+			logrus.Error(reqErr)
+			return reqErr
 		}
 
 		if !diceResp.Success {
-			return errors.Errorf("create dice deploy failed. code=%s, message=%s, ctx=%v",
+			respErr := errors.Errorf("create dice deploy failed. code=%s, message=%s, ctx=%v",
 				diceResp.Err.Code, diceResp.Err.Message, diceResp.Err.Ctx)
+			logrus.Error(respErr)
+			return respErr
 		}
+
+		logrus.Infof("request response: %+v", diceResp)
 
 		return nil
 	}, 5, time.Second*3)
@@ -96,12 +117,17 @@ func (d *dice) Deploy(deployReq *deployRequest, conf *conf) (*DeployResult, erro
 		return nil, err
 	}
 
-	result := DeployResult{}
-	if err := mapstructure.Decode(diceResp.Data, &result); err != nil {
-		return nil, errors.Wrapf(err, "mapstructure data=%+v", result)
+	deployment, ok := diceResp.Data.Deployments[conf.AppID]
+	if !ok {
+		return nil, errors.Wrapf(err, "get deployment info from reponse error, application: %d", conf.AppID)
 	}
 
-	return &result, nil
+	return &DeployResult{
+		DeploymentId:  deployment.DeploymentID,
+		ApplicationId: deployment.ApplicationID,
+		RuntimeId:     deployment.RuntimeID,
+		Operator:      diceResp.Data.Operator,
+	}, nil
 }
 
 type R struct {
