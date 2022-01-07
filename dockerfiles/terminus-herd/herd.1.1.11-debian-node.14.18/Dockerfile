@@ -5,7 +5,7 @@
 # Kernel: Linux 08f4f27793e7 5.10.47-linuxkit Sat Jul 3 21:51:47 2021 x86_64
 # Build cmd: docker build . -t terminus/debian-node.14-herd.1.1.11
 # Other tags: terminus/debian-herd:1.1.11-n14.18,terminus/debian-herd:1.1.11
-FROM node:14.18.2-bullseye-slim
+FROM registry.erda.cloud/retag/node:14.18.2-bullseye-slim
 
 LABEL maintainer=hustcer<majun@terminus.io>
 
