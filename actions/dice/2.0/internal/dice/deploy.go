@@ -27,7 +27,7 @@ func Run() error {
 	}
 	d := &dice{conf: &cfg}
 
-	deployReq, err := prepareRequest(&cfg, cfg.AssignedWorkspace)
+	deployReq, err := prepareRequest(&cfg)
 	if err != nil {
 		return errors.Wrap(err, "prepare dice deploy request failed")
 	}
@@ -54,7 +54,7 @@ func Run() error {
 	}
 	log.AddNewLine(1)
 	// add msg because of frontend will match regularly, the regular is msg=\"(.+)\"
- 	logrus.Infof("msg=\"deploy starting... ##to_link:applicationId:%d,runtimeId:%d,deploymentId:%d\"",
+	logrus.Infof("msg=\"deploy starting... ##to_link:applicationId:%d,runtimeId:%d,deploymentId:%d\"",
 		result.ApplicationId, result.RuntimeId, result.DeploymentId)
 
 	//Set default deployment timeout is 24h.
@@ -114,15 +114,15 @@ func generateMetadata(conf *conf, runtimeID int64, deploymentID int64) *apistruc
 }
 
 // storeMetaFileWithErr metadata写入err信息
-func storeMetaFileWithErr(conf *conf, runtimeID int64, deploymentID int64, deployResult *R) error {
+func storeMetaFileWithErr(conf *conf, runtimeID int64, deploymentID int64, deployResult *DeploymentStatusRespData) error {
 	if deployResult == nil {
 		return storeMetaFile(conf, runtimeID, deploymentID)
 	}
-	if len(deployResult.Data.MoudleErrMsg) == 0 {
+	if len(deployResult.Data.ModuleErrMsg) == 0 {
 		return storeMetaFile(conf, runtimeID, deploymentID)
 	}
 	metadata := generateMetadata(conf, runtimeID, deploymentID)
-	for k, v := range deployResult.Data.MoudleErrMsg {
+	for k, v := range deployResult.Data.ModuleErrMsg {
 		*metadata = append(*metadata, apistructs.MetadataField{
 			Name:  k,
 			Value: v,
@@ -227,7 +227,7 @@ deployloop:
 			deploying, runtime, err = d.Check(result, d.conf, &lastDeployStatusInfo)
 			if err != nil {
 				logrus.Errorf("check deploying is not null")
-				if _, ok := err.(*DiceDeployError); ok {
+				if _, ok := err.(*DeployErrResponse); ok {
 					logrus.Errorf("Deploy to Dice Failed: %s", err.Error())
 				}
 				return nil, err
@@ -259,25 +259,16 @@ deployloop:
 	return runtime, nil
 }
 
-func prepareRequest(conf *conf, workspace string) (*deployRequest, error) {
-	req := new(deployRequest)
-	req.ClusterName = conf.ClusterName
-	req.Name = conf.GittarBranch
-	req.Operator = conf.OperatorID
-	req.Source = "PIPELINE"
+func prepareRequest(conf *conf) (*CreateDeploymentOrderRequest, error) {
+	req := new(CreateDeploymentOrderRequest)
+	req.Type = "PIPELINE"
+	req.Workspace = conf.Workspace
+	req.ReleaseId = conf.ReleaseID
+	req.AutoRun = true
 
-	extra := make(map[string]interface{})
-	extra["orgId"] = int(conf.OrgID)
-	extra["projectId"] = int(conf.ProjectID)
-	extra["applicationId"] = int(conf.AppID)
-	extra["workspace"] = conf.Workspace
-	if workspace != "" {
-		extra["workspace"] = workspace
+	if conf.AssignedWorkspace != "" {
+		req.Workspace = conf.AssignedWorkspace
 	}
-	extra["buildId"] = conf.PipelineBuildID
-
-	req.print()
-	req.Extra = extra
 
 	var releaseID string
 	if conf.ReleaseID != "" {
@@ -286,11 +277,13 @@ func prepareRequest(conf *conf, workspace string) (*deployRequest, error) {
 		var err error
 		releaseID, err = getReleaseId(conf.ReleaseIDPath)
 		if err != nil {
+			logrus.Errorf("failed to get release id: %s", conf.ReleaseIDPath)
+			req.print()
 			return nil, err
 		}
 	}
 
-	logrus.Infof("releaseID: %s", releaseID)
+	req.print()
 
 	req.ReleaseId = releaseID
 
