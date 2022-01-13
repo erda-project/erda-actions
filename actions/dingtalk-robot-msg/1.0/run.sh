@@ -27,4 +27,4 @@ echo "INFO: ts: ${ts}"
 
 sig=$(printf "$ts\n$sec" | openssl dgst -sha256 -hmac "$sec" -binary | base64)
 
-curl -XPOST "https://oapi.dingtalk.com/robot/send?access_token=$token&timestamp=$ts&sign=$sig" -d@$msg
+curl -XPOST "https://oapi.dingtalk.com/robot/send?access_token=$token&timestamp=$ts&sign=$sig" -H 'Content-Type: application/json' -d@$msg
