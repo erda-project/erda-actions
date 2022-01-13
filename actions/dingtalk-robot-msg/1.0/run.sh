@@ -5,7 +5,7 @@ set -o errexit
 ts=$(date +%s%3N)
 token=${ACTION_ACCESS_TOKEN}
 sec=${ACTION_SECRET}
-msg=${ACTION_MSG}
+msg=${ACTION_MSG_FILE}
 
 if [ -z "${token}" ]; then
   echo "ERROR: access_token is not set"
@@ -24,4 +24,4 @@ fi
 
 sig=$(printf "$ts\n$sec" | openssl dgst -sha256 -hmac "$sec" -binary | base64)
 
-curl -XPOST "https://oapi.dingtalk.com/robot/send?access_token=$token&timestamp=$ts&sign=$sig" -d $msg
+curl -XPOST "https://oapi.dingtalk.com/robot/send?access_token=$token&timestamp=$ts&sign=$sig" -d@$msg
