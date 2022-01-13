@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -o errexit
+set -x
 
 ts=$(date +%s%3N)
 token=${ACTION_ACCESS_TOKEN}
@@ -21,6 +22,8 @@ if [ -z "${msg}" ]; then
   echo "ERROR: msg is not set"
   exit 1
 fi
+
+echo "INFO: ts: ${ts}"
 
 sig=$(printf "$ts\n$sec" | openssl dgst -sha256 -hmac "$sec" -binary | base64)
 
