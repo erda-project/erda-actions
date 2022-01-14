@@ -2,26 +2,19 @@ name: mobile-template
 version: "1.0"
 type: action
 category: build_management
-displayName: 移动端代码模板初始化
-desc: 移动端代码模板初始化
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.displayName }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.15"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "移动端代码模板初始化"
-    desc: 移动端代码模板初始化
-  en-US:
-    displayName: "Mobile terminal code template initialization"
-    desc: Initialization of mobile code template
 
 params:
   - name: display_name
     type: string
-    desc: app 显示名称
+    desc: ${{ i18n.params.display_name.desc }}
     required: true
   - name: bundle_id
     type: string
@@ -31,3 +24,8 @@ params:
     type: string
     desc: android package name
     required: true
+locale:
+  zh-CN:
+    desc: 移动端代码模板初始化
+    displayName: 移动端代码模板初始化
+    params.display_name.desc: app 显示名称

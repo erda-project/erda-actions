@@ -3,8 +3,8 @@ version: "1.0"
 type: action
 category: build_management
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/dadf5ad2-8f66-4eee-a53f-3119bebb074b.png
-displayName: 容器镜像打包
-desc: 针对自定义 dockerfile 打包，产出可运行镜像
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 labels:
   project_level_app: true
@@ -12,27 +12,19 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
 supportedErdaVersions:
   - ">= 1.0"
-
-locale:
-  zh-CN:
-    displayName: "容器镜像打包"
-    desc: 针对自定义 dockerfile 打包，产出可运行镜像
-  en-US:
-    displayName: "Container image packaging"
-    desc: "For custom dockerfile packaging, the output can run the image"
-
+  
 params:
   - name: workdir
     type: string
-    desc: 工程根目录
+    desc: ${{ i18n.params.workdir.desc }}
     required: true
   - name: path
     type: string
-    desc: dockerfile 相对应用路径
+    desc: ${{ i18n.params.path.desc }}
     required: true
   - name: build_args
     type: map
-    desc: Dockerfile build args，在这里填写的键值对 会被渲染成为 Dockerfile 中的 ARG
+    desc: ${{ i18n.params.build_args.desc }}
   - name: image
     type: map
     desc: image.name & image.tag
@@ -42,3 +34,10 @@ params:
 
 outputs:
   - name: image
+locale:
+  zh-CN:
+    desc: 针对自定义 dockerfile 打包，产出可运行镜像
+    displayName: 容器镜像打包
+    params.build_args.desc: Dockerfile build args，在这里填写的键值对 会被渲染成为 Dockerfile 中的 ARG
+    params.path.desc: dockerfile 相对应用路径
+    params.workdir.desc: 工程根目录

@@ -2,31 +2,30 @@ name: js-script
 version: "1.0"
 type: action
 category: build_management
-displayNameL: 自定义 js 命令构建
-desc: 自定义js命令构建产物
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "自定义 js 命令构建"
-    desc: "自定义js命令构建产物"
-  en-US:
-    displayName: "Custom js command build"
-    desc: "Custom js command build product"
-
 params:
   - name: workdir
     type: string
-    desc: 工程根目录
+    desc: ${{ i18n.params.workdir.desc }}
     required: true
   - name: commands
     type: string_array
-    desc: 编译命令
+    desc: ${{ i18n.params.commands.desc }}
   - name: targets
     type: string_array
-    desc: 输出内容
+    desc: ${{ i18n.params.targets.desc }}
     required: false
+locale:
+  zh-CN:
+    desc: 自定义js命令构建产物
+    displayName: 自定义 js 命令构建
+    params.commands.desc: 编译命令
+    params.targets.desc: 输出内容
+    params.workdir.desc: 工程根目录

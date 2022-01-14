@@ -2,7 +2,7 @@ name: dice-deploy-redeploy
 version: "1.0"
 type: action
 category: deploy_management
-desc: 用于 dice 平台部署应用服务
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.19"
@@ -10,14 +10,6 @@ supportedErdaVersions:
   - ">= 1.0"
 
 params:
-
-locale:
-  zh-CN:
-    displayName: "dice-deploy-redeploy"
-    desc: 用于 dice 平台部署应用服务
-  en-US:
-    displayName: "dice-deploy-redeploy"
-    desc: "Used for dice platform deployment application service"
 
 accessibleAPIs:
   # redeploy
@@ -27,6 +19,11 @@ accessibleAPIs:
 
 outputs:
   - name: runtime_id
-    desc: 部署中心运行时 ID
+    desc: ${{ i18n.outputs.runtime_id.desc }}
   - name: deployment_id
-    desc: 部署单 ID
+    desc: ${{ i18n.outputs.deployment_id.desc }}
+locale:
+  zh-CN:
+    desc: 用于 dice 平台部署应用服务
+    outputs.deployment_id.desc: 部署单 ID
+    outputs.runtime_id.desc: 部署中心运行时 ID

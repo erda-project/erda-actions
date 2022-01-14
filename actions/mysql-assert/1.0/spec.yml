@@ -2,8 +2,8 @@ name: mysql-assert
 version: '1.0'
 type: action
 category: test_management
-displayName: mysql 配置单
-desc: 在对应的数据源中执行 sql 语句且可以断言和出参
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 useProtocol: true
 labels:
@@ -14,47 +14,39 @@ supportedErdaVersions:
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.21"
 
-locale:
-  zh-CN:
-    displayName: "mysql 配置单断言"
-    desc: 在对应的数据源中执行 sql 语句且可以断言和出参
-  en-US:
-    displayName: "mysql configuration single assertion"
-    desc: Execute sql statement in the corresponding data source and can assert and output parameters
-
 params:
   - name: datasource
     required: true
-    desc: 数据源
+    desc: ${{ i18n.formProps.params.datasource.label }}
   - name: database
     required: true
-    desc: 数据库名称
+    desc: ${{ i18n.formProps.params.database.labelTip }}
   - name: sql
     required: true
-    desc: sql 语句
+    desc: ${{ i18n.params.sql.desc }}
   - name: out_params
     required: false
-    desc: 出参且断言
+    desc: ${{ i18n.formProps.params.out_params.label }}
     type: struct_array
     struct:
       - name: key
         required: true
-        desc: 出参名
+        desc: ${{ i18n.formProps.params.out_params.componentProps.objItems.key.label }}
       - name: expression
         required: true
-        desc: 支持 linux jq 表达式 以 . 开头，支持 jackson 以 $. 开头
+        desc: ${{ i18n.params.out_params.struct.expression.desc }}
       - name: value
-        desc: 值
+        desc: ${{ i18n.params.out_params.struct.value.desc }}
       - name: assert
-        desc: 断言，可填写 等于:=,不等于:!=,小于等于:<=,大于等于:>=,大于:>,小于:<,包含:contains,不包含:not_contains,属于:belong,不属于:not_belong,为空:empty,不为空:not_empty,存在:exist,不存在:not_exist
+        desc: ${{ i18n.params.out_params.struct.assert.desc }}
 
 formProps:
   - key: params
     component: formGroup
     group: params
     componentProps:
-      title: 任务参数
-  - label: 数据源
+      title: ${{ i18n.formProps.params.componentProps.title }}
+  - label: ${{ i18n.formProps.params.datasource.label }}
     component: dataSourceSelector
     required: true
     key: params.datasource
@@ -62,16 +54,16 @@ formProps:
     componentProps:
       projectId: ''
       dataSourceType: mysql
-    labelTip: 数据源
-  - label: 库名称
+    labelTip: ${{ i18n.formProps.params.datasource.label }}
+  - label: ${{ i18n.formProps.params.database.label }}
     component: input
     required: true
     key: params.database
     group: params
     componentProps:
-      placeholder: 请输入数据
-    labelTip: 数据库名称
-  - label: sql语句
+      placeholder: ${{ i18n.formProps.params.database.componentProps.placeHolder }}
+    labelTip: ${{ i18n.formProps.params.database.labelTip }}
+  - label: ${{ i18n.formProps.params.sql.label }}
     component: textarea
     required: true
     key: params.sql
@@ -80,34 +72,32 @@ formProps:
       autoSize:
         minRows: 2
         maxRows: 12
-      placeholder: 请输入数据
-    labelTip: sql语句
-  - label: 出参且断言
+      placeholder: ${{ i18n.formProps.params.database.componentProps.placeHolder }}
+    labelTip: ${{ i18n.formProps.params.sql.label }}
+  - label: ${{ i18n.formProps.params.out_params.label }}
     component: arrayObj
     key: params.out_params
     group: params
     componentProps:
       objItems:
         - key: key
-          label: 出参名
-          labelTip: 出参名
+          label: ${{ i18n.formProps.params.out_params.componentProps.objItems.key.label }}
+          labelTip: ${{ i18n.formProps.params.out_params.componentProps.objItems.key.label }}
           required: true
         - key: expression
-          label: 出参表达式
-          labelTip: 出参表达式
+          label: ${{ i18n.formProps.params.out_params.componentProps.objItems.expression.label }}
+          labelTip: ${{ i18n.formProps.params.out_params.componentProps.objItems.expression.label }}
           required: true
         - key: value
-          label: 断言的值
-          labelTip: 断言的值
+          label: ${{ i18n.formProps.params.out_params.componentProps.objItems.value.label }}
+          labelTip: ${{ i18n.formProps.params.out_params.componentProps.objItems.value.label }}
         - key: assert
-          label: 断言
-          labelTip: >-
-            断言，可填写 =, !=, <=, >=, >, <, contains, not_contains, belong,
-            not_belong, empty, not_empty, exist, not_exist
+          label: ${{ i18n.formProps.params.out_params.componentProps.objItems.assert.label }}
+          labelTip: ${{ i18n.formProps.params.out_params.componentProps.objItems.assert.labelTip }}
           component: select
-          options: >-
-             =:等于;!=:不等于;<=:小于等于;>=:大于等于;>:大于;<:小于;contains:包含;not_contains:不包含;belong:属于;not_belong:不属于;empty:为空;not_empty:不为空;exist:存在;not_exist:不存在
-    labelTip: 出参且断言
+          options: ${{ I18N.assert.options }}
+            
+    labelTip: ${{ i18n.formProps.params.out_params.label }}
 
 outputsFromParams:
   - type: jq
@@ -118,3 +108,37 @@ accessibleAPIs:
   - path: /api/addons/<addonId>
     method: GET
     schema: http
+locale:
+  zh-CN:
+    desc: 在对应的数据源中执行 sql 语句且可以断言和出参
+    displayName: mysql 配置单
+    formProps.params.componentProps.title: 任务参数
+    formProps.params.database.componentProps.placeHolder: 请输入数据
+    formProps.params.database.label: 库名称
+    formProps.params.database.labelTip: 数据库名称
+    formProps.params.datasource.label: 数据源
+    formProps.params.datasource.labelTip: 数据源
+    formProps.params.out_params.componentProps.objItems.assert.label: 断言
+    formProps.params.out_params.componentProps.objItems.assert.labelTip: >- 
+      断言，可填写 =, !=, <=, >=, >, <, contains, not_contains, belong, not_belong, empty, not_empty,
+      exist, not_exist
+    formProps.params.out_params.componentProps.objItems.expression.label: 出参表达式
+    formProps.params.out_params.componentProps.objItems.expression.labelTip: 出参表达式
+    formProps.params.out_params.componentProps.objItems.key.label: 出参名
+    formProps.params.out_params.componentProps.objItems.key.labelTip: 出参名
+    formProps.params.out_params.componentProps.objItems.value.label: 断言的值
+    formProps.params.out_params.componentProps.objItems.value.labelTip: 断言的值
+    formProps.params.out_params.label: 出参且断言
+    formProps.params.out_params.labelTip: 出参且断言
+    formProps.params.sql.componentProps.placeHolder: 请输入数据
+    formProps.params.sql.label: sql语句
+    formProps.params.sql.labelTip: sql语句
+    params.database.desc: 数据库名称
+    params.datasource.desc: 数据源
+    params.out_params.desc: 出参且断言
+    params.out_params.struct.assert.desc: 断言，可填写 等于:=,不等于:!=,小于等于:<=,大于等于:>=,大于:>,小于:<,包含:contains,不包含:not_contains,属于:belong,不属于:not_belong,为空:empty,不为空:not_empty,存在:exist,不存在:not_exist
+    params.out_params.struct.expression.desc: 支持 linux jq 表达式 以 . 开头，支持 jackson 以 $. 开头
+    params.out_params.struct.key.desc: 出参名
+    params.out_params.struct.value.desc: 值
+    params.sql.desc: sql 语句
+    assert.options: =:等于;!=:不等于;<=:小于等于;>=:大于等于;>:大于;<:小于;contains:包含;not_contains:不包含;belong:属于;not_belong:不属于;empty:为空;not_empty:不为空;exist:存在;not_exist:不存在

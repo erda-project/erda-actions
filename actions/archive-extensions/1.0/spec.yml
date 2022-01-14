@@ -12,48 +12,40 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 name: archive-extensions
-displayName: Erda Extensions 归档
+displayName: ${{ i18n.displayName }}
 logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/06/07/0784a1af-7c5d-490a-847e-dae9307f32e1.png
 version: "1.0"
 type: action
 category: deploy_management
-desc: extension 打包归档工具，将 extensions 打包归档到 OSS
+desc: ${{ i18n.desc }}
 public: true
 supportedErdaVersions:
   - ">=1.0"
 
-locale:
-  zh-CN:
-    displayName: "Erda Extensions 归档"
-    desc: "extension 打包归档工具，将 extensions 打包归档到 OSS"
-  en-US:
-    displayName: "Erda Extensions archive"
-    desc: "Extension package archive tool, package and archive extensions to OSS"
-
 params:
   - name: repos
     type: string_array
-    desc: extensions 仓库列表, 如 ${git-checkout}
+    desc: ${{ i18n.params.repos.desc }}
 
   - name: ossEndpoint
     type: string
-    desc: OSS 域名, 默认 oss-cn-hangzhou.aliyuncs.com
+    desc: ${{ i18n.params.ossEndpoint.desc }}
     required: true
     default: oss-cn-hangzhou.aliyuncs.com
 
   - name: ossBucket
     type: string
-    desc: OSS bucket, 如 erda-release
+    desc: ${{ i18n.params.ossBucket.desc }}
     required: true
 
   - name: ossPath
     type: string
-    desc: OSS 中存放打包后仓库的的路径，一般不需要指定，默认为 archived-versions/${gitref}/extensions
+    desc: ${{ i18n.params.ossPath.desc }}
     required: false
 
   - name: gitref
     type: string
-    desc: git ref, 可以是 branch, tag, commit 等，用于拼接 OSS 存放路径 archived-versions/${gitref}/extensions
+    desc: ${{ i18n.params.gitref.desc }}
 
   - name: ossAccessKeyID
     type: string
@@ -70,3 +62,12 @@ params:
     desc: releases archvied directory
     required: true
     default: archived-versions
+locale:
+  zh-CN:
+    desc: extension 打包归档工具，将 extensions 打包归档到 OSS
+    displayName: Erda Extensions 归档
+    params.gitref.desc: git ref, 可以是 branch, tag, commit 等，用于拼接 OSS 存放路径 archived-versions/${gitref}/extensions
+    params.ossBucket.desc: OSS bucket, 如 erda-release
+    params.ossEndpoint.desc: OSS 域名, 默认 oss-cn-hangzhou.aliyuncs.com
+    params.ossPath.desc: OSS 中存放打包后仓库的的路径，一般不需要指定，默认为 archived-versions/${gitref}/extensions
+    params.repos.desc: extensions 仓库列表, 如 ${git-checkout}

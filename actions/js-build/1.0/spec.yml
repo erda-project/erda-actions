@@ -2,9 +2,9 @@ name: js-build
 version: "1.0"
 type: action
 category: build_management
-displayName: Node.js 工程打包
+displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/ba477ac1-c375-4fd4-ba23-b76966830daf.jpeg
-desc: 针对 nodejs 工程的编译打包任务
+desc: ${{ i18n.desc }}
 public: true
 labels:
   project_level_app: true
@@ -13,24 +13,23 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "Node.js 工程打包"
-    desc: "针对 nodejs 工程的编译打包任务"
-  en-US:
-    displayName: "Node.js project packaging"
-    desc: "Compilation and packaging tasks for nodejs projects"
-
 params:
   - name: node_version
     type: string
-    desc: 版本
+    desc: ${{ i18n.params.node_version.desc }}
     default: "12"
   - name: workdir
     type: string
-    desc: 工程根目录
+    desc: ${{ i18n.params.workdir.desc }}
     default: "."
   - name: build_cmd
     type: string_array
-    desc: 编译 nodejs 命令
+    desc: ${{ i18n.params.build_cmd.desc }}
     required: true
+locale:
+  zh-CN:
+    desc: 针对 nodejs 工程的编译打包任务
+    displayName: Node.js 工程打包
+    params.build_cmd.desc: 编译 nodejs 命令
+    params.node_version.desc: 版本
+    params.workdir.desc: 工程根目录

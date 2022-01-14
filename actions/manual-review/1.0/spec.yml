@@ -2,32 +2,24 @@ name: manual-review
 version: '1.0'
 type: action
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/01/04/ef2070ae-5046-43f5-97ef-6ffb9b8e2d34.png
-displayName: 人工确认
+displayName: ${{ i18n.displayName }}
 # add category: test
 category: test_management
-desc: 在流水线过程中添加人工确认步骤
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.20"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "人工确认"
-    desc: 在流水线过程中添加人工确认步骤
-  en-US:
-    displayName: "Manual confirmation"
-    desc: Add a manual confirmation step in the pipeline process
-
 params:
   - name: processor
     required: true
-    desc: 处理人 id
+    desc: ${{ i18n.formProps.params.processor.label }} id
     type: string_array
   - name: wain_time_interval_sec
     type: int
-    desc: 等待时间
+    desc: ${{ i18n.formProps.params.wating_time.labelTip }}
     default: 5
 accessibleAPIs:
   # test env info
@@ -47,8 +39,8 @@ formProps:
    component: formGroup
    group: params
    componentProps:
-     title: 任务参数
- - label: 处理人
+     title: ${{ i18n.formProps.params.componentProps.title }}
+ - label: ${{ i18n.formProps.params.processor.label }}
    component: memberSelector
    required: true
    key: params.processor
@@ -60,7 +52,17 @@ formProps:
    component: input
    key: params.wating_time
    componentProps:
-     placeholder: 请输入数据
+     placeholder: ${{ i18n.formProps.params.wating_time.componentProps.placeHolder }}
    group: params
    defaultValue: 5
-   labelTip: 等待时间
+   labelTip: ${{ i18n.formProps.params.wating_time.labelTip }}
+locale:
+  zh-CN:
+    desc: 在流水线过程中添加人工确认步骤
+    displayName: 人工确认
+    formProps.params.componentProps.title: 任务参数
+    formProps.params.processor.label: 处理人
+    formProps.params.wating_time.componentProps.placeHolder: 请输入数据
+    formProps.params.wating_time.labelTip: 等待时间
+    params.processor.desc: 处理人 id
+    params.wain_time_interval_sec.desc: 等待时间

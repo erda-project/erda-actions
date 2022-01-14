@@ -2,98 +2,84 @@ name: release
 version: "1.0"
 type: action
 category: version_management
-displayName: 应用打包发布制品
+displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/1211ff12-97de-460a-9274-3de39cb02714.png
-desc: 用于打包完成时，向dicehub 提交完整可部署的dice.yml。用户若没在pipeline.yml里定义该action，CI会自动在pipeline.yml里插入该action
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "应用打包发布制品"
-    desc: "用于打包完成时，向dicehub 提交完整可部署的dice.yml。用户若没在pipeline.yml里定义该action，CI会自动在pipeline.yml里插入该action"
-  en-US:
-    displayName: "Application packaged and released products"
-    desc: "When the packaging is completed, submit a complete deployable dice.yml to dicehub. If the user does not define the action in pipeline.yml, CI will automatically insert the action in pipeline.yml"
-
 params:
   - name: dice_yml
     type: string
-    desc: dice.yml 文件路径。一般通过 ${git-checkout}/dice.yml 方式从代码仓库中进行引用。
+    desc: ${{ i18n.params.dice_yml.desc }}
     required: false
 
   - name: cross_cluster
     type: bool
-    desc: 制品是否可以跨集群部署，默认为 false
+    desc: ${{ i18n.params.cross_cluster.desc }}
     required: false
     default: false
 
   - name: replacement_images
     type: string_array
-    desc: dice_yml, 与 image 参数功能相同，二者指定其一即可
+    desc: ${{ i18n.params.replacement_images.desc }}
     required: false
 
   - name: init_sql
     type: string
-    desc: |
-      用户可以指定一个包含数据库初始化脚本的目录，目录下可以有多个 sql 文件，每个 sql 文件对应一个 数据库级别 的初始化脚本。
-      sql 文件名去掉 .sql 后缀得到的即为 db 的名字，这个名字需要在 dice.yml 中 mysql addon 的 options.create_dbs 中声明。
-      执行成功后，会在 mysql addon 的 options 下新增 init_sql 字段。
-      init_sql 功能只有 mysql addon 第一次初始化的时候有效。
+    desc: ${{ i18n.params.init_sql.desc }}
     required: false
 
   - name: dice_development_yml
     type: string
-    desc: dice_development.yml 文件路径。
+    desc: ${{ i18n.params.dice_development_yml.desc }}
     required: false
 
   - name: dice_test_yml
     type: string
-    desc: dice_test.yml 文件路径。
+    desc: ${{ i18n.params.dice_test_yml.desc }}
     required: false
 
   - name: dice_staging_yml
     type: string
-    desc: dice_staging.yml 文件路径。
+    desc: ${{ i18n.params.dice_staging_yml.desc }}
     required: false
 
   - name: dice_production_yml
     type: string
-    desc: dice_production.yml 文件路径。
+    desc: ${{ i18n.params.dice_production_yml.desc }}
     required: false
 
   - name: check_diceyml
     type: bool
-    desc: |
-      是否需要对 dice.yml 进行格式校验。默认为 true。
-      在某些特定场景下，dice.yml 不面向发布，可能包含一些模板内容，无法通过校验，但仍然需要 release，则需要设置 check_diceyml: false。
+    desc: ${{ i18n.params.check_diceyml.desc }}
     required: false
 
   - name: image
     type: map
-    desc: 与 replacement_images 功能相同，以字符串形式提供 微服务-镜像 对应信息，二者指定其一即可
+    desc: ${{ i18n.params.image.desc }}
     required: false
 
   - name: services
     type: map
-    desc: 项目基于那个镜像运行，运行命令是什么
+    desc: ${{ i18n.params.services.desc }}
 
   - name: aab_info
     type: map
-    desc: 等做完 aab 里的 AndroidManifest.xml 解析后，可删除该参数
+    desc: ${{ i18n.params.aab_info.desc }}
     required: false
   - name: tag_version
     type: string
-    desc: 版本号
+    desc: ${{ i18n.params.tag_version.desc }}
   - name: release_mobile
     type: struct
-    desc: 移动端打包
+    desc: ${{ i18n.params.release_mobile.desc }}
     struct:
-      - {name: files, type: string_array, desc: 打包文件 }
-      - {name: version, type: string, desc: 移动包版本 }
+      - {name: files, type: string_array, desc: ${{ i18n.params.release_mobile.struct.files.desc }} }
+      - {name: version, type: string, desc: ${{ i18n.params.release_mobile.struct.version.desc }} }
 
 accessibleAPIs:
   # push release
@@ -111,3 +97,29 @@ accessibleAPIs:
 
 outputs:
   - name: releaseID
+locale:
+  zh-CN:
+    desc: 用于打包完成时，向dicehub 提交完整可部署的dice.yml。用户若没在pipeline.yml里定义该action，CI会自动在pipeline.yml里插入该action
+    displayName: 应用打包发布制品
+    params.aab_info.desc: 等做完 aab 里的 AndroidManifest.xml 解析后，可删除该参数
+    params.check_diceyml.desc: |
+      是否需要对 dice.yml 进行格式校验。默认为 true。
+      在某些特定场景下，dice.yml 不面向发布，可能包含一些模板内容，无法通过校验，但仍然需要 release，则需要设置 check_diceyml: false。
+    params.cross_cluster.desc: 制品是否可以跨集群部署，默认为 false
+    params.dice_development_yml.desc: dice_development.yml 文件路径。
+    params.dice_production_yml.desc: dice_production.yml 文件路径。
+    params.dice_staging_yml.desc: dice_staging.yml 文件路径。
+    params.dice_test_yml.desc: dice_test.yml 文件路径。
+    params.dice_yml.desc: dice.yml 文件路径。一般通过 ${git-checkout}/dice.yml 方式从代码仓库中进行引用。
+    params.image.desc: 与 replacement_images 功能相同，以字符串形式提供 微服务-镜像 对应信息，二者指定其一即可
+    params.init_sql.desc: |
+      用户可以指定一个包含数据库初始化脚本的目录，目录下可以有多个 sql 文件，每个 sql 文件对应一个 数据库级别 的初始化脚本。
+      sql 文件名去掉 .sql 后缀得到的即为 db 的名字，这个名字需要在 dice.yml 中 mysql addon 的 options.create_dbs 中声明。
+      执行成功后，会在 mysql addon 的 options 下新增 init_sql 字段。
+      init_sql 功能只有 mysql addon 第一次初始化的时候有效。
+    params.release_mobile.desc: 移动端打包
+    params.release_mobile.struct.files.desc: 打包文件
+    params.release_mobile.struct.version.desc: 移动包版本
+    params.replacement_images.desc: dice_yml, 与 image 参数功能相同，二者指定其一即可
+    params.services.desc: 项目基于那个镜像运行，运行命令是什么
+    params.tag_version.desc: 版本号

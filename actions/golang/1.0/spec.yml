@@ -2,7 +2,7 @@ name: golang
 version: "1.0"
 type: action
 category: build_management
-displayName: go语言构建打包
+displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/666f1bf9-5e6d-43cb-803b-2d217361e28e.png
 desc: golang action
 public: true
@@ -11,30 +11,32 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "go语言构建打包"
-    desc: go语言构建打包
-  en-US:
-    displayName: "Go language build and package"
-    desc: "Go language build and package"
-
 params:
   - name: context
-    desc: 代码路径
+    desc: ${{ i18n.params.context.desc }}
     required: true
   - name: service
-    desc: 服务名
+    desc: ${{ i18n.params.service.desc }}
   - name: command
-    desc: 构建命令
+    desc: ${{ i18n.params.command.desc }}
   - name: target
-    desc: 构建产物路径
+    desc: ${{ i18n.params.target.desc }}
   - name: assets
-    desc: 资源文件
+    desc: ${{ i18n.params.assets.desc }}
     type: string_array
   - name: package
-    desc: go包名 优先从包govendor和gomod中探测
+    desc: ${{ i18n.params.package.desc }}
 
 outputs:
   - name: image
-    desc: 镜像
+    desc: ${{ i18n.outputs.image.desc }}
+locale:
+  zh-CN:
+    displayName: go语言构建打包
+    outputs.image.desc: 镜像
+    params.assets.desc: 资源文件
+    params.command.desc: 构建命令
+    params.context.desc: 代码路径
+    params.package.desc: go包名 优先从包govendor和gomod中探测
+    params.service.desc: 服务名
+    params.target.desc: 构建产物路径

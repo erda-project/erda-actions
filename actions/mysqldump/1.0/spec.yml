@@ -10,67 +10,78 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "mysqldump"
-    desc: "mysqldump"
-  en-US:
-    displayName: "mysqldump"
-    desc: "mysqldump"
 
 params:
   - name: mysql_host
     required: true
-    desc: 数据库连接地址
+    desc: ${{ i18n.params.mysql_host.desc }}
   - name: mysql_port
     required: false
-    desc: 数据库连接端口
+    desc: ${{ i18n.params.mysql_port.desc }}
     default: 3306
   - name: mysql_username
     required: true
-    desc: 数据库用户名
+    desc: ${{ i18n.params.mysql_username.desc }}
   - name: mysql_password
     required: false
-    desc: 数据库密码
+    desc: ${{ i18n.params.mysql_password.desc }}
   - name: mysql_database
     required: true
-    desc: 数据库
+    desc: ${{ i18n.params.mysql_database.desc }}
   - name: dump_all_tables
     required: false
-    desc: 是否操作指定数据库下的所有表。可配合 dump_all_tables_ignore_regexp 使用，即导出所有表，除了指定的需要忽略的表
+    desc: ${{ i18n.params.dump_all_tables.desc }}
     default: false
   - name: dump_all_tables_ignore_regexp
     required: false
-    desc: 导出指定数据库下的所有表时(dump_all_tables=true)，忽略匹配正则表达式的表。例如：^(fdp|pmp).*$ 忽以 fdp 或 pmp 开头的表
+    desc: ${{ i18n.params.dump_all_tables_ignore_regexp.desc }}
   - name: global_drop_table_if_not_exists
     required: false
-    desc: 全局配置：drop 已有表并重建
+    desc: ${{ i18n.params.global_drop_table_if_not_exists.desc }}
     default: true
   - name: global_charset
     required: false
     default: utf8mb4
-    desc: 全局字符集
+    desc: ${{ i18n.params.global_charset.desc }}
   - name: global_try_filter_by_columns_and_values
     required: false
-    desc: 尝试使用字段进行过滤。若字段存在，则过滤；否则忽略
+    desc: ${{ i18n.params.global_try_filter_by_columns_and_values.desc }}
   - name: must_include_tables
     required: false
-    desc: 指定必须要 dump 的表，这里声明的表一定会被 dump。该参数优先级高于 dump_all_tables_ignore_regexp
+    desc: ${{ i18n.params.must_include_tables.desc }}
     type: struct_array
     struct:
       - name: table
         required: true
-        desc: 表名
+        desc: ${{ i18n.params.must_include_tables.struct.table.desc }}
       - name: where
         required: false
-        desc: 过滤条件，若为空，则 dump 该表下的所有数据
+        desc: ${{ i18n.params.must_include_tables.struct.where.desc }}
       - name: drop_table_if_not_exists
         required: false
-        desc: 是否 drop 已有表并重建。不填写则使用全局配置。
+        desc: ${{ i18n.params.must_include_tables.struct.drop_table_if_not_exists.desc }}
       - name: try_filter_by_columns_and_values
         required: false
-        desc: 尝试使用字段对数据进行过滤后再 dump。若字段存在，则过滤；不存在则忽略。优先级高于全局配置 global_try_filter_by_columns_and_values
+        desc: ${{ i18n.params.must_include_tables.struct.try_filter_by_columns_and_values.desc }}
   - name: post_commands
     required: false
     type: string_array
-    desc: dump 完成后执行一组后置命令，例如 sed 等。dump 文件可以使用环境变量 DUMP_FILE_PATH 获取，例如：head ${DUMP_FILE_PATH}
+    desc: ${{ i18n.params.post_commands.desc }}
+locale:
+  zh-CN:
+    params.dump_all_tables.desc: 是否操作指定数据库下的所有表。可配合 dump_all_tables_ignore_regexp 使用，即导出所有表，除了指定的需要忽略的表
+    params.dump_all_tables_ignore_regexp.desc: 导出指定数据库下的所有表时(dump_all_tables=true)，忽略匹配正则表达式的表。例如：^(fdp|pmp).*$ 忽以 fdp 或 pmp 开头的表
+    params.global_charset.desc: 全局字符集
+    params.global_drop_table_if_not_exists.desc: 全局配置：drop 已有表并重建
+    params.global_try_filter_by_columns_and_values.desc: 尝试使用字段进行过滤。若字段存在，则过滤；否则忽略
+    params.must_include_tables.desc: 指定必须要 dump 的表，这里声明的表一定会被 dump。该参数优先级高于 dump_all_tables_ignore_regexp
+    params.must_include_tables.struct.drop_table_if_not_exists.desc: 是否 drop 已有表并重建。不填写则使用全局配置。
+    params.must_include_tables.struct.table.desc: 表名
+    params.must_include_tables.struct.try_filter_by_columns_and_values.desc: 尝试使用字段对数据进行过滤后再 dump。若字段存在，则过滤；不存在则忽略。优先级高于全局配置 global_try_filter_by_columns_and_values
+    params.must_include_tables.struct.where.desc: 过滤条件，若为空，则 dump 该表下的所有数据
+    params.mysql_database.desc: 数据库
+    params.mysql_host.desc: 数据库连接地址
+    params.mysql_password.desc: 数据库密码
+    params.mysql_port.desc: 数据库连接端口
+    params.mysql_username.desc: 数据库用户名
+    params.post_commands.desc: dump 完成后执行一组后置命令，例如 sed 等。dump 文件可以使用环境变量 DUMP_FILE_PATH 获取，例如：head ${DUMP_FILE_PATH}

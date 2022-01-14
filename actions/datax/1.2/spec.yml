@@ -2,8 +2,8 @@ name: datax
 version: "1.2"
 type: action
 category: data_management
-displayName: 数据源同步
-desc: DataX为用户提供多种不同数据源之间的全量同步功能。
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl:
 imageUrls:
 public: true
@@ -11,16 +11,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
-
-
-locale:
-  zh-CN:
-    displayName: "数据源同步"
-    desc: "DataX为用户提供多种不同数据源之间的全量同步功能"
-  en-US:
-    displayName: "Data source synchronization"
-    desc: "DataX provides users with full synchronization functions between a variety of different data sources"
-
 
 labels:
   maintainer: cb167668@alibaba-inc.com
@@ -68,37 +58,48 @@ source:
     default:
 params:
   - name: outputTables
-    desc: datax action执行输出表
+    desc: ${{ i18n.params.outputTables.desc }}
     type: string_array
     required: true
     default:
   - name: els
-    desc: datax执行传入EL表达式
+    desc: ${{ i18n.params.els.desc }}
     type: string_array
     required: false
     default:
   - name: MAX_WAIT_TIME
-    desc: 发现依赖表缺失后的最大等待时间，单位分钟，默认等待一天
+    desc: ${{ i18n.params.MAX_WAIT_TIME.desc }}
     type: string
     required: false
     default:
   - name: TASK_TYPE
-    desc: 任务类型，默认如果配置了crontab表达式则为周期任务。当然这里也可以手动指定：ONCE 或 PERIODIC
+    desc: ${{ i18n.params.TASK_TYPE.desc }}
     type: string
     required: false
     default:
   - name: TASK_NAME_SPACE
-    desc: 任务命名空间，不填默认为DEFAULT。为了是隔离不同项目的数据。如果不同项目间不存在同名表，则不需要配置
+    desc: ${{ i18n.params.TASK_NAME_SPACE.desc }}
     type: string
     required: false
     default:
   - name: DEPENDENCY_CHECK_INTERVAL
-    desc: 发现依赖表缺失后 轮询 依赖表的时间间隔，单位：分钟， 默认1分钟轮询一次
+    desc: ${{ i18n.params.DEPENDENCY_CHECK_INTERVAL.desc }}
     type: string
     required: false
     default:
   - name: CRON_TYPE
-    desc: crontab表达式类型，不填默认为SPRING，也支持UNIX等
+    desc: ${{ i18n.params.CRON_TYPE.desc }}
     type: string
     required: false
     default:
+locale:
+  zh-CN:
+    desc: DataX为用户提供多种不同数据源之间的全量同步功能。
+    displayName: 数据源同步
+    params.CRON_TYPE.desc: crontab表达式类型，不填默认为SPRING，也支持UNIX等
+    params.DEPENDENCY_CHECK_INTERVAL.desc: 发现依赖表缺失后 轮询 依赖表的时间间隔，单位：分钟， 默认1分钟轮询一次
+    params.MAX_WAIT_TIME.desc: 发现依赖表缺失后的最大等待时间，单位分钟，默认等待一天
+    params.TASK_NAME_SPACE.desc: 任务命名空间，不填默认为DEFAULT。为了是隔离不同项目的数据。如果不同项目间不存在同名表，则不需要配置
+    params.TASK_TYPE.desc: 任务类型，默认如果配置了crontab表达式则为周期任务。当然这里也可以手动指定：ONCE 或 PERIODIC
+    params.els.desc: datax执行传入EL表达式
+    params.outputTables.desc: datax action执行输出表

@@ -2,7 +2,7 @@ name: ios
 version: "1.0"
 type: action
 category: build
-displayName: ios构建
+displayName: ${{ i18n.displayName }}
 desc: ios remote action
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
@@ -10,38 +10,30 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "ios构建"
-    desc: "ios remote action"
-  en-US:
-    displayName: "ios build"
-    desc: "ios remote action"
-
 params:
   - name: context
-    desc: 代码路径
+    desc: ${{ i18n.params.context.desc }}
     required: true
   - name: commands
     type: string_array
-    desc: 构建命令列表
+    desc: ${{ i18n.params.commands.desc }}
   - name: targets
     type: string_array
-    desc: 构建产物路径
+    desc: ${{ i18n.params.targets.desc }}
     required: true
   - name: p12_cert
-    desc: p12证书
+    desc: ${{ i18n.params.p12_cert.desc }}
     type: struct
     struct:
-      - {name: source, desc: p12证书配置key }
-      - {name: dest, desc: 存储的目标路径 }
-      - {name: password, desc: p12证书配置的password }
+      - {name: source, desc: ${{ i18n.params.p12_cert.struct.source.desc }} }
+      - {name: dest, desc: ${{ i18n.params.p12_cert.struct.dest.desc }} }
+      - {name: password, desc: ${{ i18n.params.p12_cert.struct.password.desc }} }
   - name: mobile_provision
-    desc: mobileprovision文件
+    desc: ${{ i18n.params.mobile_provision.desc }}
     type: struct
     struct:
-      - {name: source, desc: mobileprovision证书配置key }
-      - {name: dest, desc: 存储的目标路径 }
+      - {name: source, desc: ${{ i18n.params.mobile_provision.struct.source.desc }} }
+      - {name: dest, desc: ${{ i18n.params.p12_cert.struct.dest.desc }} }
 
 
 accessibleAPIs:
@@ -60,3 +52,16 @@ accessibleAPIs:
 
 
 
+locale:
+  zh-CN:
+    displayName: ios构建
+    params.commands.desc: 构建命令列表
+    params.context.desc: 代码路径
+    params.mobile_provision.desc: mobileprovision文件
+    params.mobile_provision.struct.dest.desc: 存储的目标路径
+    params.mobile_provision.struct.source.desc: mobileprovision证书配置key
+    params.p12_cert.desc: p12证书
+    params.p12_cert.struct.dest.desc: 存储的目标路径
+    params.p12_cert.struct.password.desc: p12证书配置的password
+    params.p12_cert.struct.source.desc: p12证书配置key
+    params.targets.desc: 构建产物路径

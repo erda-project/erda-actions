@@ -2,21 +2,14 @@ name: oss-upload
 version: "1.0"
 type: action
 category: custom_task
-displayName: oss文件上传
-desc: 上传文件到OSS
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "oss文件上传"
-    desc: "上传文件到OSS"
-  en-US:
-    displayName: "oss file upload"
-    desc: "Upload files to OSS"
 
 params:
   - name: access_key_id
@@ -29,17 +22,25 @@ params:
     default: ""
   - name: endpoint
     required: true
-    desc: 区域endpoint
+    desc: ${{ i18n.params.endpoint.desc }}
     default: "http://oss-cn-hangzhou.aliyuncs.com"
   - name: local_path
     required: true
-    desc: 本地路径,支持目录和文件
+    desc: ${{ i18n.params.local_path.desc }}
     default: ""
   - name: oss_path
     required: true
-    desc: oss路径, 格式为 oss://{bucketName}/{path}
+    desc: ${{ i18n.params.oss_path.desc }}
     default: ""
   - name: meta
     required: false
-    desc: 文件元信息
+    desc: ${{ i18n.params.meta.desc }}
     default: ""
+locale:
+  zh-CN:
+    desc: 上传文件到OSS
+    displayName: oss文件上传
+    params.endpoint.desc: 区域endpoint
+    params.local_path.desc: 本地路径,支持目录和文件
+    params.meta.desc: 文件元信息
+    params.oss_path.desc: oss路径, 格式为 oss://{bucketName}/{path}

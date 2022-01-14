@@ -2,8 +2,8 @@ name: java-unit
 version: "1.0"
 type: action
 category: unit_management
-displayName: Java 工程单元测试
-desc: 用于 java 单元测试，支持 JUnit 和 TestNg 框架，制作成为 docker image 用于运行服务
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 labels:
   maintainer: dengdeyang
 public: true

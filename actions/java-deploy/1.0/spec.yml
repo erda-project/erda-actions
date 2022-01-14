@@ -2,26 +2,18 @@ name: java-deploy
 version: "1.0"
 type: action
 category: build_management
-displayName: Java Jar 包推送
-desc: 推送 java library 至远程 registry
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.14"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "Java Jar 包推送"
-    desc: "推送 java library 至远程 registry"
-  en-US:
-    displayName: "Java Jar package push"
-    desc: "Push java library to remote registry"
-
 params:
   - name: workdir
     type: string
-    desc: java library 代码根目录
+    desc: ${{ i18n.params.workdir.desc }}
     required: true
   - name: registry
     type: string
@@ -29,17 +21,26 @@ params:
     required: true
   - name: username
     type: string
-    desc: 有 deploy 权限的用户名
+    desc: ${{ i18n.params.username.desc }}
     required: true
   - name: password
     type: string
-    desc: 对应的密码
+    desc: ${{ i18n.params.password.desc }}
     required: true
   - name: skip_tests
     type: bool
-    desc: 是否跳过测试
+    desc: ${{ i18n.params.skip_tests.desc }}
     required: false
   - name: modules
     type: string
-    desc: 指定需要 deploy 的模块列表，使用 `,` 分隔
+    desc: ${{ i18n.params.modules.desc }}
     required: false
+locale:
+  zh-CN:
+    desc: 推送 java library 至远程 registry
+    displayName: Java Jar 包推送
+    params.modules.desc: 指定需要 deploy 的模块列表，使用 `,` 分隔
+    params.password.desc: 对应的密码
+    params.skip_tests.desc: 是否跳过测试
+    params.username.desc: 有 deploy 权限的用户名
+    params.workdir.desc: java library 代码根目录

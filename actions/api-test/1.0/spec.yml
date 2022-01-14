@@ -1,7 +1,7 @@
 name: api-test
 version: '1.0'
 type: action
-displayName: api测试
+displayName: ${{ i18n.displayName }}
 # add category: test
 category: test_management
 desc:
@@ -10,14 +10,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
-
-locale:
-  zh-CN:
-    displayName: "api测试"
-    desc: "api测试"
-  en-US:
-    displayName: "API testing"
-    desc: "API testin"
 
 params:
   - name: api_id
@@ -40,3 +32,6 @@ accessibleAPIs:
   - path: /api/apitests/<id>
     method: GET
     schema: http
+locale:
+  zh-CN:
+    displayName: api测试

@@ -2,26 +2,18 @@ name: cs-kubernetes-scale
 version: "1.0"
 type: action
 category: ops
-displayName: 阿里云Kubernetes集群扩容
-desc: 扩容阿里云容器服务 Kubernetes 集群
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "阿里云Kubernetes集群扩容"
-    desc: "扩容阿里云容器服务 Kubernetes 集群"
-  en-US:
-    displayName: "Alibaba Cloud Kubernetes cluster expansion"
-    desc: "Expanding the Alibaba Cloud Container Service Kubernetes cluster"
-
 params:
     - name: cluster_name
       type: string
-      desc: 集群名称
+      desc: ${{ i18n.params.cluster_name.desc }}
       required: true
 
     - name: access_key_id
@@ -36,15 +28,23 @@ params:
 
     - name: region
       type: string
-      desc: 地域
+      desc: ${{ i18n.params.region.desc }}
       required: true
 
     - name: worker_numbers
       type: int
-      desc: 节点数
+      desc: ${{ i18n.params.worker_numbers.desc }}
       required: false
 
     - name: ssh_password
       type: string
-      desc: SSH 密码
+      desc: ${{ i18n.params.ssh_password.desc }}
       required: true
+locale:
+  zh-CN:
+    desc: 扩容阿里云容器服务 Kubernetes 集群
+    displayName: 阿里云Kubernetes集群扩容
+    params.cluster_name.desc: 集群名称
+    params.region.desc: 地域
+    params.ssh_password.desc: SSH 密码
+    params.worker_numbers.desc: 节点数

@@ -2,8 +2,8 @@ name: assert
 version: '1.0'
 type: action
 category: custom_task
-displayName: 断言
-desc: 对值进行断言
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 labels:
   configsheet: true
@@ -13,28 +13,29 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "断言"
-    desc: "对值进行断言"
-  en-US:
-    displayName: "assertion"
-    desc: "Assert the value"
 params:
   - name: asserts
     required: false
-    desc: 出参
+    desc: ${{ i18n.params.asserts.desc }}
     type: struct_array
     struct:
       - name: value
         required: true
-        desc: 值
+        desc: ${{ i18n.params.asserts.struct.value.desc }}
       - name: assert
         required: true
-        desc: 断言
+        desc: ${{ i18n.displayName }}
       - name: actualValue
         required: false
-        desc: 断言的值
+        desc: ${{ params.asserts.struct.actualValue.desc }}
 
 
 
+locale:
+  zh-CN:
+    desc: 对值进行断言
+    displayName: 断言
+    params.asserts.desc: 出参
+    params.asserts.struct.actualValue.desc: 断言的值
+    params.asserts.struct.assert.desc: 断言
+    params.asserts.struct.value.desc: 值

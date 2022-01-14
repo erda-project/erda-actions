@@ -2,8 +2,8 @@ name: k8sspark
 version: "1.0"
 type: action
 category: data_management
-displayName: Spark-Job 集群
-desc: 创建 Spark-Job 集群
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 logoUrl:
 imageUrls:

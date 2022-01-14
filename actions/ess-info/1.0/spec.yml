@@ -2,39 +2,40 @@ name: ess-info
 version: "1.0"
 type: action
 category: ops
-displayName: ess信息
-desc: 获取ess group信息，如instance id，private ip
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.13"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "ess信息"
-    desc: "获取ess group信息，如instance id，private ip"
-  en-US:
-    displayName: "ess information"
-    desc: "Get ess group information, such as instance id, private ip"
-
 params:
   - name: ak
     type: string
-    desc: 访问密钥
+    desc: ${{ i18n.params.ak.desc }}
     required: true
 
   - name: sk
     type: string
-    desc: 访问密钥
+    desc: ${{ i18n.params.ak.desc }}
     required: true
 
   - name: region
     type: string
-    desc: 集群安装区域
+    desc: ${{ i18n.params.region.desc }}
     required: true
 
   - name: scaling_group_id
     type: string
-    desc: 弹性伸缩组id
+    desc: ${{ i18n.params.scaling_group_id.desc }}
     required: true
+    
+locale:
+  zh-CN:
+    desc: 获取ess group信息，如instance id，private ip
+    displayName: ess信息
+    params.ak.desc: 访问密钥
+    params.region.desc: 集群安装区域
+    params.scaling_group_id.desc: 弹性伸缩组id
+    params.sk.desc: 访问密钥

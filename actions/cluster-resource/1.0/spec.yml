@@ -2,75 +2,68 @@ name: cluster-resource
 version: "1.0"
 type: action
 category: ops
-displayName: 边缘集群资源
-desc: 创建边缘集群所有云资源
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "边缘集群资源"
-    desc: "创建边缘集群所有云资源"
-  en-US:
-    displayName: "Edge cluster resources"
-    desc: "Create all cloud resources of the edge cluster"
 
 params:
   # 通过terraform先创建云资源，再创建集群，需要如下参数
   # 企业相关信息
   - name: org_name
     type: string
-    desc: 企业名
+    desc: ${{ i18n.params.org_name.desc }}
     required: true
 
   # 集群相关配置信息
   - name: dice_version
     type: string
-    desc: dice 版本号
+    desc: ${{ i18n.params.dice_version.desc }}
     required: true
 
   - name: cluster_name
     type: string
-    desc: 集群名字
+    desc: ${{ i18n.params.cluster_name.desc }}
     required: true
 
   - name: root_domain
     type: string
-    desc: 泛域名
+    desc: ${{ i18n.params.root_domain.desc }}
     required: true
 
   - name: enable_https
     type: bool
-    desc: 是否开启https
+    desc: ${{ i18n.params.enable_https.desc }}
     required: true
 
   - name: collector_url
     type: string
-    desc: 边缘集群所需的中心集群参数
+    desc: ${{ i18n.params.collector_url.desc }}
     required: true
 
   - name: open_api
     type: string
-    desc: 边缘集群所需的中心集群参数
+    desc: ${{ i18n.params.collector_url.desc }}
     required: true
 
   # 云供应商相关信息
   - name: cloud_vendor
     type: string
-    desc: 云提供商，默认alicloud
+    desc: ${{ i18n.params.cloud_vendor.desc }}
     required: true
 
   - name: ak
     type: string
-    desc: 访问密钥
+    desc: ${{ i18n.params.ak.desc }}
     required: true
 
   - name: sk
     type: string
-    desc: 访问密钥
+    desc: ${{ i18n.params.ak.desc }}
     required: true
 
   # 集群规格，付费信息
@@ -86,64 +79,90 @@ params:
 
   - name: charge_type
     type: string
-    desc: 集群规格(PrePaid, PostPaid)，默认是PrePaid
+    desc: ${{ i18n.params.charge_type.desc }}
     required: true
 
   - name: charge_period
     type: string
-    desc: 预付费周期，默认1，即包月
+    desc: ${{ i18n.params.charge_period.desc }}
     required: false
 
   # vpc配置信息
   - name: region
     type: string
-    desc: 集群安装区域
+    desc: ${{ i18n.params.region.desc }}
     required: true
 
   - name: vpc_id
     type: string
-    desc: 通过已有vpc创建，传入vpc_id
+    desc: ${{ i18n.params.vpc_id.desc }}
     required: false
 
   - name: vpc_cidr
     type: string
-    desc: 新建vpc，传入vpc_cidr
+    desc: ${{ i18n.params.vpc_cidr.desc }}
     required: false
 
   - name: vswitch_id
     type: string
-    desc: 通过已有交换机创建，传入vswitch_id
+    desc: ${{ i18n.params.vswitch_id.desc }}
     required: false
 
   - name: vswitch_cidr
     type: string
-    desc: 新建交换机，传入vswitch_cidr
+    desc: ${{ i18n.params.vswitch_cidr.desc }}
     required: false
 
   # 容器配置相关信息
   - name: service_cidr
     type: string
-    desc: k8s service 网段
+    desc: ${{ i18n.params.service_cidr.desc }}
     required: false
 
   - name: pod_cidr
     type: string
-    desc: k8s pod 网段
+    desc: ${{ i18n.params.pod_cidr.desc }}
     required: false
 
   - name: docker_cidr
     type: string
-    desc: docker 网段
+    desc: ${{ i18n.params.docker_cidr.desc }}
     required: false
 
   - name: docker_bip
     type: string
-    desc: docker 网桥ip/mask
+    desc: ${{ i18n.params.docker_bip.desc }}
     required: false
 
   # terraform命令参数
   - name: terraform
     type: string
-    desc: 执行的terraform命令，支持（plan, apply, destroy）
+    desc: ${{ i18n.params.terraform.desc }}
     required: false
 
+locale:
+  zh-CN:
+    desc: 创建边缘集群所有云资源
+    displayName: 边缘集群资源
+    params.ak.desc: 访问密钥
+    params.charge_period.desc: 预付费周期，默认1，即包月
+    params.charge_type.desc: 集群规格(PrePaid, PostPaid)，默认是PrePaid
+    params.cloud_vendor.desc: 云提供商，默认alicloud
+    params.cluster_name.desc: 集群名字
+    params.collector_url.desc: 边缘集群所需的中心集群参数
+    params.dice_version.desc: dice 版本号
+    params.docker_bip.desc: docker 网桥ip/mask
+    params.docker_cidr.desc: docker 网段
+    params.enable_https.desc: 是否开启https
+    params.open_api.desc: 边缘集群所需的中心集群参数
+    params.org_name.desc: 企业名
+    params.pod_cidr.desc: k8s pod 网段
+    params.region.desc: 集群安装区域
+    params.root_domain.desc: 泛域名
+    params.service_cidr.desc: k8s service 网段
+    params.sk.desc: 访问密钥
+    params.terraform.desc: 执行的terraform命令，支持（plan, apply, destroy）
+    params.vpc_cidr.desc: 新建vpc，传入vpc_cidr
+    params.vpc_id.desc: 通过已有vpc创建，传入vpc_id
+    params.vswitch_cidr.desc: 新建交换机，传入vswitch_cidr
+    params.vswitch_id.desc: 通过已有交换机创建，传入vswitch_id

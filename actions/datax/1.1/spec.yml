@@ -2,8 +2,8 @@ name: datax
 version: "1.1"
 type: action
 category: data_management
-displayName: 数据源同步
-desc: DataX为用户提供多种不同数据源之间的全量同步功能。
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl:
 imageUrls:
 public: true
@@ -12,15 +12,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
-
-locale:
-  zh-CN:
-    displayName: "数据源同步"
-    desc: "DataX为用户提供多种不同数据源之间的全量同步功能"
-  en-US:
-    displayName: "Data source synchronization"
-    desc: "DataX provides users with full synchronization functions between a variety of different data sources"
-
 
 labels:
   maintainer: cb167668@alibaba-inc.com
@@ -52,12 +43,18 @@ source:
     default:
 params:
   - name: outputTables
-    desc: datax action执行输出表
+    desc: ${{ i18n.params.outputTables.desc }}
     type: string_array
     required: true
     default:
   - name: els
-    desc: datax执行传入EL表达式
+    desc: ${{ i18n.params.els.desc }}
     type: string_array
     required: false
     default:
+locale:
+  zh-CN:
+    desc: DataX为用户提供多种不同数据源之间的全量同步功能。
+    displayName: 数据源同步
+    params.els.desc: datax执行传入EL表达式
+    params.outputTables.desc: datax action执行输出表

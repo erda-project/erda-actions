@@ -2,8 +2,8 @@ name: model-publish
 version: "3.21"
 type: action
 category: data_management
-displayName: 模型发布
-desc: 模型发布
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.displayName }}
 logoUrl:
 imageUrls:
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
@@ -11,13 +11,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "模型发布"
-    desc: 模型发布
-  en-US:
-    displayName: "model release"
-    desc: model release
 
 labels:
   maintainer: shaozhong.hsz@alibaba-inc.com
@@ -25,10 +18,17 @@ labels:
 params:
   - name: config
     required: true
-    desc: action配置
+    desc: ${{ i18n.params.config.desc }}
   - name: default_spark_config
     required: true
-    desc: Spark数据源配置
+    desc: ${{ i18n.params.default_spark_config.desc }}
   - name: default_cassandra_config
     required: true
-    desc: Cassandra数据源配置
+    desc: ${{ i18n.params.default_cassandra_config.desc }}
+locale:
+  zh-CN:
+    desc: 模型发布
+    displayName: 模型发布
+    params.config.desc: action配置
+    params.default_cassandra_config.desc: Cassandra数据源配置
+    params.default_spark_config.desc: Spark数据源配置

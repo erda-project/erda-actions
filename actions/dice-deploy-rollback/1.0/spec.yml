@@ -2,20 +2,12 @@ name: dice-deploy-rollback
 version: "1.0"
 type: action
 category: deploy_management
-desc: 用于 dice 平台部署应用服务
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.19"
 supportedErdaVersions:
   - ">= 1.0"
-
-locale:
-  zh-CN:
-    displayName: "dice-deploy-rollback"
-    desc: 用于 dice 平台部署应用服务
-  en-US:
-    displayName: "dice-deploy-rollback"
-    desc: "Used for dice platform deployment application service"
 
 params:
   - name: runtime_id
@@ -29,9 +21,9 @@ accessibleAPIs:
 
 outputs:
   - name: runtime_id
-    desc: 部署中心运行时 ID
+    desc: ${{ i18n.outputs.runtime_id.desc }}
   - name: deployment_id
-    desc: 部署单 ID
+    desc: ${{ i18n.outputs.deployment_id.desc }}
 
 formProps:
   - component: formGroup
@@ -39,17 +31,25 @@ formProps:
     componentProps:
       indentation: true
       showDivider: true
-      title: 任务参数
+      title: ${{ i18n.formProps.params.componentProps.title }}
     group: params
   - label: runtime_id
     component: input
     key: params.runtime_id
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.runtime_id.componentProps.placeHolder }}
     group: params
   - label: deployment_id
     component: input
     key: params.deployment_id
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.runtime_id.componentProps.placeHolder }}
     group: params
+locale:
+  zh-CN:
+    desc: 用于 dice 平台部署应用服务
+    formProps.params.componentProps.title: 任务参数
+    formProps.params.deployment_id.componentProps.placeHolder: 请输入数据
+    formProps.params.runtime_id.componentProps.placeHolder: 请输入数据
+    outputs.deployment_id.desc: 部署单 ID
+    outputs.runtime_id.desc: 部署中心运行时 ID

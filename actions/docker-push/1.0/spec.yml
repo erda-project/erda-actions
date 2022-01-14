@@ -1,7 +1,7 @@
 name: docker-push
 version: "1.0"
 type: action
-displayName: 容器推送
+displayName: ${{ i18n.displayName }}
 category: custom_task
 params:
 public: true
@@ -11,12 +11,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
-
-
 locale:
   zh-CN:
-    displayName: "容器推送"
-    desc: "镜像推送"
-  en-US:
-    displayName: "Container push"
-    desc: "Container push"
+    displayName: 容器推送

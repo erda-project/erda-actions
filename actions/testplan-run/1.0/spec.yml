@@ -2,9 +2,9 @@ name: testplan-run
 version: '1.0'
 type: action
 logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/07/28/d23fc13f-c85e-4585-96dc-3199583d4418.png
-displayName: 测试计划
+displayName: ${{ i18n.displayName }}
 category: test_management
-desc: 根据自动化测试计划启动测试计划并等待完成
+desc: ${{ i18n.desc }}
 public: true
 useProtocol: true
 labels:
@@ -14,30 +14,22 @@ supportedVersions:
 supportedErdaVersions:
   - ">= 1.1"
 
-locale:
-  zh-CN:
-    displayName: "测试计划"
-    desc: 根据自动化测试计划启动测试计划并等待完成
-  en-US:
-    displayName: "Test Plan"
-    desc: Start the test plan according to the automated test plan and wait for completion
-
 params:
   - name: test_plan
-    desc: 测试计划名称
+    desc: ${{ i18n.displayName }}名称
     required: true
   - name: cms
-    desc: 参数配置名称
+    desc: ${{ i18n.params.cms.desc }}
     required: true
   - name: is_continue_execution
-    desc: 失败后是否继续执行,执行 或者 不执行
+    desc: ${{ i18n.params.is_continue_execution.desc }}
     required: false
 
 outputs:
   - name: pipelineID
-    desc: 执行的 pipelineId
+    desc: ${{ i18n.outputs.pipelineID.desc }}
   - name: status
-    desc: pipeline 的状态
+    desc: ${{ i18n.outputs.status.desc }}
 
 accessibleAPIs:
   - path: /api/autotests/testplans/<testPlanID>/actions/execute
@@ -46,3 +38,12 @@ accessibleAPIs:
   - path: /api/cicds-project/actions/pipeline-detail
     method: GET
     schema: http
+locale:
+  zh-CN:
+    desc: 根据自动化测试计划启动测试计划并等待完成
+    displayName: 测试计划
+    outputs.pipelineID.desc: 执行的 pipelineId
+    outputs.status.desc: pipeline 的状态
+    params.cms.desc: 参数配置名称
+    params.is_continue_execution.desc: 失败后是否继续执行,执行 或者 不执行
+    params.test_plan.desc: 测试计划名称

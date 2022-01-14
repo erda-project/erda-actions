@@ -2,8 +2,8 @@ name: sql
 version: "1.1"
 type: action
 category: data_management
-displayName: sql脚本执行器
-desc: SQL Action执行用户配置的SQL脚本。
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl:
 imageUrls:
 public: true
@@ -12,13 +12,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "sql脚本执行器"
-    desc: "SQL Action执行用户配置的SQL脚本。"
-  en-US:
-    displayName: "sql script executor"
-    desc: "SQL Action executes the SQL script configured by the user."
 
 labels:
   maintainer: hxf168482@alibaba-inc.com
@@ -26,52 +19,67 @@ labels:
 params:
   - name: queryType
     required: false
-    desc: sql脚本类型，sparksql ,hivesql等
+    desc: ${{ i18n.params.queryType.desc }}
     default: sparksql
   - name: queryEndPoint
     required: true
-    desc: 目标数据源url
+    desc: ${{ i18n.params.queryEndPoint.desc }}
     default: jdbc:hive2://1.1.1.1:10000/;auth=noSasl
   - name: username
     required: true
-    desc: 目标数据源用户名
+    desc: ${{ i18n.params.username.desc }}
     default: hive
   - name: password
     required: true
-    desc: 目标数据源密码
+    desc: ${{ i18n.params.password.desc }}
     default: hive
   - name: path
-    desc: 待执行的sql脚本路径
+    desc: ${{ i18n.params.path.desc }}
     type: string
     required: true
     default:
   - name: queryargs
-    desc: sql action执行传入的参数变量
+    desc: ${{ i18n.params.queryargs.desc }}
     type: string
     required: false
     default:
   - name: inputTables
-    desc: sql action执行依赖输入表
+    desc: ${{ i18n.params.inputTables.desc }}
     type: string_array
     required: false
     default:
   - name: outputTables
-    desc: sql action执行输出表
+    desc: ${{ i18n.params.outputTables.desc }}
     type: string_array
     required: false
     default:
   - name: triggerType
-    desc: 周期性触发类型
+    desc: ${{ i18n.params.triggerType.desc }}
     type: string
     required: false
     default:
   - name: frequency
-    desc: 周期大小
+    desc: ${{ i18n.params.frequency.desc }}
     type: string
     required: false
     default:
   - name: process
-    desc: sql action处理类型，当前onedata模型分为init和process
+    desc: ${{ i18n.params.process.desc }}
     type: string
     required: false
     default:
+locale:
+  zh-CN:
+    desc: SQL Action执行用户配置的SQL脚本。
+    displayName: sql脚本执行器
+    params.frequency.desc: 周期大小
+    params.inputTables.desc: sql action执行依赖输入表
+    params.outputTables.desc: sql action执行输出表
+    params.password.desc: 目标数据源密码
+    params.path.desc: 待执行的sql脚本路径
+    params.process.desc: sql action处理类型，当前onedata模型分为init和process
+    params.queryEndPoint.desc: 目标数据源url
+    params.queryType.desc: sql脚本类型，sparksql ,hivesql等
+    params.queryargs.desc: sql action执行传入的参数变量
+    params.triggerType.desc: 周期性触发类型
+    params.username.desc: 目标数据源用户名

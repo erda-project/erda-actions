@@ -30,6 +30,14 @@ type: action         # 类型，是 action 还是 addOn
 category: build      # 扩展所属的类别，用于在 Dice 官网扩展市场界面分类展示，目前可选：build / big_data / microservice / ability / search / distributed_cooperation / database / message
 desc: execute cmds   # 对 Ext 的简单文字描述
 
+# 国际化 在 locale 中定义
+# 使用方式  ${{ i18n.key }}
+locale:
+  zh-CN:
+    command: "Commands"
+  en-US:
+    command: "运行的命令"
+
 # 参数声明，主要用于图形化编辑
 # type: 参数类型，前端图形化编辑时会根据参数类型使用不同的输入框样式，并渲染出对应的文本。
 # 支持的类型列表，具体用法请参见下方示例
@@ -42,7 +50,7 @@ desc: execute cmds   # 对 Ext 的简单文字描述
 # - map
 params:
   - name: command
-    desc: 运行的命令
+    desc: ${{ i18n.command }} # 使用国际化 locale 中定义的 key
     type: string # string / float / int / map
 
   - name: commands

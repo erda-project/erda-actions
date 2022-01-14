@@ -1,78 +1,50 @@
 name: buildpack-aliyun
 version: "1.0"
 type: action
-displayName: 统一构建器(包含阿里云 Java Agent)
+displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/23/c5867d7a-ba0e-4357-bec7-6d7599889a2c.png
 category: build_management
-desc: |-
-  平台内置的应用构建逻辑。
-  目前支持：
-  1. Java
-  2. NodeJS(Herd)
-  3. Single Page Application(SPA)
-  4. Dockerfile
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "统一构建器"
-    desc: >-
-      平台内置的应用构建逻辑。
-      目前支持：
-      1. Java
-      2. NodeJS(Herd)
-      3. Single Page Application(SPA)
-      4. Dockerfile
-  en-US:
-    displayName: "Unity builder"
-    desc: >-
-      The built-in application construction logic of the platform.
-      Currently supports:
-      1. Java
-      2. NodeJS(Herd)
-      3. Single Page Application(SPA)
-      4. Dockerfile
-
 params:
   - name: context
     required: true
-    desc: 应用所在的上下文环境。所有的 module 必须在该路径下
+    desc: ${{ i18n.params.context.desc }}
   - name: modules
     type: struct_array
-    desc: >-
-      buildpack-aliyun 的对象是应用（Application），而一个应用包含一个或多个模块（Module）。
-      对于多模块项目，这里只需要写最终需要运行的模块；对于 lib 类的模块，无需声明。
+    desc: ${{ i18n.params.modules.desc }}
     struct:
       - name: name
         required: true
-        desc: 模块名
+        desc: ${{ i18n.params.modules.struct.name.desc }}
       - name: path
-        desc: 模块路径
+        desc: ${{ i18n.params.modules.struct.path.desc }}
       - name: image
         type: struct
         struct:
-          - {name: name, desc: 镜像名 }
-          - {name: username, desc: docker registry 用户名 }
-          - {name: password, desc: docker registry 密码 }
+          - {name: name, desc: ${{ i18n.params.modules.struct.image.struct.name.desc }} }
+          - {name: username, desc: ${{ i18n.params.modules.struct.image.struct.username.desc }} }
+          - {name: password, desc: ${{ i18n.params.modules.struct.image.struct.password.desc }} }
   - name: bp_repo
-    desc: 使用的 buildpack-aliyun 类型。非特殊情况下无需指定，平台会自动探测出合适的类型。
+    desc: ${{ i18n.params.bp_repo.desc }}
   - name: bp_ver
-    desc: 使用的 buildpack-aliyun 版本。与 bp_repo 一起使用。
+    desc: ${{ i18n.params.bp_ver.desc }}
   - name: bp_args
-    desc: 指定 buildpack-aliyun 参数。
+    desc: ${{ i18n.params.bp_args.desc }}
     type: map
   - name: http_proxy
-    desc: 指定 HTTP 代理 参数。
+    desc: ${{ i18n.params.http_proxy.desc }}
     type: string
   - name: https_proxy
-    desc: 指定 HTTPS 代理 参数。
+    desc: ${{ i18n.params.https_proxy.desc }}
     type: string
   - name: only_build
-    desc: 只编译应用，不制作镜像
+    desc: ${{ i18n.params.only_build.desc }}
     type: bool
 
 
@@ -95,3 +67,26 @@ accessibleAPIs:
   - path: /api/build-caches
     method: POST
     schema: http
+locale:
+  zh-CN:
+    desc: >-
+      平台内置的应用构建逻辑。
+      目前支持：
+      1. Java
+      2. NodeJS(Herd)
+      3. Single Page Application(SPA)
+      4. Dockerfile
+    displayName: 统一构建器(包含阿里云 Java Agent)
+    params.bp_args.desc: 指定 buildpack-aliyun 参数。
+    params.bp_repo.desc: 使用的 buildpack-aliyun 类型。非特殊情况下无需指定，平台会自动探测出合适的类型。
+    params.bp_ver.desc: 使用的 buildpack-aliyun 版本。与 bp_repo 一起使用。
+    params.context.desc: 应用所在的上下文环境。所有的 module 必须在该路径下
+    params.http_proxy.desc: 指定 HTTP 代理 参数。
+    params.https_proxy.desc: 指定 HTTPS 代理 参数。
+    params.modules.desc: buildpack-aliyun 的对象是应用（Application），而一个应用包含一个或多个模块（Module）。 对于多模块项目，这里只需要写最终需要运行的模块；对于 lib 类的模块，无需声明。
+    params.modules.struct.name.desc: 模块名
+    params.modules.struct.path.desc: 模块路径
+    params.only_build.desc: 只编译应用，不制作镜像
+    params.modules.struct.image.struct.name.desc: 镜像名
+    params.modules.struct.image.struct.password.desc: docker registry 密码
+    params.modules.struct.image.struct.username.desc: docker registry 用户名

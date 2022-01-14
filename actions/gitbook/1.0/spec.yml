@@ -2,30 +2,22 @@ name: gitbook
 version: "1.0"
 type: action
 category: build_management
-displayName: gitbook构建
-desc: gitbook构建
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.displayName }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "gitbook构建"
-    desc: gitbook构建
-  en-US:
-    displayName: "gitbook build"
-    desc: gitbook build
-
 params:
   - name: workdir
     type: string
-    desc: gitbook doc目录
+    desc: ${{ i18n.formProps.params.workdir.labelTip }}
     required: true
 outputs:
   - name: image
-    desc: 镜像
+    desc: ${{ i18n.outputs.image.desc }}
 
 formProps:
   - component: formGroup
@@ -33,13 +25,23 @@ formProps:
     componentProps:
       indentation: true
       showDivider: true
-      title: 任务参数
+      title: ${{ i18n.formProps.params.componentProps.title }}
     group: params
   - label: workdir
     component: input
     required: true
     key: params.workdir
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.workdir.componentProps.placeHolder }}
     group: params
-    labelTip: gitbook doc目录
+    labelTip: ${{ i18n.formProps.params.workdir.labelTip }}
+
+locale:
+  zh-CN:
+    desc: gitbook构建
+    displayName: gitbook构建
+    formProps.params.componentProps.title: 任务参数
+    formProps.params.workdir.componentProps.placeHolder: 请输入数据
+    formProps.params.workdir.labelTip: gitbook doc目录
+    outputs.image.desc: 镜像
+    params.workdir.desc: gitbook doc目录

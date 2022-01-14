@@ -2,8 +2,8 @@ name: npm
 version: "1.0"
 type: action
 category: version_management
-displayName: NPM 包推送
-desc: 将 npm 的 package publish 到 npm 仓库，以统一和规范化 package 管理
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 labels:
   maintainer: xxx
 public: true
@@ -12,31 +12,34 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "NPM 包推送"
-    desc: "将 npm 的 package publish 到 npm 仓库，以统一和规范化 package 管理"
-  en-US:
-    displayName: "NPM package push"
-    desc: "Publish npm's package to npm repository to unify and standardize package management"
-
 params:
 - name: package_name
   required: true
-  desc: publish的package名称
+  desc: ${{ i18n.params.package_name.desc }}
 - name: registry
-  desc: npm仓库，默认为terminus公有的npm仓库
+  desc: ${{ i18n.params.registry.desc }}
 - name: path
   required: true
-  desc: 需要publish的package存放路径
+  desc: ${{ i18n.params.path.desc }}
 - name: tag
-  desc: publish package的tag
+  desc: ${{ i18n.params.tag.desc }}
 - name: email
   required: true
-  desc: 用户的email地址
+  desc: ${{ i18n.params.email.desc }}
 - name: username
   required: true
-  desc: npm仓库的用户名
+  desc: ${{ i18n.params.username.desc }}
 - name: password
   required: true
-  desc: npm仓库的登陆密码
+  desc: ${{ i18n.params.password.desc }}
+locale:
+  zh-CN:
+    desc: 将 npm 的 package publish 到 npm 仓库，以统一和规范化 package 管理
+    displayName: NPM 包推送
+    params.email.desc: 用户的email地址
+    params.package_name.desc: publish的package名称
+    params.password.desc: npm仓库的登陆密码
+    params.path.desc: 需要publish的package存放路径
+    params.registry.desc: npm仓库，默认为terminus公有的npm仓库
+    params.tag.desc: publish package的tag
+    params.username.desc: npm仓库的用户名

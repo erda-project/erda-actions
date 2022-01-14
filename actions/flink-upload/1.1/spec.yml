@@ -2,22 +2,14 @@ name: flink-upload
 version: "1.1"
 type: action
 category: data_management
-displayName: Flink上传
-desc: Flink上传 Action允许用户上传一个Flink作业的jar包
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl:
 imageUrls:
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
-
-locale:
-  zh-CN:
-    displayName: "Flink上传"
-    desc: "Flink上传 Action允许用户上传一个Flink作业的jar包"
-  en-US:
-    displayName: "Flink upload"
-    desc: "Flink upload Action allows users to upload a jar package of a Flink job"
 
 labels:
   maintainer: cb167668@alibaba-inc.com
@@ -31,3 +23,7 @@ source:
   required: true
   desc: flink jar path
   default:
+locale:
+  zh-CN:
+    desc: Flink上传 Action允许用户上传一个Flink作业的jar包
+    displayName: Flink上传

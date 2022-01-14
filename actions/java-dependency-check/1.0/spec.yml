@@ -2,8 +2,8 @@ name: java-dependency-check
 version: "1.0"
 type: action
 category: build_management
-displayName: Java 工程漏洞检测
-desc: Java 依赖漏洞检测，并提供检测报告下载。
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/15/ed17ade2-6d8c-4c60-b718-d5e3a314c41a.png
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
@@ -11,34 +11,35 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "Java 工程漏洞检测"
-    desc: "Java 依赖漏洞检测，并提供检测报告下载。"
-  en-US:
-    displayName: "Java engineering vulnerability detection"
-    desc: "Java relies on vulnerability detection and provides detection reports for download."
-
 params:
   - name: code_dir
     type: string
-    desc: 代码目录，例如 ${git-checkout}
+    desc: ${{ i18n.params.code_dir.desc }}
     required: true
   - name: debug
     type: bool
-    desc: 打开插件调试模式，显示更多日志
+    desc: ${{ i18n.params.debug.desc }}
     required: false
     default: false
   - name: auto_update_nvd
     type: bool
-    desc: 自动更新 NVD 漏洞数据库；内置数据库已为最新，一般情况下无需打开该选项。该选项需要联网，网络不畅会导致更新失败。
+    desc: ${{ i18n.params.auto_update_nvd.desc }}
     required: false
     default: false
   - name: maven_plugin_version
     type: string
-    desc: 用于漏洞扫描的 Maven 插件版本。可以通过 https://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html 获取最新版本。
+    desc: ${{ i18n.params.maven_plugin_version.desc }}
     required: false
     default: "6.3.1"
   - name: maven_settings_xml_path
     type: string
-    desc: 用户自定义的 Maven 配置文件路径。若未指定，则使用内置的配置文件。
+    desc: ${{ i18n.params.maven_settings_xml_path.desc }}
+locale:
+  zh-CN:
+    desc: Java 依赖漏洞检测，并提供检测报告下载。
+    displayName: Java 工程漏洞检测
+    params.auto_update_nvd.desc: 自动更新 NVD 漏洞数据库；内置数据库已为最新，一般情况下无需打开该选项。该选项需要联网，网络不畅会导致更新失败。
+    params.code_dir.desc: 代码目录，例如 ${git-checkout}
+    params.debug.desc: 打开插件调试模式，显示更多日志
+    params.maven_plugin_version.desc: 用于漏洞扫描的 Maven 插件版本。可以通过 https://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html 获取最新版本。
+    params.maven_settings_xml_path.desc: 用户自定义的 Maven 配置文件路径。若未指定，则使用内置的配置文件。

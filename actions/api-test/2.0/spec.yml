@@ -2,8 +2,8 @@ name: api-test
 version: '2.0'
 type: action
 category: test_management
-displayName: 接口测试
-desc: 执行单个接口测试。上层可以通过 pipeline.yml 编排一组接口测试的执行顺序。
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/10/24195384-07b7-4203-93e1-666373639af4.png
 public: true
 executor:
@@ -17,23 +17,16 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "接口测试"
-    desc: "执行单个接口测试。上层可以通过 pipeline.yml 编排一组接口测试的执行顺序。"
-  en-US:
-    displayName: "api test"
-    desc: "Perform a single interface test. The upper layer can arrange the execution sequence of a group of interface tests through pipeline.yml."
 params:
   - name: name
     required: false
-    desc: 接口名
+    desc: ${{ i18n.params.name.desc }}
   - name: url
     required: true
-    desc: 接口地址
+    desc: ${{ i18n.params.url.desc }}
   - name: method
     required: true
-    desc: HTTP 方法。可选值：GET, POST, DELETE, PUT, PATCH, HEAD
+    desc: ${{ i18n.params.method.desc }}
   - name: params
     required: false
     desc: HTTP Query Params
@@ -47,7 +40,7 @@ params:
         required: false
   - name: headers
     required: false
-    desc: HTTP 请求头
+    desc: ${{ i18n.params.headers.desc }}
     type: struct_array
     struct:
       - name: key
@@ -58,44 +51,44 @@ params:
         required: false
   - name: body
     required: false
-    desc: 请求体
+    desc: ${{ i18n.params.body.desc }}
     type: struct
     struct:
       - name: type
         required: false
-        desc: Content-Type。可选值：none, application/json, application/x-www-form-urlencoded 等
+        desc: ${{ i18n.params.body.struct.type.desc }}
         default: none
       - name: content
         required: false
   - name: out_params
     required: false
-    desc: 出参。可供后续接口使用
+    desc: ${{ i18n.params.out_params.desc }}
     type: struct_array
     struct:
       - name: key
         required: true
-        desc: 出参名
+        desc: ${{ i18n.params.out_params.struct.key.desc }}
       - name: source
         required: true
-        desc: 出参来源。可选值：status, body:json, body:text, header
+        desc: ${{ i18n.params.out_params.struct.source.desc }}
       - name: expression
         required: false
-        desc: 表达式。jq 格式，例如 .sessionid。参考 jq 文档：https://stedolan.github.io/jq/manual/v1.6/
+        desc: ${{ i18n.params.out_params.struct.expression.desc }}
   - name: asserts
     required: false
-    desc: 断言。若接口返回成功，但断言失败，最终结果仍为失败
+    desc: ${{ i18n.params.asserts.desc }}
     type: struct_array
     struct:
       - name: arg
         required: true
-        desc: 出参名
+        desc: ${{ i18n.params.out_params.struct.key.desc }}
       - name: operator
         required: true
         type: string
-        desc: 比较操作。支持的值有：=, !=, >=, <=, >, <, contains, not_contains, belong, not_belong, empty, not_empty, exist, not_exist
+        desc: ${{ i18n.params.asserts.struct.operator.desc }}
       - name: value
         required: false
-        desc: 值
+        desc: ${{ i18n.params.asserts.struct.value.desc }}
 
 outputsFromParams:
   - type: jq
@@ -121,7 +114,26 @@ accessibleAPIs:
     schema: http
 
 formProps:
-  - label: API 配置
+  - label: ${{ i18n.formProps.params.label }}
     component: apiTest
     required: true
     key: params
+locale:
+  zh-CN:
+    desc: 执行单个接口测试。上层可以通过 pipeline.yml 编排一组接口测试的执行顺序。
+    displayName: 接口测试
+    formProps.params.label: API 配置
+    params.asserts.desc: 断言。若接口返回成功，但断言失败，最终结果仍为失败
+    params.asserts.struct.arg.desc: 出参名
+    params.asserts.struct.operator.desc: 比较操作。支持的值有：=, !=, >=, <=, >, <, contains, not_contains, belong, not_belong, empty, not_empty, exist, not_exist
+    params.asserts.struct.value.desc: 值
+    params.body.desc: 请求体
+    params.body.struct.type.desc: Content-Type。可选值：none, application/json, application/x-www-form-urlencoded 等
+    params.headers.desc: HTTP 请求头
+    params.method.desc: HTTP 方法。可选值：GET, POST, DELETE, PUT, PATCH, HEAD
+    params.name.desc: 接口名
+    params.out_params.desc: 出参。可供后续接口使用
+    params.out_params.struct.expression.desc: 表达式。jq 格式，例如 .sessionid。参考 jq 文档：https://stedolan.github.io/jq/manual/v1.6/
+    params.out_params.struct.key.desc: 出参名
+    params.out_params.struct.source.desc: 出参来源。可选值：status, body:json, body:text, header
+    params.url.desc: 接口地址

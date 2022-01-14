@@ -3,27 +3,24 @@ version: "1.3"
 type: action
 category: custom_task
 displayName: echo
-desc: 回声
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.3"
 
-locale:
-  zh-CN:
-    displayName: "echo"
-    desc: echo
-  en-US:
-    displayName: "echo"
-    desc: echo
-
 params:
   - name: what
     required: false
-    desc: 回声
+    desc: ${{ i18n.desc }}
     default: ""
   - name: count
     required: false
-    desc: 循环打印次数
+    desc: ${{ i18n.params.count.desc }}
     default: "10"
+locale:
+  zh-CN:
+    desc: 回声
+    params.count.desc: 循环打印次数
+    params.what.desc: 回声

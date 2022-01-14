@@ -1,48 +1,41 @@
 name: app-create
 version: '1.0'
 type: action
-displayName: 应用创建
+displayName: ${{ i18n.displayName }}
 category: deploy_management
-desc: 根据仓库地址和应用名称自动创建应用和推送代码
+desc: ${{ i18n.desc }}
 public: true
 labels:
   project_level_app: true
 supportedVersions:
   - ">= 4.0"
 
-locale:
-  zh-CN:
-    displayName: "应用创建"
-    desc: "根据仓库地址和应用名称自动创建应用和推送代码"
-  en-US:
-    displayName: "Application creation"
-    desc: "Automatically create applications and push codes based on warehouse address and application name"
 params:
   - name: application_git_repo
     required: true
-    desc: 应用仓库地址
+    desc: ${{ i18n.params.application_git_repo.desc }}
   - name: application_git_username
-    desc: 应用仓库的账号
+    desc: ${{ i18n.params.application_git_username.desc }}
   - name: application_git_password
-    desc: 应用仓库的密码
+    desc: ${{ i18n.params.application_git_password.desc }}
   - name: application_git_branchs
-    desc: 指定应用仓库的分支，不指定将会推送所有分支代码到内置仓库
+    desc: ${{ i18n.params.application_git_branchs.desc }}
     type: string_array
   - name: application_name
-    desc: 应用名称
+    desc: ${{ i18n.params.application_name.desc }}
     required: true
   - name: application_type
-    desc: 应用类型 LIBRARY, SERVICE, MOBILE
+    desc: ${{ i18n.params.application_type.desc }}
     required: true
   - name: is_external_repo
-    desc: 是否是外置仓库，外置仓库会引用 git 地址，内置仓库会拉取并推送 git 地址的代码
+    desc: ${{ i18n.params.is_external_repo.desc }}
     default: false
 
 outputs:
   - name: appId
-    desc: 创建或者查询到的 appId
+    desc: ${{ i18n.outputs.appId.desc }}
   - name: appExist
-    desc: app 是否已经存在
+    desc: ${{ i18n.outputs.appExist.desc }}
 
 accessibleAPIs:
   # test env info
@@ -55,3 +48,16 @@ accessibleAPIs:
   - path: /api/applications
     method: POST
     schema: http
+locale:
+  zh-CN:
+    desc: 根据仓库地址和应用名称自动创建应用和推送代码
+    displayName: 应用创建
+    outputs.appExist.desc: app 是否已经存在
+    outputs.appId.desc: 创建或者查询到的 appId
+    params.application_git_branchs.desc: 指定应用仓库的分支，不指定将会推送所有分支代码到内置仓库
+    params.application_git_password.desc: 应用仓库的密码
+    params.application_git_repo.desc: 应用仓库地址
+    params.application_git_username.desc: 应用仓库的账号
+    params.application_name.desc: 应用名称
+    params.application_type.desc: 应用类型 LIBRARY, SERVICE, MOBILE
+    params.is_external_repo.desc: 是否是外置仓库，外置仓库会引用 git 地址，内置仓库会拉取并推送 git 地址的代码
