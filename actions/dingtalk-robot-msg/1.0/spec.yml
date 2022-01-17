@@ -12,5 +12,7 @@ params:
     desc: access token of dingtalk robot
   - name: secret
     desc: secret of dingtalk robot
+  - name: msg_ctx
+    desc: message context, used in jsonnet
   - name: msg_file
     desc: message file path
