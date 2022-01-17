@@ -20,10 +20,10 @@ params:
     desc: ${{ i18n.params.version.desc }}
   - name: spec_path
     desc: ${{ i18n.params.spec_path.desc }}
-    required: true    
+    required: true
   - name: runtime_id
     desc: ${{ i18n.params.runtime_id.desc }}
-    required: true    
+    required: true
   - name: service_name
     desc: ${{ i18n.params.service_name.desc }}
     required: true

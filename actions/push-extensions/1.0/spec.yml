@@ -26,7 +26,7 @@ params:
   - name: repos
     type: string_array
     desc: ${{ i18n.params.repos.desc }}
-    
+
   - name: host
     type: string
     desc: erda host to visit, format <org>.<wildcard domain>, e.g. https://terminus-org.app.terminus.io
