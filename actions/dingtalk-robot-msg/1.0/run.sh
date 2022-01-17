@@ -3,7 +3,8 @@
 set -o errexit
 set -x
 
-ts=$(date +%s%3N)
+#ts=$(date +%s%3N)
+ts=$(date +%s000)
 token=${ACTION_ACCESS_TOKEN}
 sec=${ACTION_SECRET}
 msg_ctx=${ACTION_MSG_CTX}
