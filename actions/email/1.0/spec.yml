@@ -2,34 +2,27 @@ name: email
 version: "1.0"
 type: action
 category: custom_task
-displayName: 邮件发送
+displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/11/18/29ed35ad-0f44-46d7-8ece-e287dc17406e.jpeg
-desc: 邮件发送
+desc: ${{ i18n.displayName }}
 public: true
 supportedVersions:
   - ">= 3.9"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "邮件发送"
-    desc: 邮件发送
-  en-US:
-    displayName: "send mail"
-    desc: "send mail"
 
 params:
   - name: email_template_addr
     type: string
-    desc: 邮件模板文件地址
+    desc: ${{ i18n.params.email_template_addr.desc }}
     required: true
   - name: email_template_object
     type: string
-    desc: 邮件模板渲染对象
+    desc: ${{ i18n.params.email_template_object.desc }}
     required: true
   - name: to_email
-    desc: 接收人
+    desc: ${{ i18n.params.to_email.desc }}
     type: string_array
     required: true
 
@@ -37,3 +30,10 @@ accessibleAPIs:
   - path: /api/dice/eventbox/actions/get-smtp-info
     method: GET
     schema: http
+locale:
+  zh-CN:
+    desc: 邮件发送
+    displayName: 邮件发送
+    params.email_template_addr.desc: 邮件模板文件地址
+    params.email_template_object.desc: 邮件模板渲染对象
+    params.to_email.desc: 接收人

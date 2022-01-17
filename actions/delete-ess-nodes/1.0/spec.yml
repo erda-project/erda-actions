@@ -2,54 +2,58 @@ name: delete-ess-nodes
 version: "1.0"
 type: action
 category: ops
-displayName: ess伸缩组机器删除
-desc: 通过instance id删除ess伸缩组中的机器
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.13"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "ess伸缩组机器删除"
-    desc: "通过instance id删除ess伸缩组中的机器"
-  en-US:
-    displayName: "ess telescopic group machine delete"
-    desc: "Delete the machine in the ess scaling group through the instance id"
-
 params:
   - name: ak
     type: string
-    desc: 访问密钥
+    desc: ${{ i18n.params.ak.desc }}
     required: true
 
   - name: sk
     type: string
-    desc: 访问密钥
+    desc: ${{ i18n.params.ak.desc }}
     required: true
 
   - name: region
     type: string
-    desc: 集群安装区域
+    desc: ${{ i18n.params.region.desc }}
     required: true
 
   - name: scaling_group_id
     type: string
-    desc: 弹性伸缩组id
+    desc: ${{ i18n.params.scaling_group_id.desc }}
     required: true
 
   - name: instance_ids
     type: string
-    desc: instance ids, 多个instance id 通过逗号分隔, optional
+    desc: ${{ i18n.params.instance_ids.desc }}
     required: false
 
   - name: is_cron
     type: bool
-    desc: 是否为定时ess
+    desc: ${{ i18n.params.is_cron.desc }}
     required: false
 
   - name: instance_ids_file
     type: string
-    desc: 存放instance id的文件，若is_cron为true，则上一个action通过文件传送instance id
+    desc: ${{ i18n.params.instance_ids_file.desc }}
     required: false
+
+locale:
+  zh-CN:
+    desc: 通过instance id删除ess伸缩组中的机器
+    displayName: ess伸缩组机器删除
+    params.ak.desc: 访问密钥
+    params.instance_ids.desc: instance ids, 多个instance id 通过逗号分隔, optional
+    params.instance_ids_file.desc: 存放instance id的文件，若is_cron为true，则上一个action通过文件传送instance id
+    params.is_cron.desc: 是否为定时ess
+    params.region.desc: 集群安装区域
+    params.scaling_group_id.desc: 弹性伸缩组id
+    params.sk.desc: 访问密钥

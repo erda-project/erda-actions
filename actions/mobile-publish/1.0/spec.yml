@@ -2,25 +2,17 @@ name: mobile-publish
 version: "1.0"
 type: action
 category: deploy_management
-displayName: 移动应用内容发布
-desc: 用于移动应用发布到发布内容
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.13"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "移动应用内容发布"
-    desc: 用于移动应用发布到发布内容
-  en-US:
-    displayName: "Mobile application content publishing"
-    desc: Used for mobile application publishing to publishing content
-
 params:
   - name: release_id
-    desc: release_id值 eg:${release:OUTPUT:releaseID}
+    desc: ${{ i18n.params.release_id.desc }}
 
 accessibleAPIs:
   # get release
@@ -37,3 +29,8 @@ accessibleAPIs:
     schema: http
 
 
+locale:
+  zh-CN:
+    desc: 用于移动应用发布到发布内容
+    displayName: 移动应用内容发布
+    params.release_id.desc: release_id值 eg:${release:OUTPUT:releaseID}

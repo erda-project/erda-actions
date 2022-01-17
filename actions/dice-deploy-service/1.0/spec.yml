@@ -2,27 +2,19 @@ name: dice-deploy-service
 version: "1.0"
 type: action
 category: deploy_management
-desc: 用于 dice 平台部署应用服务
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.19"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "dice-deploy-service"
-    desc: 用于 dice 平台部署应用服务
-  en-US:
-    displayName: "dice-deploy-service"
-    desc: "Used for dice platform deployment application service"
-
 params:
   - name: deployment_id
-    desc: 部署单 id
+    desc: ${{ i18n.params.deployment_id.desc }}
   - name: time_out
     type: int
-    desc: 部署超时时间
+    desc: ${{ i18n.params.time_out.desc }}
     default: 86400
 
 accessibleAPIs:
@@ -36,3 +28,8 @@ accessibleAPIs:
     schema: http
 
 outputs:
+locale:
+  zh-CN:
+    desc: 用于 dice 平台部署应用服务
+    params.deployment_id.desc: 部署单 id
+    params.time_out.desc: 部署超时时间

@@ -2,49 +2,61 @@ name: add-nodes
 version: "1.0"
 type: action
 category: ops
-displayName: 添加节点
-desc: 添加一个或多个节点到集群中
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "添加节点"
-    desc: "添加一个或多个节点到集群中"
-  en-US:
-    displayName: "Add node"
-    desc: "Add one or more nodes to the cluster"
-
 params:
   - name: hosts
     type: array
-    desc: 节点的 IP 地址列表
+    desc: ${{ i18n.params.hosts.desc }}
     required: false
 
   - name: labels
     type: array
-    desc: 节点的标签
+    desc: ${{ i18n.params.labels.desc }}
     required: false
 
   - name: port
     type: int
-    desc: 节点 SSH 端口号，默认 22
+    desc: ${{ i18n.params.port.desc }}
     required: false
 
   - name: user
     type: string
-    desc: 节点 SSH 用户名
+    desc: ${{ i18n.params.user.desc }}
     required: true
 
   - name: password
     type: string
-    desc: 节点 SSH 密码
+    desc: ${{ i18n.params.password.desc }}
     required: true
 
   - name: data_disk_device
     type: string
-    desc: 节点数据盘设备名，如：vdb
+    desc: ${{ i18n.params.data_disk_device.desc }}
     required: false
+
+locale:
+  zh-CN:
+    desc: 添加一个或多个节点到集群中
+    displayName: 添加节点
+    params.data_disk_device.desc: 节点数据盘设备名，如：vdb
+    params.hosts.desc: 节点的 IP 地址列表
+    params.labels.desc: 节点的标签
+    params.password.desc: 节点 SSH 密码
+    params.port.desc: 节点 SSH 端口号，默认 22
+    params.user.desc: 节点 SSH 用户名
+  en-US:
+    desc: Add one or more nodes to the cluster
+    displayName: Add node
+    params.data_disk_device.desc: Node data disk device name, such as VDB
+    params.hosts.desc: IP address list of nodes
+    params.labels.desc: Labels of node
+    params.password.desc: Node SSH password
+    params.port.desc: Node SSH port, default 22
+    params.user.desc: Node SSH user name

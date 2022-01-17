@@ -2,8 +2,8 @@ name: unit-test
 version: "1.0"
 type: action
 category: test_management
-displayName: 单元测试
-desc: 该 action 是针对 单元测试  的能力抽象，在提交代码时，会自动触发 UT 分析。
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 labels:
   project_level_app: true
@@ -12,24 +12,23 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "单元测试"
-    desc: 该 action 是针对 单元测试  的能力抽象，在提交代码时，会自动触发 UT 分析。
-  en-US:
-    displayName: "Unit Test"
-    desc: This action is an abstraction for the capability of unit testing. When the code is submitted, it will automatically trigger UT analysis.
-
 params:
   - name: context
     required: true
-    desc: 上下文目录。一般为 repo
+    desc: ${{ i18n.params.context.desc }}
   - name: name
-    desc: 该次测试的测试名。
+    desc: ${{ i18n.params.name.desc }}
   - name: go_dir
-    desc: golang 代码的路径，需要跟代码里的 import 一样。若测试代码为 golang，则该参数为必填
+    desc: ${{ i18n.params.go_dir.desc }}
 
 accessibleAPIs:
   - path: /api/qa/actions/test-callback
     method: POST
     schema: http
+locale:
+  zh-CN:
+    desc: 该 action 是针对 单元测试  的能力抽象，在提交代码时，会自动触发 UT 分析。
+    displayName: 单元测试
+    params.context.desc: 上下文目录。一般为 repo
+    params.go_dir.desc: golang 代码的路径，需要跟代码里的 import 一样。若测试代码为 golang，则该参数为必填
+    params.name.desc: 该次测试的测试名。

@@ -2,26 +2,18 @@ name: js-deploy
 version: "1.0"
 type: action
 category: build_management
-displayName: npm 包推送
-desc: 推送 npm library 至远程 registry
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.14"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "npm 包推送"
-    desc: "推送 npm library 至远程 registry"
-  en-US:
-    displayName: "npm package push"
-    desc: "Push npm library to remote registry"
-
 params:
   - name: workdir
     type: string
-    desc: npm library 代码根目录
+    desc: ${{ i18n.params.workdir.desc }}
     required: true
   - name: registry
     type: string
@@ -29,9 +21,16 @@ params:
     required: true
   - name: username
     type: string
-    desc: npm publish 用户名
+    desc: ${{ i18n.params.username.desc }}
     required: true
   - name: password
     type: string
-    desc: npm publish 密码
+    desc: ${{ i18n.params.password.desc }}
     required: true
+locale:
+  zh-CN:
+    desc: 推送 npm library 至远程 registry
+    displayName: npm 包推送
+    params.password.desc: npm publish 密码
+    params.username.desc: npm publish 用户名
+    params.workdir.desc: npm library 代码根目录

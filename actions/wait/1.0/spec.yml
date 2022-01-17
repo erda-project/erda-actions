@@ -1,8 +1,8 @@
 name: wait
 version: '1.0'
 type: action
-displayName: 等待
-desc: 执行等待操作
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 executor:
   kind: "WAIT"
@@ -12,15 +12,13 @@ supportedVersions:
 supportedErdaVersions:
   - ">= 1.2"
 
-locale:
-  zh-CN:
-    displayName: "等待"
-    desc: 执行等待操作
-  en-US:
-    displayName: "Waiting"
-    desc: perform a wait operation
 
 params:
   - name: wait_time_sec
     required: true
-    desc: 等待时间(秒)
+    desc: ${{ i18n.params.wait_time_sec.desc }}
+locale:
+  zh-CN:
+    desc: 执行等待操作
+    displayName: 等待
+    params.wait_time_sec.desc: 等待时间(秒)

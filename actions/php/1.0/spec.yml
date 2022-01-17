@@ -2,7 +2,7 @@ name: php
 version: "1.0"
 type: action
 category: build_management
-displayName: php镜像构建
+displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/7f3b441c-52ca-4a7b-805d-d11b0ebc80e5.jpeg
 desc: php action
 public: true
@@ -11,20 +11,20 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "php镜像构建"
-    desc: "php镜像构建"
-  en-US:
-    displayName: "php mirror construction"
-    desc: "php mirror construction"
 params:
   - name: context
-    desc: 代码路径
+    desc: ${{ i18n.params.context.desc }}
     required: true
   - name: index_path
-    desc: 启动目录
+    desc: ${{ i18n.params.index_path.desc }}
 
 outputs:
   - name: image
-    desc: 镜像
+    desc: ${{ i18n.outputs.image.desc }}
+    
+locale:
+  zh-CN:
+    displayName: php镜像构建
+    outputs.image.desc: 镜像
+    params.context.desc: 代码路径
+    params.index_path.desc: 启动目录

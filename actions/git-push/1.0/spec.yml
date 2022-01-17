@@ -2,30 +2,22 @@ name: git-push
 version: "1.0"
 type: action
 category: source_code_management
-displayName: 代码推送
-desc: 推送代码至远程仓库
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.15"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "代码推送"
-    desc: 推送代码至远程仓库
-  en-US:
-    displayName: "Code push"
-    desc: "Push code to remote warehouse"
-
 params:
   - name: workdir
     type: string
-    desc: 本地代码所在目录
+    desc: ${{ i18n.formProps.params.workdir.labelTip }}
     required: true
   - name: remote_url
     type: string
-    desc: 远程代码仓库地址
+    desc: ${{ i18n.formProps.params.remote_url.labelTip }}
     required: true
 
 formProps:
@@ -34,21 +26,32 @@ formProps:
     componentProps:
       indentation: true
       showDivider: true
-      title: 任务参数
+      title: ${{ i18n.formProps.params.componentProps.title }}
     group: params
   - label: workdir
     component: input
     required: true
     key: params.workdir
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.workdir.componentProps.placeHolder }}
     group: params
-    labelTip: 本地代码所在目录
+    labelTip: ${{ i18n.formProps.params.workdir.labelTip }}
   - label: remote_url
     component: input
     required: true
     key: params.remote_url
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.workdir.componentProps.placeHolder }}
     group: params
-    labelTip: 远程代码仓库地址
+    labelTip: ${{ i18n.formProps.params.remote_url.labelTip }}
+locale:
+  zh-CN:
+    desc: 推送代码至远程仓库
+    displayName: 代码推送
+    formProps.params.componentProps.title: 任务参数
+    formProps.params.remote_url.componentProps.placeHolder: 请输入数据
+    formProps.params.remote_url.labelTip: 远程代码仓库地址
+    formProps.params.workdir.componentProps.placeHolder: 请输入数据
+    formProps.params.workdir.labelTip: 本地代码所在目录
+    params.remote_url.desc: 远程代码仓库地址
+    params.workdir.desc: 本地代码所在目录

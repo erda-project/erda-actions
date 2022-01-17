@@ -2,8 +2,8 @@ name: contrast-secutiry
 version: "1.0"
 type: action
 category: test_management
-displayName: contrast扫描
-desc: contrast扫描
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.displayName }}
 logo: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/11/22/832fac9a-d4d1-4ee4-87c2-f94b1f57d59a.jpg
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
@@ -11,18 +11,10 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.1"
 
-locale:
-  zh-CN:
-    displayName: "contrast扫描"
-    desc: "contrast扫描"
-  en-US:
-    displayName: "contrast scan"
-    desc: "contrast scan"
-
 params:
   - name: username
     type: string
-    desc: 用户名
+    desc: ${{ i18n.params.username.desc }}
     required: true
 
   - name: service_key
@@ -47,26 +39,37 @@ params:
 
   - name: severities
     type: string_array
-    desc: 等级
+    desc: ${{ i18n.params.severities.desc }}
     default:
 
   - name: status
     type: string
-    desc: 状态
+    desc: ${{ i18n.params.status.desc }}
     default: Reported
 
   - name: expand
     type: string
-    desc: 扩展
+    desc: ${{ i18n.params.expand.desc }}
     default: vulnerability_instances
 
   - name: assert_count
     type: int
-    desc: 总数断言(>=)
+    desc: ${{ i18n.params.assert_count.desc }}
     default: 0
 
 outputs:
   - name: count
-    desc: 漏洞总数
+    desc: ${{ i18n.outputs.count.desc }}
   - name: traces
-    desc: 漏洞扫描信息
+    desc: ${{ i18n.outputs.traces.desc }}
+locale:
+  zh-CN:
+    desc: contrast扫描
+    displayName: contrast扫描
+    outputs.count.desc: 漏洞总数
+    outputs.traces.desc: 漏洞扫描信息
+    params.assert_count.desc: 总数断言(>=)
+    params.expand.desc: 扩展
+    params.severities.desc: 等级
+    params.status.desc: 状态
+    params.username.desc: 用户名

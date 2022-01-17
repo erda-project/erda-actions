@@ -2,8 +2,8 @@ name: mysql-cli
 version: '1.0'
 type: action
 category: test_management
-displayName: mysql 配置单
-desc: 在对应的数据源中执行 sql 语句
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 labels:
   configsheet: true
@@ -13,31 +13,23 @@ supportedErdaVersions:
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.21"
 
-locale:
-  zh-CN:
-    displayName: "mysql 配置单"
-    desc: 在对应的数据源中执行 sql 语句
-  en-US:
-    displayName: "mysql configuration sheet"
-    desc: execute sql statement in the corresponding data source
-
 params:
   - name: datasource
     required: true
-    desc: 数据源
+    desc: ${{ i18n.formProps.params.datasource.labelTip }}
   - name: database
     required: true
-    desc: 数据库名称
+    desc: ${{ i18n.formProps.params.database.labelTip }}
   - name: sql
     required: true
-    desc: sql 语句
+    desc: ${{ i18n.params.sql.desc }}
 
 formProps:
   - key: params
     component: formGroup
     group: params
     componentProps:
-      title: 任务参数
+      title: ${{ i18n.formProps.params.componentProps.title }}
   - label: datasource
     component: dataSourceSelector
     required: true
@@ -46,15 +38,15 @@ formProps:
     componentProps:
       projectId: ''
       dataSourceType: mysql
-    labelTip: 数据源
+    labelTip: ${{ i18n.formProps.params.datasource.labelTip }}
   - label: database
     component: input
     required: true
     key: params.database
     group: params
     componentProps:
-      placeholder: 请输入数据
-    labelTip: 数据库名称
+      placeholder: ${{ i18n.formProps.params.database.componentProps.placeHolder }}
+    labelTip: ${{ i18n.formProps.params.database.labelTip }}
   - label: sql
     component: textarea
     required: true
@@ -64,15 +56,29 @@ formProps:
       autoSize:
         minRows: 2
         maxRows: 12
-      placeholder: 请输入数据
-    labelTip: sql语句
+      placeholder: ${{ i18n.formProps.params.database.componentProps.placeHolder }}
+    labelTip: ${{ i18n.formProps.params.sql.labelTip }}
 
 outputs:
   - name: result
-    desc: 查询结果
+    desc: ${{ i18n.outputs.result.desc }}
 
 
 accessibleAPIs:
   - path: /api/addons/<addonId>
     method: GET
     schema: http
+locale:
+  zh-CN:
+    desc: 在对应的数据源中执行 sql 语句
+    displayName: mysql 配置单
+    formProps.params.componentProps.title: 任务参数
+    formProps.params.database.componentProps.placeHolder: 请输入数据
+    formProps.params.database.labelTip: 数据库名称
+    formProps.params.datasource.labelTip: 数据源
+    formProps.params.sql.componentProps.placeHolder: 请输入数据
+    formProps.params.sql.labelTip: sql语句
+    outputs.result.desc: 查询结果
+    params.database.desc: 数据库名称
+    params.datasource.desc: 数据源
+    params.sql.desc: sql 语句

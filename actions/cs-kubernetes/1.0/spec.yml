@@ -2,26 +2,18 @@ name: cs-kubernetes
 version: "1.0"
 type: action
 category: ops
-displayName: 阿里云Kubernetes集群
-desc: 创建阿里云容器服务 Kubernetes 集群
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
 supportedErdaVersions:
   - ">= 1.4"
 
-locale:
-  zh-CN:
-    displayName: "阿里云Kubernetes集群"
-    desc: "创建阿里云容器服务 Kubernetes 集群"
-  en-US:
-    displayName: "Alibaba Cloud Kubernetes cluster"
-    desc: "Create Alibaba Cloud Container Service Kubernetes cluster"
-
 params:
     - name: cluster_name
       type: string
-      desc: 集群名称
+      desc: ${{ i18n.params.cluster_name.desc }}
       required: true
 
     - name: access_key_id
@@ -36,85 +28,107 @@ params:
 
     - name: region
       type: string
-      desc: 地域
+      desc: ${{ i18n.params.region.desc }}
       required: true
 
     - name: charge_type
       type: string
-      desc: 付费模式
+      desc: ${{ i18n.params.charge_type.desc }}
       required: false
 
     - name: charge_period
       type: int
-      desc: 包年包月购买时长
+      desc: ${{ i18n.params.charge_period.desc }}
       required: false
 
     - name: vpc_id
       type: string
-      desc: 通过已有vpc创建，传入vpc_id
+      desc: ${{ i18n.params.vpc_id.desc }}
       required: false
 
     - name: vpc_subnet
       type: string
-      desc: VPC 网段
+      desc: ${{ i18n.params.vpc_subnet.desc }}
       required: false
 
     - name: vswitch_id
       type: string
-      desc: 通过已有交换机创建，传入vswitch_id
+      desc: ${{ i18n.params.vswitch_id.desc }}
       required: false
 
     - name: vswitch_subnet
       type: string
-      desc: VSwitch 网段
+      desc: ${{ i18n.params.vswitch_subnet.desc }}
       required: false
 
     - name: container_subnet
       type: string
-      desc: Pod 网段
+      desc: ${{ i18n.params.container_subnet.desc }}
       required: false
 
     - name: vip_subnet
       type: string
-      desc: Service 网段
+      desc: ${{ i18n.params.vip_subnet.desc }}
       required: false
 
     - name: worker_numbers
       type: int
-      desc: 节点数
+      desc: ${{ i18n.params.worker_numbers.desc }}
       required: false
 
     - name: ssh_password
       type: string
-      desc: SSH 密码
+      desc: ${{ i18n.params.ssh_password.desc }}
       required: false
 
     - name: org_name
       type: string
-      desc: 企业名称
+      desc: ${{ i18n.params.org_name.desc }}
       required: false
 
     - name: root_domain
       type: string
-      desc: dice 泛域名
+      desc: ${{ i18n.params.root_domain.desc }}
       required: false
 
     - name: collector_url
       type: string
-      desc: 中心集群 collector 地址
+      desc: ${{ i18n.params.collector_url.desc }}
       required: false
 
     - name: openapi_url
       type: string
-      desc: 中心集群 openapi 地址
+      desc: ${{ i18n.params.openapi_url.desc }}
       required: false
 
     - name: enable_https
       type: bool
-      desc: 是否启用 https
+      desc: ${{ i18n.params.enable_https.desc }}
       required: false
 
     - name: terraform_command
       type: string
-      desc: terraform 命令，支持 plan, apply, destroy
+      desc: ${{ i18n.params.terraform_command.desc }}
       required: false
+locale:
+  zh-CN:
+    desc: 创建阿里云容器服务 Kubernetes 集群
+    displayName: 阿里云Kubernetes集群
+    params.charge_period.desc: 包年包月购买时长
+    params.charge_type.desc: 付费模式
+    params.cluster_name.desc: 集群名称
+    params.collector_url.desc: 中心集群 collector 地址
+    params.container_subnet.desc: Pod 网段
+    params.enable_https.desc: 是否启用 https
+    params.openapi_url.desc: 中心集群 openapi 地址
+    params.org_name.desc: 企业名称
+    params.region.desc: 地域
+    params.root_domain.desc: dice 泛域名
+    params.ssh_password.desc: SSH 密码
+    params.terraform_command.desc: terraform 命令，支持 plan, apply, destroy
+    params.vip_subnet.desc: Service 网段
+    params.vpc_id.desc: 通过已有vpc创建，传入vpc_id
+    params.vpc_subnet.desc: VPC 网段
+    params.vswitch_id.desc: 通过已有交换机创建，传入vswitch_id
+    params.vswitch_subnet.desc: VSwitch 网段
+    params.worker_numbers.desc: 节点数

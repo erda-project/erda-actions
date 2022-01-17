@@ -2,37 +2,29 @@ name: dice
 version: "1.0"
 type: action
 category: deploy_management
-displayName: 平台应用部署
+displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/fdb44148-35a3-4a91-a459-84dd197a55ae.png
-desc: 用于 Erda 平台部署应用服务
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "平台应用部署"
-    desc: "用于 Erda 平台部署应用服务"
-  en-US:
-    displayName: "Platform application deployment"
-    desc: "Used to deploy application services on the Erda platform"
-
 params:
   - name: release_id
-    desc: 制品 ID，一般通过表达式语法从前置 Release-Action 获取。
+    desc: ${{ i18n.params.release_id.desc }}
     default: ${release:OUTPUT:releaseID}
   - name: time_out
     type: int
-    desc: 部署超时时间(秒)
+    desc: ${{ i18n.params.time_out.desc }}
     default: 1800
   - name: workspace
-    desc: 环境(DEV/TEST/STAGING/PROD)，一般情况下无需指定。Erda 根据制品自动选择环境。
+    desc: ${{ i18n.params.workspace.desc }}
   - name: callback
-    desc: 回调地址，仅支持 POST 方法，用于通知部署结果
+    desc: ${{ i18n.params.callback.desc }}
   - name: release_id_path
-    desc: <废弃，请使用 release_id 参数> 包含 dicehub_release 文件的目录地址(dicehub_release 文件由 Release-Action 生成)。例如：${release}
+    desc: ${{ i18n.params.release_id_path.desc }}
 
 accessibleAPIs:
   # runtime create
@@ -50,4 +42,14 @@ accessibleAPIs:
 
 outputs:
   - name: runtimeID
-    desc: 部署中心运行时 ID
+    desc: ${{ i18n.outputs.runtimeID.desc }}
+locale:
+  zh-CN:
+    desc: 用于 Erda 平台部署应用服务
+    displayName: 平台应用部署
+    outputs.runtimeID.desc: 部署中心运行时 ID
+    params.callback.desc: 回调地址，仅支持 POST 方法，用于通知部署结果
+    params.release_id.desc: 制品 ID，一般通过表达式语法从前置 Release-Action 获取。
+    params.release_id_path.desc: <废弃，请使用 release_id 参数> 包含 dicehub_release 文件的目录地址(dicehub_release 文件由 Release-Action 生成)。例如：${release}
+    params.time_out.desc: 部署超时时间(秒)
+    params.workspace.desc: 环境(DEV/TEST/STAGING/PROD)，一般情况下无需指定。Erda 根据制品自动选择环境。

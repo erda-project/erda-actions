@@ -2,8 +2,8 @@ name: TAGGING
 version: "4.0"
 type: action
 category: big_data
-displayName: 标签计算
-desc: 标签计算
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.displayName }}
 loop:
   break: task_status == 'Success'
   strategy:
@@ -18,13 +18,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "标签计算"
-    desc: "标签计算"
-  en-US:
-    displayName: "Label Calculation"
-    desc: "label calculation"
 
 labels:
   maintainer: shaozhong.hsz@alibaba-inc.com
@@ -32,16 +25,25 @@ labels:
 params:
   - name: config
     required: true
-    desc: action配置
+    desc: ${{ i18n.params.config.desc }}
   - name: default_spark_config
     required: true
-    desc: Spark数据源配置
+    desc: ${{ i18n.params.default_spark_config.desc }}
   - name: default_cassandra_config
     required: true
-    desc: Cassandra数据源配置
+    desc: ${{ i18n.params.default_cassandra_config.desc }}
   - name: tag_es_config
     required: true
-    desc: 标签库数据源配置
+    desc: ${{ i18n.params.tag_es_config.desc }}
   - name: tag_mysql_config
     required: true
-    desc: 标签源数据库源配置
+    desc: ${{ i18n.params.tag_mysql_config.desc }}
+locale:
+  zh-CN:
+    desc: 标签计算
+    displayName: 标签计算
+    params.config.desc: action配置
+    params.default_cassandra_config.desc: Cassandra数据源配置
+    params.default_spark_config.desc: Spark数据源配置
+    params.tag_es_config.desc: 标签库数据源配置
+    params.tag_mysql_config.desc: 标签源数据库源配置

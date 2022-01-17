@@ -2,25 +2,18 @@ name: lib-publish
 version: "1.0"
 type: action
 category: deploy_management
-displayName: 库应用内容发布
-desc: 用于库应用发布到发布内容
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.13"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "库应用内容发布"
-    desc: 用于库应用发布到发布内容
-  en-US:
-    displayName: "Release of library application content"
-    desc: Used for library application to publish content
 
 params:
   - name: workdir
-    desc: spec.yml & README.md 文件所在目录
+    desc: ${{ i18n.params.workdir.desc }}
 accessibleAPIs:
   # get app publishItem relation
   - path: /api/applications/<application>/actions/get-publish-item-relations
@@ -30,3 +23,8 @@ accessibleAPIs:
   - path: /api/publish-items/<publishItemId>/versions
     method: POST
     schema: http
+locale:
+  zh-CN:
+    desc: 用于库应用发布到发布内容
+    displayName: 库应用内容发布
+    params.workdir.desc: spec.yml & README.md 文件所在目录

@@ -2,24 +2,22 @@ name: upgrade-edge-cluster
 version: "1.0"
 type: action
 category: ops
-displayName: 升级边缘集群
-desc: 升级边缘集群
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
 supportedErdaVersions:
   - ">= 1.4"
 
-locale:
-  zh-CN:
-    displayName: "升级边缘集群"
-    desc: 升级边缘集群
-  en-US:
-    displayName: "Upgrade Edge Cluster"
-    desc: Upgrade edge cluster
 
 params:
   - name: dice_version
     type: string
-    desc: 目标 dice 版本
+    desc: ${{ i18n.params.dice_version.desc }}
     required: true
+locale:
+  zh-CN:
+    desc: 升级边缘集群
+    displayName: 升级边缘集群
+    params.dice_version.desc: 目标 dice 版本

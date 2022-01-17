@@ -2,30 +2,30 @@ name: integration-test
 version: "1.0"
 type: action
 category: test_management
-displayName: 接口测试
-desc: 该 action 是针对 接口测试  的能力抽象
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "接口测试"
-    desc: "该 action 是针对接口测试的能力抽象"
-  en-US:
-    displayName: "Interface test"
-    desc: "The action is an abstraction for the ability of interface testing"
-
 params:
   - name: context
     required: true
-    desc: 上下文目录。一般为 repo
+    desc: ${{ i18n.params.context.desc }}
   - name: run_cmd
-    desc: 用于运行测试用例的 CMD。如 mvn test -Dmaven.test.failure.ignore=true
+    desc: ${{ i18n.params.run_cmd.desc }}
   - name: name
     required: true
-    desc: 该次测试的测试名
+    desc: ${{ i18n.params.name.desc }}
   - name: parser_type
-    desc: 测试框架名称，只支持 TESTNG/JUNIT
+    desc: ${{ i18n.params.parser_type.desc }}
+locale:
+  zh-CN:
+    desc: 该 action 是针对 接口测试  的能力抽象
+    displayName: 接口测试
+    params.context.desc: 上下文目录。一般为 repo
+    params.name.desc: 该次测试的测试名
+    params.parser_type.desc: 测试框架名称，只支持 TESTNG/JUNIT
+    params.run_cmd.desc: 用于运行测试用例的 CMD。如 mvn test -Dmaven.test.failure.ignore=true

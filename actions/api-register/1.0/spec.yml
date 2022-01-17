@@ -1,32 +1,25 @@
 name: api-register
 version: "1.0"
 type: action
-displayName: api注册
+displayName: ${{ i18n.displayName }}
 category: deploy_management
-desc: 用于Api的注册
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.15"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "api注册"
-    desc: "用于Api的注册"
-  en-US:
-    displayName: "api registration"
-    desc: "For Api registration"
 
 params:
   - name: runtime_id
-    desc: runtime_id值 eg:${dice:OUTPUT:runtimeID}
+    desc: ${{ i18n.params.runtime_id.desc }}
   - name: swagger_path
-    desc: swagger.json的路径 eg:${java}/swagger/swagger.json
+    desc: ${{ i18n.params.swagger_path.desc }}
   - name: service_name
-    desc: 服务名称，需要和dice.yml中的一致
+    desc: ${{ i18n.params.service_name.desc }}
   - name: service_addr
-    desc: 如果是外部服务需要填写
+    desc: ${{ i18n.params.service_addr.desc }}
 
 accessibleAPIs:
   # register api
@@ -39,5 +32,14 @@ accessibleAPIs:
 
 outputs:
   - name: registerId
-    desc: 注册id
+    desc: ${{ i18n.outputs.registerId.desc }}
 
+locale:
+  zh-CN:
+    desc: 用于Api的注册
+    displayName: api注册
+    outputs.registerId.desc: 注册id
+    params.runtime_id.desc: runtime_id值 eg:${dice:OUTPUT:runtimeID}
+    params.service_addr.desc: 如果是外部服务需要填写
+    params.service_name.desc: 服务名称，需要和dice.yml中的一致
+    params.swagger_path.desc: swagger.json的路径 eg:${java}/swagger/swagger.json

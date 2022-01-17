@@ -10,22 +10,19 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "android"
-    desc: "android action"
-  en-US:
-    displayName: "android"
-    desc: "android action"
-
 params:
   - name: context
-    desc: 代码路径
+    desc: ${{ i18n.params.context.desc }}
     required: true
   - name: commands
     type: string_array
-    desc: 构建命令列表
+    desc: ${{ i18n.params.commands.desc }}
   - name: target
-    desc: 构建产物路径
+    desc: ${{ i18n.params.target.desc }}
     required: true
 
+locale:
+  zh-CN:
+    params.commands.desc: 构建命令列表
+    params.context.desc: 代码路径
+    params.target.desc: 构建产物路径

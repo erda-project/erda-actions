@@ -12,28 +12,20 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 name: push-extensions
-displayName: extension 推送工具
+displayName: ${{ i18n.displayName }}
 logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/05/26/4b92d8fb-6e1a-4303-90c9-a35d171a561c.png
 version: "1.0"
 type: action
 category: deploy_management
-desc: extension 推送工具，将 extensions 仓库中的 Actions 和 Addons 推送到指定的 Erda 平台
+desc: ${{ i18n.desc }}
 public: true
 supportedErdaVersions:
   - ">=1.0"
 
-locale:
-  zh-CN:
-    displayName: "extension 推送工具"
-    desc: "extension 推送工具，将 extensions 仓库中的 Actions 和 Addons 推送到指定的 Erda 平台"
-  en-US:
-    displayName: "extension push tool"
-    desc: "Extension push tool, push Actions and Addons in the extensions repository to the specified Erda platform"
-
 params:
   - name: repos
     type: string_array
-    desc: extensions 仓库列表, 如 ${git-checkout}
+    desc: ${{ i18n.params.repos.desc }}
 
   - name: host
     type: string
@@ -49,3 +41,8 @@ params:
     type: string
     desc: erda password to authenticate
     required: true
+locale:
+  zh-CN:
+    desc: extension 推送工具，将 extensions 仓库中的 Actions 和 Addons 推送到指定的 Erda 平台
+    displayName: extension 推送工具
+    params.repos.desc: extensions 仓库列表, 如 ${git-checkout}

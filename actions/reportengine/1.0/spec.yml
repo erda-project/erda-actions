@@ -1,27 +1,19 @@
 name: reportengine
-displayName: 报表引擎
+displayName: ${{ i18n.displayName }}
 version: "1.0"
 type: action
 category: "monitor"
-desc: 监控平台周期性报表生成引擎，负责接收数据并渲染成报表，最终发送到用户邮箱
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "报表引擎"
-    desc: "监控平台周期性报表生成引擎，负责接收数据并渲染成报表，最终发送到用户邮箱"
-  en-US:
-    displayName: "Report Engine"
-    desc: "The periodic report generation engine of the monitoring platform is responsible for receiving data and rendering it into a report, and finally sending it to the user's mailbox"
-
 params:
   - name: report_id
     type: string
-    desc: 报表id
+    desc: ${{ i18n.params.report_id.desc }}
     required: true
   - name: domain_addr
     type: string
@@ -36,3 +28,8 @@ params:
     type: string
     required: true
 
+locale:
+  zh-CN:
+    desc: 监控平台周期性报表生成引擎，负责接收数据并渲染成报表，最终发送到用户邮箱
+    displayName: 报表引擎
+    params.report_id.desc: 报表id

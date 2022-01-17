@@ -2,9 +2,9 @@ name: java-build
 version: "1.0"
 type: action
 category: build_management
-displayName: Java 工程编译打包
+displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/d74a0d23-523d-4451-9647-f32f47b2000d.png
-desc: 针对 java 工程的编译打包任务
+desc: ${{ i18n.desc }}
 labels:
   maintainer: xxx
   project_level_app: true
@@ -14,24 +14,16 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "Java 工程编译打包"
-    desc: "针对 java 工程的编译打包任务"
-  en-US:
-    displayName: "Java project compilation and packaging"
-    desc: "Compilation and packaging tasks for java projects"
-
 params:
   - name: jdk_version
-    desc: 构建使用的jdk版本,支持8,11
+    desc: ${{ i18n.params.jdk_version.desc }}
     required: true
   - name: build_cmd
     type: string_array
-    desc: 构建命令,如:./gradlew :user:build，mvn package
+    desc: ${{ i18n.params.build_cmd.desc }}
     required: true
   - name: workdir
-    desc: 工作目录一般为仓库路径 ${git-checkout}
+    desc: ${{ i18n.params.workdir.desc }}
     default: "."
 accessibleAPIs:
   # api compatibility check
@@ -41,7 +33,16 @@ accessibleAPIs:
 
 outputs:
   - name: buildPath
-    desc: 包的位置
+    desc: ${{ i18n.outputs.buildPath.desc }}
   - name: JAVA_OPTS
-    desc: 需要假如的监控agent入参
+    desc: ${{ i18n.outputs.JAVA_OPTS.desc }}
 
+locale:
+  zh-CN:
+    desc: 针对 java 工程的编译打包任务
+    displayName: Java 工程编译打包
+    outputs.JAVA_OPTS.desc: 需要假如的监控agent入参
+    outputs.buildPath.desc: 包的位置
+    params.build_cmd.desc: 构建命令,如:./gradlew :user:build，mvn package
+    params.jdk_version.desc: 构建使用的jdk版本,支持8,11
+    params.workdir.desc: 工作目录一般为仓库路径 ${git-checkout}

@@ -12,42 +12,43 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 name: erda-mysql-migration-lint
-displayName: Erda MySQL Migration 规约检查
+displayName: ${{ i18n.displayName }}
 logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/07/20/4a7a51fa-f4f6-43e7-8658-0a7a55bbb8ba.png
 version: "1.0"
 type: action
 category: deploy_management
-desc: Erda MySQL Migration 规约检查工具
+desc: ${{ i18n.desc }}
 public: true
 supportedErdaVersions:
   - ">=1.0"
 
-locale:
-  zh-CN:
-    displayName: "Erda MySQL Migration 规约检查"
-    desc: Erda MySQL Migration 规约检查工具
-  en-US:
-    displayName: "Erda MySQL Migration Protocol Check"
-    desc: "Erda MySQL Migration protocol checking tool"
-
 params:
   - name: workdir
-    desc: 工作目录, 如 ${git-checkout}
+    desc: ${{ i18n.params.workdir.desc }}
     default: ${git-checkout}
   - name: migrationdir
     type: string
-    desc: 脚本存放目录
+    desc: ${{ i18n.params.migrationdir.desc }}
     default: .erda/migrations
   - name: lint_config
     type: string
-    desc: Erda MySQL Migration Lint 的配置文件
+    desc: ${{ i18n.params.lint_config.desc }}
     default: ""
     required: false
 
 outputs:
   - name: success
     type: boolean
-    desc: 是否成功
+    desc: ${{ i18n.outputs.success.desc }}
   - name: error
     type: string
-    desc: 错误信息
+    desc: ${{ i18n.outputs.error.desc }}
+locale:
+  zh-CN:
+    desc: Erda MySQL Migration 规约检查工具
+    displayName: Erda MySQL Migration 规约检查
+    outputs.error.desc: 错误信息
+    outputs.success.desc: 是否成功
+    params.lint_config.desc: Erda MySQL Migration Lint 的配置文件
+    params.migrationdir.desc: 脚本存放目录
+    params.workdir.desc: 工作目录, 如 ${git-checkout}

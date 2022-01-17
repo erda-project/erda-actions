@@ -2,8 +2,8 @@ name: spark
 version: "1.0"
 type: action
 category: data_management
-desc: 以jar包的方式提交Spark作业
-displayName: Spark作业
+desc: ${{ i18n.desc }}
+displayName: ${{ i18n.displayName }}
 logoUrl:
 imageUrls:
 public: true
@@ -12,13 +12,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "Spark作业"
-    desc: "Spark作业"
-  en-US:
-    displayName: "Spark job"
-    desc: "Spark job"
 
 labels:
   maintainer: cb167668@alibaba-inc.com
@@ -26,10 +19,17 @@ labels:
 params:
 - name: depends
   required: true
-  desc: 由哪个任务生成的 jar 包
+  desc: ${{ i18n.params.depends.desc }}
 - name: main_class
   required: false
-  desc: 指定 jar 包里要执行的主类
+  desc: ${{ i18n.params.main_class.desc }}
 - name: main_args
   required: false
-  desc: java -jar xxx.jar 后面的参数
+  desc: ${{ i18n.params.main_args.desc }}
+locale:
+  zh-CN:
+    desc: 以jar包的方式提交Spark作业
+    displayName: Spark作业
+    params.depends.desc: 由哪个任务生成的 jar 包
+    params.main_args.desc: java -jar xxx.jar 后面的参数
+    params.main_class.desc: 指定 jar 包里要执行的主类

@@ -2,8 +2,8 @@ name: spark-upload
 version: "1.0"
 type: action
 category: data_management
-displayName: Spark应用jar包上传
-desc: Spark上传 Action 允许用户上传Spark应用的jar包
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl:
 imageUrls:
 public: true

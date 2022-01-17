@@ -3,8 +3,8 @@ version: "1.0"
 type: action
 category: source_code_management
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/06e7346b-9377-47d4-8eb7-06a1f735691f.png
-displayName: 代码克隆
-desc: 代码仓库克隆
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 labels:
   new_workspace: true
@@ -14,47 +14,37 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "代码克隆"
-    desc: 代码仓库克隆
-  en-US:
-    displayName: "Code clone"
-    desc: "Code repository clone"
-
 params:
   - name: uri
     required: false
-    desc: 仓库完整地址。可使用占位符 ((gittar.repo))
+    desc: ${{ i18n.formProps.params.uri.labelTip }}
     default: ((gittar.repo))
   - name: branch
-    desc: 要检出的远程引用,支持 分支,标签和 commit-sha。可使用占位符 ((gittar.branch))
+    desc: ${{ i18n.formProps.params.branch.labelTip }}
     default: ((gittar.branch))
   - name: username
-    desc: 用户名。可使用占位符 ((gittar.username))
+    desc: ${{ i18n.formProps.params.username.labelTip }}
     default: ((gittar.username))
   - name: password
-    desc: 密码。可使用占位符 ((gittar.password))
+    desc: ${{ i18n.formProps.params.password.labelTip }}
     default: ((gittar.password))
   - name: depth
     type: number
     required: false
     default: 1
-    desc: >-
-      git clone --depth 参数，浅克隆。
-      因此如果指定了该参数，将不能得到完整的克隆。
+    desc: ${{ i18n.params.depth.desc }}
 
 outputs:
   - name: commit
   - name: author
   - name: author_date
-    desc: 提交时间
+    desc: ${{ i18n.outputs.author_date.desc }}
   - name: committer
-    desc: 提交人
+    desc: ${{ i18n.outputs.committer.desc }}
   - name: committer_date
   - name: branch
   - name: message
-    desc: 提交信息
+    desc: ${{ i18n.outputs.message.desc }}
 
 formProps:
   - component: formGroup
@@ -62,45 +52,69 @@ formProps:
     componentProps:
       indentation: true
       showDivider: true
-      title: 任务参数
+      title: ${{ i18n.formProps.params.componentProps.title }}
     group: params
   - label: uri
     component: input
     key: params.uri
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.uri.componentProps.placeHolder }}
     group: params
     defaultValue: "((gittar.repo))"
-    labelTip: 仓库完整地址。可使用占位符 ((gittar.repo))
+    labelTip: ${{ i18n.formProps.params.uri.labelTip }}
   - label: branch
     component: input
     key: params.branch
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.uri.componentProps.placeHolder }}
     group: params
     defaultValue: "((gittar.branch))"
-    labelTip: 要检出的远程引用,支持 分支,标签和 commit-sha。可使用占位符 ((gittar.branch))
+    labelTip: ${{ i18n.formProps.params.branch.labelTip }}
   - label: username
     component: input
     key: params.username
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.uri.componentProps.placeHolder }}
     group: params
     defaultValue: "((gittar.username))"
-    labelTip: 用户名。可使用占位符 ((gittar.username))
+    labelTip: ${{ i18n.formProps.params.username.labelTip }}
   - label: password
     component: input
     key: params.password
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.uri.componentProps.placeHolder }}
     group: params
     defaultValue: "((gittar.password))"
-    labelTip: 密码。可使用占位符 ((gittar.password))
+    labelTip: ${{ i18n.formProps.params.password.labelTip }}
   - label: depth
     component: input
     key: params.depth
     componentProps:
-      placeholder: 请输入数据
+      placeholder: ${{ i18n.formProps.params.uri.componentProps.placeHolder }}
     group: params
     defaultValue: 1
-    labelTip: git clone --depth 参数，浅克隆。 因此如果指定了该参数，将不能得到完整的克隆。
+    labelTip: ${{ i18n.formProps.params.depth.labelTip }}
+    
+locale:
+  zh-CN:
+    desc: 代码仓库克隆
+    displayName: 代码克隆
+    formProps.params.branch.componentProps.placeHolder: 请输入数据
+    formProps.params.branch.labelTip: 要检出的远程引用,支持 分支,标签和 commit-sha。可使用占位符 ((gittar.branch))
+    formProps.params.componentProps.title: 任务参数
+    formProps.params.depth.componentProps.placeHolder: 请输入数据
+    formProps.params.depth.labelTip: git clone --depth 参数，浅克隆。 因此如果指定了该参数，将不能得到完整的克隆。
+    formProps.params.password.componentProps.placeHolder: 请输入数据
+    formProps.params.password.labelTip: 密码。可使用占位符 ((gittar.password))
+    formProps.params.uri.componentProps.placeHolder: 请输入数据
+    formProps.params.uri.labelTip: 仓库完整地址。可使用占位符 ((gittar.repo))
+    formProps.params.username.componentProps.placeHolder: 请输入数据
+    formProps.params.username.labelTip: 用户名。可使用占位符 ((gittar.username))
+    outputs.author_date.desc: 提交时间
+    outputs.committer.desc: 提交人
+    outputs.message.desc: 提交信息
+    params.branch.desc: 要检出的远程引用,支持 分支,标签和 commit-sha。可使用占位符 ((gittar.branch))
+    params.depth.desc: git clone --depth 参数，浅克隆。 因此如果指定了该参数，将不能得到完整的克隆。
+    params.password.desc: 密码。可使用占位符 ((gittar.password))
+    params.uri.desc: 仓库完整地址。可使用占位符 ((gittar.repo))
+    params.username.desc: 用户名。可使用占位符 ((gittar.username))

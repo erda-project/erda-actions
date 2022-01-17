@@ -1,39 +1,40 @@
 name: rm-nodes
 version: "1.0"
 type: action
-displayName: 下线节点
+displayName: ${{ i18n.displayName }}
 category: ops
-desc: 下线节点
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "下线节点"
-    desc: "下线节点"
-  en-US:
-    displayName: "offline node"
-    desc: "offline node"
 params:
   - name: hosts
     type: array
-    desc: 节点的 IP 地址列表
+    desc: ${{ i18n.params.hosts.desc }}
     required: true
 
   - name: password
     type: string
-    desc: 节点 SSH 密码
+    desc: ${{ i18n.params.password.desc }}
     required: true
 
   - name: force
     type: string
-    desc: 跳过检查节点上是否有addon
+    desc: ${{ i18n.params.force.desc }}
     required: false
 
   - name: cluster
     type: string
-    desc: 集群名字
+    desc: ${{ i18n.params.cluster.desc }}
     required: true
+locale:
+  zh-CN:
+    desc: 下线节点
+    displayName: 下线节点
+    params.cluster.desc: 集群名字
+    params.force.desc: 跳过检查节点上是否有addon
+    params.hosts.desc: 节点的 IP 地址列表
+    params.password.desc: 节点 SSH 密码

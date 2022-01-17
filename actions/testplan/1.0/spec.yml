@@ -2,8 +2,8 @@ name: testplan
 version: "1.0"
 type: action
 category: testplan_management
-displayName: 测试计划执行
-desc: 用于通过 action 自动执行指定环境的测试计划
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 labels:
   maintainer: xxx
 public: true
@@ -12,24 +12,16 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "测试计划执行"
-    desc: 用于通过 action 自动执行指定环境的测试计划
-  en-US:
-    displayName: "Test plan execution"
-    desc: The test plan used to automatically execute the specified environment through action
-
 params:
   - name: test_plan_id
     required: true
-    desc: 执行的测试计划 ID
+    desc: ${{ i18n.params.test_plan_id.desc }}
   - name: project_test_env_id
     required: false
-    desc: 执行的测试计划变量 ID
+    desc: ${{ i18n.params.project_test_env_id.desc }}
   - name: project_id
     required: true
-    desc: 测试计划所属的项目 ID
+    desc: ${{ i18n.params.project_id.desc }}
 
 accessibleAPIs:
   # 执行测试计划
@@ -45,3 +37,10 @@ accessibleAPIs:
     method: GET
     schema: http
 
+locale:
+  zh-CN:
+    desc: 用于通过 action 自动执行指定环境的测试计划
+    displayName: 测试计划执行
+    params.project_id.desc: 测试计划所属的项目 ID
+    params.project_test_env_id.desc: 执行的测试计划变量 ID
+    params.test_plan_id.desc: 执行的测试计划 ID

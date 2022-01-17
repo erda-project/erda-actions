@@ -2,105 +2,119 @@ name: cloud-resource
 version: "1.0"
 type: action
 category: ops
-displayName: 云资源添加
-desc: 添加云资源
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.12"
 supportedErdaVersions:
   - ">= 1.0"
 
-locale:
-  zh-CN:
-    displayName: "云资源添加"
-    desc: "添加云资源"
-  en-US:
-    displayName: "Cloud resource addition"
-    desc: "Cloud resource addition"
 params:
   # 通过terraform先创建云资源，再创建集群，需要如下参数
   - name: cloud_vendor
     type: string
-    desc: 云提供商，默认alicloud
+    desc: ${{ i18n.params.cloud_vendor.desc }}
     required: true
 
   - name: ak
     type: string
-    desc: 访问密钥
+    desc: ${{ i18n.params.ak.desc }}
     required: false
 
   - name: sk
     type: string
-    desc: 访问密钥
+    desc: ${{ i18n.params.ak.desc }}
     required: false
 
   - name: region
     type: string
-    desc: 集群安装区域
+    desc: ${{ i18n.params.region.desc }}
     required: false
 
   - name: availability_zone
     type: string
-    desc: 预付费周期，默认1，即包月
+    desc: ${{ i18n.params.availability_zone.desc }}
     required: false
 
   - name: charge_type
     type: string
-    desc: 集群规格(PrePaid, PostPaid)，默认是PrePaid
+    desc: ${{ i18n.params.charge_type.desc }}
     required: false
 
   - name: charge_period
     type: string
-    desc: 预付费周期，默认1，即包月
+    desc: ${{ i18n.params.availability_zone.desc }}
     required: false
 
   - name: cluster_name
     type: string
-    desc: 集群名字
+    desc: ${{ i18n.params.cluster_name.desc }}
     required: false
 
   - name: cloud_resource
     type: string
-    desc: 创建的云资源类型，比如ecs
+    desc: ${{ i18n.params.cloud_resource.desc }}
     required: false
 
   - name: ecs_num
     type: string
-    desc: 创建的机器数目
+    desc: ${{ i18n.params.ecs_num.desc }}
     required: false
 
   - name: ecs_password
     type: string
-    desc: 机器密码
+    desc: ${{ i18n.params.ecs_password.desc }}
     required: false
 
   - name: ecs_type
     type: string
-    desc: 机器类型
+    desc: ${{ i18n.params.ecs_type.desc }}
     required: false
 
   - name: vswitch_id
     type: string
-    desc: 交换机id
+    desc: ${{ i18n.params.vswitch_id.desc }}
     required: false
 
   - name: sg_ids
     type: string
-    desc: 安全组ids,用","分隔
+    desc: ${{ i18n.params.sg_ids.desc }}
     required: false
 
   - name: disk_type
     type: string
-    desc: 磁盘类型
+    desc: ${{ i18n.params.disk_type.desc }}
     required: false
 
   - name: disk_size
     type: string
-    desc: 磁盘大小
+    desc: ${{ i18n.params.disk_size.desc }}
     required: false
 
   - name: terraform
     type: string
-    desc: 执行的terraform命令，支持（plan, apply, destroy）
+    desc: ${{ i18n.params.terraform.desc }}
     required: false
 
+locale:
+  zh-CN:
+    desc: 添加云资源
+    displayName: 云资源添加
+    params.ak.desc: 访问密钥
+    params.availability_zone.desc: 预付费周期，默认1，即包月
+    params.charge_period.desc: 预付费周期，默认1，即包月
+    params.charge_type.desc: 集群规格(PrePaid, PostPaid)，默认是PrePaid
+    params.cloud_resource.desc: 创建的云资源类型，比如ecs
+    params.cloud_vendor.desc: 云提供商，默认alicloud
+    params.cluster_name.desc: 集群名字
+    params.disk_size.desc: 磁盘大小
+    params.disk_type.desc: 磁盘类型
+    params.ecs_num.desc: 创建的机器数目
+    params.ecs_password.desc: 机器密码
+    params.ecs_type.desc: 机器类型
+    params.region.desc: 集群安装区域
+    params.sg_ids.desc: 安全组ids,用","分隔
+    params.sk.desc: 访问密钥
+    params.terraform.desc: 执行的terraform命令，支持（plan, apply, destroy）
+    params.vswitch_id.desc: 交换机id

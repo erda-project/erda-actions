@@ -2,8 +2,8 @@ name: redis-cli
 version: '1.0'
 type: action
 category: test_management
-displayName: redis 配置单
-desc: 在对应的数据源中执行 redis 命令
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 labels:
   configsheet: true
@@ -16,19 +16,11 @@ supportedErdaVersions:
 params:
   - name: datasource
     required: true
-    desc: 数据源
+    desc: ${{ i18n.formProps.params.datasource.labelTip }}
   - name: command
     required: true
-    desc: redis 语句
+    desc: ${{ i18n.formProps.params.command.labelTip }}
 
-
-locale:
-  zh-CN:
-    displayName: "redis 配置单"
-    desc: "在对应的数据源中执行 redis 命令"
-  en-US:
-    displayName: "redis configuration sheet"
-    desc: "Execute the redis command in the corresponding data source"
 
 accessibleAPIs:
   - path: /api/addons/<addonId>
@@ -40,7 +32,7 @@ formProps:
     component: formGroup
     group: params
     componentProps:
-      title: 任务参数
+      title: ${{ i18n.formProps.params.componentProps.title }}
   - label: datasource`
     component: dataSourceSelector
     required: true
@@ -49,7 +41,7 @@ formProps:
     componentProps:
       projectId: ''
       dataSourceType: redis
-    labelTip: 数据源
+    labelTip: ${{ i18n.formProps.params.datasource.labelTip }}
   - label: command
     component: textarea
     required: true
@@ -59,5 +51,15 @@ formProps:
       autoSize:
         minRows: 2
         maxRows: 12
-      placeholder: 请输入数据
-    labelTip: redis 语句
+      placeholder: ${{ i18n.formProps.params.command.componentProps.placeHolder }}
+    labelTip: ${{ i18n.formProps.params.command.labelTip }}
+locale:
+  zh-CN:
+    desc: 在对应的数据源中执行 redis 命令
+    displayName: redis 配置单
+    formProps.params.command.componentProps.placeHolder: 请输入数据
+    formProps.params.command.labelTip: redis 语句
+    formProps.params.componentProps.title: 任务参数
+    formProps.params.datasource.labelTip: 数据源
+    params.command.desc: redis 语句
+    params.datasource.desc: 数据源
