@@ -1,0 +1,7 @@
+jobs:
+  run:
+    image: registry.erda.cloud/erda-actions/dingtalk-robot-msg-action:1.0-20220117-0e442c0
+    resources:
+      cpu: 0.2
+      mem: 128
+      disk: 128

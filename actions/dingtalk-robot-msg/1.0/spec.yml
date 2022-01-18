@@ -1,0 +1,18 @@
+name: dingtalk-robot-msg
+version: "1.0"
+type: action
+category: build_management
+desc: Notify to dingtalk by robot
+public: true
+supportedErdaVersions:
+  - ">= 1.5"
+
+params:
+  - name: access_token
+    desc: access token of dingtalk robot
+  - name: secret
+    desc: secret of dingtalk robot
+  - name: msg_ctx
+    desc: message context, used in jsonnet
+  - name: msg_file
+    desc: message file path
