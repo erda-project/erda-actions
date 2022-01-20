@@ -1,0 +1,9 @@
+jobs:
+  dice:
+    image: registry.erda.cloud/erda-actions/erda-get-service-addr-action:20220120-b3768ee
+    resources:
+      cpu: 0.2
+      mem: 128
+      disk: 128
+
+
