@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/pkg/log"
-	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/dice"
+	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/dice"
 )
 
 func main() {

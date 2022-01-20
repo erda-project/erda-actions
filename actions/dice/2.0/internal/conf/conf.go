@@ -1,4 +1,4 @@
-package dice
+package conf
 
 import (
 	"github.com/sirupsen/logrus"
@@ -7,7 +7,7 @@ import (
 	"github.com/erda-project/erda/pkg/envconf"
 )
 
-type conf struct {
+type Conf struct {
 	OrgID        uint64 `env:"DICE_ORG_ID"`
 	ProjectID    uint64 `env:"DICE_PROJECT_ID"`
 	AppID        uint64 `env:"DICE_APPLICATION_ID"`
@@ -32,6 +32,9 @@ type conf struct {
 	// params
 	ReleaseID         string `env:"ACTION_RELEASE_ID"`
 	ReleaseIDPath     string `env:"ACTION_RELEASE_ID_PATH"`
+	ReleaseName       string `env:"ACTION_RELEASE_NAME"`
+	ReleaseTye        string `env:"ACTION_TYPE"`
+	ApplicationName   string `env:"ACTION_APPLICATION_NAME"`
 	TimeOut           int    `env:"ACTION_TIME_OUT"`
 	Callback          string `env:"ACTION_CALLBACK"`
 	EdgeLocation      string `env:"ACTION_EDGE_LOCATION"`
@@ -48,14 +51,14 @@ type HiddenActionParams struct {
 	ClusterName  string `env:"ACTION_DICE_CLUSTER_NAME"`
 }
 
-func HandleConf() (conf, error) {
-	var cfg conf
+func HandleConf() (Conf, error) {
+	var cfg Conf
 	if err := envconf.Load(&cfg); err != nil {
-		return conf{}, err
+		return Conf{}, err
 	}
 	var hiddenActionParams HiddenActionParams
 	if err := envconf.Load(&hiddenActionParams); err != nil {
-		return conf{}, err
+		return Conf{}, err
 	}
 
 	// assign action params if not empty
@@ -63,7 +66,7 @@ func HandleConf() (conf, error) {
 		cfg.OrgID = hiddenActionParams.OrgID
 	}
 	if hiddenActionParams.ProjectID > 0 {
-		cfg.ProjectID = hiddenActionParams.OrgID
+		cfg.ProjectID = hiddenActionParams.ProjectID
 	}
 	if hiddenActionParams.AppID > 0 {
 		cfg.AppID = hiddenActionParams.AppID
@@ -82,10 +85,11 @@ func HandleConf() (conf, error) {
 	return cfg, nil
 }
 
-func (cfg *conf) print() {
+func (cfg *Conf) print() {
 	log.AddNewLine(1)
 	logrus.Infof("config: ")
 	logrus.Infof(" appID: %d", cfg.AppID)
+	logrus.Infof(" projectId: %d", cfg.ProjectID)
 	logrus.Infof(" clusterName: %s", cfg.ClusterName)
 	logrus.Infof(" workspace: %s", cfg.Workspace)
 	logrus.Infof(" gittarBranch: %s", cfg.GittarBranch)
