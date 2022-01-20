@@ -10,12 +10,21 @@ supportedErdaVersions:
   - ">= 1.0"
 
 params:
+  - name: application_name
+    desc: ${{ i18n.params.application_name.desc }}
 
 accessibleAPIs:
   # redeploy
   - path: /api/runtimes/<runtimeId>/actions/redeploy-action
     method: POST
     schema: http
+  - path: /api/applications
+    method: GET
+    schema: http
+  - path: /api/runtimes
+    method: GET
+    schema: http
+
 
 outputs:
   - name: runtime_id
@@ -27,3 +36,4 @@ locale:
     desc: 用于 dice 平台部署应用服务
     outputs.deployment_id.desc: 部署单 ID
     outputs.runtime_id.desc: 部署中心运行时 ID
+    params.application_name.desc: 应用名称
