@@ -84,7 +84,7 @@ func Execute() error {
 		return fmt.Errorf("render template error %v", err)
 	}
 
-	var host, port, email, password string
+	var host, port, email, password, fromPrefix, subject string
 	var isSSL = true
 	data, err := erdaSmtpInfo()
 	if err != nil {
@@ -117,12 +117,24 @@ func Execute() error {
 		isSSL = false
 	}
 
+	if os.Getenv("SMTP_FROM_PRE_FIX") != "" {
+		fromPrefix = os.Getenv("SMTP_FROM_PRE_FIX")
+	} else {
+		fromPrefix = "erda"
+	}
+
+	if os.Getenv("SMTP_SUBJECT") != "" {
+		subject = os.Getenv("SMTP_SUBJECT")
+	} else {
+		subject = "No Subject"
+	}
+
 	fmt.Printf("smtp_host %v, smtp_port %v, smtp_email %v \n", host, port, email)
 
 	header := make(map[string]string)
-	header["From"] = "test" + "<" + email + ">"
+	header["From"] = fromPrefix + "<" + email + ">"
 	header["To"] = cfg.ToMail[0]
-	header["Subject"] = "dice get safety production inspection report"
+	header["Subject"] = subject
 	header["Content-Type"] = "text/html; charset=UTF-8"
 	message := ""
 	for k, v := range header {
