@@ -1,0 +1,34 @@
+name: erda-add-app-config
+version: "1.0"
+type: action
+category: deploy_management
+desc: ${{ i18n.desc }}
+public: true
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.19"
+supportedErdaVersions:
+  - ">= 1.6"
+
+params:
+  - name: application_name
+    desc: ${{ i18n.params.application_name.desc }}
+  - name: config_workspace
+    desc: ${{ i18n.params.config_workspace.desc }}
+  - name: config_items
+    type: map
+    desc: ${{ i18n.params.config_items.desc }}
+
+accessibleAPIs:
+  - path: /api/configmanage/configs
+    method: POST
+    schema: http
+  - path: /api/applications
+    method: GET
+    schema: http
+
+locale:
+  zh-CN:
+    desc: 用于添加特定应用的配置参数
+    outputs.params.application_name.desc: 应用名
+    outputs.params.config_workspace.desc: 环境
+    outputs.params.config_items.desc: 配置项
