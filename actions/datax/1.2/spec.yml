@@ -103,3 +103,13 @@ locale:
     params.TASK_TYPE.desc: 任务类型，默认如果配置了crontab表达式则为周期任务。当然这里也可以手动指定：ONCE 或 PERIODIC
     params.els.desc: datax执行传入EL表达式
     params.outputTables.desc: datax action执行输出表
+  en-US:
+    desc: DataX supports full synchronization between a variety of different data sources
+    displayName: Data source synchronization
+    params.CRON_TYPE.desc: Crontab expression type, the default is SPRING if not filled, and also supports UNIX, etc.
+    params.DEPENDENCY_CHECK_INTERVAL.desc: Polling the time interval of the dependent table after it is found that the dependent table is missing, unit: minutes, polling once every minute by default
+    params.MAX_WAIT_TIME.desc: Maximum wait time，unit of minute，Default wait one day
+    params.TASK_NAME_SPACE.desc: Task name space，The default isDEFAULT.Re-configuration is required if repeated
+    params.TASK_TYPE.desc: Task type,It is a periodic task if a crontab expression is configured. Can manually specify: ONCE or PERIODIC
+    params.els.desc: The incoming EL expression of DataX execution
+    params.outputTables.desc: datax action Execute output table

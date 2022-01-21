@@ -137,3 +137,21 @@ locale:
     params.out_params.struct.key.desc: 出参名
     params.out_params.struct.source.desc: 出参来源。可选值：status, body:json, body:text, header
     params.url.desc: 接口地址
+  en-US:
+    desc: Execute test of a single interface. The upper layer can orchestrate the execution sequence of interfaces via pipeline.yml.
+    displayName: API testing
+    formProps.params.label: API configuration
+    params.asserts.desc: Assertion,If the interface returns successfully, but the assertion fails, the final result is still failure
+    params.asserts.struct.arg.desc: Output parameter name
+    params.asserts.struct.operator.desc: Assertion, filled in with =, !=, <=, >=, >, <, contains, not_contains, belong, not_belong, empty, not_empty, exist, not_exist
+    params.asserts.struct.value.desc: value
+    params.body.desc: Request body
+    params.body.struct.type.desc: Content-Type。Optional value：none, application/json, application/x-www-form-urlencoded etc
+    params.headers.desc: HTTP header
+    params.method.desc: HTTP method。Optional value：GET, POST, DELETE, PUT, PATCH, HEAD
+    params.name.desc: API name
+    params.out_params.desc: Output parameter。Available for subsequent interfaces
+    params.out_params.struct.expression.desc: Expression。jq，For example .sessionid。Refer to the jq documentation：https://stedolan.github.io/jq/manual/v1.6/
+    params.out_params.struct.key.desc: Output parameter name
+    params.out_params.struct.source.desc: Output parameter source。filled in with：status, body:json, body:text, header
+    params.url.desc: url

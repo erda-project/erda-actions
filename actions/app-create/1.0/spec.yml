@@ -61,3 +61,15 @@ locale:
     params.application_name.desc: 应用名称
     params.application_type.desc: 应用类型 LIBRARY, SERVICE, MOBILE
     params.is_external_repo.desc: 是否是外置仓库，外置仓库会引用 git 地址，内置仓库会拉取并推送 git 地址的代码
+  en-US:
+    desc: Automatically create applications and push code based on repository address and application name
+    displayName: Application creation
+    outputs.appExist.desc: App does it already exist
+    outputs.appId.desc: AppId created or queried
+    params.application_git_branchs.desc: Specify the branch of the application repository, if not, all branches will be pushed to the built-in repository
+    params.application_git_password.desc: Application repository password
+    params.application_git_repo.desc: Application repository address
+    params.application_git_username.desc: Application repository account
+    params.application_name.desc: Application name
+    params.application_type.desc: Application type: LIBRARY, SERVICE, MOBILE
+    params.is_external_repo.desc: Whether it is an external repository. The external repository will reference the git address, and the built-in repository will pull and push the code of the git address.

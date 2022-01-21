@@ -71,3 +71,7 @@ locale:
     displayName: Erda public 版本包发布
     outputs.pkgMapUrl.desc: ToolsPkgReleaseInfo 为 json string， 可转换为 map[string]string,
       键为 osArch, 值为 包的 url
+  en-US:
+    displayName: Erda public package release
+    outputs.pkgMapUrl.desc: ToolsPkgReleaseInfo is json string， Convertible to map[string]string,
+      Key is osArch, Value is url

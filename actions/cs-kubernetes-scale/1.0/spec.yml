@@ -48,3 +48,10 @@ locale:
     params.region.desc: 地域
     params.ssh_password.desc: SSH 密码
     params.worker_numbers.desc: 节点数
+  en-US:
+    desc: Alibaba Cloud Kubernetes cluster expansion
+    displayName: Alibaba Cloud Kubernetes cluster expansion
+    params.cluster_name.desc: Cluster name
+    params.region.desc: region
+    params.ssh_password.desc: SSH password
+    params.worker_numbers.desc: Number of node

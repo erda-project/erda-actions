@@ -23,3 +23,7 @@ locale:
     desc: 运行自定义命令
     displayName: 自定义任务
     params.command.desc: 运行的命令
+  en-US:
+    desc: Run custom commands
+    displayName: Custom task
+    params.command.desc: Command

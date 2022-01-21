@@ -41,3 +41,9 @@ locale:
     params.build_args.desc: Dockerfile build args，在这里填写的键值对 会被渲染成为 Dockerfile 中的 ARG
     params.path.desc: dockerfile 相对应用路径
     params.workdir.desc: 工程根目录
+  en-US:
+    desc: For custom dockerfile packaging, to produce runnable images
+    displayName: Container image packaging
+    params.build_args.desc: Dockerfile build args, the key-value pair filled in here will be rendered as ARG in the  Dockerfile
+    params.path.desc: Dockerfile relative application path
+    params.workdir.desc: Project root directory

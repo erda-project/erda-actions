@@ -30,6 +30,10 @@ accessibleAPIs:
 outputs:
 locale:
   zh-CN:
-    desc: 用于 dice 平台部署应用服务
+    desc: 用于 Erda 平台部署应用服务
     params.deployment_id.desc: 部署单 id
     params.time_out.desc: 部署超时时间
+  en-US:
+    desc: Used to deploy application services on the Erda platform
+    params.deployment_id.desc: Deployment id
+    params.time_out.desc: Deployment timeout

@@ -14,3 +14,5 @@ supportedErdaVersions:
 locale:
   zh-CN:
     displayName: 容器推送
+  en-US:
+    displayName: Container push

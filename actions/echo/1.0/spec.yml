@@ -19,3 +19,6 @@ locale:
   zh-CN:
     desc: 回声
     params.what.desc: 回声
+  en-US:
+    desc: Echo
+    params.what.desc: Echo

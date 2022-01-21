@@ -35,3 +35,5 @@ accessibleAPIs:
 locale:
   zh-CN:
     displayName: api测试
+  en-US:
+    displayName: API test

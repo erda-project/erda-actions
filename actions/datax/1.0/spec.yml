@@ -57,3 +57,8 @@ locale:
     displayName: 数据源同步
     params.els.desc: datax执行传入EL表达式
     params.outputTables.desc: datax action执行输出表
+  en-US:
+    desc: DataX supports full synchronization between a variety of different data sources
+    displayName: Data source synchronization
+    params.els.desc: The incoming EL expression of DataX execution
+    params.outputTables.desc: The output table of DataX action execution

@@ -130,3 +130,21 @@ locale:
     params.releaseName.desc: 制品名称, 如为空, 就以仓库名称作为制品名称
     params.securityContext.desc: 令服务的 k8s_snippet.container.securityContext.privileged=true
     params.workdir.desc: 仓库目录, 默认为 ${git-checkout}。action 从仓库中读取 migrations 脚本等。
+  en-US:
+    desc: >-
+      Archive artifact snapshots and data migration scripts from the source repository to the target (version) repository. The source repository is generally the current repository. Archive the <.dice|.erda>/migrations of the current repository to <version>/sqls of the target repository. Archive artifacts released by application packaging to <version>/releases/<snapName>/dice.yml in the target repository.
+    displayName: Erda artifact archive
+    params.gitref.desc: Used to generate <version number>. For example, v1.1.0 => v1.1.0, release/1.1 => v1.1. At least one of gitref and ossPath should be set.
+    params.lint_config.desc: The path of the configuration file of Erda MySQL migration lint. If it is empty, the configuration file will not be archived.
+    params.migrationsDir.desc: The directory where the migrations script is located. If it is empty, the migrations script will not be archived.
+    params.ossArchivedDir.desc: Used to generate the archive path. If not set, it is archived-versions by default.
+    params.ossBucket.desc: OSS bucket, such as erda-release
+    params.ossEndpoint.desc: OSS domain name, which is oss-cn-hangzhou.aliyuncs.com by default
+    params.ossPath.desc: The path to the archived material in OSS. If not set, it will be configured as `<ossArchiveDir>/<version number>`
+    params.registry_replacement.desc: registry address to replace in Dice.yml
+    params.registry_replacement.struct.new.desc: The target registry host to replace, No substitution occurs when empty
+    params.registry_replacement.struct.old.desc: The original registry host to be replaced, When empty, the action will automatically recognize the registry host and replace it
+    params.releaseID.desc: The release ID of the artifact released by application packaging, which is ${release:OUTPUT:releaseID} by default.
+    params.releaseName.desc: The artifact name. If it is empty, use the repository name as the artifact name.
+    params.securityContext.desc: Make the service's k8s_snippet.container.securityContext.privileged=true
+    params.workdir.desc: The repository directory, which is ${git-checkout} by default. Action reads migrations scripts, etc. from the repository.

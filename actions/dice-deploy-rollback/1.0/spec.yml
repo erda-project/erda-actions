@@ -47,9 +47,16 @@ formProps:
     group: params
 locale:
   zh-CN:
-    desc: 用于 dice 平台部署应用服务
+    desc: 用于 Erda 平台部署应用服务
     formProps.params.componentProps.title: 任务参数
     formProps.params.deployment_id.componentProps.placeHolder: 请输入数据
     formProps.params.runtime_id.componentProps.placeHolder: 请输入数据
     outputs.deployment_id.desc: 部署单 ID
     outputs.runtime_id.desc: 部署中心运行时 ID
+  en-US:
+    desc: Used to deploy application services on the Erda platform
+    formProps.params.componentProps.title: Task parameters
+    formProps.params.deployment_id.componentProps.placeHolder: Please enter
+    formProps.params.runtime_id.componentProps.placeHolder: Please enter
+    outputs.deployment_id.desc: Deployment id
+    outputs.runtime_id.desc: Runtime id

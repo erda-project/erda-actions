@@ -28,3 +28,6 @@ locale:
   zh-CN:
     desc: Flink上传 Action允许用户上传一个Flink作业的jar包
     displayName: Flink上传
+  en-US:
+    desc: Flink upload Action,Allows users to upload the jar package for flink
+    displayName: Flink upload

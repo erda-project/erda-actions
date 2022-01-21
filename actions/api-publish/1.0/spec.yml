@@ -33,3 +33,9 @@ locale:
     params.item_name.desc: API商品名称
     params.owner_email.desc: 责任人邮箱
     params.register_id.desc: register_id值 eg:${api-register:OUTPUT:registerId}
+  en-US:
+    desc: For API release
+    displayName: API release
+    params.item_name.desc: API item name
+    params.owner_email.desc: Owner email
+    params.register_id.desc: register_id value, eg:${api-register:OUTPUT:registerId}

@@ -26,7 +26,12 @@ outputs:
     desc: ${{ i18n.outputs.deployment_id.desc }}
 locale:
   zh-CN:
-    desc: 用于 dice 平台部署应用服务
+    desc: 用于 Erda 平台部署应用服务
     outputs.deployment_id.desc: 部署单 ID
     outputs.runtime_id.desc: 部署中心运行时 ID
     params.release_id_path.desc: dicehub-resource release时存放的releaseId路径，dice-resource需要到此路径去取。若pipeline.yml里没有写dicehub，pipeline.yml里会自动插入到dice-resource的source里。若pipeline.yml里写了dicehub，则release_id_path必填，其值为dicehub-resource的Name
+  en-US:
+    desc: Used to deploy application services on the Erda platform
+    outputs.deployment_id.desc: Deployment ID
+    outputs.runtime_id.desc: Runtime ID
+    params.release_id_path.desc: The releaseId path stored when releasing dicehub-resource, from where to get dice-resource. If dicehub is not written in pipeline.yml, it will be automatically inserted into the source of dice-resource in pipeline.yml. If dicehub is written in pipeline.yml, then release_id_path is required, and its value is the name of dicehub-resource.

@@ -39,3 +39,10 @@ locale:
     params.asserts.struct.actualValue.desc: 断言的值
     params.asserts.struct.assert.desc: 断言
     params.asserts.struct.value.desc: 值
+  en-US:
+    desc: Assert the value
+    displayName: Assertion
+    params.asserts.desc: Output parameters
+    params.asserts.struct.actualValue.desc: Assertion value
+    params.asserts.struct.assert.desc: Assertion
+    params.asserts.struct.value.desc: Value

@@ -43,3 +43,11 @@ locale:
     params.service_addr.desc: 如果是外部服务需要填写
     params.service_name.desc: 服务名称，需要和dice.yml中的一致
     params.swagger_path.desc: swagger.json的路径 eg:${java}/swagger/swagger.json
+  en-US:
+    desc: For API registration
+    displayName: API registration
+    outputs.registerId.desc: Registration id
+    params.runtime_id.desc: runtime_id value eg:${dice:OUTPUT:runtimeID}
+    params.service_addr.desc: Required if it is an external service
+    params.service_name.desc: Service name, which needs to be consistent with that in dice.yml
+    params.swagger_path.desc: The path of swagger.json, eg:${java}/swagger/swagger.json

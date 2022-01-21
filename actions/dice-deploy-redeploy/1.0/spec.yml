@@ -33,7 +33,12 @@ outputs:
     desc: ${{ i18n.outputs.deployment_id.desc }}
 locale:
   zh-CN:
-    desc: 用于 dice 平台部署应用服务
+    desc: 用于 Erda 平台部署应用服务
     outputs.deployment_id.desc: 部署单 ID
     outputs.runtime_id.desc: 部署中心运行时 ID
     params.application_name.desc: 应用名称
+  en-US:
+    desc: Used to deploy application services on the Erda platform
+    outputs.deployment_id.desc: Deployment ID
+    outputs.runtime_id.desc: Runtime ID
+    params.application_name.desc: Application Name

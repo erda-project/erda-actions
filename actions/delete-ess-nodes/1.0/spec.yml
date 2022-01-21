@@ -57,3 +57,13 @@ locale:
     params.region.desc: 集群安装区域
     params.scaling_group_id.desc: 弹性伸缩组id
     params.sk.desc: 访问密钥
+  en-US:
+    desc: Delete machines in the ess scaling group by instance id
+    displayName: Ess scaling group machine removal
+    params.ak.desc: Access Key
+    params.instance_ids.desc: instance ids,Multiple instance ids are separated by commas,optional
+    params.instance_ids_file.desc: The file that stores the instance id，if is_cron is true，Transfer instance id by file
+    params.is_cron.desc: Is it timed ess
+    params.region.desc: region
+    params.scaling_group_id.desc: Scaling group id
+    params.sk.desc: Secret Key

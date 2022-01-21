@@ -55,3 +55,13 @@ locale:
     formProps.params.workdir.labelTip: 本地代码所在目录
     params.remote_url.desc: 远程代码仓库地址
     params.workdir.desc: 本地代码所在目录
+  en-US:
+    desc: Push code to remote repository
+    displayName: Git push
+    formProps.params.componentProps.title: Task parameters
+    formProps.params.remote_url.componentProps.placeHolder: Please enter
+    formProps.params.remote_url.labelTip: Remote code repository address
+    formProps.params.workdir.componentProps.placeHolder: Please enter
+    formProps.params.workdir.labelTip: Local code directory
+    params.remote_url.desc: Remote code repository address
+    params.workdir.desc: Local code directory

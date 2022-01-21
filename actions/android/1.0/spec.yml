@@ -26,3 +26,9 @@ locale:
     params.commands.desc: 构建命令列表
     params.context.desc: 代码路径
     params.target.desc: 构建产物路径
+
+  en-US:
+    params.commands.desc: Build command list
+    params.context.desc: Code path
+    params.target.desc: Build product path
+

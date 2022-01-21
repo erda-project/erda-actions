@@ -71,3 +71,11 @@ locale:
     params.ossEndpoint.desc: OSS 域名, 默认 oss-cn-hangzhou.aliyuncs.com
     params.ossPath.desc: OSS 中存放打包后仓库的的路径，一般不需要指定，默认为 archived-versions/${gitref}/extensions
     params.repos.desc: extensions 仓库列表, 如 ${git-checkout}
+  en-US:
+    desc: The extension packaging and archiving tool to package and archive extensions to OSS
+    displayName: Erda extensions archive
+    params.gitref.desc: Git ref, which can be branch, tag, commit, etc., is used to splice the OSS storage path archived-versions/${gitref}/extensions
+    params.ossBucket.desc: OSS bucket, such as erda-release
+    params.ossEndpoint.desc: OSS domain name, which is oss-cn-hangzhou.aliyuncs.com by default
+    params.ossPath.desc: The path to store the packaged repository in OSS, which generally does not need to be specified, and is archived-versions/${gitref}/extensions by default
+    params.repos.desc: Extensions repository list, such as ${git-checkout}

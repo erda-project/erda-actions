@@ -140,3 +140,21 @@ locale:
     params.skip_pre_migration.desc: 跳过预执行
     params.skip_sandbox.desc: 跳过沙盒预演
     params.workdir.desc: 工作目录, 如 ${git-checkout}
+  en-US:
+    desc: Erda MySQL Migration tool
+    displayName: Erda MySQL data migration
+    outputs.success.desc: Whether succeed
+    params.database.desc: The name of the library to execute migration
+    params.lint_config.desc: Configuration file of Erda MySQL migration lint
+    params.migrationdir.desc: Script directory
+    params.modules.desc: The module to be migrated, or all modules in the migrationDir directory if empty.
+    params.mysql_host.desc: Mysql host
+    params.mysql_password.desc: Mysql password
+    params.mysql_port.desc: Mysql port
+    params.mysql_username.desc: Mysql user name
+    params.retry_timeout.desc: The maximum timeout for connecting to the database
+    params.skip_lint.desc: Skip Erda MySQL protocol check. Note that scripts marked "MIGRATION_BASE" will not be checked.
+    params.skip_migration.desc: Skip pre-execution and formal execution
+    params.skip_pre_migration.desc: Skip pre-execution
+    params.skip_sandbox.desc: Skip the sandbox preview
+    params.workdir.desc: Working directory, such as ${git-checkout}

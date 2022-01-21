@@ -52,3 +52,11 @@ locale:
     params.lint_config.desc: Erda MySQL Migration Lint 的配置文件
     params.migrationdir.desc: 脚本存放目录
     params.workdir.desc: 工作目录, 如 ${git-checkout}
+  en-US:
+    desc: Erda MySQL Migration migration protocol check tool
+    displayName: Erda MySQL Migration migration protocol check
+    outputs.error.desc: Error message
+    outputs.success.desc: Whether succeed
+    params.lint_config.desc: Configuration file of Erda MySQL migration lint
+    params.migrationdir.desc: Script directory
+    params.workdir.desc: Working directory, such as ${git-checkout}

@@ -166,3 +166,28 @@ locale:
     params.vpc_id.desc: 通过已有vpc创建，传入vpc_id
     params.vswitch_cidr.desc: 新建交换机，传入vswitch_cidr
     params.vswitch_id.desc: 通过已有交换机创建，传入vswitch_id
+  en-US:
+    desc: Create all cloud resources of the edge cluster
+    displayName: Resources of the edge cluster
+    params.ak.desc: Access Key
+    params.charge_period.desc: Prepaid period, the default is 1, monthly subscription
+    params.charge_type.desc: Cluster Specifications(PrePaid, PostPaid)，the default is PrePaid
+    params.cloud_vendor.desc: Cloud vendor，the default is alicloud
+    params.cluster_name.desc: Cluster name
+    params.collector_url.desc: Center cluster parameters required for edge clusters
+    params.dice_version.desc: dice version
+    params.docker_bip.desc: docker bridge ip/mask
+    params.docker_cidr.desc: docker network segment
+    params.enable_https.desc: Whether to enable https
+    params.open_api.desc: Center cluster parameters required for edge clusters
+    params.org_name.desc: Organization name
+    params.pod_cidr.desc: k8s pod network segment
+    params.region.desc: Cluster region
+    params.root_domain.desc: domain
+    params.service_cidr.desc: k8s service network segment
+    params.sk.desc: Secret Key
+    params.terraform.desc: Executed terraform commands，support（plan, apply, destroy）
+    params.vpc_cidr.desc: Create a new vpc，input vpc_cidr
+    params.vpc_id.desc: From an existing vpc，input vpc_id
+    params.vswitch_cidr.desc: Create a new switch，input vswitch_cidr
+    params.vswitch_id.desc: From an existing switch，input vswitch_id

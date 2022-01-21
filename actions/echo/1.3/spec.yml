@@ -24,3 +24,7 @@ locale:
     desc: 回声
     params.count.desc: 循环打印次数
     params.what.desc: 回声
+  en-US:
+    desc: Echo
+    params.count.desc: Number of loop
+    params.what.desc: Echo

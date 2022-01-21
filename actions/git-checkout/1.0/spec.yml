@@ -118,3 +118,25 @@ locale:
     params.password.desc: 密码。可使用占位符 ((gittar.password))
     params.uri.desc: 仓库完整地址。可使用占位符 ((gittar.repo))
     params.username.desc: 用户名。可使用占位符 ((gittar.username))
+  en-US:
+    desc: Clone code repository
+    displayName: Git clone
+    formProps.params.branch.componentProps.placeHolder: Please enter
+    formProps.params.branch.labelTip: The remote reference to be checked out, supporting branch, tag and commit-sha. Placeholders ((gittar.branch)) can be used.
+    formProps.params.componentProps.title: Task parameters
+    formProps.params.depth.componentProps.placeHolder: Please enter
+    formProps.params.depth.labelTip: git clone --depth parameter, shallow clone. The complete clone will be unavailable if this parameter is specified.
+    formProps.params.password.componentProps.placeHolder: Please enter
+    formProps.params.password.labelTip: Password. Placeholders ((gittar.password)) can be used.
+    formProps.params.uri.componentProps.placeHolder: Please enter
+    formProps.params.uri.labelTip: The full address of the repository. Placeholders ((gittar.repo)) can be used.
+    formProps.params.username.componentProps.placeHolder: Please enter
+    formProps.params.username.labelTip: Username. Placeholders ((gittar.username)) can be used.
+    outputs.author_date.desc: Submit time
+    outputs.committer.desc: Committer
+    outputs.message.desc: Commit message
+    params.branch.desc: The remote reference to be checked out, supporting branch, tag and commit-sha. Placeholders ((gittar.branch)) can be used.
+    params.depth.desc: git clone --depth parameter, shallow clone. The complete clone will be unavailable if this parameter is specified.
+    params.password.desc: Password. Placeholders ((gittar.password)) can be used.
+    params.uri.desc: The full address of the repository. Placeholders ((gittar.repo)) can be used.
+    params.username.desc: Username. Placeholders ((gittar.username)) can be used.

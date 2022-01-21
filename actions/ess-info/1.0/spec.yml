@@ -39,3 +39,10 @@ locale:
     params.region.desc: 集群安装区域
     params.scaling_group_id.desc: 弹性伸缩组id
     params.sk.desc: 访问密钥
+  en-US:
+    desc: Get ess group information, such as instance id, private ip
+    displayName: Ess information
+    params.ak.desc: Access Key
+    params.region.desc: region
+    params.scaling_group_id.desc: Scaling group id
+    params.sk.desc: Secret Key

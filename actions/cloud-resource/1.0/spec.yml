@@ -118,3 +118,23 @@ locale:
     params.sk.desc: 访问密钥
     params.terraform.desc: 执行的terraform命令，支持（plan, apply, destroy）
     params.vswitch_id.desc: 交换机id
+  en-US:
+    desc: Add cloud resources
+    displayName: Add cloud resources
+    params.ak.desc: Access Key
+    params.availability_zone.desc: Prepaid period, the default is 1, monthly subscription
+    params.charge_period.desc: Prepaid period, the default is 1, monthly subscription
+    params.charge_type.desc: Cluster Specifications(PrePaid, PostPaid)，the default is PrePaid
+    params.cloud_resource.desc: The type of cloud resource created，such as ecs
+    params.cloud_vendor.desc: Cloud vendor，the default is alicloud
+    params.cluster_name.desc: Cluster name
+    params.disk_size.desc: Disk size
+    params.disk_type.desc: Disk type
+    params.ecs_num.desc: Ecs number
+    params.ecs_password.desc: Ecs password
+    params.ecs_type.desc: Ecs type
+    params.region.desc: Cluster region
+    params.sg_ids.desc: security group ids,Separated by ","
+    params.sk.desc: Secret Key
+    params.terraform.desc: Executed terraform commands，support（plan, apply, destroy）
+    params.vswitch_id.desc: Switch id

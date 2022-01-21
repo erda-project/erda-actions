@@ -51,3 +51,11 @@ locale:
     params.application_name.desc: 应用名称
     params.branch.desc: 分支名称
     params.pipeline_yml_name.desc: 流水线名称
+  en-US:
+    desc: Execute pipeline and wait for it to complete according to the pipeline file in the repository
+    displayName: Application execution
+    outputs.pipelineID.desc: PipelineId
+    outputs.status.desc: Pipeline status
+    params.application_name.desc: Application name
+    params.branch.desc: Branch name
+    params.pipeline_yml_name.desc: Pipelien name

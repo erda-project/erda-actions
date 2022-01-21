@@ -99,3 +99,25 @@ locale:
     params.modules.struct.name.desc: 模块名
     params.modules.struct.path.desc: 模块路径
     params.only_build.desc: 只编译应用，不制作镜像
+  en-US:
+    desc: >-
+      The built-in application building logic of the platform. 
+      Currently supports: 
+      1. Java 
+      2. NodeJS (Herd) 
+      3. Single Page Application (SPA) 
+      4. Dockerfile
+    displayName: Unified builder
+    params.bp_args.desc: Specify buildpack parameters.
+    params.bp_repo.desc: The buildpack type used. Generally it does not need to be specified as the platform will automatically detect the appropriate one.
+    params.bp_ver.desc: The buildpack version used. Use with bp_repo.
+    params.build_type.desc: Specify the build type
+    params.container_type.desc: Specify the container type
+    params.context.desc: The context of the application. All modules must be in this path.
+    params.http_proxy.desc: Specify HTTP proxy parameters.
+    params.https_proxy.desc: Specify HTTPS proxy parameters.
+    params.language.desc: Specify a language
+    params.modules.desc: The object of the Buildpack is the application, and an application contains one or more modules。 For multi-module projects, you only need to write the modules that need to be run in the end; for modules of the lib class, no declaration is required.
+    params.modules.struct.name.desc: Module name
+    params.modules.struct.path.desc: Module path
+    params.only_build.desc: Compile applications only, not make images

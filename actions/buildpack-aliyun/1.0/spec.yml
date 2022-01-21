@@ -90,3 +90,25 @@ locale:
     params.modules.struct.image.struct.name.desc: 镜像名
     params.modules.struct.image.struct.password.desc: docker registry 密码
     params.modules.struct.image.struct.username.desc: docker registry 用户名
+  en-US:
+    desc: >-
+      The built-in application building logic of the platform. 
+      Currently supports: 
+      1. Java 
+      2. NodeJS (Herd) 
+      3. Single Page Application (SPA) 
+      4. Dockerfile
+    displayName: Unified builder (including Alibaba Cloud Java agent)
+    params.bp_args.desc: Specify buildpack-aliyun parameters.
+    params.bp_repo.desc: The buildpack-aliyun type used. Generally it does not need to be specified as the platform will automatically detect the appropriate one.
+    params.bp_ver.desc: The buildpack-aliyun version used. Use with bp_repo.
+    params.context.desc: The context of the application. All modules must be in this path.
+    params.http_proxy.desc: Specify HTTP proxy parameters.
+    params.https_proxy.desc: Specify HTTPS proxy parameters.
+    params.modules.desc: The object of the Buildpack-aliyun is the application, and an application contains one or more modules。 For multi-module projects, you only need to write the modules that need to be run in the end; for modules of the lib class, no declaration is required.
+    params.modules.struct.name.desc: Module name
+    params.modules.struct.path.desc: Module path
+    params.only_build.desc: Compile applications only, not make images
+    params.modules.struct.image.struct.name.desc: Image name
+    params.modules.struct.image.struct.password.desc: Docker registry password
+    params.modules.struct.image.struct.username.desc: Docker registry name

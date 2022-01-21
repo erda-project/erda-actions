@@ -73,3 +73,13 @@ locale:
     params.severities.desc: 等级
     params.status.desc: 状态
     params.username.desc: 用户名
+  en-US:
+    desc: Contrast scanning
+    displayName: Contrast scanning
+    outputs.count.desc: Total Vulnerability
+    outputs.traces.desc: Vulnerability scanning information
+    params.assert_count.desc: Total assertion (>=)
+    params.expand.desc: Extension
+    params.severities.desc: Level
+    params.status.desc: Status
+    params.username.desc: Username

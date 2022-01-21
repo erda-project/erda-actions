@@ -132,3 +132,24 @@ locale:
     params.vswitch_id.desc: 通过已有交换机创建，传入vswitch_id
     params.vswitch_subnet.desc: VSwitch 网段
     params.worker_numbers.desc: 节点数
+  en-US:
+    desc: Create an Alibaba Kubernetes cluster
+    displayName: Alibaba Kubernetes
+    params.charge_period.desc: purchase duration
+    params.charge_type.desc: Payment model
+    params.cluster_name.desc: Cluster name
+    params.collector_url.desc: Center cluster collector url
+    params.container_subnet.desc: Pod network segment
+    params.enable_https.desc: Whether to enable https
+    params.openapi_url.desc: Center cluster openapi url
+    params.org_name.desc: Organization name
+    params.region.desc: region
+    params.root_domain.desc: dice domain
+    params.ssh_password.desc: SSH password
+    params.terraform_command.desc: Executed terraform commands，support（plan, apply, destroy）
+    params.vip_subnet.desc: Service network segment
+    params.vpc_id.desc: From an existing vpc，input vpc_id
+    params.vpc_subnet.desc: VPC network segment
+    params.vswitch_id.desc: From an existing switch，input vswitch_id
+    params.vswitch_subnet.desc: VSwitch network segment
+    params.worker_numbers.desc: number of nodes
