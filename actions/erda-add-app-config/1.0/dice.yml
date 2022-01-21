@@ -1,0 +1,9 @@
+jobs:
+  dice:
+    image: registry.erda.cloud/erda-actions/erda-add-app-config-action:1.0-20220120-2dc7ee3ff489
+    resources:
+      cpu: 0.2
+      mem: 128
+      disk: 128
+
+
