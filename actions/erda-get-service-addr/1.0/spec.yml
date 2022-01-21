@@ -1,0 +1,27 @@
+name: erda-get-service-addr
+version: "1.0"
+type: action
+category: deploy_management
+desc: ${{ i18n.desc }}
+public: true
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.19"
+supportedErdaVersions:
+  - ">= 1.0"
+
+params:
+  - name: runtime_id
+    desc: ${{ i18n.params.runtime_id.desc }}
+
+accessibleAPIs:
+  # inspect runtime
+  - path: /api/runtimes/<idOrName>
+    method: GET
+    schema: http
+
+
+
+locale:
+  zh-CN:
+    desc: 用于查看指定 runtime 的 services 地址。
+    params.runtime_id.desc: Runtime 的 ID
