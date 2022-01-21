@@ -79,7 +79,7 @@ func build(cfg conf.Conf) error {
 		return err
 	}
 
-	cmd := exec.Command("/bin/sh", "-c", "mysqlsh --json=raw --host="+mysqlAddon.Config[mysqlHost].(string)+" --password="+mysqlAddon.Config[mysqlPassword].(string)+" "+
+	cmd := exec.Command("/bin/sh", "-c", "mysqlsh --json=raw --host="+mysqlAddon.Config[mysqlHost].(string)+" --password='"+mysqlAddon.Config[mysqlPassword].(string)+"' "+
 		"--dbuser="+mysqlAddon.Config[mysqlUsername].(string)+" --port="+mysqlAddon.Config[mysqlPort].(string)+" --database="+cfg.Database+" --file=mysql-cli.sql")
 
 	var output bytes.Buffer

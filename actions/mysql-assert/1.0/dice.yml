@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   mysql-assert:
-    image: registry.erda.cloud/erda-actions/mysql-assert-action:20210910-713594b
+    image: registry.erda.cloud/erda-actions/mysql-assert-action:1.0-20220121-315b79c
     envs:
       BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:
