@@ -1,0 +1,38 @@
+name: erda-get-addon-info
+version: "1.0"
+type: action
+category: deploy_management
+desc: ${{ i18n.desc }}
+public: true
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.19"
+supportedErdaVersions:
+  - ">= 1.0"
+
+params:
+  - name: runtime_id
+    desc: ${{ i18n.params.runtime_id.desc }}
+    required: true
+  - name: addon_name
+    desc: ${{ i18n.params.addon_name.desc }}
+    required: true
+
+accessibleAPIs:
+  # list addons
+  - path: /api/addons
+    method: GET
+    schema: http
+  # get addon info
+  - path: /api/addons/<addonId>
+    method: GET
+    schema: http
+
+locale:
+  zh-CN:
+    desc: 用于获取 runtime 下关联的 addon 实例名称的配置信息
+    params.runtime_id.desc: runtime 的 ID
+    params.addon_name.desc: addon 实例的名称
+  en-US:
+    desc: Used to get specific addon for specific runtime on the Erda platform
+    params.runtime_id.desc: Runtime's ID
+    params.addon_name.desc: Addon Instance Name
