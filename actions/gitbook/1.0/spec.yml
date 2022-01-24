@@ -45,3 +45,12 @@ locale:
     formProps.params.workdir.labelTip: gitbook doc目录
     outputs.image.desc: 镜像
     params.workdir.desc: gitbook doc目录
+
+  en-US:
+    desc: gitbook build
+    displayName: gitbook build
+    formProps.params.componentProps.title: Task Parameters
+    formProps.params.workdir.componentProps.placeHolder: Please enter data
+    formProps.params.workdir.labelTip: gitbook doc directory
+    outputs.image.desc: Image
+    params.workdir.desc: gitbook doc directory

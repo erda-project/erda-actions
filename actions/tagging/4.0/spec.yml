@@ -18,7 +18,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 labels:
   maintainer: shaozhong.hsz@alibaba-inc.com
 
@@ -47,3 +46,12 @@ locale:
     params.default_spark_config.desc: Spark数据源配置
     params.tag_es_config.desc: 标签库数据源配置
     params.tag_mysql_config.desc: 标签源数据库源配置
+
+  en-US:
+    desc: tag calculation
+    displayName: tag calculation
+    params.config.desc: action config
+    params.default_cassandra_config.desc: Cassandra data source config
+    params.default_spark_config.desc: Spark data source config
+    params.tag_es_config.desc: tag library data source config
+    params.tag_mysql_config.desc: tag source database config

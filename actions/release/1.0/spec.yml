@@ -78,8 +78,16 @@ params:
     type: struct
     desc: ${{ i18n.params.release_mobile.desc }}
     struct:
-      - {name: files, type: string_array, desc: ${{ i18n.params.release_mobile.struct.files.desc }} }
-      - {name: version, type: string, desc: ${{ i18n.params.release_mobile.struct.version.desc }} }
+      - {
+          name: files,
+          type: string_array,
+          desc: "${{ i18n.params.release_mobile.struct.files.desc }}",
+        }
+      - {
+          name: version,
+          type: string,
+          desc: "${{ i18n.params.release_mobile.struct.version.desc }}",
+        }
 
 accessibleAPIs:
   # push release
@@ -123,3 +131,28 @@ locale:
     params.replacement_images.desc: dice_yml, 与 image 参数功能相同，二者指定其一即可
     params.services.desc: 项目基于那个镜像运行，运行命令是什么
     params.tag_version.desc: 版本号
+
+  en-US:
+    desc: Used to submit a complete deploymentable dice.yml when packaging is completed. The user can define this action in pipeline.yml. If not defined, CI will automatically insert this action in pipeline.yml.
+    displayName: Application packaging release
+    params.aab_info.desc: After aab is parsed, you can delete this parameter
+    params.check_diceyml.desc: |
+      Whether to check the format of dice.yml. The default is true.
+      In some specific scenarios, dice.yml is not for release, but still needs to be released, then you need to set check_diceyml: false.
+    params.cross_cluster.desc: Whether the product can be deployed across clusters, the default is false
+    params.dice_development_yml.desc: dice_development.yml file path.
+    params.dice_production_yml.desc: dice_production.yml file path.
+    params.dice_staging_yml.desc: dice_staging.yml file path.
+    params.dice_test_yml.desc: dice_test.yml file path.
+    params.dice_yml.desc: dice.yml file path. Usually you can use ${git-checkout}/dice.yml to refer to the code repository.
+    params.image.desc: The same as replacement_images, you can specify the image of microservice-image, or you can specify the image of microservice-image.
+    params.init_sql.desc: |
+      The user can specify a directory that contains database initialization scripts. The directory can contain multiple sql files, each sql file corresponds to a database level initialization script.
+      The sql file name without the .sql suffix is the name of the database, which needs to be declared in dice.yml, mysql addon's options.create_dbs.
+      After the execution is successful, the mysql addon's options will add a new init_sql field.
+    params.release_mobile.desc: Mobile packaging
+    params.release_mobile.struct.files.desc: Packaging file
+    params.release_mobile.struct.version.desc: Mobile package version
+    params.replacement_images.desc: dice_yml, the same as image
+    params.services.desc: The microservice is based on which image runs, the running command is what
+    params.tag_version.desc: Version number

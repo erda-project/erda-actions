@@ -33,3 +33,10 @@ locale:
     params.build_cmd.desc: 编译 nodejs 命令
     params.node_version.desc: 版本
     params.workdir.desc: 工程根目录
+
+  en-US:
+    desc: A task to compile and package nodejs project
+    displayName: Node.js project build and package
+    params.build_cmd.desc: Build command
+    params.node_version.desc: Version
+    params.workdir.desc: Project root directory

@@ -12,7 +12,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 labels:
   maintainer: cb167668@alibaba-inc.com
 
@@ -26,3 +25,8 @@ locale:
     desc: Spark上传 Action 允许用户上传Spark应用的jar包
     displayName: Spark上传
     params.jarPath.desc: 云存储jar包路径
+
+  en-US:
+    desc: Spark upload Action allows users to upload Spark application jar package
+    displayName: Spark upload
+    params.jarPath.desc: Cloud storage jar package path

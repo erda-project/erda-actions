@@ -29,3 +29,10 @@ locale:
     params.commands.desc: 编译命令
     params.targets.desc: 输出内容
     params.workdir.desc: 工程根目录
+
+  en-US:
+    desc: Custom js command build product
+    displayName: Custom js command build
+    params.commands.desc: Compile command
+    params.targets.desc: Output content
+    params.workdir.desc: Project root directory

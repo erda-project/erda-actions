@@ -10,7 +10,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 params:
   - name: mysql_host
     required: true
@@ -85,3 +84,21 @@ locale:
     params.mysql_port.desc: 数据库连接端口
     params.mysql_username.desc: 数据库用户名
     params.post_commands.desc: dump 完成后执行一组后置命令，例如 sed 等。dump 文件可以使用环境变量 DUMP_FILE_PATH 获取，例如：head ${DUMP_FILE_PATH}
+
+  en-US:
+    params.dump_all_tables.desc: Whether to operate all tables of the specified database. Can be used together with dump_all_tables_ignore_regexp to export all tables, except for the specified tables to be ignored
+    params.dump_all_tables_ignore_regexp.desc: "When exporting all tables of the specified database (dump_all_tables=true), ignore the tables matching the regular expression. For example: ^(fdp|pmp).*$ ignores tables starting with fdp or pmp"
+    params.global_charset.desc: Global character set
+    params.global_drop_table_if_not_exists.desc: "Global configuration: drop existing tables and rebuild"
+    params.global_try_filter_by_columns_and_values.desc: Try to use the column to filter data. If the column exists, then filter; otherwise, ignore.
+    params.must_include_tables.desc: Specify the tables that must be dumped. Here, the tables declared here must be dumped. The priority of this parameter is higher than dump_all_tables_ignore_regexp
+    params.must_include_tables.struct.drop_table_if_not_exists.desc: Whether to drop existing tables and rebuild. If not specified, it uses the global configuration.
+    params.must_include_tables.struct.table.desc: Table name
+    params.must_include_tables.struct.try_filter_by_columns_and_values.desc: Try to use the column to filter data after dumping. If the column exists, then filter; otherwise, ignore. The priority of this parameter is higher than global_try_filter_by_columns_and_values
+    params.must_include_tables.struct.where.desc: Filter condition. If it is empty, then dump all data of the table
+    params.mysql_database.desc: Database
+    params.mysql_host.desc: Database connection address
+    params.mysql_password.desc: Database password
+    params.mysql_port.desc: Database connection port
+    params.mysql_username.desc: Database username
+    params.post_commands.desc: Execute a group of post-processing commands after dumping. For example, sed. The dump file can be accessed through the environment variable DUMP_FILE

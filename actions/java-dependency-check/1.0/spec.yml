@@ -43,3 +43,12 @@ locale:
     params.debug.desc: 打开插件调试模式，显示更多日志
     params.maven_plugin_version.desc: 用于漏洞扫描的 Maven 插件版本。可以通过 https://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html 获取最新版本。
     params.maven_settings_xml_path.desc: 用户自定义的 Maven 配置文件路径。若未指定，则使用内置的配置文件。
+
+  en-US:
+    desc: Java dependency vulnerability detection, and provide vulnerability report download.
+    displayName: Java project vulnerability detection
+    params.auto_update_nvd.desc: Automatically update NVD vulnerability database; the internal database is the latest, in general, no need to open this option. This option requires Internet, network is not stable will cause update failure.
+    params.code_dir.desc: Code directory, such as ${git-checkout}
+    params.debug.desc: Open plugin debug mode, display more logs
+    params.maven_plugin_version.desc: Version of the Maven plugin used for vulnerability scanning. You can get the latest version through https://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html
+    params.maven_settings_xml_path.desc: Custom Maven configuration file path. If not specified, use the internal configuration file.

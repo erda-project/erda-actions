@@ -40,3 +40,13 @@ locale:
     params.package.desc: go包名 优先从包govendor和gomod中探测
     params.service.desc: 服务名
     params.target.desc: 构建产物路径
+
+  en-US:
+    displayName: go build and package
+    outputs.image.desc: Image
+    params.assets.desc: Assets
+    params.command.desc: Build command
+    params.context.desc: Code path
+    params.package.desc: Go package name. Prefer govendor and gomod to detect
+    params.service.desc: Service name
+    params.target.desc: Build output path

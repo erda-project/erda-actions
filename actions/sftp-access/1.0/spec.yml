@@ -12,7 +12,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 labels:
   maintainer: jiejin.ljj@alibaba-inc.com
 
@@ -50,3 +49,9 @@ locale:
     displayName: sftp server交互
     params.SFTP_LOCAL_PATH.desc: 本地文件保存路径
     params.SFTP_REMOTE_PATH.desc: 需要下载的远程文件路径
+
+  en-US:
+    desc: sftp server interaction tool.
+    displayName: sftp server interaction
+    params.SFTP_LOCAL_PATH.desc: Local file save path
+    params.SFTP_REMOTE_PATH.desc: Remote file path to download

@@ -49,5 +49,15 @@ locale:
     params.build_cmd.desc: 编译 nodejs 命令
     params.dependency_cmd.desc: 依赖下载命令
     params.dest_dir.desc: 构建结果目录(public)
-    params.registry.desc: 'npm 镜像地址, default: https://registry.npm.terminus.io/'
+    params.registry.desc: "npm 镜像地址, default: https://registry.npm.terminus.io/"
     params.workdir.desc: 工程根目录
+
+  en-US:
+    desc: A task to compile and package nodejs project
+    displayName: Node.js project build and package
+    outputs.image.desc: Image
+    params.build_cmd.desc: Build command
+    params.dependency_cmd.desc: Dependency download command
+    params.dest_dir.desc: Build output path
+    params.registry.desc: "npm image address, default: https://registry.npm.terminus.io/"
+    params.workdir.desc: Project root directory

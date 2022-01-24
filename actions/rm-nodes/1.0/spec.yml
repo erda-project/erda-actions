@@ -38,3 +38,11 @@ locale:
     params.force.desc: 跳过检查节点上是否有addon
     params.hosts.desc: 节点的 IP 地址列表
     params.password.desc: 节点 SSH 密码
+
+  en-US:
+    desc: Remove nodes
+    displayName: Remove nodes
+    params.cluster.desc: Cluster name
+    params.force.desc: Skip check node is running addon
+    params.hosts.desc: Node IP address list
+    params.password.desc: Node SSH password

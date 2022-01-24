@@ -25,16 +25,21 @@ params:
     desc: ${{ i18n.params.p12_cert.desc }}
     type: struct
     struct:
-      - {name: source, desc: ${{ i18n.params.p12_cert.struct.source.desc }} }
-      - {name: dest, desc: ${{ i18n.params.p12_cert.struct.dest.desc }} }
-      - {name: password, desc: ${{ i18n.params.p12_cert.struct.password.desc }} }
+      - { name: source, desc: "${{ i18n.params.p12_cert.struct.source.desc }}" }
+      - { name: dest, desc: "${{ i18n.params.p12_cert.struct.dest.desc }}" }
+      - {
+          name: password,
+          desc: "${{ i18n.params.p12_cert.struct.password.desc }}",
+        }
   - name: mobile_provision
-    desc: ${{ i18n.params.mobile_provision.desc }}
+    desc: "${{ i18n.params.mobile_provision.desc }}"
     type: struct
     struct:
-      - {name: source, desc: ${{ i18n.params.mobile_provision.struct.source.desc }} }
-      - {name: dest, desc: ${{ i18n.params.p12_cert.struct.dest.desc }} }
-
+      - {
+          name: source,
+          desc: "${{ i18n.params.mobile_provision.struct.source.desc }}",
+        }
+      - { name: dest, desc: "${{ i18n.params.p12_cert.struct.dest.desc }}" }
 
 accessibleAPIs:
   - path: /api/files
@@ -50,8 +55,6 @@ accessibleAPIs:
     method: GET
     schema: http
 
-
-
 locale:
   zh-CN:
     displayName: ios构建
@@ -65,3 +68,16 @@ locale:
     params.p12_cert.struct.password.desc: p12证书配置的password
     params.p12_cert.struct.source.desc: p12证书配置key
     params.targets.desc: 构建产物路径
+
+  en-US:
+    displayName: ios build
+    params.commands.desc: build command list
+    params.context.desc: code path
+    params.mobile_provision.desc: mobileprovision file
+    params.mobile_provision.struct.dest.desc: storage destination path
+    params.mobile_provision.struct.source.desc: mobileprovision certificate configuration key
+    params.p12_cert.desc: p12 certificate
+    params.p12_cert.struct.dest.desc: storage destination path
+    params.p12_cert.struct.password.desc: p12 certificate configuration password
+    params.p12_cert.struct.source.desc: p12 certificate configuration key
+    params.targets.desc: build product path

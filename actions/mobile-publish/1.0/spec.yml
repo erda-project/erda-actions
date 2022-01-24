@@ -28,9 +28,13 @@ accessibleAPIs:
     method: POST
     schema: http
 
-
 locale:
   zh-CN:
     desc: 用于移动应用发布到发布内容
     displayName: 移动应用内容发布
     params.release_id.desc: release_id值 eg:${release:OUTPUT:releaseID}
+
+  en-US:
+    desc: Used for mobile application publish to publish content
+    displayName: Mobile Application Content Publish
+    params.release_id.desc: release_id value eg:${release:OUTPUT:releaseID}

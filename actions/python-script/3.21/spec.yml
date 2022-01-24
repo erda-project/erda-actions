@@ -27,3 +27,8 @@ locale:
     desc: python执行
     displayName: python执行
     params.config.desc: action 配置
+
+  en-US:
+    desc: python execute
+    displayName: python execute
+    params.config.desc: action config

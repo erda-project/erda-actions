@@ -12,20 +12,19 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 labels:
   maintainer: cb167668@alibaba-inc.com
 
 params:
-- name: depends
-  required: true
-  desc: ${{ i18n.params.depends.desc }}
-- name: main_class
-  required: false
-  desc: ${{ i18n.params.main_class.desc }}
-- name: main_args
-  required: false
-  desc: ${{ i18n.params.main_args.desc }}
+  - name: depends
+    required: true
+    desc: ${{ i18n.params.depends.desc }}
+  - name: main_class
+    required: false
+    desc: ${{ i18n.params.main_class.desc }}
+  - name: main_args
+    required: false
+    desc: ${{ i18n.params.main_args.desc }}
 locale:
   zh-CN:
     desc: 以jar包的方式提交Spark作业
@@ -33,3 +32,10 @@ locale:
     params.depends.desc: 由哪个任务生成的 jar 包
     params.main_args.desc: java -jar xxx.jar 后面的参数
     params.main_class.desc: 指定 jar 包里要执行的主类
+
+  en-US:
+    desc: Submit Spark job with jar package
+    displayName: Spark job
+    params.depends.desc: Which task generates the jar package
+    params.main_args.desc: java -jar xxx.jar after the parameters
+    params.main_class.desc: Specify the main class in the jar package

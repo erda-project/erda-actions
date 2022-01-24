@@ -44,3 +44,12 @@ locale:
     params.skip_tests.desc: 是否跳过测试
     params.username.desc: 有 deploy 权限的用户名
     params.workdir.desc: java library 代码根目录
+
+  en-US:
+    desc: Push java library to remote registry
+    displayName: Java Jar Package Push
+    params.modules.desc: Specify the module list to deploy, separated by `,`
+    params.password.desc: Password of the user with deploy permission
+    params.skip_tests.desc: Whether to skip tests
+    params.username.desc: Username of the user with deploy permission
+    params.workdir.desc: Java library code root directory

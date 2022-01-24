@@ -1,5 +1,5 @@
 name: wait
-version: '1.0'
+version: "1.0"
 type: action
 displayName: ${{ i18n.displayName }}
 desc: ${{ i18n.desc }}
@@ -12,7 +12,6 @@ supportedVersions:
 supportedErdaVersions:
   - ">= 1.2"
 
-
 params:
   - name: wait_time_sec
     required: true
@@ -22,3 +21,8 @@ locale:
     desc: 执行等待操作
     displayName: 等待
     params.wait_time_sec.desc: 等待时间(秒)
+
+  en-US:
+    desc: Execute wait operation
+    displayName: Wait
+    params.wait_time_sec.desc: Wait time(seconds)

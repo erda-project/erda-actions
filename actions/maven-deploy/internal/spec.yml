@@ -17,7 +17,7 @@ source:
     required: true
     desc: 仓库的地址（一般是 Release 仓库的地址）
   - name: snapshot_url
-    desc:  Snapshot 仓库的地址
+    desc: Snapshot 仓库的地址
   - name: artifact
     required: true
     desc: 构建产品，格式必须是 groupId:artifactId:type[:classifier]
@@ -37,7 +37,7 @@ params:
     desc: ${{ i18n.params.pom_file.desc }}
   - name: version_file
     desc: ${{ i18n.params.version_file.desc }}
-    
+
 locale:
   zh-CN:
     desc: 将构建产物发布到 Maven 仓库
@@ -47,3 +47,12 @@ locale:
     params.file.desc: 构建产物的路径名。（和 app app_file 组合必须二选一）
     params.pom_file.desc: 构建产物共生的 pom 文件
     params.version_file.desc: 版本文件
+
+  en-US:
+    desc: Deploy build product to Maven repository
+    displayName: Maven Build Deploy
+    params.app.desc: Build product in compressed package. (with bp-compile and resource)
+    params.app_file.desc: Build product path in compressed package. (with app)
+    params.file.desc: Build product path. (with app app_file)
+    params.pom_file.desc: Build product pom file
+    params.version_file.desc: Version file

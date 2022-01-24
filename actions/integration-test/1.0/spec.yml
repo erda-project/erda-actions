@@ -29,3 +29,11 @@ locale:
     params.name.desc: 该次测试的测试名
     params.parser_type.desc: 测试框架名称，只支持 TESTNG/JUNIT
     params.run_cmd.desc: 用于运行测试用例的 CMD。如 mvn test -Dmaven.test.failure.ignore=true
+
+  en-US:
+    desc: This action is abstract for interface test.
+    displayName: Interface Test
+    params.context.desc: Context directory. Usually is repo.
+    params.name.desc: Test name.
+    params.parser_type.desc: Test framework name. Only support TESTNG/JUNIT
+    params.run_cmd.desc: "CMD to run test case. For example: mvn test -Dmaven.test.failure.ignore=true"

@@ -46,3 +46,8 @@ locale:
     desc: extension 推送工具，将 extensions 仓库中的 Actions 和 Addons 推送到指定的 Erda 平台
     displayName: extension 推送工具
     params.repos.desc: extensions 仓库列表, 如 ${git-checkout}
+
+  en-US:
+    desc: extension push tool, push extensions repository to erda platform
+    displayName: extension push tool
+    params.repos.desc: extensions repository list, e.g. ${git-checkout}

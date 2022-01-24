@@ -10,7 +10,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.4"
 
-
 params:
   - name: dice_version
     type: string
@@ -21,3 +20,8 @@ locale:
     desc: 升级边缘集群
     displayName: 升级边缘集群
     params.dice_version.desc: 目标 dice 版本
+
+  en-US:
+    desc: Upgrade edge cluster
+    displayName: Upgrade edge cluster
+    params.dice_version.desc: Target dice version

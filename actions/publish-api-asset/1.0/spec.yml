@@ -34,7 +34,6 @@ accessibleAPIs:
     method: POST
     schema: http
 
-
 locale:
   zh-CN:
     desc: 将 API 描述文档发布到 API 集市，成为 API 资源
@@ -45,3 +44,13 @@ locale:
     params.service_name.desc: 服务名称，需要和 dice.yml 中的一致
     params.spec_path.desc: API 描述文档的路径，eg:${java}/swagger/swagger.json
     params.version.desc: API 资源版本，需要使用 X.Y.Z 的格式，不填时自动生成
+
+  en-US:
+    desc: Publish API description document to API Market, become API resource
+    displayName: API Document Publish
+    params.asset_id.desc: API resource id
+    params.display_name.desc: API resource display name, if not set, use asset_id
+    params.runtime_id.desc: runtime_id value, eg:${dice:OUTPUT:runtimeID}
+    params.service_name.desc: Service name, must be the same as dice.yml
+    params.spec_path.desc: API description document path, eg:${java}/swagger/swagger.json
+    params.version.desc: "API resource version, eg: X.Y.Z, if not set, auto generate"

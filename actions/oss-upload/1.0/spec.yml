@@ -10,7 +10,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 params:
   - name: access_key_id
     required: true
@@ -44,3 +43,11 @@ locale:
     params.local_path.desc: 本地路径,支持目录和文件
     params.meta.desc: 文件元信息
     params.oss_path.desc: oss路径, 格式为 oss://{bucketName}/{path}
+
+  en-US:
+    desc: Upload file to OSS
+    displayName: oss file upload
+    params.endpoint.desc: region endpoint
+    params.local_path.desc: local path, support directory and file
+    params.meta.desc: file meta info
+    params.oss_path.desc: oss path, format as oss://{bucketName}/{path}

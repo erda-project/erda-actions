@@ -1,5 +1,5 @@
 name: mysql-assert
-version: '1.0'
+version: "1.0"
 type: action
 category: test_management
 displayName: ${{ i18n.displayName }}
@@ -52,7 +52,7 @@ formProps:
     key: params.datasource
     group: params
     componentProps:
-      projectId: ''
+      projectId: ""
       dataSourceType: mysql
     labelTip: ${{ i18n.formProps.params.datasource.label }}
   - label: ${{ i18n.formProps.params.database.label }}
@@ -96,13 +96,12 @@ formProps:
           labelTip: ${{ i18n.formProps.params.out_params.componentProps.objItems.assert.labelTip }}
           component: select
           options: ${{ I18N.assert.options }}
-            
+
     labelTip: ${{ i18n.formProps.params.out_params.label }}
 
 outputsFromParams:
   - type: jq
     keyExpr: 'try  [.out_params[].key,"result"] catch ["result"]'
-
 
 accessibleAPIs:
   - path: /api/addons/<addonId>
@@ -119,7 +118,7 @@ locale:
     formProps.params.datasource.label: 数据源
     formProps.params.datasource.labelTip: 数据源
     formProps.params.out_params.componentProps.objItems.assert.label: 断言
-    formProps.params.out_params.componentProps.objItems.assert.labelTip: >- 
+    formProps.params.out_params.componentProps.objItems.assert.labelTip: >-
       断言，可填写 =, !=, <=, >=, >, <, contains, not_contains, belong, not_belong, empty, not_empty,
       exist, not_exist
     formProps.params.out_params.componentProps.objItems.expression.label: 出参表达式
@@ -142,3 +141,39 @@ locale:
     params.out_params.struct.value.desc: 值
     params.sql.desc: sql 语句
     assert.options: =:等于;!=:不等于;<=:小于等于;>=:大于等于;>:大于;<:小于;contains:包含;not_contains:不包含;belong:属于;not_belong:不属于;empty:为空;not_empty:不为空;exist:存在;not_exist:不存在
+
+  en-US:
+    desc: Execute sql in the corresponding data source and assert and output
+    displayName: mysql config
+    formProps.params.componentProps.title: Task parameters
+    formProps.params.database.componentProps.placeHolder: Please enter data
+    formProps.params.database.label: Database name
+    formProps.params.database.labelTip: Database name
+    formProps.params.datasource.label: Data source
+    formProps.params.datasource.labelTip: Data source
+    formProps.params.out_params.componentProps.objItems.assert.label: Assert
+    formProps.params.out_params.componentProps.objItems.assert.labelTip: >-
+      Assert, can be filled in =, !=, <=, >=, >, <, contains, not_contains, belong, not_belong, empty, not_empty,
+      exist, not_exist
+    formProps.params.out_params.componentProps.objItems.expression.label: Output expression
+    formProps.params.out_params.componentProps.objItems.expression.labelTip: Output expression
+    formProps.params.out_params.componentProps.objItems.key.label: Output name
+    formProps.params.out_params.componentProps.objItems.key.labelTip: Output name
+    formProps.params.out_params.componentProps.objItems.value.label: Assert value
+    formProps.params.out_params.componentProps.objItems.value.labelTip: Assert value
+    formProps.params.out_params.label: Output and assert
+    formProps.params.out_params.labelTip: Output and assert
+    formProps.params.sql.componentProps.placeHolder: Please enter data
+    formProps.params.sql.label: sql statement
+    formProps.params.sql.labelTip: sql statement
+    params.database.desc: Database name
+    params.datasource.desc: Data source
+    params.out_params.desc: Output and assert
+    params.out_params.struct.assert.desc:
+      Assert, can be filled in =, !=, <=, >=, >, <, contains, not_contains, belong, not_belong, empty, not_empty,
+      exist, not_exist
+    params.out_params.struct.expression.desc: Supports linux jq expression starting with ., supports jackson starting with $.
+    params.out_params.struct.key.desc: Output name
+    params.out_params.struct.value.desc: Value
+    params.sql.desc: sql statement
+    assert.options: =:equal;!=:not equal;<=:less than or equal;>=:greater than or equal;>:greater than;<:less than;contains:contains;not_contains:not contains;belong:belong;not_belong:not belong;empty:empty;not_empty:not empty;exist:exist;not_exist:not exist

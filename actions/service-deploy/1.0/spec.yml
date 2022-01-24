@@ -46,3 +46,14 @@ locale:
     params.release_id_path.desc: dicehub-resource releasdse时存放的releaseId路径，dice-resource需要到此路径去取。若pipeline.yml里没有写dicehub，pipeline.yml里会自动插入到dice-resource的source里。若pipeline.yml里写了dicehub，则release_id_path必填，其值为dicehub-resource的Name
     params.time_out.desc: 部署超时时间
     params.uri.desc: dice 平台的地址。使用占位符  ((dice.url)) 则由平台渲染
+
+  en-US:
+    desc: Deploy service for dice platform
+    displayName: dice platform deploy service
+    params.app_id.desc: dice application ID. Use ((dice.id)) to be rendered by the platform.
+    params.branch.desc: Code branch name. Use ((gittar.branch)) to be rendered by the platform.
+    params.callback.desc: Callback address, only support POST method, used to notify the deployment result.
+    params.operator_id.desc: Operator ID. Use ((dice.operator.id)) to be rendered by the platform. Note that when operator_id is a Number, it needs to be enclosed in single quotes.
+    params.release_id_path.desc: Path to store releaseId in dicehub-resource.dice-resource needs to go to this path to get. If pipeline.yml does not contain dicehub, pipeline.yml will automatically insert it into dice-resource's source. If pipeline.yml contains dicehub, release_id_path must be specified, and its value is the name of dicehub-resource.
+    params.time_out.desc: Deployment timeout
+    params.uri.desc: dice platform address. Use ((dice.url)) to be rendered by the platform.

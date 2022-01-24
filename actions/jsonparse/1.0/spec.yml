@@ -1,5 +1,5 @@
 name: jsonparse
-version: '1.0'
+version: "1.0"
 type: action
 category: custom_task
 displayName: ${{ i18n.displayName }}
@@ -40,3 +40,11 @@ locale:
     params.out_params.desc: 出参
     params.out_params.struct.expression.desc: 支持 linux jq 表达式 以 . 开头，支持 jackson 以 $. 开头
     params.out_params.struct.key.desc: 出参名
+
+  en-US:
+    desc: Parse json value and return out params
+    displayName: json parse
+    params.data.desc: json data
+    params.out_params.desc: out params
+    params.out_params.struct.expression.desc: support linux jq expression start with ., support jackson start with $.
+    params.out_params.struct.key.desc: out params name

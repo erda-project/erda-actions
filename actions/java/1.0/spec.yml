@@ -57,3 +57,17 @@ locale:
     params.swagger_path.desc: swagger.json相对workdir的路径
     params.target.desc: 产物jar或war文件
     params.workdir.desc: 工作目录一般为仓库路径 ${git-checkout}
+
+  en-US:
+    desc: Build and package image for java project
+    displayName: Java project build and package image
+    outputs.image.desc: Image
+    params.build_cmd.desc: Build command, for example:./gradlew :user:build
+    params.build_type.desc: Build type, support gradle, maven
+    params.container_type.desc: Container type, support openjdk, tomcat
+    params.copy_assets.desc: Configure file to container, support 2 types, copy to relative path:fileName, copy to absolute path:sourceFile:destFile
+    params.jdk_version.desc: Build use jdk version, support 8, 11
+    params.service_name.desc: Service name, need to match dice.yml
+    params.swagger_path.desc: Swagger.json path relative workdir
+    params.target.desc: Product jar or war file
+    params.workdir.desc: Workdir usually is repo path ${git-checkout}

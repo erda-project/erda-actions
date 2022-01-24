@@ -10,7 +10,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 params:
   - name: display_name
     type: string
@@ -29,3 +28,8 @@ locale:
     desc: 移动端代码模板初始化
     displayName: 移动端代码模板初始化
     params.display_name.desc: app 显示名称
+
+  en-US:
+    desc: Mobile code template initialization
+    displayName: Mobile code template initialization
+    params.display_name.desc: app display name
