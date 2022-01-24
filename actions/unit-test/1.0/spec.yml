@@ -32,3 +32,10 @@ locale:
     params.context.desc: 上下文目录。一般为 repo
     params.go_dir.desc: golang 代码的路径，需要跟代码里的 import 一样。若测试代码为 golang，则该参数为必填
     params.name.desc: 该次测试的测试名。
+
+  en-US:
+    desc: This action is an abstraction of UT, and it will be triggered automatically when you submit code.
+    displayName: Unit test
+    params.context.desc: Context directory. Usually it is the repo.
+    params.go_dir.desc: The path of golang code. It should be the same as the import path in the code. If the test code is golang, this parameter is required.
+    params.name.desc: The test name.

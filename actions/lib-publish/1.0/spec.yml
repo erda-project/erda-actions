@@ -10,7 +10,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 params:
   - name: workdir
     desc: ${{ i18n.params.workdir.desc }}
@@ -28,3 +27,8 @@ locale:
     desc: 用于库应用发布到发布内容
     displayName: 库应用内容发布
     params.workdir.desc: spec.yml & README.md 文件所在目录
+
+  en-US:
+    desc: Used for library application publish to publish content
+    displayName: Library Application Content Publish
+    params.workdir.desc: spec.yml & README.md file directory

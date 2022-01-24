@@ -200,3 +200,19 @@ locale:
     params.sonar_login.desc: 用于登录 sonar 服务器的用户名或 token。若不填写，使用平台 sonar 服务自动生成的 token
     params.sonar_password.desc: 用于登录 sonar 服务器的密码。若不填写，使用平台 sonar 服务自动生成的 token。特别的，当 sonar_login 为 token 而非 username 方式时，sonar_password 无需填写
     params.use_platform_quality_gate.desc: 是否加载平台的门禁
+
+  en-US:
+    displayName: Sonar Code Quality Check
+    params.code_dir.desc: The directory of code to be analyzed
+    params.delete_project.desc: Whether to delete the project after analysis. The default is true
+    params.language.desc: The language type. Currently only supports java / go / js
+    params.project_key.desc: The project key in sonar. If not filled in, the system will automatically generate UUID
+    params.quality_gate.desc: Custom quality gate
+    params.quality_gate.struct.error.desc: The threshold value of the quality gate. If the value exceeds this threshold, it is not passed
+    params.quality_gate.struct.op.desc: The comparison operation. The default is GT
+    params.sonar_exclustions.desc: "Declare which files are not to be analyzed. Refer to the documentation: https://docs.sonarqube.org/latest/project-administration/narrowing-the-focus/"
+    params.sonar_host_url.desc: The address of the sonar server. If not filled in, the system will use the platform provided sonar server
+    params.sonar_log_level.desc: The log level of the sonar analysis. The higher the level, the more detailed the log. The default is INFO
+    params.sonar_login.desc: The username or token to login to the sonar server. If not filled in, the system will automatically generate a token
+    params.sonar_password.desc: "The password to login to the sonar server. If not filled in, the system will automatically generate a token. Special note: When sonar_login is token and not username, sonar_password is not required"
+    params.use_platform_quality_gate.desc: Whether to load the platform quality gate

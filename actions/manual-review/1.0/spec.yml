@@ -1,5 +1,5 @@
 name: manual-review
-version: '1.0'
+version: "1.0"
 type: action
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/01/04/ef2070ae-5046-43f5-97ef-6ffb9b8e2d34.png
 displayName: ${{ i18n.displayName }}
@@ -33,29 +33,28 @@ accessibleAPIs:
     method: POST
     schema: http
 
-
 formProps:
- - key: params
-   component: formGroup
-   group: params
-   componentProps:
-     title: ${{ i18n.formProps.params.componentProps.title }}
- - label: ${{ i18n.formProps.params.processor.label }}
-   component: memberSelector
-   required: true
-   key: params.processor
-   group: params
-   componentProps:
-     scopeType: app
-     mode: multiple
- - label: wain_time_interval_sec
-   component: input
-   key: params.wating_time
-   componentProps:
-     placeholder: ${{ i18n.formProps.params.wating_time.componentProps.placeHolder }}
-   group: params
-   defaultValue: 5
-   labelTip: ${{ i18n.formProps.params.wating_time.labelTip }}
+  - key: params
+    component: formGroup
+    group: params
+    componentProps:
+      title: ${{ i18n.formProps.params.componentProps.title }}
+  - label: ${{ i18n.formProps.params.processor.label }}
+    component: memberSelector
+    required: true
+    key: params.processor
+    group: params
+    componentProps:
+      scopeType: app
+      mode: multiple
+  - label: wain_time_interval_sec
+    component: input
+    key: params.wating_time
+    componentProps:
+      placeholder: ${{ i18n.formProps.params.wating_time.componentProps.placeHolder }}
+    group: params
+    defaultValue: 5
+    labelTip: ${{ i18n.formProps.params.wating_time.labelTip }}
 locale:
   zh-CN:
     desc: 在流水线过程中添加人工确认步骤
@@ -66,3 +65,13 @@ locale:
     formProps.params.wating_time.labelTip: 等待时间
     params.processor.desc: 处理人 id
     params.wain_time_interval_sec.desc: 等待时间
+
+  en-US:
+    desc: Add a manual review step in the pipeline process
+    displayName: Manual Review
+    formProps.params.componentProps.title: Task Parameters
+    formProps.params.processor.label: Processor
+    formProps.params.wating_time.componentProps.placeHolder: Please enter data
+    formProps.params.wating_time.labelTip: Waiting time
+    params.processor.desc: Processor id
+    params.wain_time_interval_sec.desc: Waiting time

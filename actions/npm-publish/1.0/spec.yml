@@ -13,25 +13,25 @@ supportedErdaVersions:
   - ">= 1.0"
 
 params:
-- name: package_name
-  required: true
-  desc: ${{ i18n.params.package_name.desc }}
-- name: registry
-  desc: ${{ i18n.params.registry.desc }}
-- name: path
-  required: true
-  desc: ${{ i18n.params.path.desc }}
-- name: tag
-  desc: ${{ i18n.params.tag.desc }}
-- name: email
-  required: true
-  desc: ${{ i18n.params.email.desc }}
-- name: username
-  required: true
-  desc: ${{ i18n.params.username.desc }}
-- name: password
-  required: true
-  desc: ${{ i18n.params.password.desc }}
+  - name: package_name
+    required: true
+    desc: ${{ i18n.params.package_name.desc }}
+  - name: registry
+    desc: ${{ i18n.params.registry.desc }}
+  - name: path
+    required: true
+    desc: ${{ i18n.params.path.desc }}
+  - name: tag
+    desc: ${{ i18n.params.tag.desc }}
+  - name: email
+    required: true
+    desc: ${{ i18n.params.email.desc }}
+  - name: username
+    required: true
+    desc: ${{ i18n.params.username.desc }}
+  - name: password
+    required: true
+    desc: ${{ i18n.params.password.desc }}
 locale:
   zh-CN:
     desc: 将 npm 的 package publish 到 npm 仓库，以统一和规范化 package 管理
@@ -43,3 +43,14 @@ locale:
     params.registry.desc: npm仓库，默认为terminus公有的npm仓库
     params.tag.desc: publish package的tag
     params.username.desc: npm仓库的用户名
+
+  en-US:
+    desc: Publish npm package to npm registry, unified and standardized package management
+    displayName: NPM Package Push
+    params.email.desc: User's email address
+    params.package_name.desc: Package name to publish
+    params.password.desc: npm registry login password
+    params.path.desc: Path of package to publish
+    params.registry.desc: npm registry, default is public npm registry
+    params.tag.desc: Tag of package to publish
+    params.username.desc: npm registry login username

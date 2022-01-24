@@ -1,5 +1,5 @@
 name: testplan-run
-version: '1.0'
+version: "1.0"
 type: action
 logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/07/28/d23fc13f-c85e-4585-96dc-3199583d4418.png
 displayName: ${{ i18n.displayName }}
@@ -47,3 +47,12 @@ locale:
     params.cms.desc: 参数配置名称
     params.is_continue_execution.desc: 失败后是否继续执行,执行 或者 不执行
     params.test_plan.desc: 测试计划名称
+
+  en-US:
+    desc: Use this action to execute a test plan automatically according to the environment
+    displayName: Test plan
+    outputs.pipelineID.desc: pipeline ID
+    outputs.status.desc: pipeline status
+    params.cms.desc: Parameter configuration name
+    params.is_continue_execution.desc: Whether to continue execution after failure, execute or not execute
+    params.test_plan.desc: Test plan name

@@ -1,5 +1,5 @@
 name: testscene-run
-version: '1.0'
+version: "1.0"
 type: action
 displayName: ${{ i18n.displayName }}
 logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/07/28/8e9d0fcd-691f-4a9c-a11a-b0a2e0f9e691.png
@@ -54,3 +54,13 @@ locale:
     params.test_scene.desc: 场景
     params.test_scene_set.desc: 场景集
     params.test_space.desc: 空间
+
+  en-US:
+    desc: Use this action to execute a test scene automatically according to the environment
+    displayName: Test scene
+    outputs.pipelineID.desc: pipeline ID
+    outputs.status.desc: pipeline status
+    params.cms.desc: Parameter configuration name
+    params.test_scene.desc: Test scene
+    params.test_scene_set.desc: Test scene set
+    params.test_space.desc: Space

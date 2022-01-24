@@ -1,5 +1,5 @@
 name: mysql-cli
-version: '1.0'
+version: "1.0"
 type: action
 category: test_management
 displayName: ${{ i18n.displayName }}
@@ -36,7 +36,7 @@ formProps:
     key: params.datasource
     group: params
     componentProps:
-      projectId: ''
+      projectId: ""
       dataSourceType: mysql
     labelTip: ${{ i18n.formProps.params.datasource.labelTip }}
   - label: database
@@ -63,7 +63,6 @@ outputs:
   - name: result
     desc: ${{ i18n.outputs.result.desc }}
 
-
 accessibleAPIs:
   - path: /api/addons/<addonId>
     method: GET
@@ -82,3 +81,17 @@ locale:
     params.database.desc: 数据库名称
     params.datasource.desc: 数据源
     params.sql.desc: sql 语句
+
+  en-US:
+    desc: Execute sql in the corresponding data source
+    displayName: mysql config sheet
+    formProps.params.componentProps.title: Task Parameters
+    formProps.params.database.componentProps.placeHolder: Please enter data
+    formProps.params.database.labelTip: Database name
+    formProps.params.datasource.labelTip: Data source
+    formProps.params.sql.componentProps.placeHolder: Please enter data
+    formProps.params.sql.labelTip: sql statement
+    outputs.result.desc: Query result
+    params.database.desc: Database name
+    params.datasource.desc: Data source
+    params.sql.desc: sql statement

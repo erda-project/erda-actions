@@ -83,11 +83,11 @@ locale:
     displayName: 循环操作
     params.cmd.desc: 当操作类型为 CMD 时，该参数必填。
     params.http_conf.desc: 当操作类型为 HTTP 时，该参数必填，描述 HTTP 配置。
-    params.http_conf.struct.header.desc: HTTP Header，map[string]string 格式
-    params.http_conf.struct.host.desc: Host。例如：127.0.0.1:8080, https://www.baidu.com
-    params.http_conf.struct.method.desc: HTTP Method，目前支持 GET/POST/PUT/DELETE
-    params.http_conf.struct.path.desc: Host 后的路径，与 Host 拼接在一起。例如：/ping, /status
-    params.json_response_success_field.desc: 使用 json 格式解析 response(HTTP Response Body 或 CMD 标准输出)，根据所需字段是否为 true 判断成功与否。例如 .success
+    params.http_conf.struct.header.desc: "HTTP Header，map[string]string 格式"
+    params.http_conf.struct.host.desc: "Host。例如：127.0.0.1:8080, https://www.baidu.com"
+    params.http_conf.struct.method.desc: "HTTP Method，目前支持 GET/POST/PUT/DELETE"
+    params.http_conf.struct.path.desc: "Host 后的路径，与 Host 拼接在一起。例如：/ping, /status"
+    params.json_response_success_field.desc: "使用 json 格式解析 response(HTTP Response Body 或 CMD 标准输出)，根据所需字段是否为 true 判断成功与否。例如 .success"
     params.loop_decline_limit.desc: 设置衰退延迟的最大值，默认不限制最大值
     params.loop_decline_ratio.desc: 设置衰退延迟的比例，默认是 1
     params.loop_interval.desc: 设置每次循环的间隔时间
@@ -96,3 +96,22 @@ locale:
       操作类型，可选：HTTP, CMD。
       HTTP: 根据 HTTP CODE 判断成功与否。HTTP CODE=2xx 时为成功。
       CMD: 根据命令 EXIT CODE 判断成功或失败。EXIT CODE=0 时为成功。
+
+  en-US:
+    desc: Loop a certain action until meet the exit condition or timeout.
+    displayName: Loop Action
+    params.cmd.desc: This parameter is required when the action type is CMD.
+    params.http_conf.desc: This parameter is required when the action type is HTTP.
+    params.http_conf.struct.header.desc: "HTTP Header, map[string]string format"
+    params.http_conf.struct.host.desc: "Host。Such as: 127.0.0.1:8080, https://www.baidu.com"
+    params.http_conf.struct.method.desc: "HTTP Method，currently supports GET/POST/PUT/DELETE"
+    params.http_conf.struct.path.desc: "Host path, concatenated with Host. Such as: /ping, /status"
+    params.json_response_success_field.desc: "Use json format to parse response(HTTP Response Body or CMD standard output), based on the required field is true or not to determine success or not. For example .success"
+    params.loop_decline_limit.desc: Set the decline delay maximum value, default is no limit
+    params.loop_decline_ratio.desc: Set the decline delay ratio, default is 1
+    params.loop_interval.desc: Set the interval time of each loop
+    params.loop_max_times.desc: Set the maximum loop times
+    params.type.desc: |-
+      Action type, optional: HTTP, CMD.
+      HTTP: Based on HTTP CODE to determine success or not. HTTP CODE=2xx is success.
+      CMD: Based on EXIT CODE to determine success or not. EXIT CODE=0 is success.

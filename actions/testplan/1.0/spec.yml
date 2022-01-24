@@ -44,3 +44,10 @@ locale:
     params.project_id.desc: 测试计划所属的项目 ID
     params.project_test_env_id.desc: 执行的测试计划变量 ID
     params.test_plan_id.desc: 执行的测试计划 ID
+
+  en-US:
+    desc: Use this action to execute a test plan automatically according to the environment
+    displayName: Test plan execution
+    params.project_id.desc: Project ID
+    params.project_test_env_id.desc: Test plan variable ID
+    params.test_plan_id.desc: Test plan ID

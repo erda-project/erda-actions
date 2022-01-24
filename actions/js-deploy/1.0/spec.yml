@@ -34,3 +34,10 @@ locale:
     params.password.desc: npm publish 密码
     params.username.desc: npm publish 用户名
     params.workdir.desc: npm library 代码根目录
+
+  en-US:
+    desc: Push npm library to remote registry
+    displayName: npm Package Push
+    params.password.desc: npm publish password
+    params.username.desc: npm publish username
+    params.workdir.desc: npm library code root directory

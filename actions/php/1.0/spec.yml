@@ -21,10 +21,16 @@ params:
 outputs:
   - name: image
     desc: ${{ i18n.outputs.image.desc }}
-    
+
 locale:
   zh-CN:
     displayName: php镜像构建
     outputs.image.desc: 镜像
     params.context.desc: 代码路径
     params.index_path.desc: 启动目录
+
+  en-US:
+    displayName: php image build
+    outputs.image.desc: Image
+    params.context.desc: Code path
+    params.index_path.desc: Start directory

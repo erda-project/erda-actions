@@ -12,7 +12,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 labels:
   maintainer: hxf168482@alibaba-inc.com
 
@@ -83,3 +82,18 @@ locale:
     params.queryargs.desc: sql action执行传入的参数变量
     params.triggerType.desc: 周期性触发类型
     params.username.desc: 目标数据源用户名
+
+  en-US:
+    desc: SQL Action execute user configed SQL script.
+    displayName: sql executor
+    params.frequency.desc: period size
+    params.inputTables.desc: sql action execute depend input table
+    params.outputTables.desc: sql action execute output table
+    params.password.desc: target data source password
+    params.path.desc: sql script path
+    params.process.desc: sql action process type, current onedata model has init and process
+    params.queryEndPoint.desc: target data source url
+    params.queryType.desc: sql script type, sparksql ,hivesql, etc
+    params.queryargs.desc: sql action execute input param
+    params.triggerType.desc: period trigger type
+    params.username.desc: target data source username

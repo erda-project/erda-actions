@@ -1,5 +1,5 @@
 name: redis-cli
-version: '1.0'
+version: "1.0"
 type: action
 category: test_management
 displayName: ${{ i18n.displayName }}
@@ -21,7 +21,6 @@ params:
     required: true
     desc: ${{ i18n.formProps.params.command.labelTip }}
 
-
 accessibleAPIs:
   - path: /api/addons/<addonId>
     method: GET
@@ -39,7 +38,7 @@ formProps:
     key: params.datasource
     group: params
     componentProps:
-      projectId: ''
+      projectId: ""
       dataSourceType: redis
     labelTip: ${{ i18n.formProps.params.datasource.labelTip }}
   - label: command
@@ -63,3 +62,13 @@ locale:
     formProps.params.datasource.labelTip: 数据源
     params.command.desc: redis 语句
     params.datasource.desc: 数据源
+
+  en-US:
+    desc: Execute redis command in the corresponding data source
+    displayName: redis config
+    formProps.params.command.componentProps.placeHolder: Please enter data
+    formProps.params.command.labelTip: redis command
+    formProps.params.componentProps.title: Task parameters
+    formProps.params.datasource.labelTip: Data source
+    params.command.desc: redis command
+    params.datasource.desc: Data source

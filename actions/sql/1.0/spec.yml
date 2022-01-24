@@ -12,7 +12,6 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
-
 labels:
   maintainer: hxf168482@alibaba-inc.com
 
@@ -80,3 +79,14 @@ locale:
     params.process.desc: sql action处理类型，当前onedata模型分为init和process
     params.queryargs.desc: sql action执行传入的参数变量
     params.triggerType.desc: 周期性触发类型
+
+  en-US:
+    desc: SQL Action user configuration SQL script.
+    displayName: SQL Action executor
+    params.frequency.desc: Period size
+    params.inputTables.desc: SQL action execution input table
+    params.outputTables.desc: SQL action execution output table
+    params.path.desc: SQL script to be executed
+    params.process.desc: SQL action processing type, current onedata model is divided into init and process
+    params.queryargs.desc: SQL action execution input parameter variable
+    params.triggerType.desc: Periodic trigger type
