@@ -1,0 +1,95 @@
+# Copyright (c) 2021 Terminus, Inc.
+#
+# This program is free software: you can use, redistribute, and/or modify
+# it under the terms of the GNU Affero General Public License, version 3
+# or later ("AGPL"), as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+name: erda-create-custom-addon
+displayName: ${{ i18n.displayName }}
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/01/21/419c5ca5-52e7-4aff-8e10-46a3e330febd.png
+version: "1.0"
+type: action
+category: deploy_management
+desc: ${{ i18n.desc }}
+
+public: true
+supportedErdaVersions:
+  - ">=1.0"
+
+params:
+  - name: name
+    desc: ${{ i18n.params.name.desc }}
+    type: string
+    required: true
+
+  - name: tag
+    desc: ${{ i18n.params.tag.desc }}
+    type: string
+    required: false
+
+  - name: configs
+    desc: ${{ i18n.params.configs.desc }}
+    type: map
+    required: false
+
+  - name: configsFrom
+    desc: ${{ i18n.params.configsFrom.desc }}
+    type: string
+    required: false
+
+outputs:
+  - name: name
+    desc: ${{ i18n.outputs.name.desc }}
+  - name: tag
+    desc: ${{ i18n.outputs.tag.desc }}
+  - name: configs
+    desc: ${{ i18n.outputs.configs.desc }}
+  - name: addonInstanceID
+    desc: ${{ i18n.outputs.instanceID.desc }}
+  - name: routingInstanceID
+    desc: ${{ i18n.outputs.routingInstanceID.desc }}
+
+accessibleAPIs:
+  - path: /api/addons/actions/create-custom
+    method: POST
+    schema: http
+
+  - path: /api/addons
+    method: GET
+    schema: http
+
+locale:
+  zh-CN:
+    displayName: 创建 Custom Addon
+    desc: >-
+      创建 Custom Addon，如果该环境下同名 Custom Addon 已存在则跳过创建。
+    params.name.desc: Custom Addon 名称，如果该环境下同名 Custom Addon 已存在则不会创建。
+    params.tag.desc: Custom Addon 的别名。
+    params.configs.desc: Custom Addon 配置，是一系列键值对，优先级最高。
+    params.configsFrom.desc: Custom Addon 配置文件，为各环境分别配置了键值对，优先级低于 configs。
+    outputs.name.desc: Custom Addon 名称。
+    outputs.tag.desc: Custom Addon 别名。
+    outputs.configs.desc: Custom Addon 的配置，是一系列键值对。
+    outputs.instanceID.desc: Custom Addon 的 instanceID。
+    outputs.routingInstanceID.desc: Custom Addon 的 routingInstanceID。
+
+  en-US:
+    displayName: Erda Create Custom Addon
+    desc: >-
+      To create a Custom Addon. It will not create the addon if there is already a same name Custom Addon in the workspace.
+    params.name.desc: Custom Addon name. It will not create the addon if there is already a same name Custom Addon in the workspace.
+    params.tag.desc: Custom Addon alias name.
+    params.configs.desc: Custom Addon congfigs is some key-values.
+    params.configsFrom.desc: Custom Addon is the configs file contains some key-values.
+    outputs.name.desc: Custom Addon name.
+    outputs.tag.desc: Custom Addon alias name。
+    outputs.configs.desc: Custom Addon configs.
+    outputs.instanceID.desc: Custom Addon instanceID。
+    outputs.routingInstanceID.desc: Custom Addon routingInstanceID.

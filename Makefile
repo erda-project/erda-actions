@@ -9,12 +9,12 @@ DevelopRegistry="registry.cn-hangzhou.aliyuncs.com/dice"
 .ONESHELL:
 echo \
 custom-script java-agent \
-email mysql-assert app-create app-run git-checkout assert jsonparse redis-cli mysql-cli git-push release dice dice-deploy dice-deploy-addon dice-deploy-service dice-deploy-domain dice-deploy-release dice-deploy-redeploy dice-deploy-rollback \
-buildpack buildpack-aliyun java java-build js js-build manual-review js-deploy dockerfile docker-push php gitbook js-script\
-sonar integration-test unit-test api-test  java-lint testplan java-dependency-check golang java-unit android ios mobile-template lib-publish mobile-publish java-deploy \
-extract-repo-version release-fetch dingtalk-robot-msg \
-oss-upload delete-nodes ess-info loop api-register api-publish publish-api-asset mysqldump archive-release erda-get-addon-info erda-get-service-addr erda-mysql-migration\
-push-extensions archive-extensions testscene-run testplan-run erda-mysql-migration-lint erda-pkg-release-public erda-pkg-release-enterprise contrast-security:
+email mysql-assert app-create app-run git-checkout assert jsonparse redis-cli mysql-cli git-push release dice dice-deploy dice-deploy-addon dice-deploy-service \
+dice-deploy-domain dice-deploy-release dice-deploy-redeploy dice-deploy-rollback buildpack buildpack-aliyun java java-build js js-build manual-review js-deploy \
+dockerfile docker-push php gitbook js-script sonar integration-test unit-test api-test  java-lint testplan java-dependency-check golang java-unit android ios \
+mobile-template lib-publish mobile-publish java-deploy extract-repo-version release-fetch dingtalk-robot-msg oss-upload delete-nodes ess-info loop api-register \
+api-publish publish-api-asset mysqldump archive-release erda-get-addon-info erda-get-service-addr erda-mysql-migration push-extensions archive-extensions \
+testscene-run testplan-run erda-mysql-migration-lint erda-pkg-release-public erda-pkg-release-enterprise contrast-security erda-create-custom-addon:
 
 	@set -eo pipefail
 

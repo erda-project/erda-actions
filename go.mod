@@ -4,7 +4,7 @@ go 1.14
 
 replace (
 	github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.5
-	github.com/erda-project/erda-proto-go v0.0.0 => github.com/dspo/erda/api/proto-go v0.0.0-20210923114807-a90b0469e7e3
+	github.com/erda-project/erda-proto-go => github.com/erda-project/erda/api/proto-go v0.0.0-20220124060358-b57fb04efaba
 	github.com/google/gnostic => github.com/googleapis/gnostic v0.4.0
 	github.com/googlecloudplatform/flink-operator => github.com/googlecloudplatform/flink-on-k8s-operator v0.0.0-20200909223554-f302312417ee
 	github.com/influxdata/influxql => github.com/erda-project/influxql v1.1.0-ex
@@ -55,7 +55,7 @@ require (
 	github.com/labstack/gommon v0.3.0
 	github.com/machinebox/progress v0.2.0
 	github.com/matryer/is v1.4.0 // indirect
-	github.com/mitchellh/mapstructure v1.4.1
+	github.com/mitchellh/mapstructure v1.4.3
 	github.com/otiai10/copy v1.5.0
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/pkg/errors v0.9.1
@@ -67,8 +67,8 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2
 	github.com/toqueteos/trie v0.0.0-20150530104557-56fed4a05683 // indirect
-	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2
-	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8
+	golang.org/x/crypto v0.0.0-20210920023735-84f357641f63
+	golang.org/x/net v0.0.0-20210917221730-978cfadd31cf
 	gopkg.in/src-d/enry.v1 v1.6.4
 	gopkg.in/stretchr/testify.v1 v1.2.2
 	gopkg.in/toqueteos/substring.v1 v1.0.2 // indirect

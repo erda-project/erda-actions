@@ -18,9 +18,18 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 )
 
 const metafile = "METAFILE"
+
+var (
+	warnIndex uint64
+	errIndex  uint64
+
+	w = New(os.Getenv(metafile))
+	m = meta{}
+)
 
 type meta struct {
 	Metadata []ele `json:"metadata"`
@@ -29,16 +38,37 @@ type meta struct {
 type ele struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
+	Type  string `json:"type,omitempty"`
 }
 
 // Write is the shortcut for New(filename).Write(key, value)
-func Write(m map[string]interface{}) (err error) {
-	return New(os.Getenv(metafile)).Write(m)
+func Write(values map[string]interface{}) (err error) {
+	return w.Write(values)
 }
 
 // WriteKV is the shortcut for New(filename).Write(key, value)
 func WriteKV(k string, v interface{}) error {
-	return New(os.Getenv(metafile)).WriteKV(k, v)
+	return w.WriteKV(k, v)
+}
+
+// WriteSuccess writes the final result is whether success or fails.
+func WriteSuccess(success bool) error {
+	return w.WriteSuccess(success)
+}
+
+// WriteLink writes key-value with link
+func WriteLink(k string, v interface{}) error {
+	return w.WriteLink(k, v)
+}
+
+// WriteWarn writes warn info to meta file
+func WriteWarn(v interface{}) error {
+	return w.WriteWarn(v)
+}
+
+// WriteError writes err info to meta file
+func WriteError(v interface{}) error {
+	return w.WriteError(v)
 }
 
 type Writer struct {
@@ -49,12 +79,11 @@ func New(filename string) *Writer {
 	return &Writer{filename: filename}
 }
 
-func (w Writer) Write(m map[string]interface{}) error {
-	var mt meta
-	for k, v := range m {
-		mt.Metadata = append(mt.Metadata, ele{k, fmt.Sprintf("%v", v)})
+func (w Writer) Write(values map[string]interface{}) error {
+	for k, v := range values {
+		m.Metadata = append(m.Metadata, ele{Name: k, Value: fmt.Sprintf("%v", v)})
 	}
-	data, err := json.Marshal(mt)
+	data, err := json.Marshal(m)
 	if err != nil {
 		return err
 	}
@@ -62,9 +91,28 @@ func (w Writer) Write(m map[string]interface{}) error {
 }
 
 func (w Writer) WriteKV(k string, v interface{}) error {
-	data, err := json.Marshal(meta{Metadata: []ele{{Name: k, Value: fmt.Sprintf("%v", v)}}})
-	if err != nil {
-		return err
-	}
-	return ioutil.WriteFile(w.filename, data, 0644)
+	return w.Write(map[string]interface{}{k: v})
+}
+
+// WriteSuccess writes the final result is whether success or fails.
+func (w Writer) WriteSuccess(success bool) error {
+	return w.WriteKV("success", success)
+}
+
+// WriteLink writes key-value with link
+func (w Writer) WriteLink(k string, v interface{}) error {
+	m.Metadata = append(m.Metadata, ele{Name: k, Value: fmt.Sprintf("%v", v), Type: "link"})
+	return w.Write(make(map[string]interface{}))
+}
+
+// WriteWarn writes warn info to meta file
+func (w Writer) WriteWarn(v interface{}) error {
+	warnIndex++
+	return w.WriteKV("warn-"+strconv.FormatUint(warnIndex, 10), v)
+}
+
+// WriteError writes err info to meta file
+func (w Writer) WriteError(v interface{}) error {
+	errIndex++
+	return w.WriteKV("err-"+strconv.FormatUint(errIndex, 10), v)
 }
