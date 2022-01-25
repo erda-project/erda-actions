@@ -71,5 +71,5 @@ locale:
     params.application_git_repo.desc: Application repository address
     params.application_git_username.desc: Application repository account
     params.application_name.desc: Application name
-    params.application_type.desc: Application type: LIBRARY, SERVICE, MOBILE
+    params.application_type.desc: "Application type: LIBRARY, SERVICE, MOBILE"
     params.is_external_repo.desc: Whether it is an external repository. The external repository will reference the git address, and the built-in repository will pull and push the code of the git address.

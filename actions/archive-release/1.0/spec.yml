@@ -93,8 +93,8 @@ params:
     desc: ${{ i18n.params.registry_replacement.desc }}
     required: false
     struct:
-      - { name: old, type: string, default: , desc: ${{ i18n.params.registry_replacement.struct.old.desc }} }
-      - { name: new, type: string, default: , desc: ${{ i18n.params.registry_replacement.struct.new.desc }} }
+      - { name: old, type: string, default: , desc: "${{ i18n.params.registry_replacement.struct.old.desc }}" }
+      - { name: new, type: string, default: , desc: "${{ i18n.params.registry_replacement.struct.new.desc }}" }
 
   - name: securityContext
     type: string_array
