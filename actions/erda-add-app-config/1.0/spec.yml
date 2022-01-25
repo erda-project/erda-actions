@@ -32,3 +32,8 @@ locale:
     outputs.params.application_name.desc: 应用名
     outputs.params.config_workspace.desc: 环境
     outputs.params.config_items.desc: 配置项
+  en-US:
+    desc: Used to add specific applications's config parameters
+    outputs.params.application_name.desc: Application Name
+    outputs.params.config_workspace.desc: Workspace/Enviroment
+    outputs.params.config_items.desc: Configurations

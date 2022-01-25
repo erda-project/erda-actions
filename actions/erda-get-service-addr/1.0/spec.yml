@@ -25,3 +25,6 @@ locale:
   zh-CN:
     desc: 用于查看指定 runtime 的 services 地址。
     params.runtime_id.desc: Runtime 的 ID
+  en-US:
+    desc: Used to get specific runtime's service addr on the Erda platform
+    params.runtime_id.desc: Runtime's ID
