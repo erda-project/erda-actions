@@ -27,9 +27,9 @@ params:
       - name: image
         type: struct
         struct:
-          - {name: name, desc: ${{ i18n.params.modules.struct.image.struct.name.desc }} }
-          - {name: username, desc: ${{ i18n.params.modules.struct.image.struct.username.desc }} }
-          - {name: password, desc: ${{ i18n.params.modules.struct.image.struct.password.desc }} }
+          - {name: name, desc: "${{ i18n.params.modules.struct.image.struct.name.desc }}" }
+          - {name: username, desc: "${{ i18n.params.modules.struct.image.struct.username.desc }}" }
+          - {name: password, desc: "${{ i18n.params.modules.struct.image.struct.password.desc }}" }
   - name: bp_repo
     desc: ${{ i18n.params.bp_repo.desc }}
   - name: bp_ver
