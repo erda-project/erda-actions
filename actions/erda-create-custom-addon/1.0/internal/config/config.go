@@ -48,7 +48,10 @@ func Get() *Config {
 	if err := envconf.Load(c); err != nil {
 		panic(errors.Wrap(err, "failed to Load config"))
 	}
-	c.init()
+	if err := c.init(); err != nil {
+		_ = metawriter.WriteError(errors.Wrap(err, "failed to init config"))
+		logrus.Fatalf("failed to init config: %v", err)
+	}
 	return c
 }
 
@@ -78,7 +81,7 @@ type Config struct {
 	realConfigs map[string]string
 }
 
-func (c *Config) init() {
+func (c *Config) init() error {
 	c.realConfigs = make(map[string]string)
 	var cf = configsFrom{
 		Name:    "",
@@ -89,18 +92,20 @@ func (c *Config) init() {
 		Staging: make(map[string]string),
 		Prod:    make(map[string]string),
 	}
-	if file, err := ioutil.ReadFile(c.ConfigsFrom); err == nil {
-		if err = yaml.Unmarshal(file, &cf); err != nil {
+	if c.ConfigsFrom != "" {
+		file, err := ioutil.ReadFile(c.ConfigsFrom)
+		if err != nil {
+			_ = metawriter.WriteError(fmt.Sprintf("failed to parse configs from file: %v", err))
 			logrus.WithError(err).
 				WithField("configsFrom", c.ConfigsFrom).
-				Warnln("failed to parse configs from file")
-			_ = metawriter.WriteWarn(fmt.Sprintf("failed to parse configs from file: %v", err))
+				Fatalln("failed to ReadFile")
 		}
-	} else {
-		logrus.WithError(err).
-			WithField("configsFrom", c.ConfigsFrom).
-			Warnln("failed to ReadFile")
-		_ = metawriter.WriteWarn(fmt.Sprintf("failedt to ReadFile: %v", err))
+		if err = yaml.Unmarshal(file, &cf); err != nil {
+			_ = metawriter.WriteError(fmt.Sprintf("failed to parse configs from file: %v", err))
+			logrus.WithError(err).
+				WithField("configsFrom", c.ConfigsFrom).
+				Fatalln("failed to parse config from file")
+		}
 	}
 
 	if c.Name == "" {
@@ -132,6 +137,8 @@ func (c *Config) init() {
 			c.realConfigs[k] = v
 		}
 	}
+
+	return Interpolate(c.realConfigs)
 }
 
 func (c *Config) GetConfigs() map[string]string {
