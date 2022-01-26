@@ -65,6 +65,10 @@ accessibleAPIs:
     method: GET
     schema: http
 
+  - path: /api/addons/<addonId>
+    method: GET
+    schema: http
+
 locale:
   zh-CN:
     displayName: 创建 Custom Addon

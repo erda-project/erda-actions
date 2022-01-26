@@ -13,7 +13,7 @@
 
 jobs:
   custom-addon:
-    image: registry.erda.cloud/erda-actions/erda-create-custom-addon-action:1.0-20220124-4d6585c
+    image: registry.erda.cloud/erda-actions/erda-create-custom-addon-action:1.0-20220126-d2848c2
     resource:
       cpu: 0.3
       disk: 1024

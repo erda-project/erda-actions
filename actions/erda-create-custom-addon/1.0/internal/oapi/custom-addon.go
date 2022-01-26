@@ -16,6 +16,7 @@ package oapi
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"strconv"
 	"strings"
@@ -48,8 +49,44 @@ func New(c *config.Config) *CustomAddon {
 	}
 }
 
-func (a *CustomAddon) Create() (*AddonInfo, error) {
+func (a *CustomAddon) Create() error {
 	var l = logrus.WithField("func", "*CustomAddon.Create")
+
+	if _, err := a.Get(); err == nil {
+		l.WithField("name", a.req.Name).
+			WithField("workspace", a.req.Workspace).
+			Infoln("the addon exists, skip creating")
+		return nil
+	}
+
+	// to create the custom addon
+	var body = bytes.NewBuffer(nil)
+	if err := json.NewEncoder(body).Encode(a.req); err != nil {
+		l.WithError(err).Errorln("failed to Encode")
+		return errors.Wrap(err, "failed to Encode")
+	}
+	var resp struct {
+		header
+		Data *CreateCustomAddonResponseData `json:"data"`
+	}
+	if _, err := httpclient.New().Post(a.cfg.OpenapiHost).
+		Path("/api/addons/actions/create-custom").
+		Header("Authorization", a.cfg.OpenapiToken).
+		RawBody(body).
+		Do().
+		JSON(&resp); err != nil {
+		l.WithError(err).Errorln("failed to Post or Do JSON")
+		return err
+	}
+	if !resp.Success {
+		l.Errorf("failed to create addon: %+v", resp.Err)
+		return errors.Errorf("failed to create addon: %+v", resp.Err)
+	}
+	return nil
+}
+
+func (a *CustomAddon) Get() (*AddonInfo, error) {
+	var l = logrus.WithField("func", "*CustomAddon.Get")
 
 	// list all of addons, if the same name custom addon exists, return it
 	addons, err := a.list()
@@ -58,33 +95,9 @@ func (a *CustomAddon) Create() (*AddonInfo, error) {
 		return nil, errors.Wrap(err, "failed to list addons")
 	}
 	if addon, ok := sameNameIn(addons, a.req.Name, a.req.Workspace); ok {
-		return addon, nil
+		return a.get(addon.InstanceId)
 	}
-
-	// to create the custom addon
-	var body = bytes.NewBuffer(nil)
-	if err := json.NewEncoder(body).Encode(a.req); err != nil {
-		l.WithError(err).Errorln("failed to Encode")
-		return nil, errors.Wrap(err, "failed to Encode")
-	}
-	var resp struct {
-		header
-		Data *CreateCustomAddonResponseData `json:"data"`
-	}
-	if _, err = httpclient.New().Post(a.cfg.OpenapiHost).
-		Path("/api/addons/actions/create-custom").
-		Header("Authorization", a.cfg.OpenapiToken).
-		RawBody(body).
-		Do().
-		JSON(&resp); err != nil {
-		l.WithError(err).Errorln("failed to Post or Do JSON")
-		return nil, err
-	}
-	if !resp.Success {
-		l.Errorf("failed to create addon: %+v", resp.Err)
-		return nil, errors.Errorf("failed to create addon: %+v", resp.Err)
-	}
-	return a.Create()
+	return nil, errors.Errorf("custom addon not found, name: %s, workspace: %s", a.req.Name, a.req.Workspace)
 }
 
 func (a *CustomAddon) list() ([]*AddonInfo, error) {
@@ -106,8 +119,28 @@ func (a *CustomAddon) list() ([]*AddonInfo, error) {
 		return nil, err
 	}
 	if !resp.Success {
-		l.Errorf("failed to get addons: %+v", resp.Err)
-		return nil, errors.Errorf("failed to get addons: %+v", resp.Err)
+		l.Errorf("failed to list addons: %+v", resp.Err)
+		return nil, errors.Errorf("failed to list addons: %+v", resp.Err)
+	}
+	return resp.Data, nil
+}
+
+func (a *CustomAddon) get(addonInstanceID string) (*AddonInfo, error) {
+	var l = logrus.WithField("func", "*CustomAddon.get")
+	var resp struct {
+		header
+		Data *AddonInfo `json:"data"`
+	}
+	if _, err := httpclient.New().Get(a.cfg.OpenapiHost).
+		Path(fmt.Sprintf("/api/addons/%s", addonInstanceID)).
+		Header("Authorization", a.cfg.OpenapiToken).
+		Do().
+		JSON(&resp); err != nil {
+		l.WithError(err).WithField("instanceId", addonInstanceID).Errorln("failed to Get or Do JSON")
+	}
+	if !resp.Success {
+		l.WithField("instanceId", addonInstanceID).Errorf("failed to get addon: %+v", resp.Err)
+		return nil, errors.Errorf("failed to get addon: %+v", resp.Err)
 	}
 	return resp.Data, nil
 }

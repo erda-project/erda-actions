@@ -14,6 +14,8 @@
 package main
 
 import (
+	"encoding/json"
+
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/erda-create-custom-addon/1.0/internal/config"
@@ -23,24 +25,34 @@ import (
 
 func main() {
 	logrus.Infoln("Custom Addon begins to work")
-	addon, err := oapi.New(config.Get()).Create()
-	if err != nil {
+	var h = oapi.New(config.Get())
+	if err := h.Create(); err != nil {
 		_ = metawriter.WriteSuccess(false)
 		logrus.WithError(err).Fatalln("failed to Create custom addon")
 	}
-	logrus.
-		WithFields(map[string]interface{}{
-			"name":              addon.Name,
-			"tag":               addon.Tag,
-			"configs":           string(addon.Config),
-			"instanceID":        addon.InstanceId,
-			"routingInstanceID": addon.RealInstanceId,
-		}).
-		Infoln("the addon info")
+	_ = metawriter.WriteSuccess(true)
+
+	addon, err := h.Get()
+	if err != nil {
+		logrus.WithError(err).Errorln("failed to Get addon")
+		_ = metawriter.WriteError(err)
+		return
+	}
+
+	logrus.WithFields(map[string]interface{}{
+		"name":              addon.Name,
+		"tag":               addon.Tag,
+		"configs":           string(addon.Config),
+		"instanceID":        addon.InstanceId,
+		"routingInstanceID": addon.RealInstanceId,
+	}).Infoln("the addon info")
 	_ = metawriter.WriteKV("name", addon.Name)
 	_ = metawriter.WriteKV("tag", addon.Tag)
-	_ = metawriter.WriteKV("configs", string(addon.Config))
 	_ = metawriter.WriteLink("addonInstanceID", addon.InstanceId)
 	_ = metawriter.WriteKV("routingInstanceID", addon.RealInstanceId)
-	_ = metawriter.WriteSuccess(true)
+	_ = metawriter.WriteKV("configs", string(addon.Config))
+	var configs = make(map[string]interface{})
+	if err = json.Unmarshal(addon.Config, &configs); err == nil {
+		_ = metawriter.Write(configs)
+	}
 }
