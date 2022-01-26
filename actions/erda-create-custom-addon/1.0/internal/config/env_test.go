@@ -30,9 +30,18 @@ func TestFindEnvLiteral(t *testing.T) {
 		}
 	)
 	for _, s := range evns {
-		env, indexStart, indexEnd := config.FindEnvLiteral(s)
+		env, indexStart, indexEnd, err := config.FindEnvLiteral(s)
+		if err != nil {
+			t.Fatal(err, s)
+		}
 		t.Log(env, indexStart, indexEnd, s[indexStart:indexEnd])
 	}
+	env, indexStart, indexEnd, err := config.FindEnvLiteral(`some${info
+}in the multilines`)
+	if err == nil {
+		t.Fatal("err not be nil")
+	}
+	t.Log(env, indexStart, indexEnd, err)
 }
 
 func TestInterpolate(t *testing.T) {

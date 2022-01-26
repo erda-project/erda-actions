@@ -59,24 +59,30 @@ var runes = map[rune]bool{
 	'_': true,
 }
 
-func FindEnvLiteral(s string) (string, int, int) {
+func FindEnvLiteral(s string) (string, int, int, error) {
 	for i := 0; i <= len(s)-2; i++ {
 		if s[i] == '$' && s[i+1] == '{' {
 			for j := i; j < len(s); j++ {
+				if s[j] == '\n' || s[j] == '\r' {
+					return "", 0, 0, errors.New("invalid literal: '\\n' or '\\r' in string")
+				}
 				if s[j] == '}' {
-					return s[i+2 : j], i, j + 1
+					return s[i+2 : j], i, j + 1, nil
 				}
 			}
 		}
 	}
-	return "", 0, 0
+	return "", 0, 0, nil
 }
 
 func Interpolate(m map[string]string) error {
 	for k := range m {
 		s := m[k]
 		for {
-			key, indexStart, indexEnd := FindEnvLiteral(s)
+			key, indexStart, indexEnd, err := FindEnvLiteral(s)
+			if err != nil {
+				return err
+			}
 			if len(key) == 0 {
 				break
 			}
