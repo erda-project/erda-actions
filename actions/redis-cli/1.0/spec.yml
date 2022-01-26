@@ -32,7 +32,7 @@ formProps:
     group: params
     componentProps:
       title: ${{ i18n.formProps.params.componentProps.title }}
-  - label: datasource`
+  - label: datasource
     component: dataSourceSelector
     required: true
     key: params.datasource
