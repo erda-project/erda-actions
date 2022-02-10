@@ -1,4 +1,4 @@
-package dice
+package common
 
 import (
 	"encoding/json"
@@ -11,6 +11,14 @@ import (
 const (
 	Authorization              = "Authorization"
 	DeploymentOrderRequestPath = "/api/deployment-orders"
+	TypeApplicationRelease     = "APPLICATION_RELEASE"
+	TypeProjectRelease         = "PROJECT_RELEASE"
+	SourcePipeline             = "PIPELINE"
+)
+
+const (
+	CallbackStatusFailed  = "Failed"
+	CallbackStatusSuccess = "Success"
 )
 
 // erda standard response struct
@@ -27,19 +35,36 @@ type Err struct {
 }
 
 type CreateDeploymentOrderRequest struct {
-	Type      string `json:"type,omitempty"`
-	ReleaseId string `json:"releaseId"`
-	Workspace string `json:"workspace,omitempty"`
-	AutoRun   bool   `json:"autoRun"`
+	Type            string `json:"type"`
+	ReleaseId       string `json:"releaseId"`
+	ReleaseName     string `json:"releaseName"`
+	ProjectId       uint64 `json:"projectId"`
+	ApplicationName string `json:"applicationName"`
+	Workspace       string `json:"workspace"`
+	AutoRun         bool   `json:"autoRun"`
+	Source          string `json:"source"`
 }
 
-func (d *CreateDeploymentOrderRequest) print() {
+func (d *CreateDeploymentOrderRequest) Print() {
 	log.AddNewLine(1)
 	logrus.Infof("request deploy body: ")
-	logrus.Infof(" releaseId: %s", d.ReleaseId)
-	logrus.Infof(" type: %s", d.Type)
 	logrus.Infof(" worspace: %s", d.Workspace)
 	logrus.Infof(" autoRun: %v", d.AutoRun)
+	logrus.Infof(" source: %s", SourcePipeline)
+
+	switch d.Type {
+	case TypeApplicationRelease, TypeProjectRelease:
+		logrus.Infof(" type: %s", d.Type)
+		logrus.Infof(" releaseName: %s", d.ReleaseName)
+		if d.Type == TypeApplicationRelease {
+			logrus.Infof(" application_name: %s", d.ApplicationName)
+		} else {
+			logrus.Infof(" projectId: %d", d.ProjectId)
+		}
+	case "":
+		logrus.Infof(" releaseId: %s", d.ReleaseId)
+	}
+
 	log.AddLineDelimiter(" ")
 }
 
@@ -47,14 +72,14 @@ type CreateDeploymentOrderResponse struct {
 	Response
 	Data struct {
 		DeploymentOrderId string                    `json:"id"`
-		Deployments       map[uint64]DeploymentInfo `json:"deployments"`
+		Deployments       map[string]DeploymentInfo `json:"deployments"`
 	} `json:"data"`
 }
 
 type DeploymentInfo struct {
-	DeploymentID  int64 `json:"deploymentId"`
-	ApplicationID int64 `json:"applicationId"`
-	RuntimeID     int64 `json:"runtimeId"`
+	DeploymentID  uint64 `json:"deploymentId"`
+	ApplicationID uint64 `json:"applicationId"`
+	RuntimeID     uint64 `json:"runtimeId"`
 }
 
 type DeploymentStatusRespData struct {
@@ -107,15 +132,21 @@ func (r *DeploymentStatusRespData) Print() {
 }
 
 type DeployResult struct {
-	DeploymentId  int64
-	ApplicationId int64
-	RuntimeId     int64
+	DeploymentId  uint64
+	ApplicationId uint64
+	RuntimeId     uint64
 }
 
 type DeployErrResponse struct {
-	s string
+	Msg string
 }
 
 func (d *DeployErrResponse) Error() string {
-	return d.s
+	return d.Msg
+}
+
+type CancelRequest struct {
+	DeploymentOrderId string
+	Operator          string
+	Force             bool `json:"force"`
 }

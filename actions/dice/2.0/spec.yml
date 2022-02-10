@@ -15,6 +15,12 @@ params:
   - name: release_id
     desc: ${{ i18n.params.release_id.desc }}
     default: ${release:OUTPUT:releaseID}
+  - name: release_name
+    desc: 制品名称
+  - name: type
+    desc: 项目级制品或应用制品
+  - name: application_name
+    desc: 应用名称
   - name: time_out
     type: int
     desc: ${{ i18n.params.time_out.desc }}
@@ -38,6 +44,10 @@ accessibleAPIs:
   # pipeline callback
   - path: /api/pipelines/actions/callback
     method: GET
+    schema: http
+  # cancel deployment order deploying
+  - path: /api/deployment-orders/<deploymentOrderID>/actions/cancel
+    method: POST
     schema: http
 
 outputs:
