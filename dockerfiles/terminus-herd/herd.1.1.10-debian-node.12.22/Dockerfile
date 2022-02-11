@@ -32,11 +32,11 @@ RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak \
 
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
-ENV NODEJS_ORG_MIRROR="https://npm.taobao.org/dist"
-ENV SASS_BINARY_SITE="https://npm.taobao.org/mirrors/node-sass"
+ENV NODEJS_ORG_MIRROR="https://npmmirror.com/dist"
+ENV SASS_BINARY_SITE="https://npmmirror.com/mirrors/node-sass"
 
 RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
-    && npm config set registry https://registry.npm.taobao.org/ \
+    && npm config set registry https://registry.npmmirror.com/ \
     && apt update \
     && apt install -y --no-install-recommends --no-install-suggests \
        # Network related utils
