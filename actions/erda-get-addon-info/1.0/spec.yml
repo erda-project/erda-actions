@@ -12,18 +12,27 @@ supportedErdaVersions:
 params:
   - name: runtime_id
     desc: ${{ i18n.params.runtime_id.desc }}
-    required: true
   - name: addon_name
     desc: ${{ i18n.params.addon_name.desc }}
     required: true
+  - name: application_name
+    desc: ${{ i18n.params.application_name.desc }}
 
 accessibleAPIs:
   # list addons
   - path: /api/addons
     method: GET
     schema: http
+    # list application
+  - path: /api/applications
+    method: GET
+    schema: http
   # get addon info
   - path: /api/addons/<addonId>
+    method: GET
+    schema: http
+   # list runtimes
+  - path: /api/runtimes
     method: GET
     schema: http
 
@@ -32,7 +41,9 @@ locale:
     desc: 用于获取 runtime 下关联的 addon 实例名称的配置信息
     params.runtime_id.desc: runtime 的 ID
     params.addon_name.desc: addon 实例的名称
+    params.application_name.desc: 应用名称
   en-US:
     desc: Used to get specific addon for specific runtime on the Erda platform
     params.runtime_id.desc: Runtime's ID
     params.addon_name.desc: Addon Instance Name
+    params.application_name.desc: Application Name
