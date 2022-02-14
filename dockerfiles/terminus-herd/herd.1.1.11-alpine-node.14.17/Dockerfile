@@ -13,8 +13,8 @@ FROM node:14.17.5-alpine3.14
 LABEL maintainer=hustcer<majun@terminus.io>
 
 ENV LANG=en_US.UTF-8
-ENV NODEJS_ORG_MIRROR="https://npm.taobao.org/dist"
-ENV SASS_BINARY_SITE="https://npm.taobao.org/mirrors/node-sass"
+ENV NODEJS_ORG_MIRROR="https://npmmirror.com/dist"
+ENV SASS_BINARY_SITE="https://npmmirror.com/mirrors/node-sass"
 
 # Use aliyun repo to speed up installation
 # Testing repo: https://mirrors.aliyun.com/alpine/edge/testing/
@@ -28,7 +28,7 @@ RUN echo "https://mirrors.aliyun.com/alpine/v3.14/main/" > /etc/apk/repositories
 
 # Use terminus npm registry
 RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
-    && npm config set registry https://registry.npm.taobao.org/ \
+    && npm config set registry https://registry.npmmirror.com/ \
     && apk add --no-cache busybox-extras bash \
        # Dev related: install libstdc++ libc6-compat, etc. to fix node-canvas related issue
        # build-base will install: binutils, gcc, g++, make, patch, etc.
