@@ -4,6 +4,7 @@ GitCommit=$(shell git rev-parse --short HEAD)
 Date=$(shell date +"%Y%m%d")
 BuildTime=$(shell date '+%Y-%m-%d %T%z')
 Registry="registry.erda.cloud/erda-actions"
+RegistryForPush="erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions"
 DevelopRegistry="registry.cn-hangzhou.aliyuncs.com/dice"
 
 .ONESHELL:
@@ -40,13 +41,15 @@ testscene-run testplan-run erda-mysql-migration-lint erda-pkg-release-public erd
 	if [[ "$(DEVELOP_MODE)" == 'true' ]]; then
 		echo "DEVELOP_MODE == true"
 		image="$(DevelopRegistry)/$@-action:$${version}-$(Date)-${GitCommit}"
+		imageForPush=$${image}
 	else
 		image="$(Registry)/$@-action:$${version}-$(Date)-${GitCommit}"
+		imageForPush="$(RegistryForPush)/$@-action:$${version}-$(Date)-${GitCommit}"
 	fi
 
 	@echo image=$${image}
 
-	dockerbuild="docker build . -f $${dockerfile} -t $${image} \
+	dockerbuild="docker build . -f $${dockerfile} -t $${imageForPush} \
 				 --label 'branch=$(GitBranch)' --label 'commit=$(GitCommit)' --label 'build-time=$(BuildTime)'"
 	# --pull
 	if [[ $@ == "java-dependency-check" ]]; then dockerbuild="$${dockerbuild} --pull"; fi
@@ -58,7 +61,7 @@ testscene-run testplan-run erda-mysql-migration-lint erda-pkg-release-public erd
 	@echo $${dockerbuild}
 	eval "$${dockerbuild}"
 
-	docker push $${image}
+	docker push $${imageForPush}
 
 	echo "action meta: $@($${version})=$${image}"
 
