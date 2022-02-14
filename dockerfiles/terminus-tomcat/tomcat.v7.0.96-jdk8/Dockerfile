@@ -13,7 +13,7 @@ ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$TOMCAT_NATIVE_LIBDIR
 ENV TOMCAT_MAJOR 7
 ENV TOMCAT_VERSION 7.0.96
 
-RUN curl -s https://www-us.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz -o /tmp/tomcat.tar.gz && \
+RUN curl -s https://archive.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz -o /tmp/tomcat.tar.gz && \
         tar xzf /tmp/tomcat.tar.gz --strip-components=1 -C $CATALINA_HOME && \
         rm -f /tmp/tomcat.tar.gz
 
