@@ -95,7 +95,7 @@ formProps:
           label: ${{ i18n.formProps.params.out_params.componentProps.objItems.assert.label }}
           labelTip: ${{ i18n.formProps.params.out_params.componentProps.objItems.assert.labelTip }}
           component: select
-          options: ${{ I18N.assert.options }}
+          options: ${{ i18n.assert.options }}
 
     labelTip: ${{ i18n.formProps.params.out_params.label }}
 
