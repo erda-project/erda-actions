@@ -55,7 +55,7 @@ func Run() error {
 
 	// check deployments status
 	// TODO: check deployment order status instead
-	if err := d.StatusCheck(rets, cfg.TimeOut); err != nil {
+	if err := d.StatusCheck(orderId, rets, cfg.TimeOut); err != nil {
 		logrus.Errorf("failed to check status, err: %v", err)
 		cancel.ExeWithConfig(orderId, &cfg)
 		return err

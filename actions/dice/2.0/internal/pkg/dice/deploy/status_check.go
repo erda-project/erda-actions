@@ -29,7 +29,7 @@ var (
 	lastStatusMap = sync.Map{}
 )
 
-func (d *deploy) StatusCheck(result map[string]*common.DeployResult, timeout int) error {
+func (d *deploy) StatusCheck(orderId string, result map[string]*common.DeployResult, timeout int) error {
 	// Set default deployment timeout is 24h.
 	minTimeoutSec := defaultTimeout
 	if timeout < minTimeoutSec {
@@ -39,21 +39,31 @@ func (d *deploy) StatusCheck(result map[string]*common.DeployResult, timeout int
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 	defer cancel()
 
-	// loop check deployments status
-	if err := d.statusCheckLoop(ctx, result); err != nil {
-		if err == ErrCheckTimeout {
-			logrus.Infof("Deploying timeout, you can: ")
-			logrus.Infof("   1. increase timeout in pipeline.yml")
-			logrus.Infof("   2. try again ")
-			return nil
+	releaseType := utils.ConvertType(d.cfg.ReleaseTye)
+	switch releaseType {
+	case common.TypeProjectRelease:
+		if err := d.checkBatchStatusLoop(ctx, orderId); err != nil {
+			if err == ErrCheckTimeout {
+				ErrTimeOutPrint()
+				return nil
+			}
+			return err
 		}
-		return err
+		return nil
+	default:
+		// loop check deployments status
+		if err := d.statusCheckLoop(ctx, result); err != nil {
+			if err == ErrCheckTimeout {
+				ErrTimeOutPrint()
+				return nil
+			}
+			return err
+		}
+
+		// batch execute callback
+		d.exeCallBack(result)
+		return d.store.BatchStoreMetaFile(statusResult)
 	}
-
-	// batch execute callback
-	d.exeCallBack(result)
-
-	return d.store.BatchStoreMetaFile(statusResult)
 }
 
 func (d *deploy) statusCheckLoop(ctx context.Context, drMap map[string]*common.DeployResult) error {
@@ -75,6 +85,42 @@ func (d *deploy) statusCheckLoop(ctx context.Context, drMap map[string]*common.D
 			ticker.Reset(defaultCheckInterval)
 		}
 	}
+}
+
+func (d *deploy) checkBatchStatusLoop(ctx context.Context, orderId string) error {
+	ticker := time.NewTicker(defaultCheckInterval)
+	for {
+		select {
+		case <-ctx.Done():
+			return ErrCheckTimeout
+		case <-ticker.C:
+			isDeploying, err := d.checkBatch(orderId)
+			if err != nil {
+				logrus.Error("failed to check deploy", err)
+				return err
+			}
+			// deploy done
+			if !isDeploying {
+				return nil
+			}
+			ticker.Reset(defaultCheckInterval)
+		}
+	}
+}
+
+func (d *deploy) checkBatch(orderId string) (bool, error) {
+	var err error
+	resp, err := d.getDeploymentOrderStatus(orderId)
+	if err != nil {
+		logrus.Errorf("failed to get deployment order status, orderId: %s, err: %s", orderId, err)
+		return false, err
+	}
+
+	resp.Print()
+	if resp.Data.Status == "FAILED" {
+		err = fmt.Errorf("get failed status, please check runtime log at deploy center")
+	}
+	return continueDeploying(resp.Data.Status), err
 }
 
 func (d *deploy) check(drMap map[string]*common.DeployResult) (bool, error) {
@@ -168,23 +214,34 @@ func (d *deploy) check(drMap map[string]*common.DeployResult) (bool, error) {
 }
 
 func parseStatus(resp *common.DeploymentStatusRespData) (bool, error) {
+	var err error
 	switch resp.Data.Status {
-	case "WAITING", "WAITAPPROVE", "INIT":
-		return true, nil
-	case "DEPLOYING":
-		return true, nil
-	case "OK":
-		return false, nil
 	case "CANCELED":
-		return false, &common.DeployErrResponse{
+		err = &common.DeployErrResponse{
 			Msg: "deployment canceled by dice",
 		}
 	case "FAILED":
-		return false, &common.DeployErrResponse{
+		err = &common.DeployErrResponse{
 			Msg: "deployment failed in dice, " + resp.Data.FailCause,
 		}
+	}
+	return continueDeploying(resp.Data.Status), err
+}
+
+func continueDeploying(status string) bool {
+	switch status {
+	case "WAITING", "WAITAPPROVE", "INIT":
+		return true
+	case "DEPLOYING":
+		return true
+	case "OK":
+		return false
+	case "CANCELED":
+		return false
+	case "FAILED":
+		return false
 	default:
-		return false, fmt.Errorf("status %s unkonwn", resp.Data.Status)
+		return false
 	}
 }
 
@@ -200,7 +257,25 @@ func (d *deploy) getDeploymentStatus(deploymentId uint64) (*common.DeploymentSta
 		return nil, errors.Errorf("deploy to dice failed, statusCode: %d", r.StatusCode())
 	}
 	if !result.Success {
-		return nil, errors.Errorf("create dice deploy failed. code=%s, message=%s, ctx=%v",
+		return nil, errors.Errorf("failed to request dice deploy status. code=%s, message=%s, ctx=%v",
+			result.Err.Code, result.Err.Message, result.Err.Ctx)
+	}
+	return &result, nil
+}
+
+func (d *deploy) getDeploymentOrderStatus(orderId string) (*common.DeploymentOrderStatusRespData, error) {
+	var result common.DeploymentOrderStatusRespData
+	r, err := httpclient.New(httpclient.WithCompleteRedirect()).Get(d.cfg.DiceOpenapiPrefix).
+		Path(fmt.Sprintf("/api/deployment-orders/%s", orderId)).
+		Header("Authorization", d.cfg.DiceOpenapiToken).Do().JSON(&result)
+	if err != nil {
+		return nil, err
+	}
+	if !r.IsOK() {
+		return nil, errors.Errorf("deploy to dice failed, statusCode: %d", r.StatusCode())
+	}
+	if !result.Success {
+		return nil, errors.Errorf("failed to request deploy order status. code=%s, message=%s, ctx=%v",
 			result.Err.Code, result.Err.Message, result.Err.Ctx)
 	}
 	return &result, nil
@@ -247,4 +322,10 @@ func (d *deploy) exeCallBack(result map[string]*common.DeployResult) {
 	}
 
 	wg.Wait()
+}
+
+func ErrTimeOutPrint() {
+	logrus.Infof("Deploying timeout, you can: ")
+	logrus.Infof("   1. increase timeout in pipeline.yml")
+	logrus.Infof("   2. try again ")
 }
