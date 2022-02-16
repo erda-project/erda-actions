@@ -82,6 +82,24 @@ type DeploymentInfo struct {
 	RuntimeID     uint64 `json:"runtimeId"`
 }
 
+type DeploymentOrderStatusRespData struct {
+	Response
+	Data struct {
+		BatchSize    uint64 `json:"batchSize"`
+		CurrentBatch uint64 `json:"currentBatch"`
+		Status       string `json:"status"`
+	} `json:"data"`
+}
+
+func (d *DeploymentOrderStatusRespData) Print() {
+	log.AddNewLine(1)
+	logrus.Infof("response deploy status body: ")
+	logrus.Infof(" batchSize: %d", d.Data.BatchSize)
+	logrus.Infof(" currentBatch: %d", d.Data.CurrentBatch)
+	logrus.Infof(" status: %s", d.Data.Status)
+	log.AddLineDelimiter(" ")
+}
+
 type DeploymentStatusRespData struct {
 	Response
 	Data struct {

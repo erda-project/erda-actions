@@ -10,7 +10,7 @@ import (
 
 type Deploy interface {
 	Do() (string, map[string]*common.DeployResult, error)
-	StatusCheck(result map[string]*common.DeployResult, timeOut int) error
+	StatusCheck(orderId string, result map[string]*common.DeployResult, timeOut int) error
 }
 
 type Option func(d *deploy)
