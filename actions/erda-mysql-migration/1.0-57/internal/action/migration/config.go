@@ -24,8 +24,6 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda/pkg/database/sqllint"
-	//"github.com/erda-project/erda/pkg/database/sqllint/configuration"
-	//"github.com/erda-project/erda/pkg/database/sqllint/rules"
 	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
 	"github.com/erda-project/erda/pkg/envconf"
 )
