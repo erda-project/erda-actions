@@ -20,12 +20,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/erda-project/erda/pkg/database/sqllint/configuration"
-	"github.com/erda-project/erda/pkg/database/sqllint/rules"
-	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
-	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+
+	"github.com/erda-project/erda/pkg/database/sqllint"
+	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
+	"github.com/erda-project/erda/pkg/envconf"
 )
 
 const (
@@ -56,7 +56,7 @@ type Conf struct {
 	SkipSand      bool     `env:"ACTION_SKIP_SANDBOX"`
 	SkipPreMig    bool     `env:"ACTION_SKIP_PRE_MIGRATION"`
 	SkipMig       bool     `env:"ACTION_SKIP_MIGRATION"`
-	LintConfig    string   `env:"ACTION_LINT_CONFIG"`
+	LintConfig_   string   `env:"ACTION_LINT_CONFIG"`
 	Modules_      []string `env:"ACTION_MODULES"`
 	RetryTimeout_ uint64   `env:"ACTION_RETRY_TIMEOUT"`
 
@@ -64,6 +64,8 @@ type Conf struct {
 
 	mysqlParameters   *migrator.DSNParameters
 	sandboxParameters *migrator.DSNParameters
+
+	cfg map[string]sqllint.Config
 }
 
 type ActionMySQLSettings struct {
@@ -121,6 +123,18 @@ func Configuration() *Conf {
 		logrus.Fatalf("failed to get MySQL addon DSN: %v", err)
 	}
 
+	conf.cfg = make(map[string]sqllint.Config)
+	if !conf.SkipLint {
+		configFilename := filepath.Join(conf.Workdir(), conf.LintConfig_)
+		cfg, err := sqllint.LoadConfigFromLocal(configFilename)
+		if err != nil {
+			logrus.WithError(err).
+				WithField("lint config file name", configFilename).
+				Fatalln("failed to LoadConfigFromLocal")
+		}
+		conf.cfg = cfg
+	}
+
 	return conf
 }
 
@@ -175,19 +189,8 @@ func (c *Conf) Modules() []string {
 	return modules
 }
 
-func (c *Conf) Rules() []rules.Ruler {
-	configFilename := filepath.Join(c.Workdir(), c.LintConfig)
-	rulesConfig, err := configuration.FromLocal(configFilename)
-	if err != nil {
-		logrus.Warnln("failed to load migration linter configuration from local, use default")
-		return configuration.DefaultRulers()
-	}
-	rulers, err := rulesConfig.Rulers()
-	if err != nil {
-		logrus.Warnln("failed to parse migration linter from local, use default")
-		return configuration.DefaultRulers()
-	}
-	return rulers
+func (c *Conf) LintConfig() map[string]sqllint.Config {
+	return c.cfg
 }
 
 func (c *Conf) RetryTimeout() uint64 {

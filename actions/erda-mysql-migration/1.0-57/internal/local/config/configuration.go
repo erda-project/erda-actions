@@ -22,12 +22,12 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 
 	"github.com/erda-project/erda-actions/pkg/envconf"
-	configuration2 "github.com/erda-project/erda/pkg/database/sqllint/configuration"
-	"github.com/erda-project/erda/pkg/database/sqllint/rules"
+	"github.com/erda-project/erda/pkg/database/sqllint"
+
 	"github.com/erda-project/erda/pkg/database/sqlparser/migrator"
 )
 
@@ -41,16 +41,27 @@ var configuration *Configuration
 type Configuration struct {
 	envs *envs
 	cf   *ConfigFile
+	cfg  map[string]sqllint.Config
 }
 
 func Config() *Configuration {
 	if configuration == nil {
 		configuration = new(Configuration)
 		if err := configuration.reload(); err != nil {
-			log.Errorf("failed to reload configuration: %v", err)
+			logrus.WithError(err).Errorln("failed to reload configuration")
 		}
 
-		log.Infof("%+v", *configuration.envs)
+		logrus.Infof("%+v", *configuration.envs)
+		if !configuration.envs.SkipLint {
+			configFilename := filepath.Join(configuration.MigrationDir(), "config.yml")
+			cfg, err := sqllint.LoadConfigFromLocal(configFilename)
+			if err != nil {
+				logrus.WithError(err).
+					WithField("lint config filename", configFilename).
+					Fatalln("failed to sqllint.LoadConfigFromLocal")
+			}
+			configuration.cfg = cfg
+		}
 	}
 	return configuration
 }
@@ -178,10 +189,8 @@ func (c *Configuration) SQLCollectorDir() string {
 	return "/log"
 }
 
-// Rules returns Erda MySQL linters
-// note: hard code here
-func (c Configuration) Rules() []rules.Ruler {
-	return configuration2.DefaultRulers()
+func (c Configuration) LintConfig() map[string]sqllint.Config {
+	return c.cfg
 }
 
 func (c Configuration) ExternalSandbox() bool {
