@@ -59,7 +59,7 @@ func (sonar *Sonar) invokeSonarIssuesTree(projectKey string, measureType Measure
 		BasicAuth(sonar.Auth.Login, sonar.Auth.Password).
 		Get(sonar.Auth.HostURL).
 		Path("/api/measures/component_tree").
-		Param("baseComponentKey", projectKey).
+		Param("component", projectKey).
 		Param("metricSortFilter", "withMeasuresOnly").
 		Param("ps", "500").
 		Param("asc", "false"). // desc
