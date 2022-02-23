@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   golang:
-    image: registry.erda.cloud/erda-actions/android-action:20210118-b362e93d
+    image: registry.erda.cloud/erda-actions/android-action:1.0-20220214-2fa8c3a
     resources:
       cpu: 2
       mem: 4096
