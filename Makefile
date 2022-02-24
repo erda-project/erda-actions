@@ -4,7 +4,7 @@ GitCommit=$(shell git rev-parse --short HEAD)
 Date=$(shell date +"%Y%m%d")
 BuildTime=$(shell date '+%Y-%m-%d %T%z')
 Registry="registry.erda.cloud/erda-actions"
-RegistryForPush="erda-registry.cn-hangzhou.cr.aliyuncs.com/erda-actions"
+RegistryForPush="registry.erda.cloud/erda-actions"
 DevelopRegistry="registry.cn-hangzhou.aliyuncs.com/dice"
 
 .ONESHELL:

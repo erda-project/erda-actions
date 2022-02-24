@@ -40,11 +40,12 @@ func main() {
 	// get release
 	release, err := getRelease(hc, appID)
 	if err != nil {
-		echoMeta("Error", "commit id not match")
+		echoMeta("Error", err.Error())
 		panic(err)
 	}
 
 	echoMeta("release_id", release.ReleaseID)
+	echoMeta("release_name", release.Version)
 	echoMeta("release_branch", release.Labels["gitBranch"])
 	echoMeta("release_commit", release.Labels["gitCommitId"])
 	echoMeta("release_commit_message", release.Labels["gitCommitMessage"])
@@ -82,7 +83,7 @@ func getAppID(hc *httpclient.HTTPClient, name string) (string, error) {
 	return strconv.FormatUint(resp.Data.List[0].ID, 10), nil
 }
 
-func getRelease(hc *httpclient.HTTPClient, appID string) (*apistructs.ReleaseGetResponseData, error) {
+func getRelease(hc *httpclient.HTTPClient, appID string) (*apistructs.ReleaseData, error) {
 	var resp apistructs.ReleaseListResponse
 	// fetch release
 	r, err := hc.Get(conf.DiceOpenapiAddr).
