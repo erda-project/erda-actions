@@ -83,7 +83,7 @@ func getAppID(hc *httpclient.HTTPClient, name string) (string, error) {
 	return strconv.FormatUint(resp.Data.List[0].ID, 10), nil
 }
 
-func getRelease(hc *httpclient.HTTPClient, appID string) (*apistructs.ReleaseGetResponseData, error) {
+func getRelease(hc *httpclient.HTTPClient, appID string) (*apistructs.ReleaseData, error) {
 	var resp apistructs.ReleaseListResponse
 	// fetch release
 	r, err := hc.Get(conf.DiceOpenapiAddr).
