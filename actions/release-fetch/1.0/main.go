@@ -40,7 +40,7 @@ func main() {
 	// get release
 	release, err := getRelease(hc, appID)
 	if err != nil {
-		echoMeta("Error", "commit id not match")
+		echoMeta("Error", err.Error())
 		panic(err)
 	}
 
