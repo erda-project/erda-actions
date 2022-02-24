@@ -29,20 +29,11 @@ function get_version() {
     fi
   fi
 
-  # TODO: [hack] Delete the judgment logic of the release/master
-  if [[ "${BRANCH_PREFIX}" == "master" || "${BRANCH_PREFIX}" == "release/master" ]]; then
+  if [[ "${BRANCH_PREFIX}" == "master" ]]; then
     VERSION=${ver}-master
   fi
 
   echo ${VERSION:-${ALPHA}}
-}
-
-function get_tag() {
-  ver=$(get_version)
-  if ! [[ "${ver}" =~ - ]]; then
-    ver="${ver}-stable"
-  fi
-  echo "${ver}-$(date '+%Y%m%d%H%M%S')-$(git rev-parse --short HEAD)"
 }
 
 
@@ -59,9 +50,12 @@ fi
 
 cd $dir
 
-VER=$(get_version)-$(date '+%Y%m%d%H%M%S')
+tm=$(date '+%Y%m%d%H%M%S')
+VER=$(get_version)
 MAJOR_MINOR_VER=`echo $VER | sed -e 's/\([0-9]\+\.[0-9]\+\).*/\1/g'`
+FULL_VER="${VER}+${tm}"
+IMAGE_TAG="${VER}-${tm}-$(git rev-parse --short HEAD)"
 
-echo "action meta: version=$VER"
+echo "action meta: version=$FULL_VER"
 echo "action meta: major_minor_version=$MAJOR_MINOR_VER"
-echo "action meta: image_tag=$(get_tag)"
+echo "action meta: image_tag=$IMAGE_TAG"

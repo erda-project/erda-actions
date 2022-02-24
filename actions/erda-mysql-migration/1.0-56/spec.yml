@@ -13,7 +13,7 @@
 
 name: erda-mysql-migration
 displayName: ${{ i18n.displayName }}
-logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2021/03/31/5ad6b5a6-23a7-4b3b-9b43-ef8e896e687d.png
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/02/18/9f85e163-3c4b-4685-ada5-d87eeafcdd80.png
 version: "1.0-56"
 type: action
 category: deploy_management

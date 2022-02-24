@@ -1,7 +1,7 @@
 name: ios
 version: "1.0"
 type: action
-category: build
+category: build_management
 displayName: ${{ i18n.displayName }}
 desc: ios remote action
 public: true

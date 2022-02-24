@@ -10,3 +10,7 @@
       params:
         code_dir: ${git-checkout}
 ```
+
+#### 支持的sonarQube版本
+* 8.4.2
+* 8.9.6

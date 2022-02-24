@@ -8,9 +8,9 @@
       asserts:
         - value: "123"
           assert: "="
-          assertValue: "123"
+          actualValue: "123"
         - value: "123"
           assert: "="
-          assertValue: "123"
+          actualValue: "123"
 
 ```

@@ -16,13 +16,13 @@ params:
     desc: ${{ i18n.params.release_id.desc }}
     default: ${release:OUTPUT:releaseID}
   - name: release_name
-    desc: 制品名称
+    desc: ${{ i18n.params.release_name.desc }}
   - name: type
-    desc: 项目级制品或应用制品
+    desc: ${{ i18n.params.type.desc }}
   - name: application_name
-    desc: 应用名称
+    desc: ${{ i18n.params.application_name.desc }}
   - name: deploy_without_branch
-    desc: 无分支名称部署
+    desc: ${{ i18n.params.deploy_without_branch.desc }}
   - name: time_out
     type: int
     desc: ${{ i18n.params.time_out.desc }}
@@ -41,6 +41,10 @@ accessibleAPIs:
     schema: http
   # deployment status
   - path: /api/deployments/<deploymentId>/status
+    method: GET
+    schema: http
+  # deployment order status
+  - path: /api/deployment-orders/<deploymentOrderID>
     method: GET
     schema: http
   # pipeline callback
@@ -66,6 +70,10 @@ locale:
     params.deploy_without_branch: 无分支名称部署, 项目级/应用级制品部署默认无分支名称，通过 release_id 部署时候可以选择该参数。
     params.time_out.desc: 部署超时时间(秒)
     params.workspace.desc: 环境(DEV/TEST/STAGING/PROD)，一般情况下无需指定。Erda 根据制品自动选择环境。
+    params.release_name: 制品名称
+    params.type.desc: 制品类型, 可选：项目制品 (project)、应用制品(application)
+    params.application_name.desc: 应用名称, 应用制品发布时候需要指定应用名称
+
   en-US:
     desc: Used to deploy application services on the Erda platform
     displayName: Application deployment on the platform
@@ -76,3 +84,6 @@ locale:
     params.deploy_without_branch: Deploy without branch name, project-level/application-level artifact deployment by default without branch name, deployment by release_id can be selected by this parameter.
     params.time_out.desc: Deployment timeout (seconds)
     params.workspace.desc: Environment (DEV/TEST/STAGING/PROD), which does not need to be specified generally. Erda automatically selects the environment based on the artifact.
+    params.release_name.desc: The artifact name
+    params.type.desc: The artifact type, optional, project artifact (project), application artifact (application)
+    params.application_name.desc: Application name, required when deploying application artifacts

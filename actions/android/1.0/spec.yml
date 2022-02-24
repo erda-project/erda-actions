@@ -2,7 +2,7 @@ name: android
 version: "1.0"
 type: action
 displayName: android
-category: build
+category: build_management
 desc: android action
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
