@@ -30,15 +30,16 @@ type Conf struct {
 	PipelineTaskID  uint64 `env:"PIPELINE_TASK_ID"`
 
 	// params
-	ReleaseID         string `env:"ACTION_RELEASE_ID"`
-	ReleaseIDPath     string `env:"ACTION_RELEASE_ID_PATH"`
-	ReleaseName       string `env:"ACTION_RELEASE_NAME"`
-	ReleaseTye        string `env:"ACTION_TYPE"`
-	ApplicationName   string `env:"ACTION_APPLICATION_NAME"`
-	TimeOut           int    `env:"ACTION_TIME_OUT"`
-	Callback          string `env:"ACTION_CALLBACK"`
-	EdgeLocation      string `env:"ACTION_EDGE_LOCATION"`
-	AssignedWorkspace string `env:"ACTION_WORKSPACE"`
+	ReleaseID           string `env:"ACTION_RELEASE_ID"`
+	ReleaseIDPath       string `env:"ACTION_RELEASE_ID_PATH"`
+	ReleaseName         string `env:"ACTION_RELEASE_NAME"`
+	ReleaseTye          string `env:"ACTION_TYPE"`
+	ApplicationName     string `env:"ACTION_APPLICATION_NAME"`
+	DeployWithoutBranch bool   `env:"ACTION_DEPLOY_WITHOUT_BRANCH"`
+	TimeOut             int    `env:"ACTION_TIME_OUT"`
+	Callback            string `env:"ACTION_CALLBACK"`
+	EdgeLocation        string `env:"ACTION_EDGE_LOCATION"`
+	AssignedWorkspace   string `env:"ACTION_WORKSPACE"`
 }
 
 // HiddenActionParams value passed from user, but not defined in spec.yml
@@ -94,5 +95,6 @@ func (cfg *Conf) print() {
 	logrus.Infof(" workspace: %s", cfg.Workspace)
 	logrus.Infof(" gittarBranch: %s", cfg.GittarBranch)
 	logrus.Infof(" operatorID: %s", cfg.OperatorID)
+	logrus.Infof(" deployWithoutBranch: %v", cfg.DeployWithoutBranch)
 	log.AddLineDelimiter(" ")
 }
