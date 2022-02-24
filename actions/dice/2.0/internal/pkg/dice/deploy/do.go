@@ -92,6 +92,7 @@ func composeRequest(c *conf.Conf) (*common.CreateDeploymentOrderRequest, error) 
 	case common.TypeProjectRelease:
 		r.ProjectId = c.ProjectID
 	default:
+		r.DeployWithoutBranch = c.DeployWithoutBranch
 		r.ReleaseId = c.ReleaseID
 		if c.ReleaseID == "" {
 			releaseID, err := getReleaseId(c.ReleaseIDPath)

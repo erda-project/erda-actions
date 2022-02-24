@@ -35,14 +35,15 @@ type Err struct {
 }
 
 type CreateDeploymentOrderRequest struct {
-	Type            string `json:"type"`
-	ReleaseId       string `json:"releaseId"`
-	ReleaseName     string `json:"releaseName"`
-	ProjectId       uint64 `json:"projectId"`
-	ApplicationName string `json:"applicationName"`
-	Workspace       string `json:"workspace"`
-	AutoRun         bool   `json:"autoRun"`
-	Source          string `json:"source"`
+	Type                string `json:"type"`
+	ReleaseId           string `json:"releaseId"`
+	ReleaseName         string `json:"releaseName"`
+	ProjectId           uint64 `json:"projectId"`
+	ApplicationName     string `json:"applicationName"`
+	Workspace           string `json:"workspace"`
+	AutoRun             bool   `json:"autoRun"`
+	DeployWithoutBranch bool   `json:"deployWithoutBranch"`
+	Source              string `json:"source"`
 }
 
 func (d *CreateDeploymentOrderRequest) Print() {
@@ -63,6 +64,7 @@ func (d *CreateDeploymentOrderRequest) Print() {
 		}
 	case "":
 		logrus.Infof(" releaseId: %s", d.ReleaseId)
+		logrus.Infof(" deployWithoutBranch: %v", d.DeployWithoutBranch)
 	}
 
 	log.AddLineDelimiter(" ")
