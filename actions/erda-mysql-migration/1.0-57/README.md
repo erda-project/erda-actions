@@ -277,6 +277,26 @@ Action 可以从三处获取 MySQL 设置, 分别是 Action 参数, Pipeline 参
 ```
 其 meta 规定了一个列选项列表，表示在建表语句中，所有的列至少有列表中的一个选项。
 如果规定了 columnName，则表示规约仅对该列生效。
+可配置的 columnOptionType 有：
+```yaml
+- "ColumnOptionNoOption"      
+- "ColumnOptionPrimaryKey"    
+- "ColumnOptionNotNull"       
+- "ColumnOptionAutoIncrement" 
+- "ColumnOptionDefaultValue"  
+- "ColumnOptionUniqKey"       
+- "ColumnOptionNull"          
+- "ColumnOptionOnUpdate"      
+- "ColumnOptionFulltext"      
+- "ColumnOptionComment"       
+- "ColumnOptionGenerated"     
+- "ColumnOptionReference"     
+- "ColumnOptionCollate"       
+- "ColumnOptionCheck"         
+- "ColumnOptionColumnFormat"  
+- "ColumnOptionStorage"       
+- "ColumnOptionAutoRandom"    
+```
 
 ### 规约：必要建表选项校验
 ```yaml
@@ -296,6 +316,45 @@ Action 可以从三处获取 MySQL 设置, 分别是 Action 参数, Pipeline 参
       - "utf8mb4"
 ```
 其 meta 规定了建表语句必要的表选项。key 表示选项的名称，values 表示可选的值。有的表选项是没有值的。
+
+支持的 tableOption key 有：
+```yaml
+- TableOptionNone
+- TableOptionEngine
+- TableOptionCharset
+- TableOptionCollate
+- TableOptionAutoIdCache
+- TableOptionAutoIncrement
+- TableOptionAutoRandomBase
+- TableOptionComment
+- TableOptionAvgRowLength
+- TableOptionCheckSum
+- TableOptionCompression
+- TableOptionConnection
+- TableOptionPassword
+- TableOptionKeyBlockSize
+- TableOptionMaxRows
+- TableOptionMinRows
+- TableOptionDelayKeyWrite
+- TableOptionRowFormat
+- TableOptionStatsPersistent
+- TableOptionStatsAutoRecalc
+- TableOptionShardRowID
+- TableOptionPreSplitRegion
+- TableOptionPackKeys
+- TableOptionTablespace
+- TableOptionNodegroup
+- TableOptionDataDirectory
+- TableOptionIndexDirectory
+- TableOptionStorageMedia
+- TableOptionStatsSamplePages
+- TableOptionSecondaryEngine
+- TableOptionSecondaryEngineNull
+- TableOptionInsertMethod
+- TableOptionTableCheckSum
+- TableOptionUnion
+- TableOptionEncryption
+```
 
 ### 规约：主键字段名校验
 ```yaml
