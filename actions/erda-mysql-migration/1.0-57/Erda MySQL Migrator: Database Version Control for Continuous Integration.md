@@ -287,9 +287,7 @@ apim/20210715-01-feature.sql:1: missing necessary column definition option: NOT 
 
 ```
 使用命令行工具进行本地规约检查<br />可以看到命令行返回了检查报告，指出了某个文件中存在不合规的语句，并指出了具体的文件、行号、错误原因等信息。上面示例中指出了这条语句有两条不合规处：一是新增列时，应当有列注释，此处缺失；二是新增的列应当是 NOT NULL 的，此处没有指定。
-<a name="zvz3H"></a>
-### 使用 CI 工具进行规约检查
-开发者自行使用命令行工具自检是合规检查的第一道关卡。在提交的代码合并到 erda 仓库主干分支前，PR 触发的 CI 流程会利用命令行工具检查 migrations 合规性则是第二道关卡。当提交包含不合规的 SQL 的 PR 时，CI 就会失败：<br />![image.png](https://intranetproxy.alipay.com/skylark/lark/0/2021/png/332103/1626336217802-7b85da14-7ba2-4f5d-a6a2-66401edd962e.png#clientId=ufbe31a87-adfb-4&from=paste&height=333&id=FQKWR&margin=%5Bobject%20Object%5D&name=image.png&originHeight=333&originWidth=1063&originalType=binary&ratio=1&size=138885&status=done&style=none&taskId=u951191b0-436b-4ac8-b565-b4068b6188a&width=1063)<br />Github CI：Erda MySQL Lint 失败提示
+
 <a name="PNPn3"></a>
 ### 使用 Erda MySQL Migration Action 进行规约检查
 略。
