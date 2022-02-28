@@ -4,6 +4,15 @@
 
 Erda MySQL 数据库迁移工具
 
+## [方法论: 可持续集成的数据库版本控制](./Erda%20MySQL%20Migrator%3A%20Database%20Version%20Control%20for%20Continuous%20Integration.md)
+[Erda MySQL Migrator: Database Version Control for Continuous Integration](./Erda%20MySQL%20Migrator%3A%20Database%20Version%20Control%20for%20Continuous%20Integration.md)
+
+提要：
+- 为什么要进行数据库表控制
+- 如何使用 Erda MySQL Migration 工具进行数据库版本控制
+- 如何使用 Python 脚本实现复杂数据迁移逻辑
+- 其他特性：Dryrun，规约检查，文件篡改发现与修订机制，日志收集等
+
 ## 功能
 该 Action 用于将代码仓库中的 SQLs 脚本更新到数据库中。
 用户需要将用于 migration 的 SQLs 脚本提交到某个目录，并按模块进行分门别类。
