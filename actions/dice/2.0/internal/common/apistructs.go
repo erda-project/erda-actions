@@ -49,7 +49,9 @@ type CreateDeploymentOrderRequest struct {
 func (d *CreateDeploymentOrderRequest) Print() {
 	log.AddNewLine(1)
 	logrus.Infof("request deploy body: ")
-	logrus.Infof(" worspace: %s", d.Workspace)
+	if d.Workspace != "" {
+		logrus.Infof(" worspace: %s", d.Workspace)
+	}
 	logrus.Infof(" autoRun: %v", d.AutoRun)
 	logrus.Infof(" source: %s", SourcePipeline)
 

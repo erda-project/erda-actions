@@ -33,7 +33,6 @@ func Cancel() error {
 		return err
 	}
 
-	logrus.Info(cfg)
 	logrus.Info("now we are going to cancel the task...")
 
 	orderId, err := getDiceInfo(cfg.WorkDir)
