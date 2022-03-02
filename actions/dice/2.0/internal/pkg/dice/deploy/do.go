@@ -13,9 +13,15 @@ import (
 	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
+	"strings"
 )
 
 func (d *deploy) Do() (string, map[string]*common.DeployResult, error) {
+	// preCheck params
+	if err := paramsPreCheck(d.cfg); err != nil {
+		return "", nil, err
+	}
+
 	// compose request
 	req, err := composeRequest(d.cfg)
 	if err != nil {
@@ -76,14 +82,10 @@ func composeRequest(c *conf.Conf) (*common.CreateDeploymentOrderRequest, error) 
 	releaseType := utils.ConvertType(c.ReleaseTye)
 	r := &common.CreateDeploymentOrderRequest{
 		ReleaseName: c.ReleaseName,
-		Workspace:   c.Workspace,
+		Workspace:   strings.ToUpper(c.AssignedWorkspace),
 		AutoRun:     true,
 		Source:      common.SourcePipeline,
 		Type:        releaseType,
-	}
-
-	if c.AssignedWorkspace != "" {
-		r.Workspace = c.AssignedWorkspace
 	}
 
 	switch releaseType {

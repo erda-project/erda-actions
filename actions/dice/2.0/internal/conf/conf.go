@@ -11,7 +11,6 @@ type Conf struct {
 	OrgID        uint64 `env:"DICE_ORG_ID"`
 	ProjectID    uint64 `env:"DICE_PROJECT_ID"`
 	AppID        uint64 `env:"DICE_APPLICATION_ID"`
-	Workspace    string `env:"DICE_WORKSPACE"`
 	GittarBranch string `env:"GITTAR_BRANCH"`
 	ClusterName  string `env:"DICE_CLUSTER_NAME"`
 	OperatorID   string `env:"DICE_OPERATOR_ID"`
@@ -47,7 +46,6 @@ type HiddenActionParams struct {
 	OrgID        uint64 `env:"ACTION_DICE_ORG_ID"`
 	ProjectID    uint64 `env:"ACTION_DICE_PROJECT_ID"`
 	AppID        uint64 `env:"ACTION_DICE_APPLICATION_ID"`
-	Workspace    string `env:"ACTION_DICE_WORKSPACE"`
 	GittarBranch string `env:"ACTION_GITTAR_BRANCH"`
 	ClusterName  string `env:"ACTION_DICE_CLUSTER_NAME"`
 }
@@ -72,9 +70,6 @@ func HandleConf() (Conf, error) {
 	if hiddenActionParams.AppID > 0 {
 		cfg.AppID = hiddenActionParams.AppID
 	}
-	if hiddenActionParams.Workspace != "" {
-		cfg.Workspace = hiddenActionParams.Workspace
-	}
 	if hiddenActionParams.GittarBranch != "" {
 		cfg.GittarBranch = hiddenActionParams.GittarBranch
 	}
@@ -92,9 +87,11 @@ func (cfg *Conf) print() {
 	logrus.Infof(" appID: %d", cfg.AppID)
 	logrus.Infof(" projectId: %d", cfg.ProjectID)
 	logrus.Infof(" clusterName: %s", cfg.ClusterName)
-	logrus.Infof(" workspace: %s", cfg.Workspace)
 	logrus.Infof(" gittarBranch: %s", cfg.GittarBranch)
 	logrus.Infof(" operatorID: %s", cfg.OperatorID)
 	logrus.Infof(" deployWithoutBranch: %v", cfg.DeployWithoutBranch)
+	if cfg.AssignedWorkspace != "" {
+		logrus.Infof(" assignedWorkspace: %v", cfg.AssignedWorkspace)
+	}
 	log.AddLineDelimiter(" ")
 }
