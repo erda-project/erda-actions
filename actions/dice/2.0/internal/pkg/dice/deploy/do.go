@@ -82,11 +82,17 @@ func composeRequest(c *conf.Conf) (*common.CreateDeploymentOrderRequest, error) 
 	releaseType := utils.ConvertType(c.ReleaseTye)
 	r := &common.CreateDeploymentOrderRequest{
 		ReleaseName: c.ReleaseName,
-		Workspace:   strings.ToUpper(c.AssignedWorkspace),
+		Workspace:   c.Workspace,
 		AutoRun:     true,
 		Source:      common.SourcePipeline,
 		Type:        releaseType,
 	}
+
+	if c.AssignedWorkspace != "" {
+		r.Workspace = c.AssignedWorkspace
+	}
+
+	r.Workspace = strings.ToUpper(r.Workspace)
 
 	switch releaseType {
 	case common.TypeApplicationRelease:

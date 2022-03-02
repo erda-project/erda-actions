@@ -39,6 +39,9 @@ type Conf struct {
 	Callback            string `env:"ACTION_CALLBACK"`
 	EdgeLocation        string `env:"ACTION_EDGE_LOCATION"`
 	AssignedWorkspace   string `env:"ACTION_WORKSPACE"`
+
+	// Deprecated
+	Workspace string `env:"DICE_WORKSPACE"`
 }
 
 // HiddenActionParams value passed from user, but not defined in spec.yml
@@ -48,6 +51,9 @@ type HiddenActionParams struct {
 	AppID        uint64 `env:"ACTION_DICE_APPLICATION_ID"`
 	GittarBranch string `env:"ACTION_GITTAR_BRANCH"`
 	ClusterName  string `env:"ACTION_DICE_CLUSTER_NAME"`
+
+	// Deprecated pipeline will not inject workspace
+	Workspace string `env:"ACTION_DICE_WORKSPACE"`
 }
 
 func HandleConf() (Conf, error) {
@@ -77,6 +83,11 @@ func HandleConf() (Conf, error) {
 		cfg.ClusterName = hiddenActionParams.ClusterName
 	}
 
+	// Deprecated
+	if hiddenActionParams.Workspace != "" {
+		cfg.Workspace = hiddenActionParams.Workspace
+	}
+
 	cfg.print()
 	return cfg, nil
 }
@@ -92,6 +103,10 @@ func (cfg *Conf) print() {
 	logrus.Infof(" deployWithoutBranch: %v", cfg.DeployWithoutBranch)
 	if cfg.AssignedWorkspace != "" {
 		logrus.Infof(" assignedWorkspace: %v", cfg.AssignedWorkspace)
+	}
+	// Deprecated
+	if cfg.Workspace != "" {
+		logrus.Infof(" workspace: %v", cfg.Workspace)
 	}
 	log.AddLineDelimiter(" ")
 }
