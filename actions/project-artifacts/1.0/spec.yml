@@ -1,0 +1,92 @@
+# Copyright (c) 2021 Terminus, Inc.
+#
+# This program is free software: you can use, redistribute, and/or modify
+# it under the terms of the GNU Affero General Public License, version 3
+# or later ("AGPL"), as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+name: project-artifacts
+displayName: ${{ i18n.displayName }}
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/03/02/185d6ab3-34bc-42e2-a552-6e07ec5832e8.png
+version: "1.0"
+type: action
+category: version_management
+desc: ${{ i18n.desc }}
+public: true
+supportedErdaVersions:
+  - ">=1.6"
+
+
+params:
+  - name: version
+    desc: ${{ i18n.params.version.desc }}
+    default: 1.0.0-${{ random.date }}
+    required: true
+
+  - name: changeLog
+    type: string
+    desc: ${{ i18n.params.changeLog.desc }}
+    default: "auto compose from applications"
+    required: true
+
+  - name: groups
+    type: struct_array
+    desc: ${{ i18n.params.groups.desc }}
+    required: false
+    struct:
+      - name: applications
+        desc: ${{ i18n.params.groups.applications.desc }}
+        type: struct_array
+        struct:
+          - {name: name, type: string, desc: "application name", required: true}
+          - {name: branch, type: string, desc: "application released from", required: false}
+          - {name: releaseID, type: string, desc: "application release id", required: false}
+
+outputs:
+  - name: releaseID
+    type: string
+    desc: ${{ i18n.outputs.releaseID.desc }}
+
+  - name: version
+    type: string
+    desc: ${{ i18n.outputs.releaseID.version }}
+
+accessibleAPIs:
+  - path: /api/releases
+    method: GET
+    schema: http
+  - path: /api/releases
+    method: POST
+    schema: http
+  - path: /api/releases/{releaseID}
+    method: PUT
+    schema: http
+
+locale:
+  zh-CN:
+    displayName: 项目打包发布制品
+    desc: 应用制品发布到项目制品
+    params.version.desc: 项目制品版本号
+    params.changeLog.desc: 项目制品更新信息
+    params.groups.desc: 应用列表
+    params.groups.applications.desc: 应用分组
+
+    outputs.releaseID.desc: 项目制品 ID
+    outputs.releaseID.version: 项目制品版本
+
+  en-US:
+    displayName: ProjectArtifacts
+    desc: Compose project release from applications
+    params.version.desc: project release version
+    params.changeLog.desc: project release change log
+    params.groups.desc: applications list
+    params.groups.applications.desc: application groups
+
+    outputs.releaseID.desc: project release ID
+    outputs.releaseID.version: project release version
