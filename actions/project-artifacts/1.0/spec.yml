@@ -13,7 +13,7 @@
 
 name: project-artifacts
 displayName: ${{ i18n.displayName }}
-logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/03/02/a43327bb-5989-477d-ad84-5e31893cebcd.png
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/03/02/185d6ab3-34bc-42e2-a552-6e07ec5832e8.png
 version: "1.0"
 type: action
 category: version_management
