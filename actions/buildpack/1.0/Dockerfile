@@ -6,7 +6,7 @@ COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 # go build
-RUN GOOS=linux GOARCH=amd64 go build -o /assets/run github.com/erda-project/erda-actions/actions/buildpack/1.0/internal
+RUN GOPROXY=https://goproxy.cn,direct GOOS=linux GOARCH=amd64 go build -o /assets/run github.com/erda-project/erda-actions/actions/buildpack/1.0/internal
 
 # async assets
 WORKDIR actions/buildpack/1.0
