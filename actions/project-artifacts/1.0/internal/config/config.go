@@ -16,6 +16,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/pkg/errors"
 	"sigs.k8s.io/yaml"
@@ -105,5 +106,6 @@ func GetConfig() (*Config, error) {
 	if err := envconf.Load(c); err != nil {
 		return nil, errors.Wrap(err, "failed to Load params")
 	}
+	c.Version += "+" + time.Now().Format("20060102150405")
 	return c, nil
 }
