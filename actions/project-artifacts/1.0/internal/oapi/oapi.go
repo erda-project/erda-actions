@@ -37,6 +37,7 @@ func GetLatestApplicationRelease(cfg *config.Config, app config.Application) (st
 	response, err := httpclient.New().
 		Get(cfg.OapiHost).
 		Path(oAPI).
+		Param("pageSize", "65535").
 		Param("projectId", strconv.FormatInt(cfg.ProjectID, 10)).
 		Param("isProjectRelease", strconv.FormatBool(false)).
 		Header("Authorization", cfg.OapiToken).
@@ -53,7 +54,7 @@ func GetLatestApplicationRelease(cfg *config.Config, app config.Application) (st
 	}
 	if app.ReleaseID != "" {
 		for i := range resp.Data.List {
-			if item := resp.Data.List[i]; item.IsStable && item.IsLatest && item.ReleaseID == app.ReleaseID {
+			if item := resp.Data.List[i]; item.ReleaseID == app.ReleaseID {
 				return app.ReleaseID, true, nil
 			}
 		}

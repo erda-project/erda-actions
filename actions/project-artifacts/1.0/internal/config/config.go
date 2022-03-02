@@ -28,15 +28,11 @@ var c *Config
 
 type Config struct {
 	// platform envs
-	OrgID       uint64 `env:"DICE_ORG_ID" required:"true"`
-	OapiToken   string `env:"DICE_OPENAPI_TOKEN" required:"true"`
-	OapiHost    string `env:"DICE_OPENAPI_ADDR" required:"true"`
-	ProjectName string `env:"DICE_PROJECT_NAME" required:"true"`
-	AppName     string `env:"DICE_APPLICATION_NAME" required:"true"`
-	ProjectID   int64  `env:"DICE_PROJECT_ID" required:"true"`
-	AppID       uint64 `env:"DICE_APPLICATION_ID" required:"true"`
-	Workspace   string `env:"DICE_WORKSPACE" required:"true"`
-	UserID      string `env:"DICE_USER_ID" required:"true"`
+	OrgID     uint64 `env:"DICE_ORG_ID" required:"true"`
+	OapiToken string `env:"DICE_OPENAPI_TOKEN" required:"true"`
+	OapiHost  string `env:"DICE_OPENAPI_ADDR" required:"true"`
+	ProjectID int64  `env:"DICE_PROJECT_ID" required:"true"`
+	UserID    string `env:"DICE_USER_ID" required:"true"`
 
 	// action envs
 	Version   string `env:"ACTION_VERSION"`
