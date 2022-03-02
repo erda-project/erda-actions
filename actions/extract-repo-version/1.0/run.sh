@@ -5,7 +5,7 @@
 # 2. take tag name when the HEAD matches any tag
 # 3. take x.x when the HEAD matches branch named as release/x.x
 #    cases:
-#     a) release/1.0 -> 1.0-beta
+#     a) release/1.0 -> 1.0
 #     b) release/1.0-beta.2 -> 1.0-beta.2
 # 4. VERSION file content which indicates the next version
 
@@ -23,17 +23,9 @@ function get_version() {
 
   if [[ "${BRANCH_PREFIX}" =~ release/[[:digit:]]+\.* ]]; then
     VERSION=${BRANCH_PREFIX//release\//}
-    # some case branch already have greek version, like: release/1.0-beta.2
-    if ! [[ "${BRANCH_PREFIX}" =~ - ]]; then
-      VERSION="${VERSION}-beta"
-    fi
   fi
 
-  if [[ "${BRANCH_PREFIX}" == "master" ]]; then
-    VERSION=${ver}-master
-  fi
-
-  echo ${VERSION:-${ALPHA}}
+  echo "${VERSION:-${ALPHA}}"
 }
 
 
