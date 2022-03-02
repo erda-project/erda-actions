@@ -11,9 +11,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-name: compose-applications
+name: release-project
 displayName: ${{ i18n.displayName }}
-logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/03/01/1b88acaa-c37e-4faa-8f8c-5c1be2809f12.png
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/03/02/51fd6410-7427-42aa-93cf-08223784d86a.png
 version: "1.0"
 type: action
 category: version_management
@@ -70,7 +70,7 @@ accessibleAPIs:
 
 locale:
   zh-CN:
-    displayName: 应用制品发布到项目制品
+    displayName: 项目打包发布制品
     desc: 应用制品发布到项目制品
     params.version.desc: 项目制品版本号
     params.changeLog.desc: 项目制品更新信息
@@ -81,7 +81,7 @@ locale:
     outputs.releaseID.version: 项目制品版本
 
   en-US:
-    displayName: ComposeProjectReleaseFromApplications
+    displayName: ReleaseProject
     desc: Compose project release from applications
     params.version.desc: project release version
     params.changeLog.desc: project release change log

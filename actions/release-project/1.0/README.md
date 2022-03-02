@@ -13,17 +13,17 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
 
-### Compose Applications Releases
-> ### 发布应用制品到项目制品
+### Release Project
+> ### 项目打包发布制品
 将给定的应用的制品组合发布为项目制品
-
+![](http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/03/02/51fd6410-7427-42aa-93cf-08223784d86a.png)
 > 示例
 ```yaml
 version: "1.1"
 stages:
   - stage:
-      - compose-applications:
-          alias: compose-applications
+      - release-project:
+          alias: release-project
           description: 应用制品发布到项目制品
           version: "1.0"
           params:

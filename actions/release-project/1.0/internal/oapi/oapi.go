@@ -21,7 +21,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/erda-project/erda-actions/actions/compose-applications/1.0/internal/config"
+	"github.com/erda-project/erda-actions/actions/release-project/1.0/internal/config"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 )
