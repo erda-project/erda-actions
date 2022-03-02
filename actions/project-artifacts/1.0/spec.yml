@@ -11,9 +11,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-name: release-project
+name: project-artifacts
 displayName: ${{ i18n.displayName }}
-logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/03/02/51fd6410-7427-42aa-93cf-08223784d86a.png
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/03/02/a43327bb-5989-477d-ad84-5e31893cebcd.png
 version: "1.0"
 type: action
 category: version_management
@@ -81,7 +81,7 @@ locale:
     outputs.releaseID.version: 项目制品版本
 
   en-US:
-    displayName: ReleaseProject
+    displayName: ProjectArtifacts
     desc: Compose project release from applications
     params.version.desc: project release version
     params.changeLog.desc: project release change log

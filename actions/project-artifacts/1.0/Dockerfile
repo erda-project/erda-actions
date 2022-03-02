@@ -22,12 +22,12 @@ RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.7.linux-amd64.tar.gz
 # build cmd
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions/actions
-RUN rm -rf `ls | grep -v release-project`
+RUN rm -rf `ls | grep -v project-artifacts`
 WORKDIR /go/src/github.com/erda-project/erda-actions
 RUN /usr/local/go/bin/go env -w GOPROXY="https://goproxy.io,https://goproxy.cn,direct"
 RUN /usr/local/go/bin/go env -w GOOS="linux"
 RUN /usr/local/go/bin/go env -w GOARCH="amd64"
 RUN /usr/local/go/bin/go mod tidy
-RUN /usr/local/go/bin/go build -o /opt/action/run actions/release-project/1.0/internal/cmd/main.go
+RUN /usr/local/go/bin/go build -o /opt/action/run actions/project-artifacts/1.0/internal/cmd/main.go
 
 RUN chmod 777 /opt/action/*

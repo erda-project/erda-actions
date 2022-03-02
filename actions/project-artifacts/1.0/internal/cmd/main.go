@@ -20,8 +20,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/erda-project/erda-actions/actions/release-project/1.0/internal/config"
-	"github.com/erda-project/erda-actions/actions/release-project/1.0/internal/oapi"
+	"github.com/erda-project/erda-actions/actions/project-artifacts/1.0/internal/config"
+	"github.com/erda-project/erda-actions/actions/project-artifacts/1.0/internal/oapi"
 	"github.com/erda-project/erda-actions/pkg/metawriter"
 )
 
