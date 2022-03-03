@@ -9,12 +9,12 @@ labels:
   autotest: true
   configsheet: true
   project_level_app: true
+  eci_disable: true
 
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.6"
-
 params:
   - name: command
     desc: ${{ i18n.params.command.desc }}
