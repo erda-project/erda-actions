@@ -3,6 +3,7 @@ package dice
 import (
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -36,7 +37,7 @@ func UploadFile(req *UploadFileRequest) (*apistructs.FileUploadResponse, error) 
 		},
 	}
 	var resp apistructs.FileUploadResponse
-	request := httpclient.New(httpclient.WithCompleteRedirect(), httpclient.WithTimeout(3*httpclient.DialTimeout, 3*httpclient.ClientDefaultTimeout)).Post(req.OpenApiPrefix).
+	request := httpclient.New(httpclient.WithCompleteRedirect(), httpclient.WithTimeout(time.Second, time.Second*3)).Post(req.OpenApiPrefix).
 		Path("/api/files").
 		Param("fileFrom", req.From).
 		Param("expiredIn", req.ExpireIn).
