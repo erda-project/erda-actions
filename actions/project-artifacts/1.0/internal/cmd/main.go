@@ -50,7 +50,7 @@ func main() {
 	for i, group := range groups {
 		for j := range group.Applications {
 			app := *group.Applications[j]
-			releaseID, ok, err := oapi.GetLatestApplicationRelease(cfg, app)
+			releaseID, ok, err := oapi.GetReleaseID(cfg, app)
 			if err != nil {
 				_ = metawriter.WriteSuccess(false)
 				_ = metawriter.WriteError(err)
@@ -75,13 +75,13 @@ func main() {
 	}
 	cfg.ChangeLog += "\n"
 
-	releaseID, err := oapi.CreateUpdateProjectRelease(cfg, releases)
+	releaseID, err := oapi.CreateProjectRelease(cfg, releases)
 	if err != nil {
 		_ = metawriter.WriteSuccess(false)
 		_ = metawriter.WriteError(err)
 		errL.WithError(err).
 			WithField("releases", releases).
-			Fatalf("failed to CreateUpdateProjectRelease")
+			Fatalf("failed to CreateProjectRelease")
 	}
 	_ = metawriter.WriteSuccess(true)
 	_ = metawriter.WriteKV("releaseID", releaseID)
