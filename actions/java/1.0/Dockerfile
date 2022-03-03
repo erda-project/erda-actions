@@ -12,7 +12,7 @@ COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 RUN set -x \
-    	&& eval "GOOS=linux GOARCH=amd64 go build $BUILD_FLAGS -o /opt/action/run github.com/erda-project/erda-actions/actions/java/1.0/internal/cmd"
+    	&& eval "GOPROXY=https://goproxy.cn,direct GOOS=linux GOARCH=amd64 go build $BUILD_FLAGS -o /opt/action/run github.com/erda-project/erda-actions/actions/java/1.0/internal/cmd"
 
 RUN mkdir -p /opt/action/comp && \
     cp -r actions/java/1.0/comp/* /opt/action/comp
