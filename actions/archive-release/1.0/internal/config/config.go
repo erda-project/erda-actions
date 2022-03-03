@@ -52,7 +52,6 @@ type Config struct {
 	AppName      string `env:"DICE_APPLICATION_NAME" required:"true"`
 	ProjectID    int64  `env:"DICE_PROJECT_ID" required:"true"`
 	AppID        uint64 `env:"DICE_APPLICATION_ID" required:"true"`
-	Workspace    string `env:"DICE_WORKSPACE" required:"true"`
 
 	// pipeline parameters
 	PipelineDebugMode bool   `env:"PIPELINE_DEBUG_MODE"`

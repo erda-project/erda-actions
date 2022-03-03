@@ -16,7 +16,6 @@ package oapi
 import (
 	"bytes"
 	"encoding/json"
-	"strconv"
 
 	"github.com/pkg/errors"
 
@@ -29,48 +28,21 @@ var (
 	oAPI = "/api/releases"
 )
 
-// GetLatestApplicationRelease gets the release for the given releaseID or the latest release for the
-//  given branch if the releaseID is not given.
-func GetLatestApplicationRelease(cfg *config.Config, app config.Application) (string, bool, error) {
-	// var request and response
-	var resp ReleasesResponse
-	response, err := httpclient.New().
-		Get(cfg.OapiHost).
-		Path(oAPI).
-		Param("projectId", strconv.FormatInt(cfg.ProjectID, 10)).
-		Param("isProjectRelease", strconv.FormatBool(false)).
-		Header("Authorization", cfg.OapiToken).
-		Do().
-		JSON(&resp)
-	if err != nil {
-		return "", false, errors.Wrap(err, "failed to do request")
-	}
-	if !resp.Success {
-		return "", false, errors.Errorf("failed to do request: %+v, data: %s", resp.Error, string(response.Body()))
-	}
-	if resp.Data == nil || len(resp.Data.List) == 0 {
-		return "", false, nil
+// GetReleaseID gets releaseID for given app conditions
+func GetReleaseID(cfg *config.Config, app config.Application) (string, bool, error) {
+	if err := singleton(cfg); err != nil {
+		return "", false, err
 	}
 	if app.ReleaseID != "" {
-		for i := range resp.Data.List {
-			if item := resp.Data.List[i]; item.IsStable && item.IsLatest && item.ReleaseID == app.ReleaseID {
-				return app.ReleaseID, true, nil
-			}
-		}
-		return "", false, errors.Errorf("releaseID %s not found", app.ReleaseID)
+		return list.getByReleaseID(cfg, app.ReleaseID)
 	}
-	for i := range resp.Data.List {
-		if item := resp.Data.List[i]; item.IsStable && item.IsLatest &&
-			item.ApplicationName == app.Name && item.Labels.GitBranch == app.Branch {
-			return item.ReleaseID, true, nil
-		}
-	}
-	return "", false, nil
+	releaseID, ok := list.getByBranch(app.Name, app.Branch)
+	return releaseID, ok, nil
 }
 
-// CreateUpdateProjectRelease creates the project release if it is not created yet,
+// CreateProjectRelease creates the project release if it is not created yet,
 // updates the project release if it is already created.
-func CreateUpdateProjectRelease(cfg *config.Config, releases [][]string) (string, error) {
+func CreateProjectRelease(cfg *config.Config, releases [][]string) (string, error) {
 	var request = CreateUpdateReleaseRequest{
 		Version:                cfg.Version,
 		ApplicationReleaseList: releases,

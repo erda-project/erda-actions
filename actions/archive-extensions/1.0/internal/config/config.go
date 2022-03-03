@@ -17,8 +17,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/pkg/errors"
+
+	"github.com/erda-project/erda/pkg/envconf"
 )
 
 const (
@@ -50,7 +51,6 @@ type Config struct {
 	AppName           string `env:"DICE_APPLICATION_NAME" required:"true"`
 	ProjectID         int64  `env:"DICE_PROJECT_ID" required:"true"`
 	AppID             uint64 `env:"DICE_APPLICATION_ID" required:"true"`
-	Workspace         string `env:"DICE_WORKSPACE" required:"true"`
 
 	// actions parameters
 	Repos          []string `env:"ACTION_REPOS" required:"true"`
