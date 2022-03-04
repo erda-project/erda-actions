@@ -27,23 +27,6 @@ func (l Language) String() string {
 	return string(l)
 }
 
-type SonarLogLevel string
-
-const (
-	SonarLogLevelINFO  SonarLogLevel = "INFO"
-	SonarLogLevelDEBUG SonarLogLevel = "DEBUG"
-	SonarLogLevelTRACE SonarLogLevel = "TRACE"
-)
-
-func (l SonarLogLevel) Valid() bool {
-	switch l {
-	case SonarLogLevelINFO, SonarLogLevelDEBUG, SonarLogLevelTRACE:
-		return true
-	default:
-		return false
-	}
-}
-
 type Conf struct {
 	Debug bool `env:"ACTION_DEBUG" default:"false"`
 
@@ -81,13 +64,6 @@ type ActionParams struct {
 	// +required
 	CodeDir string `env:"ACTION_CODE_DIR" required:"true"`
 
-	// language
-	// go, java
-	Language Language `env:"ACTION_LANGUAGE" requied:"true"`
-	// java
-	// +optional
-	SonarJavaBinaries string `env:"ACTION_SONAR_JAVA_BINARIES"`
-
 	// SonarHostURL sonar 服务器地址，用户可以手动指定。若不填写，则使用平台提供的 sonar 服务
 	SonarHostURL string `env:"ACTION_SONAR_HOST_URL"`
 	// SonarLogin is the login or authentication token of a SonarQube user with Execute Analysis permission on the project
@@ -95,22 +71,9 @@ type ActionParams struct {
 	// SonarPassword is the password that goes with the sonar.login username. This should be left blank if an authentication token is being used
 	SonarPassword string `env:"ACTION_SONAR_PASSWORD"`
 
-	// sonar configs
-	SonarExclusions string        `env:"ACTION_SONAR_EXCLUSIONS"`
-	SonarLogLevel   SonarLogLevel `env:"SONAR_LOG_LEVEL" default:"INFO"`
-
 	// Project
 	// +optional
 	ProjectKey string `env:"ACTION_PROJECT_KEY"`
-	// DeleteProject after analysis finished
-	// +optional
-	DeleteProject bool `env:"ACTION_DELETE_PROJECT"`
-
-	// 使用平台配置
-	UsePlatformQualityGate bool `env:"ACTION_USE_PLATFORM_QUALITY_GATE"`
-
-	// QualityGate
-	QualityGate []QualityGateCondition `env:"ACTION_QUALITY_GATE"`
 
 	MustGateStatusOK bool `env:"ACTION_MUST_GATE_STATUS_OK"`
 }

@@ -5,16 +5,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"strings"
-	"time"
-
-	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/http/httpclient"
-	"github.com/erda-project/erda/pkg/retry"
+	"github.com/pkg/errors"
 )
 
 type Components struct {
@@ -81,36 +76,4 @@ func (sonar *Sonar) invokeSonarIssuesTree(projectKey string, measureType Measure
 	}
 
 	return &tree, nil
-}
-
-// invokeDelSonarServerProject 删除用于分析的 sonar project
-// web api: /api/projects/delete
-func (sonar *Sonar) invokeDelSonarServerProject(projectKey string) error {
-	req := make(url.Values)
-	req.Set("project", projectKey)
-
-	err := retry.DoWithInterval(func() error {
-		var body bytes.Buffer
-		r, err := httpclient.New(httpclient.WithCompleteRedirect()).
-			BasicAuth(sonar.Auth.Login, sonar.Auth.Password).
-			Post(sonar.Auth.HostURL).
-			Path("/api/projects/delete").
-			FormBody(req).
-			// Header("Authentication", "admin").
-			Do().
-			Body(&body)
-		if err != nil {
-			return fmt.Errorf("delete sonar project failed, err: %v, url: %s, body: %s", err, sonar.Auth.HostURL, body.String())
-		}
-		if !r.IsOK() {
-			return fmt.Errorf("statusCode: %d, body: %s", r.StatusCode(), body.String())
-		}
-
-		return nil
-	}, 2, time.Second*2)
-	if err != nil {
-		return fmt.Errorf("failed to delete sonar project, projectKey: %s, err: %v", projectKey, err)
-	}
-	logrus.Infof("delete sonar project: %s successfully!", projectKey)
-	return nil
 }
