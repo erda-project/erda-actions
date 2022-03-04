@@ -1,6 +1,6 @@
 jobs:
   run:
-    image: registry.erda.cloud/erda-actions/extract-repo-version-action:1.0-20220224-d2c7dd0
+    image: registry.erda.cloud/erda-actions/extract-repo-version-action:1.0-20220304-801fb33
     resources:
       cpu: 0.2
       mem: 128
