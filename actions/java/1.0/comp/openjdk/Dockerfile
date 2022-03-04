@@ -21,8 +21,8 @@ COPY comp/fonts /usr/share/fonts/custom
 COPY comp/arthas-boot.jar /
 COPY comp/jacocoagent.jar /opt/jacoco/jacocoagent.jar
 
-ARG DICE_VERSION
-COPY comp/spot-agent/${DICE_VERSION}/spot-agent.tar.gz /tmp/spot-agent.tar.gz
+ARG ERDA_VERSION
+COPY comp/spot-agent/${ERDA_VERSION}/spot-agent.tar.gz /tmp/spot-agent.tar.gz
 RUN \
 	if [ "${MONITOR_AGENT}" = true ]; then \
         mkdir -p /opt/spot; tar -xzf /tmp/spot-agent.tar.gz -C /opt/spot; \

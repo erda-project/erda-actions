@@ -3,6 +3,7 @@ package pack
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -110,6 +111,11 @@ func dockerPackBuild() ([]byte, error) {
 		dockerBuildNetwork = "host"
 	}
 
+	erdaVersion := conf.PlatformEnvs().DiceVersion
+	if !version.IsHistoryVersion(erdaVersion) {
+		erdaVersion = "latest"
+	}
+
 	dockerBuildCmdArgs := []string{
 		"build",
 		// float
@@ -127,7 +133,7 @@ func dockerPackBuild() ([]byte, error) {
 		"-t", oneImage,
 		"-f", exactDockerfilePath,
 
-		"--build-arg", "DICE_VERSION=" + conf.PlatformEnvs().DiceVersion,
+		"--build-arg", "DICE_VERSION=" + erdaVersion,
 
 		exactWd,
 	}

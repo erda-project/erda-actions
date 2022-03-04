@@ -3,6 +3,7 @@ package build
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -110,7 +111,10 @@ func dockerBuild() error {
 		nodeAdditionArgs = []string{"--build-arg", fmt.Sprintf("NODE_OPTIONS=--max_old_space_size=%s",
 			strconv.FormatFloat(float64(memory-32), 'f', 0, 64))}
 	}
-
+	erdaVersion := conf.PlatformEnvs().DiceVersion
+	if !version.IsHistoryVersion(erdaVersion) {
+		erdaVersion = "latest"
+	}
 	dockerBuildCmdArgs := []string{
 		"build",
 		// float
@@ -130,7 +134,7 @@ func dockerBuild() error {
 		"--build-arg", fmt.Sprintf("FORCE_UPDATE_SNAPSHOT=%d", time.Now().Unix()),
 		"--build-arg", "MAVEN_OPTS=" + mavenOpts,
 		"--build-arg", "PACKAGE_LOCK_DIR=/.cache_packagejson",
-		"--build-arg", "DICE_VERSION=" + conf.PlatformEnvs().DiceVersion,
+		"--build-arg", "DICE_VERSION=" + erdaVersion,
 	}
 
 	// HTTP_PROXY & HTTPS_PROXY

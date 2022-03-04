@@ -22,6 +22,7 @@ import (
 	"github.com/erda-project/erda-actions/actions/java/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/pack"
+	"github.com/erda-project/erda-actions/pkg/version"
 )
 
 // packAndPushAppImage pack and push application image
@@ -127,12 +128,17 @@ func packAndPushAppImage(cfg conf.Conf) error {
 		}
 	}
 
+	erdaVersion := cfg.DiceVersion
+	if !version.IsHistoryVersion(cfg.DiceVersion) {
+		erdaVersion = "latest"
+	}
+
 	// compose build args
 	buildArgs := map[string]string{
 		"TARGET":                 "target",
 		"MONITOR_AGENT":          cfg.MonitorAgent,
 		"SPRING_PROFILES_ACTIVE": cfg.Profile, // TODO: 非 spring 定制,
-		"DICE_VERSION":           cfg.DiceVersion,
+		"ERDA_VERSION":           erdaVersion,
 		"WEB_PATH":               cfg.WebPath,
 	}
 

@@ -3,6 +3,7 @@ package build
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -21,7 +22,6 @@ import (
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/strutil"
 )
-
 
 func BuildkitBuild() error {
 
@@ -100,6 +100,10 @@ func dockerBuildForBuildkit() error {
 		nodeAdditionArgs = []string{"--opt", "build-arg:" + fmt.Sprintf("NODE_OPTIONS=--max_old_space_size=%s",
 			strconv.FormatFloat(float64(memory-32), 'f', 0, 64))}
 	}
+	erdaVersion := conf.PlatformEnvs().DiceVersion
+	if !version.IsHistoryVersion(erdaVersion) {
+		erdaVersion = "latest"
+	}
 	//TODO: buildkitd addr from env
 	buildCmdArgs := []string{
 		"--addr",
@@ -114,15 +118,15 @@ func dockerBuildForBuildkit() error {
 		"--opt", "build-arg:" + fmt.Sprintf("FORCE_UPDATE_SNAPSHOT=%d", time.Now().Unix()),
 		"--opt", "build-arg:MAVEN_OPTS=" + mavenOpts,
 		"--opt", "build-arg:PACKAGE_LOCK_DIR=/.cache_packagejson",
-		"--opt", "build-arg:DICE_VERSION=" + conf.PlatformEnvs().DiceVersion,
+		"--opt", "build-arg:DICE_VERSION=" + erdaVersion,
 	}
 
 	// HTTP_PROXY & HTTPS_PROXY
 	if conf.Params().HttpProxy != "" {
-		buildCmdArgs = append(buildCmdArgs, "--opt", "build-arg:HTTP_PROXY=" + conf.Params().HttpProxy)
+		buildCmdArgs = append(buildCmdArgs, "--opt", "build-arg:HTTP_PROXY="+conf.Params().HttpProxy)
 	}
 	if conf.Params().HttpsProxy != "" {
-		buildCmdArgs = append(buildCmdArgs, "--opt", "build-arg:HTTPS_PROXY=" + conf.Params().HttpsProxy)
+		buildCmdArgs = append(buildCmdArgs, "--opt", "build-arg:HTTPS_PROXY="+conf.Params().HttpsProxy)
 	}
 
 	if len(nodeAdditionArgs) > 0 {
@@ -130,11 +134,11 @@ func dockerBuildForBuildkit() error {
 	}
 
 	buildCmdArgs = append(buildCmdArgs,
-		"--local", "context=" + conf.PlatformEnvs().WorkDir,
-		"--local", "dockerfile=" + filepath.Join(conf.PlatformEnvs().WorkDir, "bp", "build"),
-		"--output", "type=image,name=" + conf.EasyUse().DockerImageFromBuild + ",push=true",
-		"--import-cache", "type=registry,ref=" + conf.EasyUse().CalculatedCacheImage,
-		"--export-cache", "type=registry,ref=" + conf.EasyUse().CalculatedCacheImage + ",push=true",
+		"--local", "context="+conf.PlatformEnvs().WorkDir,
+		"--local", "dockerfile="+filepath.Join(conf.PlatformEnvs().WorkDir, "bp", "build"),
+		"--output", "type=image,name="+conf.EasyUse().DockerImageFromBuild+",push=true",
+		"--import-cache", "type=registry,ref="+conf.EasyUse().CalculatedCacheImage,
+		"--export-cache", "type=registry,ref="+conf.EasyUse().CalculatedCacheImage+",push=true",
 	)
 
 	// build
@@ -322,4 +326,3 @@ func afterBuildNodeForBuiltkit() ([]ModuleArtifact, error) {
 
 	return buildResult, nil
 }
-

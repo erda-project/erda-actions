@@ -18,8 +18,8 @@ RUN chmod +x /entrypoint.sh
 COPY pre_start.sh /pre_start.sh
 RUN chmod +x /pre_start.sh
 
-ARG DICE_VERSION
-COPY comp/spot-agent/${DICE_VERSION}/spot-agent.tar.gz /tmp/spot-agent.tar.gz
+ARG ERDA_VERSION
+COPY comp/spot-agent/${ERDA_VERSION}/spot-agent.tar.gz /tmp/spot-agent.tar.gz
 RUN \
 	if [ "${MONITOR_AGENT}" = true ]; then \
         mkdir -p /opt/spot; tar -xzf /tmp/spot-agent.tar.gz -C /opt/spot; \

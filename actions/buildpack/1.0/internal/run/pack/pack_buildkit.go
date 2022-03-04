@@ -3,6 +3,7 @@ package pack
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -32,7 +33,6 @@ func PackForBuildkit() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
 
 	return packResult, nil
 }
@@ -117,6 +117,11 @@ func dockerPackBuildForBuildkit() ([]byte, error) {
 		dockerBuildNetwork = "host"
 	}
 
+	erdaVersion := conf.PlatformEnvs().DiceVersion
+	if !version.IsHistoryVersion(erdaVersion) {
+		erdaVersion = "latest"
+	}
+
 	buildCmdArgs := []string{
 		"--addr",
 		"tcp://buildkitd.default.svc.cluster.local:1234",
@@ -125,7 +130,7 @@ func dockerPackBuildForBuildkit() ([]byte, error) {
 		"--tlskey=/.buildkit/key.pem",
 		"build",
 		"--frontend", "dockerfile.v0",
-		"--opt", "build-arg:DICE_VERSION=" + conf.PlatformEnvs().DiceVersion,
+		"--opt", "build-arg:DICE_VERSION=" + erdaVersion,
 		"--local",
 		"context=" + exactWd,
 		"--local",
@@ -135,10 +140,10 @@ func dockerPackBuildForBuildkit() ([]byte, error) {
 	}
 	// HTTP_PROXY & HTTPS_PROXY
 	if conf.Params().HttpProxy != "" {
-		buildCmdArgs = append(buildCmdArgs, "--opt", "build-arg:HTTP_PROXY=" + conf.Params().HttpProxy)
+		buildCmdArgs = append(buildCmdArgs, "--opt", "build-arg:HTTP_PROXY="+conf.Params().HttpProxy)
 	}
 	if conf.Params().HttpsProxy != "" {
-		buildCmdArgs = append(buildCmdArgs, "--opt", "build-arg:HTTPS_PROXY=" + conf.Params().HttpsProxy)
+		buildCmdArgs = append(buildCmdArgs, "--opt", "build-arg:HTTPS_PROXY="+conf.Params().HttpsProxy)
 	}
 
 	// build
