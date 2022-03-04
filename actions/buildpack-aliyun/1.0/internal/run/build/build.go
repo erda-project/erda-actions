@@ -112,7 +112,7 @@ func dockerBuild() error {
 			strconv.FormatFloat(float64(memory-32), 'f', 0, 64))}
 	}
 	erdaVersion := conf.PlatformEnvs().DiceVersion
-	if version.IsHistoryVersion(erdaVersion) {
+	if !version.IsHistoryVersion(erdaVersion) {
 		erdaVersion = "latest"
 	}
 	dockerBuildCmdArgs := []string{

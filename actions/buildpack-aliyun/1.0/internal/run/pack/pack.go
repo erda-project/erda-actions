@@ -111,7 +111,7 @@ func dockerPackBuild() ([]byte, error) {
 		dockerBuildNetwork = "host"
 	}
 	erdaVersion := conf.PlatformEnvs().DiceVersion
-	if version.IsHistoryVersion(erdaVersion) {
+	if !version.IsHistoryVersion(erdaVersion) {
 		erdaVersion = "latest"
 	}
 	dockerBuildCmdArgs := []string{

@@ -113,7 +113,7 @@ func dockerBuild() error {
 	}
 
 	erdaVersion := conf.PlatformEnvs().DiceVersion
-	if version.IsHistoryVersion(erdaVersion) {
+	if !version.IsHistoryVersion(erdaVersion) {
 		erdaVersion = "latest"
 	}
 
