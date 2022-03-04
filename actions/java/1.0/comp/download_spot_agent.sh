@@ -34,3 +34,11 @@ for v in ${versions[@]}; do
     # check .tar.gz
     tar -tzf ${outputFile} >/dev/null
 done
+
+# download latest java agent
+mkdir -p ${spotAgentDir}/latest
+outputFile=${spotAgentDir}/latest/spot-agent.tar.gz
+curl -o ${outputFile} \
+    https://terminus-dice.oss-cn-hangzhou.aliyuncs.com/spot/java-agent/action/release/latest/spot-agent.tar.gz
+    # check .tar.gz
+    tar -tzf ${outputFile} >/dev/null

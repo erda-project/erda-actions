@@ -3,6 +3,7 @@ package build
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"log"
 	"os"
@@ -152,9 +153,14 @@ func build(cfg conf.Conf) error {
 		return err
 	}
 
+	erdaVersion := cfg.DiceVersion
+	if !version.IsHistoryVersion(erdaVersion) {
+		erdaVersion = "latest"
+	}
+
 	//做一些agent的工作，将dockerfile中下载和拷贝到agent.jar文件拷贝到buildPath目录下
 	runCommand(fmt.Sprintf(" mkdir -p %s", fmt.Sprintf("%s/%s/%s", cfg.WorkDir, pwdName, "spot-agent")))
-	runCommand(fmt.Sprintf(" cp -rv %s %s ", "/opt/action/comp/spot-agent/${DICE_VERSION}/spot-agent/.", fmt.Sprintf("%s/%s/%s", cfg.WorkDir, pwdName, "spot-agent")))
+	runCommand(fmt.Sprintf(" cp -rv %s %s ", fmt.Sprintf("/opt/action/comp/spot-agent/%s/spot-agent/.", erdaVersion), fmt.Sprintf("%s/%s/%s", cfg.WorkDir, pwdName, "spot-agent")))
 	runCommand(fmt.Sprintf("echo 'JAVA_OPTS=%s' >> %s ", "-javaagent:/spot-agent/spot-agent.jar", cfg.MetaFile))
 
 	return nil

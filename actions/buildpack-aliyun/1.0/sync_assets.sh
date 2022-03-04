@@ -24,6 +24,20 @@ function download() {
     tar -tzf ${outputFile} >/dev/null
 }
 
+function latestDownload() {
+    dir=$1
+    release_version=latest
+    mkdir -p ${dir}/java-agent/${release_version}
+    outputFile=${dir}/java-agent/${release_version}/spot-agent.tar.gz
+    curl -o ${outputFile} \
+    https://terminus-dice.oss-cn-hangzhou.aliyuncs.com/spot/java-agent/action/release/${release_version}/spot-agent.tar.gz
+    # check .tar.gz
+    printf ${outputFile}
+    tar -tzf ${outputFile} >/dev/null
+}
+
+latestDownload ${assetsDir}
+
 ## release 3.x
 release_3_first_version=3
 for i in {15..21}; do
