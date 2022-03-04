@@ -16,17 +16,21 @@
 FROM registry.erda.cloud/retag/golang:1.15 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
+WORKDIR /go/src/github.com/erda-project/erda-actions/actions
+RUN rm -rf `ls | grep -v erda-mysql-migration`
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
+# go mod tidy
+RUN go env -w GOPROXY="https://goproxy.io,https://goproxy.cn,direct"
+RUN go env -w GOOS="linux"
+RUN go env -w GOARCH="amd64"
+RUN go mod tidy
+
 # go build action cmd
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/go/pkg/mod \
-    GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-mysql-migration/1.0-57/internal/action/cmd/main.go
+RUN go build -o /opt/action/run actions/erda-mysql-migration/1.0-57/internal/action/cmd/main.go
 
 # go build local cmd
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/go/pkg/mod \
-    GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0-57/internal/local/cmd/main.go
+RUN go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0-57/internal/local/cmd/main.go
 
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
