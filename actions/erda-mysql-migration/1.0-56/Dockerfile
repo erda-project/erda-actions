@@ -23,7 +23,7 @@ WORKDIR /go/src/github.com/erda-project/erda-actions
 # go mod tidy
 RUN go env -w GOPROXY="https://goproxy.io,https://goproxy.cn,direct"
 RUN go env -w GOOS="linux"
-RUN env -w GOARCH="amd64"
+RUN go env -w GOARCH="amd64"
 RUN go mod tidy
 
 # go build action cmd
