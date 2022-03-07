@@ -63,21 +63,3 @@ func splitLanguages(langs detect.Languages) (detect.Languages, detect.Languages)
 	}
 	return inLangs, outLangs
 }
-
-func CheckLanguage(path string) (string, error) {
-	buildPack, err := detectBuildPack(path)
-	if err != nil {
-		return "", errors.Wrapf(err, "Detect buildPack failed.")
-	}
-
-	switch buildPack.Language {
-	case "java", "kotlin":
-		return "java", nil
-	case "dice_spa", "herd", "javascript":
-		return "js", nil
-	case "golang", "go":
-		return "golang", nil
-	}
-
-	return buildPack.Language, nil
-}

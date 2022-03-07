@@ -1,11 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"net/url"
-
-	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda/pkg/http/httpclient"
 )
@@ -31,6 +27,52 @@ var (
 	SonarQualityGateStatusNONE  SonarQualityGateStatus = "NONE"
 )
 
+// MetricKey 指标名
+// see: https://docs.sonarqube.org/latest/user-guide/metric-definitions/
+type MetricKey string
+
+var (
+	MetricKeyBugs                   MetricKey = "bugs"
+	MetricKeyVulnerabilities        MetricKey = "vulnerabilities"
+	MetricKeyCodeSmells             MetricKey = "code_smells"
+	MetricKeyCoverage               MetricKey = "coverage"
+	MetricKeyUncoveredLines         MetricKey = "uncovered_lines"
+	MetricKeyUncoveredConditions    MetricKey = "uncovered_conditions"
+	MetricKeyNcloc                  MetricKey = "ncloc"                    // Lines of code: Number of physical lines that contain at least one character which is neither a whitespace nor a tabulation nor part of a comment.
+	MetricKeyDuplicatedLinesDensity MetricKey = "duplicated_lines_density" // 重复行数百分比：duplicated_lines / lines * 100
+	MetricKeyDuplicatedLines        MetricKey = "duplicated_lines"
+	MetricKeyDuplicatedBlocks       MetricKey = "duplicated_blocks"
+	MetricKeyReliabilityRating      MetricKey = "reliability_rating"
+	MetricKeySecurityRating         MetricKey = "security_rating"
+	MetricKeyMaintainabilityRating  MetricKey = "sqale_rating"
+
+	/////////////////////////////////////////////
+	// quality gate built-in sonar-way metrics //
+	/////////////////////////////////////////////
+	MetricKeyNewSecurityRating           MetricKey = "new_security_rating"
+	MetricKeyNewReliabilityRating        MetricKey = "new_reliability_rating"
+	MetricKeyNewMaintainabilityRating    MetricKey = "new_maintainability_rating"
+	MetricKeyNewCoverage                 MetricKey = "new_coverage"
+	MetricKeyNewDuplicatedLinesDensity   MetricKey = "new_duplicated_lines_density"
+	MetircKeyNewSecurityHotspotsReviewed MetricKey = "new_security_hotspots_reviewed"
+)
+
+func (k MetricKey) String() string {
+	return string(k)
+}
+
+// MeasureType 测量类型
+type MeasureType string
+
+var (
+	MeasureTypeCoverage     MeasureType = "coverage"
+	MeasureTypeDuplications MeasureType = "duplications"
+)
+
+func (t MeasureType) String() string {
+	return string(t)
+}
+
 // getSonarQualityGateStatus 查询代码门禁结果
 func (sonar *Sonar) getSonarQualityGateStatus(analysisID string) (*SonarQualityGateResult, error) {
 	var statusResp struct {
@@ -47,83 +89,4 @@ func (sonar *Sonar) getSonarQualityGateStatus(analysisID string) (*SonarQualityG
 		return nil, fmt.Errorf("failed to fetch qualitygates status, status code: %d", resp.StatusCode())
 	}
 	return statusResp.ProjectStatus, nil
-}
-
-// createQualityGate 创建代码质量门禁
-func (sonar *Sonar) createQualityGate(name string) error {
-	logrus.Infof("Begin create sonar quality gate: %s", name)
-	var respBody bytes.Buffer
-	httpResp, err := httpclient.New(httpclient.WithCompleteRedirect()).BasicAuth(sonar.Auth.Login, sonar.Auth.Password).
-		Post(sonar.Auth.HostURL).Path("/api/qualitygates/create").
-		Param("name", name).
-		Do().Body(&respBody)
-	if err != nil {
-		return err
-	}
-	if !httpResp.IsOK() {
-		logrus.Errorf("Failed to create sonar quality gate: %s, err: %v", name, err)
-		return fmt.Errorf("failed to create quality gate, name: %s, status-code: %d, respBody: %s", name, httpResp.StatusCode(), respBody.String())
-	}
-	logrus.Infof("End create sonar quality gate: %s", name)
-	return nil
-}
-
-// destroyQualityGate 销毁代码质量门禁
-func (sonar *Sonar) destroyQualityGate(name string) error {
-	var respBody bytes.Buffer
-	httpResp, err := httpclient.New(httpclient.WithCompleteRedirect()).BasicAuth(sonar.Auth.Login, sonar.Auth.Password).
-		Post(sonar.Auth.HostURL).Path("/api/qualitygates/destroy").
-		Param("name", name).
-		Do().Body(&respBody)
-	if err != nil {
-		return err
-	}
-	if !httpResp.IsOK() {
-		return fmt.Errorf("failed to destroy quality gate, name: %s, status-code: %d, respBody: %s", name, httpResp.StatusCode(), respBody.String())
-	}
-	return nil
-}
-
-type QualityGateConditionOp string
-
-func (op QualityGateConditionOp) String() string {
-	return string(op)
-}
-
-var (
-	OpGT QualityGateConditionOp = "GT" // is greater than
-	OpLT QualityGateConditionOp = "LT" // is lower than
-)
-
-type QualityGateCondition struct {
-	Error  string                 `json:"error"`  // condition error threshold. "A","B" will transfer to 1,2
-	Metric MetricKey              `json:"metric"` // condition metric
-	Op     QualityGateConditionOp `json:"op"`     // condition operator
-}
-
-// createQualityGateCondition
-func (sonar *Sonar) createQualityGateCondition(gateName string, cond QualityGateCondition) error {
-	logrus.Infof("Begin create sonar quality gate condition, metric: %s, op: %s, err: %s", cond.Metric.String(), cond.Op, cond.Error)
-	// generate params
-	params := make(url.Values, 0)
-	params.Add("gateName", gateName)
-	params.Add("error", cond.Error)
-	params.Add("metric", cond.Metric.String())
-	params.Add("op", cond.Op.String())
-
-	var respBody bytes.Buffer
-	httpResp, err := httpclient.New(httpclient.WithCompleteRedirect()).BasicAuth(sonar.Auth.Login, sonar.Auth.Password).
-		Post(sonar.Auth.HostURL).Path("/api/qualitygates/create_condition").
-		Params(params).
-		Do().Body(&respBody)
-	if err != nil {
-		return err
-	}
-	if !httpResp.IsOK() {
-		logrus.Errorf("Failed to create sonar quality gate condition, metric: %s, err: %v", cond.Metric, err)
-		return fmt.Errorf("failed to create quality gate condition, gateName: %s, errorThreshold: %s, metric: %s, op: %s, respBody: %s",
-			gateName, cond.Error, cond.Metric, cond.Op, respBody.String())
-	}
-	logrus.Infof("End create sonar quality gate condition, metric: %s", cond.Metric)
-	return nil
 }
