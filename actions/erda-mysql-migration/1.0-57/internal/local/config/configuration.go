@@ -15,6 +15,7 @@ package config
 
 import (
 	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -51,7 +52,7 @@ func Config() *Configuration {
 			logrus.WithError(err).Errorln("failed to reload configuration")
 		}
 
-		logrus.Infof("%+v", *configuration.envs)
+		logrus.Infoln(configuration.envs.Sprint())
 		if !configuration.envs.SkipLint {
 			configFilename := filepath.Join(configuration.MigrationDir(), "config.yml")
 			cfg, err := sqllint.LoadConfigFromLocal(configFilename)
@@ -248,6 +249,17 @@ type envs struct {
 
 	Workdir      string `env:"WORKDIR"`
 	MigrationDir string `env:"MIGRATION_DIR"`
+}
+
+func (e envs) Sprint() string {
+	cpy := e
+	if length := len(cpy.MySQLPassword); length > 4 {
+		cpy.MySQLPassword = cpy.MySQLPassword[:2] + "******" + cpy.MySQLPassword[length-2:]
+	} else {
+		cpy.MySQLPassword = "******"
+	}
+	data, _ := json.MarshalIndent(cpy, "", "  ")
+	return string(data)
 }
 
 // ConfigFile represents the structure of ${DICE_CONFIG}/config.yaml which
