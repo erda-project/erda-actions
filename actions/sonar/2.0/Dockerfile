@@ -3,7 +3,7 @@ FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-RUN GOOS=linux GOARCH=amd64 go build -o /assets/run actions/sonar/2.0/internal/*.go
+RUN GOOS=linux GOARCH=amd64 go build -o /assets/run actions/sonar/2.0/internal/cmd/*.go
 
 FROM registry.erda.cloud/erda/terminus-centos:base AS action
 

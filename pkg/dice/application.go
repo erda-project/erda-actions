@@ -1,20 +1,21 @@
-package main
+package dice
 
 import (
 	"fmt"
 	"strconv"
 
+	"github.com/erda-project/erda-actions/pkg/envconf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 )
 
-func getApplication(cfg *Conf) (*apistructs.ApplicationDTO, error) {
+func GetApplication(cfg envconf.PlatformParams) (*apistructs.ApplicationDTO, error) {
 
 	var resp apistructs.ApplicationFetchResponse
 
 	response, err := httpclient.New(httpclient.WithCompleteRedirect()).Get(cfg.OpenAPIAddr).
 		Path(fmt.Sprintf("/api/applications/%v", cfg.AppID)).
-		Header("Org-ID", strconv.FormatUint(cfg.OrgId, 10)).
+		Header("Org-ID", strconv.FormatUint(cfg.OrgID, 10)).
 		Header("USER-ID", cfg.UserID).
 		Header("Authorization", cfg.OpenAPIToken).Do().JSON(&resp)
 	if err != nil {
