@@ -16,6 +16,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -24,7 +25,10 @@ import (
 	"github.com/erda-project/erda/pkg/envconf"
 )
 
-var c *Config
+var (
+	c                  *Config
+	defaultLocation, _ = time.LoadLocation("Asia/Shanghai")
+)
 
 type Config struct {
 	// platform envs
@@ -38,6 +42,7 @@ type Config struct {
 	Version   string `env:"ACTION_VERSION"`
 	ChangeLog string `env:"ACTION_CHANGELOG"`
 	Groups    string `env:"ACTION_GROUPS"`
+	Tz        string `env:"ACTION_TZ"`
 }
 
 func (cfg Config) Host() string {
@@ -102,6 +107,15 @@ func GetConfig() (*Config, error) {
 	if err := envconf.Load(c); err != nil {
 		return nil, errors.Wrap(err, "failed to Load params")
 	}
-	c.Version += "+" + time.Now().Format("20060102150405")
+	if c.Tz == "" {
+		c.Tz = "Asia/Shanghai"
+	}
+	if !strings.Contains(c.Version, "+") {
+		location, err := time.LoadLocation(c.Tz)
+		if err != nil {
+			location = defaultLocation
+		}
+		c.Version += "+" + time.Now().In(location).Format("20060102150405")
+	}
 	return c, nil
 }
