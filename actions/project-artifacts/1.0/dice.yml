@@ -13,7 +13,7 @@
 
 jobs:
   compose-applications:
-    image: registry.erda.cloud/erda-actions/project-artifacts-action:1.0-20220303-80bf010
+    image: registry.erda.cloud/erda-actions/project-artifacts-action:1.0-20220308-52ef0cc
     resource:
       cpu: 0.2
       mem: 512
