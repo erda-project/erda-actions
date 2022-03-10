@@ -17,7 +17,7 @@ params:
     desc: ${{ i18n.params.context.desc }}
   - name: modules
     type: struct_array
-    desc: ${{ i18n.params.context.desc }}
+    desc: ${{ i18n.params.modules.desc }}
     struct:
       - name: name
         required: true

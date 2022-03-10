@@ -1,0 +1,58 @@
+name: project-package
+version: "1.0"
+type: action
+category: version_management
+desc: ${{ i18n.desc }}
+public: true
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.19"
+supportedErdaVersions:
+  - ">= 1.0"
+
+params:
+  - name: artifacts
+    type: struct_array
+    struct:
+      - name: name
+        required: true
+        desc: ${{ i18n.params.artifacts.struct.name.desc }}
+      - name: type
+        required: true
+        desc: ${{ i18n.params.artifacts.struct.type.desc }}
+      - name: version
+        required: true
+        desc: ${{ i18n.params.artifacts.struct.version.desc }}
+  - name: wait_minutes
+    type: int
+    desc: ${{ i18n.params.wait_minutes.desc }}
+    required: false
+    
+accessibleAPIs:
+  # export project package
+  - path: /api/orgs/<orgID>/projects/<projectID>/package/actions/export
+    method: POST
+    schema: http
+  - path: /api/test-file-records/<id>
+    method: GET
+    schema: http
+
+outputs:
+  - name: package_url
+    desc: ${{ i18n.outputs.package_url.desc }}
+
+locale:
+  zh-CN:
+    desc: 用于 Erda 平台制作项目工程包
+    outputs.package_url.desc: 项目工程包压缩文件下载链接
+    params.artifacts.struct.name.desc: 制品名称
+    params.artifacts.struct.type.desc: 制品类型
+    params.artifacts.struct.version.desc: 制品版本
+    params.wait_minutes.desc: 等待分钟数
+  en-US:
+    desc: Used to produce package for project on the Erda platform
+    outputs.package_url.desc: Project package zip file download url
+    params.artifacts.struct.name.desc: Artifact name
+    params.artifacts.struct.type.desc: Artifact type
+    params.artifacts.struct.version.desc: Artifact version
+    params.wait_minutes.desc: minutes to wait
+

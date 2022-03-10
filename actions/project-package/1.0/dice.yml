@@ -1,0 +1,7 @@
+jobs:
+  dice:
+    image: registry.erda.cloud/erda-actions/project-package-action:1.0-20220307-277569f
+    resources:
+      cpu: 0.2
+      mem: 128
+      disk: 128

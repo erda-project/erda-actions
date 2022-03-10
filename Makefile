@@ -15,7 +15,7 @@ dice-deploy-domain dice-deploy-release dice-deploy-redeploy dice-deploy-rollback
 dockerfile docker-push php gitbook js-script sonar integration-test unit-test api-test  java-lint testplan java-dependency-check golang java-unit android ios \
 mobile-template lib-publish mobile-publish java-deploy extract-repo-version release-fetch dingtalk-robot-msg oss-upload delete-nodes ess-info loop api-register \
 api-publish publish-api-asset mysqldump archive-release erda-get-addon-info erda-get-service-addr erda-mysql-migration push-extensions archive-extensions \
-testscene-run testplan-run erda-pkg-release-public erda-pkg-release-enterprise contrast-security erda-create-custom-addon project-artifacts:
+testscene-run testplan-run erda-pkg-release-public erda-pkg-release-enterprise contrast-security erda-create-custom-addon project-artifacts project-package:
 
 	@set -eo pipefail
 
