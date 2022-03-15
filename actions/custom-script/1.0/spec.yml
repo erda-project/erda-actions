@@ -4,7 +4,7 @@ type: action
 displayName: ${{ i18n.displayName }}
 category: custom_task
 desc: ${{ i18n.desc }}
-public: true
+public: false
 labels:
   autotest: true
   configsheet: true
