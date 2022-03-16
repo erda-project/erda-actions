@@ -40,4 +40,4 @@ outputFile=${spotAgentDir}/latest/spot-agent.tar.gz
 curl -o ${outputFile} \
 https://terminus-dice.oss-cn-hangzhou.aliyuncs.com/spot/java-agent/action/release/latest/spot-agent.tar.gz
 # check .tar.gz
-tar -xzf ${outputFile} -C ${spotAgentDir}/${v}/
+tar -xzf ${outputFile} -C ${spotAgentDir}/latest/
