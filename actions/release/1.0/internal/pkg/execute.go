@@ -309,7 +309,7 @@ func Execute() error {
 }
 
 func isServiceMode(cfg *conf.Conf) bool {
-	return cfg.Services != nil && cfg.Images == nil
+	return cfg.Services != nil
 }
 
 func simpleRun(name string, arg ...string) error {
