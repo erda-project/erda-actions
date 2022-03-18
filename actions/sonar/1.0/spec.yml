@@ -3,6 +3,7 @@ version: "1.0"
 type: action
 category: test_management
 public: true
+isDefault: true
 displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/21/825d9774-c095-4b4f-a729-2efd5a33509a.png
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.

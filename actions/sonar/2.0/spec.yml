@@ -1,0 +1,53 @@
+name: sonar
+version: "2.0"
+type: action
+category: test_management
+public: true
+displayName: ${{ i18n.displayName }}
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/21/825d9774-c095-4b4f-a729-2efd5a33509a.png
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.14"
+supportedErdaVersions:
+  - ">= 1.0"
+
+params:
+  - name: code_dir
+    required: true
+    desc: ${{ i18n.params.code_dir.desc }}
+  - name: must_gate_status_ok
+    required: false
+    desc: ${{ i18n.params.must_gate_status_ok.desc }}
+  - name: sonar_host_url
+    required: false
+    desc: ${{ i18n.params.sonar_host_url.desc }}
+  - name: sonar_login
+    required: false
+    desc: ${{ i18n.params.sonar_login.desc }}
+  - name: sonar_password
+    required: false
+    desc: ${{ i18n.params.sonar_password.desc }}
+  - name: sonar_project_key
+    required: false
+    desc: ${{ i18n.params.sonar_project_key.desc }}
+accessibleAPIs:
+  - path: /api/applications/<applicationId>
+    method: GET
+    schema: http
+locale:
+  zh-CN:
+    displayName: Sonar 代码质量检测
+    params.code_dir.desc: 执行代码质量分析的目录
+    params.must_gate_status_ok.desc: 是否要求代码门禁检查状态为 ok
+    params.sonar_project_key.desc: 对应 sonar 里的 project key。若不填写，使用应用配置里的sonar project key
+    params.sonar_host_url.desc: sonar 服务器地址，用户可以手动指定。若不填写，使用应用配置里的sonar host
+    params.sonar_login.desc: 用于登录 sonar 服务器的用户名或 token。若不填写，使用应用配置里的sonar token
+    params.sonar_password.desc: 用于登录 sonar 服务器的密码。若不填写，使用平台 sonar 服务自动生成的 token。特别的，当 sonar_login 为 token 而非 username 方式时，sonar_password 无需填写
+
+  en-US:
+    displayName: Sonar Code Quality Check
+    params.code_dir.desc: The directory of code to be analyzed
+    params.must_gate_status_ok.desc: Whether the code gate status is required as ok
+    params.sonar_project_key.desc: The project key in sonar. If not filled in, the system will use the project key in the application configuration
+    params.sonar_host_url.desc: The address of the sonar server. If not filled in, the system will use the application setting's sonar host
+    params.sonar_login.desc: The username or token to login to the sonar server. If not filled in, the system will use the application setting's sonar token
+    params.sonar_password.desc: "The password to login to the sonar server. If not filled in, the system will automatically generate a token. Special note: When sonar_login is token and not username, sonar_password is not required"
