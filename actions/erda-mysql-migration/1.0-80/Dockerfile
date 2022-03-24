@@ -13,8 +13,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-FROM registry.erda.cloud/retag/golang:1.15 AS builder
-
+FROM registry.erda.cloud/retag/golang:1.16 AS builder
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions/actions
 RUN rm -rf `ls | grep -v erda-mysql-migration`
@@ -26,11 +25,11 @@ RUN go env -w GOOS="linux"
 RUN go env -w GOARCH="amd64"
 RUN go mod tidy
 
-# go build action cmd
-RUN go build -o /opt/action/run actions/erda-mysql-migration/1.0-57/internal/action/cmd/main.go
+# go build action cmd, GODEBUG=x509ignoreCN=0 prevent ssl cert fault
+RUN GOPROXY=https://goproxy.cn,direct GODEBUG=x509ignoreCN=0 GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-mysql-migration/1.0-57/internal/action/cmd/main.go
 
-# go build local cmd
-RUN go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0-57/internal/local/cmd/main.go
+# go build local cmd, GODEBUG=x509ignoreCN=0 prevent ssl cert fault
+RUN GOPROXY=https://goproxy.cn,direct GODEBUG=x509ignoreCN=0 GOOS=linux GOARCH=amd64 go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0-57/internal/local/cmd/main.go
 
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
