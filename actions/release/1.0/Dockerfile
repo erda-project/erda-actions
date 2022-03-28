@@ -4,6 +4,7 @@ FROM registry.erda.cloud/retag/golang:1.16-alpine3.14 AS builder
 # disable CGO for ALL THE THINGS (to help ensure no libc)
 ENV CGO_ENABLED 0
 ENV BUILD_FLAGS="-v -ldflags '-d -s -w' -a -tags netgo -installsuffix netgo"
+ENV GOPROXY=https://goproxy.cn
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
@@ -19,7 +20,8 @@ FROM registry.erda.cloud/retag/alpine:3.14
 RUN echo "http://mirrors.aliyun.com/alpine/v3.12/main/" > /etc/apk/repositories && \
     echo "http://mirrors.aliyun.com/alpine/v3.12/community/" >> /etc/apk/repositories && \
     apk update && apk add --no-cache docker
-RUN apk add --no-cache bash tar
+RUN apk add --no-cache bash tar libarchive-tools
+RUN cp  /usr/bin/bsdtar /usr/bin/tar
 
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 COPY --from=builder /assets /opt/action
