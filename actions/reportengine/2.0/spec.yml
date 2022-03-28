@@ -1,0 +1,40 @@
+name: reportengine
+displayName: ${{ i18n.displayName }}
+version: "2.0"
+type: action
+category: "monitor"
+desc: ${{ i18n.desc }}
+public: false
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
+
+params:
+  - name: report_id
+    type: string
+    desc: ${{ i18n.params.report_id.desc }}
+    required: true
+  - name: domain_addr
+    type: string
+    required: true
+  - name: org_name
+    type: string
+    requried: true
+  - name: monitor_addr
+    type: string
+    required: true
+  - name: core_services_addr
+    type: string
+    required: true
+
+locale:
+  zh-CN:
+    desc: 监控平台周期性报表生成引擎，负责接收数据并渲染成报表，最终发送到用户邮箱
+    displayName: 报表引擎
+    params.report_id.desc: 报表id
+
+  en-US:
+    desc: Report engine, responsible for receiving data and rendering reports, and finally send to user email
+    displayName: Report engine
+    params.report_id.desc: Report id
