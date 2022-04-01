@@ -23,7 +23,7 @@ import (
 )
 
 // migration flyway migration 文件镜像release
-func migration(cfg *conf.Conf) (string, error) {
+func migration(app *apistructs.ApplicationDTO, cfg *conf.Conf) (string, error) {
 	if cfg.MigrationDir == "" {
 		logrus.Info("empty migration dir.")
 		return "", nil
@@ -57,13 +57,13 @@ func migration(cfg *conf.Conf) (string, error) {
 		return "", nil
 	}
 	// migration release dice.yml
-	return migrationRelease(cfg, repo)
+	return migrationRelease(app, cfg, repo)
 }
 
 // migrationRelease migration信息release
-func migrationRelease(cfg *conf.Conf, repo string) (string, error) {
+func migrationRelease(app *apistructs.ApplicationDTO, cfg *conf.Conf, repo string) (string, error) {
 	// generate release create request
-	req := genReleaseRequest(cfg)
+	req := genReleaseRequest(app, cfg)
 	req.ReleaseName = req.ReleaseName + "_migration"
 
 	diceyml, err := genMigrationDiceYml(cfg, repo)
@@ -172,7 +172,7 @@ func packWithBuildkit(repo string) error {
 		"--frontend", "dockerfile.v0",
 		"--local", "context=/opt/action/comp/migration",
 		"--local", "dockerfile=/opt/action/comp/migration",
-		"--output", "type=image,name=" + repo + ",push=true")
+		"--output", "type=image,name="+repo+",push=true")
 
 	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
 	packCmd.Stdout = os.Stdout
@@ -181,7 +181,7 @@ func packWithBuildkit(repo string) error {
 		return err
 	}
 	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
-	return  nil
+	return nil
 }
 
 // storeMetaFile upload metadata

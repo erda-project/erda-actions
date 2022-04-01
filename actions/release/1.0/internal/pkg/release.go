@@ -19,7 +19,7 @@ const (
 	releaseBranchPrefix = "release/"
 )
 
-func genReleaseRequest(cfg *conf.Conf) *apistructs.ReleaseCreateRequest {
+func genReleaseRequest(app *apistructs.ApplicationDTO, cfg *conf.Conf) *apistructs.ReleaseCreateRequest {
 	labels := make(map[string]string, len(cfg.Labels)+5)
 	// insert user defined label
 	for k, v := range cfg.Labels {
@@ -35,11 +35,11 @@ func genReleaseRequest(cfg *conf.Conf) *apistructs.ReleaseCreateRequest {
 		Labels:          labels,
 		OrgID:           cfg.OrgID,
 		ProjectID:       cfg.ProjectID,
-		ApplicationID:   cfg.AppID,
+		ApplicationID:   int64(app.ID),
 		UserID:          cfg.DiceOperatorID,
 		ClusterName:     cfg.ClusterName,
 		ProjectName:     cfg.ProjectName,
-		ApplicationName: cfg.AppName,
+		ApplicationName: app.Name,
 		CrossCluster:    cfg.CrossCluster,
 	}
 

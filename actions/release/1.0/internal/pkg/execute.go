@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -15,6 +16,7 @@ import (
 
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
+	"github.com/erda-project/erda-actions/pkg/metawriter"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
@@ -40,17 +42,28 @@ func Execute() error {
 	}
 
 	// check application mode
-	app, err := GetApp(cfg.AppID, cfg)
+	app, err := GetApp(cfg.GetAppIDOrName(), cfg)
 	if err != nil {
 		return err
 	}
+	logrus.WithField("projectID", cfg.ProjectID).
+		WithField("projectName", cfg.ProjectName).
+		WithField("appID", app.ID).
+		WithField("appName", app.Name).
+		WithField("across apps", app.Name != cfg.AppName).
+		Infoln()
+	if app.Name != cfg.AppName {
+		_ = metawriter.WriteKV("appID", app.ID)
+		_ = metawriter.WriteKV("appName", app.Name)
+	}
+
 	// project level application not support release action
 	if app.Mode == string(apistructs.ApplicationModeProjectService) {
 		return fmt.Errorf("project level application not support release action")
 	}
 
 	// generate release create request
-	req := genReleaseRequest(&cfg)
+	req := genReleaseRequest(app, &cfg)
 	storage, err := parseURL(cfg.PipelineStorageURL)
 	if err != nil {
 		return err
@@ -261,7 +274,7 @@ func Execute() error {
 	fmt.Println(fmt.Sprintf("composed & filled dice.yml: %v", req.Dice))
 
 	// migration sql release
-	migrationReleaseID, err := migration(&cfg)
+	migrationReleaseID, err := migration(app, &cfg)
 	if err != nil {
 		return err
 	}
@@ -373,26 +386,45 @@ func initEnv(cfg *conf.Conf) error {
 	return nil
 }
 
-func GetApp(id int64, conf conf.Conf) (*apistructs.ApplicationDTO, error) {
-
-	var resp apistructs.ApplicationFetchResponse
-
+// GetApp returns app details.
+// if idOrName is id, should be int64, if is name, should be string
+func GetApp(idOrName interface{}, conf conf.Conf) (*apistructs.ApplicationDTO, error) {
+	var resp apistructs.ApplicationListResponse
 	response, err := httpclient.New(httpclient.WithCompleteRedirect()).
 		Get(conf.DiceOpenapiPrefix).
-		Path(fmt.Sprintf("/api/applications/%d", id)).
-		Header("Authorization", conf.CiOpenapiToken).Do().JSON(&resp)
-
+		Path("/api/applications").
+		Header("Authorization", conf.CiOpenapiToken).
+		Params(url.Values{
+			"projectID": {strconv.FormatInt(conf.ProjectID, 10)},
+			"pageSize":  {"65535"},
+			"pageNo":    {"1"},
+		}).
+		Do().
+		JSON(&resp)
 	if err != nil {
-		return nil, fmt.Errorf("failed to request (%s)", err.Error())
+		return nil, errors.Wrap(err, "failed to do request")
 	}
-
 	if !response.IsOK() {
-		return nil, fmt.Errorf(fmt.Sprintf("failed to request, status-code: %d, content-type: %s", response.StatusCode(), response.ResponseHeader("Content-Type")))
+		return nil, errors.Errorf("response not ok: %+v", resp.Error)
 	}
 
-	if !resp.Success {
-		return nil, fmt.Errorf(fmt.Sprintf("failed to request, error code: %s, error message: %s", resp.Error.Code, resp.Error.Msg))
+	switch t := idOrName.(type) {
+	case string:
+		for i := range resp.Data.List {
+			if item := resp.Data.List[i]; item.Name == t {
+				return &item, nil
+			}
+		}
+	case int64, uint64, int32, uint32, int, uint:
+		for i := range resp.Data.List {
+			if item := resp.Data.List[i]; fmt.Sprintf("%d", item.ID) == fmt.Sprintf("%d", t) {
+				return &item, nil
+			}
+		}
+	default:
+		return nil, errors.Errorf("idOrName type error: %T", idOrName)
 	}
 
-	return &resp.Data, nil
+	return nil, errors.Errorf("app was not found in the project, app id or name: %s, project name: %v",
+		idOrName, conf.ProjectName)
 }
