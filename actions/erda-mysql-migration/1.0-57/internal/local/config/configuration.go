@@ -73,7 +73,7 @@ func Config() *Configuration {
 func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 	tls := &migrator.TLSConfig{}
 	if c.envs.TLS == "custom" {
-		tls.DBCaCert = c.envs.CAPATH
+		tls.DBCaCert = c.envs.CACERT
 	}
 
 	if c.envs.MySQLUser != "" {
@@ -235,7 +235,7 @@ type envs struct {
 	MySQLDiceDB   string `env:"MIGRATION_MYSQL_DBNAME:MYSQL_DATABASE"`
 
 	TLS    string `env:"MYSQL_TLS"`
-	CAPATH string `env:"MYSQL_CACERTPATH"`
+	CACERT string `env:"MYSQL_CACERT"`
 
 	// flow control parameters
 	SkipLint    bool `env:"MIGRATION_SKIP_LINT"`
