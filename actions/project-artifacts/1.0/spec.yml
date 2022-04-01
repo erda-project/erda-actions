@@ -48,6 +48,11 @@ params:
           - {name: branch, type: string, desc: "application released from", required: false}
           - {name: releaseID, type: string, desc: "application release id", required: false}
 
+  - name: modes
+    type: map
+    desc: ${{ i18n.params.groups.modes.desc }}
+    required: false
+
 outputs:
   - name: releaseID
     type: string
@@ -76,6 +81,7 @@ locale:
     params.changeLog.desc: 项目制品更新信息
     params.groups.desc: 应用列表
     params.groups.applications.desc: 应用分组
+    params.groups.modes.desc: 部署模式
 
     outputs.releaseID.desc: 项目制品 ID
     outputs.releaseID.version: 项目制品版本
@@ -87,6 +93,7 @@ locale:
     params.changeLog.desc: project release change log
     params.groups.desc: applications list
     params.groups.applications.desc: application groups
+    params.groups.modes.desc: deploy modes
 
     outputs.releaseID.desc: project release ID
     outputs.releaseID.version: project release version

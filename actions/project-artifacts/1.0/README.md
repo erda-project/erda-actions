@@ -16,6 +16,7 @@
 ### Project Artifacts
 > ### 项目打包发布制品
 将给定的应用的制品组合发布为项目制品
+
 ![](http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/03/02/a43327bb-5989-477d-ad84-5e31893cebcd.png)
 > 示例
 ```yaml
@@ -34,5 +35,23 @@ stages:
                     name: go-demo                     // 应用名称
                   - name: java-demo
                     releaseID: a9af810ebd884107a3b9a  // 指定的应用 releaseID, 优先级高于 branch
+            modes:                                    // 部署模式，优先级高于 groups
+              default: 
+                dependOn:                             // 依赖模式
+                  - modeA
+                expose: true                          // 是否展示
+                groups:
+                  - applications:                         
+                      - branch: release/1.0               
+                        name: go-demo                     
+                      - name: java-demo
+                        releaseID: a9af810ebd884107a3b9a
+              modeA:
+                expose: false
+                groups:
+                  - applications:
+                      - branch: release/1.0
+                        name: base
+
             version: 1.0.0+${{ random.date }}         // 项目 release 的版本号
 ```

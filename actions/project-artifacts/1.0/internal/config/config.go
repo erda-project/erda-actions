@@ -42,6 +42,7 @@ type Config struct {
 	Version   string `env:"ACTION_VERSION"`
 	ChangeLog string `env:"ACTION_CHANGELOG"`
 	Groups    string `env:"ACTION_GROUPS"`
+	Modes     string `env:"ACTION_MODES"`
 	Tz        string `env:"ACTION_TZ"`
 }
 
@@ -70,6 +71,24 @@ func (cfg Config) GetGroups() ([]*Group, error) {
 	return groups, nil
 }
 
+func (cfg Config) GetModes() (map[string]*Mode, error) {
+	modes := make(map[string]*Mode)
+	if err := yaml.Unmarshal([]byte(cfg.Modes), &modes); err != nil {
+		return nil, errors.Wrapf(err, "failed to unmarshal Modes: %s", cfg.Modes)
+	}
+	if len(modes) == 0 {
+		return nil, errors.Errorf("no mode in params: %s", cfg.Modes)
+	}
+	for name := range modes {
+		for i := range modes[name].Groups {
+			if len(modes[name].Groups[i].Applications) == 0 {
+				return nil, errors.Errorf("no application in group[%v] of mode[%s]: %s", i, name, cfg.Modes)
+			}
+		}
+	}
+	return modes, nil
+}
+
 func (cfg Config) Print() {
 	_, _ = fmt.Fprintf(os.Stdout, "\t    host: %s\n", cfg.Host())
 	_, _ = fmt.Fprintf(os.Stdout, "\t  verson: %s\n", cfg.Version)
@@ -87,6 +106,12 @@ func (cfg Config) Print() {
 			_, _ = fmt.Fprintf(os.Stdout, "\t\t  releaseID: %s\n", groups[i].Applications[j].ReleaseID)
 		}
 	}
+}
+
+type Mode struct {
+	DependOn []string `json:"dependOn" yaml:"dependOn"`
+	Expose   bool     `json:"expose" yaml:"expose"`
+	Groups   []*Group `json:"groups" yaml:"groups"`
 }
 
 type Group struct {

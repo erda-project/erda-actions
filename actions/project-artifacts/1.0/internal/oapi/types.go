@@ -42,14 +42,20 @@ type Labels struct {
 	GitRepo          string `json:"gitRepo"`
 }
 
-type CreateUpdateReleaseRequest struct {
-	Version                string     `json:"version"`
+type Mode struct {
+	DependOn               []string   `json:"dependOn"`
+	Expose                 bool       `json:"expose"`
 	ApplicationReleaseList [][]string `json:"applicationReleaseList"`
-	Changelog              string     `json:"changelog"`
-	OrgId                  uint64     `json:"orgId"`
-	UserId                 string     `json:"userId"`
-	ProjectID              int64      `json:"projectID"`
-	IsStable               bool       `json:"isStable"`
-	IsFormal               bool       `json:"isFormal"`
-	IsProjectRelease       bool       `json:"isProjectRelease"`
+}
+
+type CreateUpdateReleaseRequest struct {
+	Version          string          `json:"version"`
+	Modes            map[string]Mode `json:"modes"`
+	Changelog        string          `json:"changelog"`
+	OrgId            uint64          `json:"orgId"`
+	UserId           string          `json:"userId"`
+	ProjectID        int64           `json:"projectID"`
+	IsStable         bool            `json:"isStable"`
+	IsFormal         bool            `json:"isFormal"`
+	IsProjectRelease bool            `json:"isProjectRelease"`
 }

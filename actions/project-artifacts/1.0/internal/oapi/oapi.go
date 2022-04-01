@@ -42,17 +42,17 @@ func GetReleaseID(cfg *config.Config, app config.Application) (string, bool, err
 
 // CreateProjectRelease creates the project release if it is not created yet,
 // updates the project release if it is already created.
-func CreateProjectRelease(cfg *config.Config, releases [][]string) (string, error) {
+func CreateProjectRelease(cfg *config.Config, modes map[string]Mode) (string, error) {
 	var request = CreateUpdateReleaseRequest{
-		Version:                cfg.Version,
-		ApplicationReleaseList: releases,
-		Changelog:              cfg.ChangeLog,
-		OrgId:                  cfg.OrgID,
-		UserId:                 cfg.UserID,
-		ProjectID:              cfg.ProjectID,
-		IsStable:               true,
-		IsFormal:               false,
-		IsProjectRelease:       true,
+		Version:          cfg.Version,
+		Modes:            modes,
+		Changelog:        cfg.ChangeLog,
+		OrgId:            cfg.OrgID,
+		UserId:           cfg.UserID,
+		ProjectID:        cfg.ProjectID,
+		IsStable:         true,
+		IsFormal:         false,
+		IsProjectRelease: true,
 	}
 	body, err := json.Marshal(request)
 	if err != nil {
