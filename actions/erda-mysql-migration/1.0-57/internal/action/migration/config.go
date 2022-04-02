@@ -74,10 +74,6 @@ type ActionMySQLSettings struct {
 	Username string `env:"ACTION_MYSQL_USERNAME"`
 	Password string `env:"ACTION_MYSQL_PASSWORD"`
 	Database string `env:"ACTION_DATABASE"`
-	IsTLS    string `env:"ACTION_IS_TLS"`
-	CAPATH   string `env:"ACTION_CA_PATH"`
-	CertPath string `env:"ACTION_CERT_PATH"`
-	KeyPath  string `env:"ACTION_KEY_PATH"`
 }
 
 func (s ActionMySQLSettings) Valid() bool {
@@ -90,10 +86,6 @@ type PipelineMySQLSettings struct {
 	Username string `env:"PIPELINE_MIGRATION_USERNAME"`
 	Password string `env:"PIPELINE_MIGRATION_PASSWORD"`
 	Database string `env:"PIPELINE_MIGRATION_DATABASE"`
-	IsTLS    bool   `env:"PIPELINE_MIGRATION_IS_TLS"`
-	CAPATH   string `env:"PIPELINE_MIGRATION_CA_PATH"`
-	CertPath string `env:"PIPELINE_MIGRATION_CERT_PATH"`
-	KeyPath  string `env:"PIPELINE_MIGRATION_KEY_PATH"`
 }
 
 func (s PipelineMySQLSettings) Valid() bool {
@@ -223,12 +215,7 @@ func (c *Conf) retrieveMySQLParameters() error {
 		c.mysqlParameters.Username = actionMySQLSettings.Username
 		c.mysqlParameters.Password = actionMySQLSettings.Password
 		c.mysqlParameters.Database = actionMySQLSettings.Database
-		//c.mysqlParameters.TLSConfig = &migrator.TLSConfig{
-		//	DBClientKey:  actionMySQLSettings.KeyPath,
-		//	DBCaCert:     actionMySQLSettings.CAPATH,
-		//	DBClientCert: actionMySQLSettings.CertPath,
-		//}
-		c.sandboxParameters.TLS = actionMySQLSettings.IsTLS
+		c.sandboxParameters.Database = actionMySQLSettings.Database
 		return nil
 	}
 	envconf.Load(&pipelineMySQLSettings)
@@ -238,11 +225,6 @@ func (c *Conf) retrieveMySQLParameters() error {
 		c.mysqlParameters.Username = pipelineMySQLSettings.Username
 		c.mysqlParameters.Password = pipelineMySQLSettings.Password
 		c.mysqlParameters.Database = pipelineMySQLSettings.Database
-		c.mysqlParameters.TLSConfig = &migrator.TLSConfig{
-			DBClientKey:  pipelineMySQLSettings.KeyPath,
-			DBCaCert:     pipelineMySQLSettings.CAPATH,
-			DBClientCert: pipelineMySQLSettings.CertPath,
-		}
 		c.sandboxParameters.Database = pipelineMySQLSettings.Database
 		return nil
 	}

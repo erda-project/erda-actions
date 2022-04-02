@@ -71,11 +71,6 @@ func Config() *Configuration {
 // 如果从环境变量中读取的 DSN 信息有效，则返回环境变量中的 DSN 信息;
 // 否则返回从配置文件中读取到的 MySQL Addon 的 DSN 信息.
 func (c Configuration) MySQLParameters() *migrator.DSNParameters {
-	tls := &migrator.TLSConfig{}
-	if c.envs.TLS == "custom" {
-		tls.DBCaCert = c.envs.CACERT
-	}
-
 	if c.envs.MySQLUser != "" {
 		return &migrator.DSNParameters{
 			Username:  c.envs.MySQLUser,
@@ -85,8 +80,6 @@ func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 			Database:  c.envs.MySQLDiceDB,
 			ParseTime: true,
 			Timeout:   time.Second * 150,
-			TLS:       c.envs.TLS,
-			TLSConfig: tls,
 		}
 	}
 
@@ -100,8 +93,6 @@ func (c Configuration) MySQLParameters() *migrator.DSNParameters {
 		Host:      c.cf.Installs.Addons.Mysql.Host,
 		Port:      c.cf.Installs.Addons.Mysql.Port,
 		Database:  c.cf.Installs.Addons.Mysql.Db,
-		TLS:       c.envs.TLS,
-		TLSConfig: tls,
 		ParseTime: true,
 		Timeout:   time.Second * 150,
 	}
@@ -233,9 +224,6 @@ type envs struct {
 	MySQLHost     string `env:"MIGRATION_MYSQL_HOST:MYSQL_HOST"`
 	MySQLPort     uint64 `env:"MIGRATION_MYSQL_PORT:MYSQL_PORT"`
 	MySQLDiceDB   string `env:"MIGRATION_MYSQL_DBNAME:MYSQL_DATABASE"`
-
-	TLS    string `env:"MYSQL_TLS"`
-	CACERT string `env:"MYSQL_CACERT"`
 
 	// flow control parameters
 	SkipLint    bool `env:"MIGRATION_SKIP_LINT"`
