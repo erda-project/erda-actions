@@ -205,6 +205,14 @@ dice_development.yml 文件路径。
       cross_cluster: true # 生成的 release 可以跨集群部署。
 ```
 
+### `app_id` & `app_name`
+
+选填。
+
+用于跨应用生成制品。该字段在图形化编辑界面被隐藏，要使用跨应用生成制品需切换到文本编辑界面手动填写该字段。
+当填写了 `app_id` 或 `app_name` 时，会将制品生成到对应应用下，不填写则生成在当前应用下；
+`app_id` 优先级高于 `app_name`。
+
 ## Action 输出
 
 release action 运行成功后会在当前目录生成 `dicehub-release` 文件。
