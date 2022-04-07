@@ -28,6 +28,8 @@ type Conf struct {
 	MigrationMysqlDatabase string `env:"ACTION_MIGRATION_MYSQL_DATABASE"`
 	CrossCluster           bool   `env:"ACTION_CROSS_CLUSTER" default:"false"`
 	AABInfoStr             string `env:"ACTION_AAB_INFO"`
+	CustomAppName          string `env:"ACTION_APP_NAME"`
+	CustomAppID            int64  `env:"ACTION_APP_ID"`
 	AABInfo                AABInfo
 
 	// env
@@ -57,9 +59,26 @@ type Conf struct {
 	LocalRegistryUserName string `env:"BP_DOCKER_ARTIFACT_REGISTRY_USERNAME"`
 	LocalRegistryPassword string `env:"BP_DOCKER_ARTIFACT_REGISTRY_PASSWORD"`
 
-	DiceVersion  string `env:"DICE_VERSION"`
-	Base64Switch bool   `env:"BASE64_SWITCH"` // base64 开关
+	DiceVersion    string `env:"DICE_VERSION"`
+	Base64Switch   bool   `env:"BASE64_SWITCH"` // base64 开关
 	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
+}
+
+func (c Conf) GetAppIDOrName() interface{} {
+	if c.CustomAppID != 0 {
+		return c.CustomAppID
+	}
+	if c.CustomAppName != "" {
+		return c.CustomAppName
+	}
+	return c.AppID
+}
+
+func (c Conf) GetAppName() string {
+	if c.CustomAppName != "" {
+		return c.CustomAppName
+	}
+	return c.AppName
 }
 
 type Service struct {
