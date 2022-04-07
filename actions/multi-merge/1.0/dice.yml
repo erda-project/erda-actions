@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  multi-merge:
+    image: registry.erda.cloud/erda-actions/multi-merge-action:1.0-20220402-635ede8
+    resources:
+      cpu: 0.1
+      mem: 1024
+      disk: 1024

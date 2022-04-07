@@ -1,0 +1,64 @@
+name: multi-merge
+version: "1.0"
+type: action
+category: source_code_management
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
+public: true
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.0"
+
+params:
+  - name: dest_repo
+    required: true
+    desc: ${{ i18n.params.dest_repo.desc }}
+    default: ((gittar.repo))
+  - name: dest_branch
+    required: true
+    desc: ${{ i18n.params.dest_branch.desc }}
+    default: ((gittar.branch))
+  - name: username
+    desc: ${{ i18n.params.username.desc }}
+    default: ((gittar.username))
+  - name: password
+    desc: ${{ i18n.params.password.desc }}
+    default: ((gittar.password))
+  - name: repos
+    desc: ${{ i18n.params.repos.desc }}
+    type: struct_array
+    struct:
+      - name: uri
+        required: true
+      - name: branches
+        required: true
+        type: string_array
+  - name: git_config
+    desc: ${{ i18n.params.git_config.desc }}
+    type: struct_array
+    struct:
+      - name: name
+        required: true
+      - name: value
+        required: true
+
+locale:
+  zh-CN:
+    desc: 多代码仓库克隆合并
+    displayName: 多代码仓库克隆合并
+    params.dest_repo.desc: 要检出的远程仓库,可使用占位符 ((gittar.branch))
+    params.dest_branch.desc: 要检出的远程目标分支
+    params.password.desc: 密码。可使用占位符 ((gittar.password))
+    params.repos.desc: 要合并到目标仓库分支所有pr
+    params.username.desc: 用户名。可使用占位符 ((gittar.username))
+    params.git_config.desc: git 的配置项
+  en-US:
+    desc: multi-code repository clone and merge
+    displayName: multi-code repository clone and merge
+    params.dest_repo.desc: remote repository to checkout, can use ((gittar.branch)) as placeholder
+    params.dest_branch.desc: remote branch to checkout
+    params.password.desc: password. Can use ((gittar.password)) as placeholder
+    params.repos.desc: repositories to merge all prs
+    params.username.desc: username. Can use ((gittar.username)) as placeholder
+    params.git_config.desc: git configs
