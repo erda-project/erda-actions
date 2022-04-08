@@ -49,6 +49,7 @@ func StartSandbox() error {
 
 func FatalError(f func() error) {
 	if err := f(); err != nil {
+		select {}
 		logrus.Fatalln(err)
 	}
 }
