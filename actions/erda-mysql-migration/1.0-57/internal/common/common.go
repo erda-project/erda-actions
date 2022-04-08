@@ -32,11 +32,15 @@ func StartSandbox() error {
 	envs := os.Environ()
 	sandbox := exec.Command(mysqld)
 	for _, env := range envs {
-		for _, key := range []string{"MYSQL_USER", "MYSQL_USERNAME", "MYSQL_PASSWORD", "MYSQL_DATABASE", "MYSQL_HOST", "MYSQL_PORT"} {
-			if !strings.HasPrefix(env, key+"=") {
-				sandbox.Env = append(sandbox.Env, env)
-			}
+		if strings.HasPrefix(env, "MYSQL_USER=") ||
+			strings.HasPrefix(env, "MYSQL_USERNAME=") ||
+			strings.HasPrefix(env, "MYSQL_PASSWORD=") ||
+			strings.HasPrefix(env, "MYSQL_DATABASE=") ||
+			strings.HasPrefix(env, "MYSQL_HOST=") ||
+			strings.HasPrefix(env, "MYSQL_PORT=") {
+			continue
 		}
+		sandbox.Env = append(sandbox.Env, env)
 	}
 	if err := sandbox.Start(); err != nil {
 		return errors.Wrap(err, "failed to Start sandbox")
@@ -49,7 +53,6 @@ func StartSandbox() error {
 
 func FatalError(f func() error) {
 	if err := f(); err != nil {
-		select {}
 		logrus.Fatalln(err)
 	}
 }
