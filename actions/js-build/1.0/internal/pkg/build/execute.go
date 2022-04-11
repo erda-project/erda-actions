@@ -15,10 +15,11 @@ import (
 )
 
 var SupportNodeVersionFormatMap = map[string]string{
-	"8":  "v8.17.0",
-	"10": "v10.24.1",
-	"12": "v12.22.5",
-	"14": "v14.17.5",
+	"8":  "8",
+	"10": "10",
+	"12": "12",
+	"14": "14",
+	"16": "16"
 }
 
 func Execute() error {

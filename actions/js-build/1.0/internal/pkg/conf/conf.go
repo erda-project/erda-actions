@@ -1,6 +1,6 @@
 package conf
 
-// Conf js action param collection
+// Conf js build action param collection
 type Conf struct {
 	MetaFile string `env:"METAFILE"`
 	WorkDir  string `env:"WORKDIR"`

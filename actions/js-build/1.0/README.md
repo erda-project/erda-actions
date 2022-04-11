@@ -1,6 +1,13 @@
 ### js-build Action
 
-Warning!!! 当前为 Beta 版，不推荐使用，不向前兼容。
+
+#### Params
+
+| 属性 | 说明 | 默认值 |
+|----|---|---|
+| node_version| 特殊指定运行的 node 版本| 12 |
+| build_cmd | 需要执行的 sh 命令| -|
+| workdir | 指定执行命令的文件目录 | - |
 
 例子:
 
