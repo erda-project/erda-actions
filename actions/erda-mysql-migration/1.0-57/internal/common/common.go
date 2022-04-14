@@ -14,7 +14,9 @@
 package common
 
 import (
+	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -27,7 +29,19 @@ const (
 // StartSandbox start a MySQL server in the container
 func StartSandbox() error {
 	logrus.Infoln("Create sandbox")
+	envs := os.Environ()
 	sandbox := exec.Command(mysqld)
+	for _, env := range envs {
+		if strings.HasPrefix(env, "MYSQL_USER=") ||
+			strings.HasPrefix(env, "MYSQL_USERNAME=") ||
+			strings.HasPrefix(env, "MYSQL_PASSWORD=") ||
+			strings.HasPrefix(env, "MYSQL_DATABASE=") ||
+			strings.HasPrefix(env, "MYSQL_HOST=") ||
+			strings.HasPrefix(env, "MYSQL_PORT=") {
+			continue
+		}
+		sandbox.Env = append(sandbox.Env, env)
+	}
 	if err := sandbox.Start(); err != nil {
 		return errors.Wrap(err, "failed to Start sandbox")
 	}
@@ -37,7 +51,7 @@ func StartSandbox() error {
 	return nil
 }
 
-func FatalError(f func() error)  {
+func FatalError(f func() error) {
 	if err := f(); err != nil {
 		logrus.Fatalln(err)
 	}

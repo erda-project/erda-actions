@@ -1,6 +1,7 @@
 name: release-fetch
 version: "1.0"
 type: action
+logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/04/14/1db49dbf-8881-4432-a8c5-12d3945c70ce.png
 category: deploy_management
 desc: Fetch release by query
 public: true

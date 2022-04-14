@@ -16,6 +16,7 @@ package config
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -51,8 +52,7 @@ func Config() *Configuration {
 		if err := configuration.reload(); err != nil {
 			logrus.WithError(err).Errorln("failed to reload configuration")
 		}
-
-		logrus.Infoln(configuration.envs.Sprint())
+		fmt.Println(configuration.envs.Sprint())
 		if !configuration.envs.SkipLint {
 			configFilename := filepath.Join(configuration.MigrationDir(), "config.yml")
 			cfg, err := sqllint.LoadConfigFromLocal(configFilename)

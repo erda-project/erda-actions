@@ -21,7 +21,7 @@ RUN rm -rf `ls | grep -v erda-mysql-migration`
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 # go mod tidy
-RUN go env -w GOPROXY="https://goproxy.io,https://goproxy.cn,direct"
+RUN go env -w GOPROXY="https://goproxy.cn,direct"
 RUN go env -w GOOS="linux"
 RUN go env -w GOARCH="amd64"
 RUN go mod tidy
