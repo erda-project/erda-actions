@@ -48,7 +48,7 @@ func main() {
 			errL.WithError(err).Fatalf("failed to GetGroups")
 		}
 		cfgModes["default"] = &config.Mode{
-			Expose: false,
+			Expose: true,
 			Groups: groups,
 		}
 	} else {
