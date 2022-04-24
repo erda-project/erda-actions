@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"fmt"
 	"time"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/pkg/errors"
@@ -13,7 +14,6 @@ import (
 	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
-	"strings"
 )
 
 func (d *deploy) Do() (string, map[string]*common.DeployResult, error) {
@@ -28,41 +28,47 @@ func (d *deploy) Do() (string, map[string]*common.DeployResult, error) {
 		return "", nil, err
 	}
 
+	var deployError error
+
 	// crate deployment order with interval
 	var resp common.CreateDeploymentOrderResponse
-	err = retry.DoWithInterval(func() error {
+	if err = retry.DoWithInterval(func() error {
 		r, err := httpclient.New(httpclient.WithCompleteRedirect()).
 			Post(d.cfg.DiceOpenapiPrefix).
 			Path(common.DeploymentOrderRequestPath).
 			Header(common.Authorization, d.cfg.DiceOpenapiToken).JSONBody(&req).Do().JSON(&resp)
 		if err != nil {
-			logrus.Errorf("failed to create http client, err: %v", err)
-			return err
-		}
-
-		if !r.IsOK() {
-			reqErr := fmt.Errorf("create a deloyment request failed, statusCode: %d, resp:%+v",
-				r.StatusCode(), resp)
-			logrus.Error(reqErr)
-			return reqErr
+			return fmt.Errorf("failed to create http client, err: %v", err)
 		}
 
 		if !resp.Success {
-			respErr := errors.Errorf("create dice deploy failed. code=%s, message=%s, ctx=%v",
-				resp.Err.Code, resp.Err.Message, resp.Err.Ctx)
-			logrus.Error(respErr)
-			return respErr
+			respErrs := []string{
+				"", // empty line
+				fmt.Sprintf("status code: %d", r.StatusCode()),
+				fmt.Sprintf("response code: %s", resp.Err.Code),
+				fmt.Sprintf("message: %s", resp.Err.Message),
+				fmt.Sprintf("context: %s", resp.Err.Ctx),
+			}
+			respErr := errors.New(strings.Join(respErrs, "\n"))
+			// retry
+			if resp.Err.Ctx["deploymentOrderID"] == "" {
+				return respErr
+			}
+			// if deployment order already created, break
+			deployError = respErr
+			return nil
 		}
 
-		logrus.Infof("request response: %+v", resp)
-
 		return nil
-	}, 5, time.Second*3)
-
-	if err != nil {
-		logrus.Errorf("deploy to dice failed! response err: %v", err)
+	}, 3, time.Second*5); err != nil {
 		return "", nil, err
 	}
+
+	if deployError != nil {
+		return "", nil, deployError
+	}
+
+	logrus.Infof("request response: %+v", resp)
 
 	// parse deploy result
 	ret := make(map[string]*common.DeployResult)
