@@ -22,3 +22,4 @@ locale:
 
 labels:
   maintainer: ld269464@alibaba-inc.com
+  eci_disable: true
