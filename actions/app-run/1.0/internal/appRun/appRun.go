@@ -21,12 +21,19 @@ import (
 )
 
 func handlerPipelineYmlName(ymlName string) string {
-
-	if ymlName != "pipeline.yml" && !strings.HasPrefix(ymlName, ".dice/pipelines") {
-		return ".dice/pipelines/" + ymlName
+	if strings.HasPrefix(ymlName, ".erda/pipelines") {
+		return ymlName
 	}
 
-	return ymlName
+	if strings.HasPrefix(ymlName, ".dice/pipelines") {
+		return ymlName
+	}
+
+	if ymlName == "pipeline.yml" {
+		return ymlName
+	}
+
+	return ".dice/pipelines/" + ymlName
 }
 
 func handleAPIs() error {
@@ -62,7 +69,7 @@ func handleAPIs() error {
 	}
 	logrus.Infof("end run pipeline %s", conf.ActionPipelineYmlName())
 
-	logrus.Infof("wait pipeline done %s", pipelineDTO.ID)
+	logrus.Infof("wait pipeline done %v", pipelineDTO.ID)
 
 	err = storePipelineInfo(pipelineDTO.ID)
 	if err != nil {
@@ -91,7 +98,7 @@ func handleAPIs() error {
 				continue
 			}
 
-			logrus.Infof("pipeline %s was done status %v", pipelineDTO.ID, dto.Status.String())
+			logrus.Infof("pipeline %v was done status %v", pipelineDTO.ID, dto.Status.String())
 
 			runtimeIDs := getDiceTaskRuntimeIDs(dto)
 

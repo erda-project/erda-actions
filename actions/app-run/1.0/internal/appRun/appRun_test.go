@@ -34,3 +34,50 @@ func TestHandlerPipelineYmlName(t *testing.T) {
 		}
 	}
 }
+
+func Test_handlerPipelineYmlName(t *testing.T) {
+	type args struct {
+		ymlName string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "test .dice",
+			args: args{
+				ymlName: ".dice/pipelines/aa.yml",
+			},
+			want: ".dice/pipelines/aa.yml",
+		},
+		{
+			name: "test .erda",
+			args: args{
+				ymlName: ".erda/pipelines/aa.yml",
+			},
+			want: ".erda/pipelines/aa.yml",
+		},
+		{
+			name: "test default .dice",
+			args: args{
+				ymlName: "aa.yml",
+			},
+			want: ".dice/pipelines/aa.yml",
+		},
+		{
+			name: "test pipeline.yml",
+			args: args{
+				ymlName: "pipeline.yml",
+			},
+			want: "pipeline.yml",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := handlerPipelineYmlName(tt.args.ymlName); got != tt.want {
+				t.Errorf("handlerPipelineYmlName() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
