@@ -8,6 +8,7 @@ COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 # go build
+ENV GOPROXY=https://goproxy.io,https://goproxy.cn,direct
 RUN GOOS=linux GOARCH=amd64 go build -o /assets/run /go/src/github.com/erda-project/erda-actions/actions/android/1.0/internal/cmd/main.go
 
 FROM registry.erda.cloud/erda/android-gradle-node:v29
