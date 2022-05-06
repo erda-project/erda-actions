@@ -29,9 +29,11 @@ func Execute() error {
 	if err := os.Chdir(cfg.Context); err != nil {
 		return err
 	}
-	if err := createAndroidBuildCfg(); err != nil {
-		return err
-	}
+	// pipelineID is bigger than the max versionCode(2100000000)
+	// see: https://developer.android.com/studio/publish/versioning
+	//if err := createAndroidBuildCfg(); err != nil {
+	//	return err
+	//}
 	// 替换 gradle 配置
 	cfgMap := make(map[string]string)
 	cfgMap["NEXUS_URL"] = strutil.Concat("http://", strings.TrimPrefix(cfg.NexusUrl, "http://"))
