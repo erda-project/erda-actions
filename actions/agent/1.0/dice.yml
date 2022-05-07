@@ -1,10 +1,10 @@
 ### job 配置项
 jobs:
   agent:
-    image: registry.erda.cloud/erda-actions/action-agent:2.1-alpha-20220424192546-1c9a857f1
+    image: registry.erda.cloud/erda-actions/action-agent:2.2-alpha-20220507134854-9116bec47
     labels:
       # 必填字段
-      MD5: d8c42a46adbb1c328dcf746565eb8052
+      MD5: f693a2b66edf1eb2cd8ebeecfce84bb6
     envs:
       # DEBUG mode, will produce more logs
       DEBUG: false
@@ -12,3 +12,4 @@ jobs:
       ENABLE_PUSH_LOG_TO_COLLECTOR: false
       STDERR_REGEXP_LIST: '["^[a-z]*can*","^[a-z]*fail*"]'
       ENCRYPTED_VAlUE_MIN_LEN: 6
+      FILE_STREAM_TIMEOUT_SEC: 60
