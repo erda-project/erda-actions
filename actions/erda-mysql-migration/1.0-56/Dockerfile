@@ -35,7 +35,7 @@ RUN go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0-57/int
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
 
-FROM registry.erda.cloud/retag/erda-mysql-migration-sandbox56:20210922
+FROM registry.erda.cloud/erda-actions/erda-mysql-migration-sandbox:56-20220509161616
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
