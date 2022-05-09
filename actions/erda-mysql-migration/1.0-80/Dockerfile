@@ -44,6 +44,7 @@ USER root
 VOLUME ["/log", "/migrations"]
 ENV MIGRATION_DIR=/migrations
 
+COPY --from=builder /go/src/github.com/erda-project/erda-actions/go.mod /opt/action/go.mod
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/erda-migrate /usr/bin/erda-migrate
 
