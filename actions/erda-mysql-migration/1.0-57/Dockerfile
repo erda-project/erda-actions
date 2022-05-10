@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-FROM registry.erda.cloud/retag/golang:1.15 AS builder
+FROM golang:1.18 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions/actions
@@ -35,7 +35,7 @@ RUN go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0-57/int
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
 
-FROM registry.erda.cloud/retag/erda-mysql-migration-sandbox57:20210916
+FROM registry.erda.cloud/erda-actions/erda-mysql-migration-sandbox:57-20220509161616
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
@@ -44,6 +44,7 @@ USER root
 VOLUME ["/log", "/migrations"]
 ENV MIGRATION_DIR=/migrations
 
+COPY --from=builder /go/src/github.com/erda-project/erda-actions/go.mod /opt/action/go.mod
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/erda-migrate /usr/bin/erda-migrate
 

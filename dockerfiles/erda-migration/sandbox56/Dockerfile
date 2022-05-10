@@ -13,7 +13,7 @@ COPY dockerfiles/erda-migration/sandbox56/my.cnf /etc/my.cnf
 # install python3
 RUN yum install -y mariadb-devel gcc python3-devel.x86_64
 RUN python3 -m pip --no-cache-dir install pip -U
-RUN python3 -m pip --no-cache-dir config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+RUN python3 -m pip --no-cache-dir config set global.index-url https://mirrors.aliyun.com/pypi/simple
 RUN python3 -m pip --no-cache-dir install mysql-connector-python==8.0.26 django==3.2.4 pytz==2021.1 sqlparse==0.4.1
 
 # support chinese
