@@ -8,58 +8,60 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/base"
-	p "github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/parser"
+	"github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/parser"
 	"github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/tap"
+	"github.com/erda-project/erda-proto-go/dop/qa/unittest/pb"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/qaparser"
 )
 
-func JsTest(codePath string) (*apistructs.TestSuite, error) {
+func JsTest(codePath string) (*pb.TestSuite, []*pb.CodeCoverageNode, error) {
 	var (
 		content []byte
 		err     error
 	)
 	if err = base.ChangeWorkDir(codePath); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	// install npm mocha
 	if err := base.ExecuteCmd("npm install mocha-tap-reporter; npm install"); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if content, err = base.ExecuteCmdOutput("npm run test | grep '^[^>]'"); err != nil {
-		return nil, err
+		return nil, nil, err
+	}
+	suites, err := getUtSuites(string(content), codePath)
+	if err != nil {
+		return nil, nil, err
 	}
 
-	return getUtSuites(string(content), codePath)
+	return suites, nil, nil
 }
 
-func getUtSuites(content, moduleName string) (*apistructs.TestSuite, error) {
+func getUtSuites(content, moduleName string) (*pb.TestSuite, error) {
 	var (
 		suiteTap *tap.Testsuite
 		err      error
 	)
-	if suiteTap, err = p.ParserTapSuite(content); err != nil {
+	if suiteTap, err = parser.ParserTapSuite(content); err != nil {
 		return nil, err
 	}
 
-	suite := &apistructs.TestSuite{
+	suite := &pb.TestSuite{
 		Name: fmt.Sprintf("js(ut):%s", moduleName),
-		Totals: &apistructs.TestTotals{
-			Statuses: make(map[apistructs.TestStatus]int),
+		Totals: &pb.TestTotal{
+			Statuses: make(map[string]int64),
 		},
 		Extra: make(map[string]string),
 	}
 
 	for _, t := range suiteTap.Tests {
-		tests := &apistructs.Test{}
+		tests := &pb.Test{}
 		if !t.Ok {
 			tests.Status = "failed"
-			tests.Error = struct {
-				Body    string `json:"body"`
-				Message string `json:"message"`
-			}{
+			tests.Error = &pb.TestError{
 				Body:    t.Diagnostic,
 				Message: "Failed",
 			}
@@ -69,7 +71,7 @@ func getUtSuites(content, moduleName string) (*apistructs.TestSuite, error) {
 				makeTotals(t.Diagnostic, suite.Totals)
 			}
 		}
-		tests.SystemOut = t.Description
+		tests.Stdout = t.Description
 		tests.Name = t.Description
 		suite.Tests = append(suite.Tests, tests)
 	}
@@ -78,7 +80,7 @@ func getUtSuites(content, moduleName string) (*apistructs.TestSuite, error) {
 	return suite, nil
 }
 
-func makeTotals(diagnostic string, totals *apistructs.TestTotals) {
+func makeTotals(diagnostic string, totals *pb.TestTotal) {
 	var (
 		val int
 		err error
@@ -100,16 +102,17 @@ func makeTotals(diagnostic string, totals *apistructs.TestTotals) {
 			if val, err = strconv.Atoi(ret[1]); err != nil {
 				logrus.Errorf("failed to convert, value: %d, (%+v)", ret[1], err)
 			}
+			dat := int64(val)
 
 			switch ret[0] {
 			case "tests":
-				totals.Tests += val
+				totals.Tests += dat
 			case "pass":
-				totals.Statuses[apistructs.TestStatusPassed] += val
+				totals.Statuses[string(apistructs.TestStatusPassed)] += dat
 			case "fail":
-				totals.Statuses[apistructs.TestStatusFailed] += val
+				totals.Statuses[string(apistructs.TestStatusFailed)] += dat
 			case "skip":
-				totals.Statuses[apistructs.TestStatusSkipped] += val
+				totals.Statuses[string(apistructs.TestStatusSkipped)] += dat
 			}
 		}
 	}

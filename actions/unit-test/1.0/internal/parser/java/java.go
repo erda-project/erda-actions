@@ -13,15 +13,16 @@ import (
 	"github.com/sirupsen/logrus"
 
 	. "github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/base"
-	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/coverage"
+	"github.com/erda-project/erda-proto-go/dop/qa/unittest/pb"
 	"github.com/erda-project/erda/pkg/qaparser"
 	"github.com/erda-project/erda/pkg/qaparser/surefilexml"
 	"github.com/erda-project/erda/pkg/qaparser/testngxml"
 )
 
-func MavenTest(codePath string) (*apistructs.TestSuite, error) {
+func MavenTest(codePath string) (*pb.TestSuite, []*pb.CodeCoverageNode, error) {
 	if err := ChangeWorkDir(codePath); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	// get maven options
@@ -48,7 +49,7 @@ func MavenTest(codePath string) (*apistructs.TestSuite, error) {
 			execCmd = fmt.Sprintf("GRADLE_OPTS=%s ./gradlew test", mvnOpts)
 		} else {
 			// real error
-			return nil, err
+			return nil, nil, err
 		}
 	} else {
 		// found
@@ -80,18 +81,25 @@ func MavenTest(codePath string) (*apistructs.TestSuite, error) {
 		// Get Junit Suites
 		suite = getUtSuites(JunitFile, Junit, codePath)
 		if suite == nil {
-			return nil, errors.New("nil Suites")
+			return nil, nil, errors.New("nil Suites")
 		}
 	}
 
-	return suite, execError
+	jacocoFiles := coverage.GetJacocoFiles(codePath, "jacoco")
+	report, err := coverage.BatchGenCoverageReport(jacocoFiles)
+	if err != nil {
+		logrus.Errorf("gen coverage report failed, err: %v", err)
+		return nil, nil, err
+	}
+
+	return suite, report, execError
 }
 
-func getUtSuites(testFile, testType, moduleName string) *apistructs.TestSuite {
-	suite := &apistructs.TestSuite{
+func getUtSuites(testFile, testType, moduleName string) *pb.TestSuite {
+	suite := &pb.TestSuite{
 		Name: fmt.Sprintf("java(ut):%s", moduleName),
-		Totals: &apistructs.TestTotals{
-			Statuses: make(map[apistructs.TestStatus]int),
+		Totals: &pb.TestTotal{
+			Statuses: make(map[string]int64),
 		},
 		Extra: make(map[string]string),
 	}
@@ -116,7 +124,7 @@ func getUtSuites(testFile, testType, moduleName string) *apistructs.TestSuite {
 		for _, s := range suitesParse {
 			suite.Tests = append(suite.Tests, s.Tests...)
 			totals := &qaparser.Totals{suite.Totals}
-			suite.Totals = totals.Add(s.Totals).TestTotals
+			suite.Totals = totals.Add(s.Totals).TestTotal
 		}
 		suite.Properties = suitesParse[0].Properties
 		suite.Package = suitesParse[0].Package
@@ -144,11 +152,11 @@ func setSuiteExtraInfo() map[string]string {
 	}
 }
 
-func getSuites(f string, testType string) ([]*apistructs.TestSuite, error) {
+func getSuites(f string, testType string) ([]*pb.TestSuite, error) {
 	var (
 		data   []byte
 		err    error
-		suites []*apistructs.TestSuite
+		suites []*pb.TestSuite
 		testNg *testngxml.NgTestResult
 	)
 	if data, err = ioutil.ReadFile(f); err != nil {

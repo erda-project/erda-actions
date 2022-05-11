@@ -18,6 +18,8 @@ params:
     desc: ${{ i18n.params.context.desc }}
   - name: name
     desc: ${{ i18n.params.name.desc }}
+  - name: command
+    desc: ${{ i18n.params.command.desc }}
   - name: go_dir
     desc: ${{ i18n.params.go_dir.desc }}
 
@@ -30,12 +32,14 @@ locale:
     desc: 该 action 是针对 单元测试  的能力抽象，在提交代码时，会自动触发 UT 分析。
     displayName: 单元测试
     params.context.desc: 上下文目录。一般为 repo
-    params.go_dir.desc: golang 代码的路径，需要跟代码里的 import 一样。若测试代码为 golang，则该参数为必填
+    params.command.desc: 自定义命令
     params.name.desc: 该次测试的测试名。
+    params.go_dir.desc: golang 代码的路径，需要跟代码里的 import 一样。若测试代码为 golang，则该参数为必填
 
   en-US:
     desc: This action is an abstraction of UT, and it will be triggered automatically when you submit code.
     displayName: Unit test
     params.context.desc: Context directory. Usually it is the repo.
-    params.go_dir.desc: The path of golang code. It should be the same as the import path in the code. If the test code is golang, this parameter is required.
+    params.command.desc: Custom command
     params.name.desc: The test name.
+    params.go_dir.desc: The path of golang code. It should be the same as the import path in the code. If the test code is golang, this parameter is required.

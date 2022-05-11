@@ -10,6 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/conf"
+	"github.com/erda-project/erda-proto-go/dop/qa/unittest/pb"
 	"github.com/erda-project/erda/apistructs"
 )
 
@@ -67,36 +68,36 @@ func FileExists(name string) bool {
 	return true
 }
 
-func ComposeResults(results *apistructs.TestResults) error {
+func ComposeResults(results *pb.TestResult) error {
 	err := composeEnv(results)
 	if err != nil {
 		return err
 	}
 
-	if len(results.CommitID) > 6 {
-		results.Name = fmt.Sprintf("ut-%s", results.CommitID[:6])
+	if len(results.CommitId) > 6 {
+		results.Name = fmt.Sprintf("ut-%s", results.CommitId[:6])
 	} else {
-		results.Name = fmt.Sprintf("ut-%s", results.CommitID)
+		results.Name = fmt.Sprintf("ut-%s", results.CommitId)
 	}
 
 	results.Status = UTSatus
-	results.Type = apistructs.UT
+	results.Type = string(apistructs.UT)
 
 	return nil
 }
 
-func composeEnv(results *apistructs.TestResults) error {
-	results.OperatorID = Cfg.OperatorID
+func composeEnv(results *pb.TestResult) error {
+	results.OperatorId = Cfg.OperatorID
 	results.OperatorName = Cfg.OperatorName
-	results.ApplicationID = int64(Cfg.AppID)
-	results.ProjectID = int64(Cfg.ProjectID)
+	results.ApplicationId = int64(Cfg.AppID)
+	results.ProjectId = int64(Cfg.ProjectID)
 	results.ApplicationName = Cfg.AppName
-	results.BuildID = Cfg.BuildID
+	results.BuildId = Cfg.BuildID
 	results.GitRepo = Cfg.GittarRepo
 	results.Branch = Cfg.GittarBranch
-	results.CommitID = Cfg.GittarCommit
+	results.CommitId = Cfg.GittarCommit
 	results.Workspace = Cfg.Workspace
-	results.UUID = Cfg.UUID
+	results.Uuid = Cfg.UUID
 
 	return nil
 }

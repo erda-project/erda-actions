@@ -30,3 +30,35 @@ ut action 主要对用户的项目进行单元测试，当用户 push 代码时�
       code: ${git-checkout}/
       command: ./gradlew test # 自定义单元测试命令，默认不用填写，平时自动分析语言类型并填充
 ```
+
+## 代码覆盖率报告
+目前支持java代码生成覆盖率报告，可以通过在pom.xml添加jacoco插件的方式生成报告。
+例如在pom.xml中添加如下插件：
+```yaml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.6</version>
+            <executions>
+                <!--first execution : for preparing JaCoCo runtime agent-->
+                <execution>
+                    <id>prepare-agent</id>
+                    <goals>
+                        <goal>prepare-agent</goal>
+                    </goals>
+                </execution>
+                <!--second execution : for creating code coverage reports-->
+                <execution>
+                    <id>report</id>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```

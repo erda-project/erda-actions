@@ -14,22 +14,22 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/integration-test/1.0/internal/conf"
-	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda-proto-go/dop/qa/unittest/pb"
 	"github.com/erda-project/erda/pkg/qaparser"
 	"github.com/erda-project/erda/pkg/qaparser/surefilexml"
 	"github.com/erda-project/erda/pkg/qaparser/testngxml"
 )
 
-func MavenTest(cfg *conf.Conf) (*apistructs.TestSuite, error) {
+func MavenTest(cfg *conf.Conf) (*pb.TestSuite, error) {
 	var (
 		context string
 		runCmd  string
 		err     error
 		mem     float64
 		mvnOpts string
-		suite   = &apistructs.TestSuite{
-			Totals: &apistructs.TestTotals{
-				Statuses: make(map[apistructs.TestStatus]int),
+		suite   = &pb.TestSuite{
+			Totals: &pb.TestTotal{
+				Statuses: make(map[string]int64),
 			},
 			Extra: make(map[string]string),
 		}
@@ -96,16 +96,16 @@ func MavenTest(cfg *conf.Conf) (*apistructs.TestSuite, error) {
 	return suite, nil
 }
 
-func getItSuites(testFile, testType string) (*apistructs.TestSuite, error) {
+func getItSuites(testFile, testType string) (*pb.TestSuite, error) {
 	var (
-		suitesParse []*apistructs.TestSuite
+		suitesParse []*pb.TestSuite
 		err         error
 	)
 
-	suite := &apistructs.TestSuite{
+	suite := &pb.TestSuite{
 		Name: "it-results",
-		Totals: &apistructs.TestTotals{
-			Statuses: make(map[apistructs.TestStatus]int),
+		Totals: &pb.TestTotal{
+			Statuses: make(map[string]int64),
 		},
 		Extra: make(map[string]string),
 	}
@@ -123,7 +123,7 @@ func getItSuites(testFile, testType string) (*apistructs.TestSuite, error) {
 		for _, s := range suitesParse {
 			suite.Tests = append(suite.Tests, s.Tests...)
 			totals := &qaparser.Totals{suite.Totals}
-			suite.Totals = totals.Add(s.Totals).TestTotals
+			suite.Totals = totals.Add(s.Totals).TestTotal
 		}
 		suite.Properties = suitesParse[0].Properties
 		suite.Package = suitesParse[0].Package
@@ -151,11 +151,11 @@ func setSuiteExtraInfo() map[string]string {
 	}
 }
 
-func getSuites(f string, testType string) ([]*apistructs.TestSuite, error) {
+func getSuites(f string, testType string) ([]*pb.TestSuite, error) {
 	var (
 		data   []byte
 		err    error
-		suites []*apistructs.TestSuite
+		suites []*pb.TestSuite
 		testNg *testngxml.NgTestResult
 	)
 

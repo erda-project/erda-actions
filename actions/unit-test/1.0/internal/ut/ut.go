@@ -14,6 +14,7 @@ import (
 	_go "github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/parser/go"
 	"github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/parser/java"
 	"github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/parser/js"
+	"github.com/erda-project/erda-proto-go/dop/qa/unittest/pb"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
@@ -29,12 +30,13 @@ func NewUt() *Ut {
 func (ut *Ut) UnitTest() error {
 	var (
 		path      string
-		suites    []*apistructs.TestSuite
+		suites    []*pb.TestSuite
+		report    []*pb.CodeCoverageNode
 		language  string
-		suite     *apistructs.TestSuite
+		suite     *pb.TestSuite
 		err       error
 		qaID      string
-		utResults *apistructs.TestCallBackRequest
+		utResults *pb.TestCallBackRequest
 	)
 
 	context := base.Cfg.Context
@@ -45,7 +47,7 @@ func (ut *Ut) UnitTest() error {
 		}
 
 		logrus.Infof("start to execute test, language:%s", language)
-		if suite, err = executeTest(language, path); err != nil {
+		if suite, report, err = executeTest(language, path); err != nil {
 			return err
 		}
 
@@ -62,7 +64,7 @@ func (ut *Ut) UnitTest() error {
 			}
 
 			logrus.Infof("start to execute test, language:%s", language)
-			if suite, err = executeTest(language, p); err != nil {
+			if suite, report, err = executeTest(language, p); err != nil {
 				return err
 			}
 
@@ -73,6 +75,7 @@ func (ut *Ut) UnitTest() error {
 	if utResults, err = makeUtResults(suites); err != nil {
 		return err
 	}
+	utResults.CoverageReport = report
 
 	if qaID, err = callback(utResults); err != nil {
 		logrus.Errorf("failed to callback, (%+v)", err)
@@ -82,7 +85,7 @@ func (ut *Ut) UnitTest() error {
 	return storeMetaFile(qaID, utResults)
 }
 
-func executeTest(language, path string) (*apistructs.TestSuite, error) {
+func executeTest(language, path string) (*pb.TestSuite, []*pb.CodeCoverageNode, error) {
 	switch language {
 	case base.Java:
 		return java.MavenTest(path)
@@ -92,7 +95,7 @@ func executeTest(language, path string) (*apistructs.TestSuite, error) {
 		return _go.GoTest(path)
 	}
 
-	return nil, errors.Errorf("not support, language: %s", language)
+	return nil, nil, errors.Errorf("not support, language: %s", language)
 }
 
 func checkLanguage(path string) (string, error) {
@@ -117,21 +120,21 @@ func checkLanguage(path string) (string, error) {
 	return buildPack.Language, nil
 }
 
-func calculateTotals(suites []*apistructs.TestSuite, totals *apistructs.TestCallBackRequest) {
+func calculateTotals(suites []*pb.TestSuite, totals *pb.TestCallBackRequest) {
 	if totals.Totals == nil {
-		totals.Totals = &apistructs.TestTotals{
-			Statuses: make(map[apistructs.TestStatus]int),
+		totals.Totals = &pb.TestTotal{
+			Statuses: make(map[string]int64),
 		}
 	}
 
 	for _, s := range suites {
 		to := &qaparser.Totals{totals.Totals}
-		totals.Totals = to.Add(s.Totals).TestTotals
+		totals.Totals = to.Add(s.Totals).TestTotal
 	}
 }
 
 // callback to qa
-func callback(req *apistructs.TestCallBackRequest) (string, error) {
+func callback(req *pb.TestCallBackRequest) (string, error) {
 	var result = struct {
 		Success bool   `json:"success"`
 		Data    string `json:"data"`
@@ -167,13 +170,13 @@ func callback(req *apistructs.TestCallBackRequest) (string, error) {
 	return result.Data, nil
 }
 
-func makeUtResults(suites []*apistructs.TestSuite) (*apistructs.TestCallBackRequest, error) {
-	results := &apistructs.TestCallBackRequest{
-		Results: &apistructs.TestResults{
+func makeUtResults(suites []*pb.TestSuite) (*pb.TestCallBackRequest, error) {
+	results := &pb.TestCallBackRequest{
+		Results: &pb.TestResult{
 			Extra: make(map[string]string),
 		},
-		Totals: &apistructs.TestTotals{
-			Statuses: make(map[apistructs.TestStatus]int),
+		Totals: &pb.TestTotal{
+			Statuses: make(map[string]int64),
 		},
 	}
 
@@ -188,7 +191,7 @@ func makeUtResults(suites []*apistructs.TestSuite) (*apistructs.TestCallBackRequ
 	return results, nil
 }
 
-func storeMetaFile(qaID string, req *apistructs.TestCallBackRequest) error {
+func storeMetaFile(qaID string, req *pb.TestCallBackRequest) error {
 	meta := apistructs.ActionCallback{
 		Metadata: apistructs.Metadata{
 			{
