@@ -32,7 +32,7 @@ func TestGoTest(t *testing.T) {
 	cfg := conf.Conf{}
 	cfg.GoDir = "/Users/ddy/go/src/terminus.io/dice/dice/internal"
 
-	suite, err := GoTest("")
+	suite, _, err := GoTest("")
 	assert.Nil(t, err)
 
 	content, err := json.Marshal(suite)

@@ -55,7 +55,7 @@ func TestGetUtSuites(t *testing.T) {
 
 func TestMavenTest(t *testing.T) {
 	t.Log(os.Getenv("JAVA_HOME"))
-	suite, err := MavenTest("")
+	suite, _, err := MavenTest("")
 	assert.Nil(t, err)
 
 	content, err := json.Marshal(suite)

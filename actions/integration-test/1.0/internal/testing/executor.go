@@ -7,21 +7,21 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	"github.com/erda-project/erda-actions/actions/integration-test/1.0/internal/conf"
+	"github.com/erda-project/erda-proto-go/dop/qa/unittest/pb"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda/pkg/qaparser"
-
-	"github.com/erda-project/erda-actions/actions/integration-test/1.0/internal/conf"
 )
 
 func Exec(cfg *conf.Conf) error {
 	var (
-		suites    []*apistructs.TestSuite
-		suite     *apistructs.TestSuite
+		suites    []*pb.TestSuite
+		suite     *pb.TestSuite
 		err       error
 		qaID      string
-		utResults *apistructs.TestCallBackRequest
+		utResults *pb.TestCallBackRequest
 	)
 
 	if suite, err = MavenTest(cfg); err != nil {
@@ -42,7 +42,7 @@ func Exec(cfg *conf.Conf) error {
 }
 
 // callback to qa
-func callback(req *apistructs.TestCallBackRequest, cfg *conf.Conf) (string, error) {
+func callback(req *pb.TestCallBackRequest, cfg *conf.Conf) (string, error) {
 	var result = struct {
 		Success bool   `json:"success"`
 		Data    string `json:"data"`
@@ -113,13 +113,13 @@ func storeMetaFile(cfg *conf.Conf, qaID string) error {
 	return nil
 }
 
-func makeItResults(suites []*apistructs.TestSuite, cfg *conf.Conf) (*apistructs.TestCallBackRequest, error) {
-	results := &apistructs.TestCallBackRequest{
-		Results: &apistructs.TestResults{
+func makeItResults(suites []*pb.TestSuite, cfg *conf.Conf) (*pb.TestCallBackRequest, error) {
+	results := &pb.TestCallBackRequest{
+		Results: &pb.TestResult{
 			Extra: make(map[string]string),
 		},
-		Totals: &apistructs.TestTotals{
-			Statuses: make(map[apistructs.TestStatus]int),
+		Totals: &pb.TestTotal{
+			Statuses: make(map[string]int64),
 		},
 	}
 
@@ -135,28 +135,28 @@ func makeItResults(suites []*apistructs.TestSuite, cfg *conf.Conf) (*apistructs.
 	return results, nil
 }
 
-func calculateTotals(suites []*apistructs.TestSuite, totals *apistructs.TestCallBackRequest) {
+func calculateTotals(suites []*pb.TestSuite, totals *pb.TestCallBackRequest) {
 	if totals.Totals == nil {
-		totals.Totals = &apistructs.TestTotals{
-			Statuses: make(map[apistructs.TestStatus]int),
+		totals.Totals = &pb.TestTotal{
+			Statuses: make(map[string]int64),
 		}
 	}
 	for _, s := range suites {
 		to := &qaparser.Totals{totals.Totals}
-		totals.Totals = to.Add(s.Totals).TestTotals
+		totals.Totals = to.Add(s.Totals).TestTotal
 	}
 }
 
-func composeResults(results *apistructs.TestResults, cfg *conf.Conf, name string) error {
+func composeResults(results *pb.TestResult, cfg *conf.Conf, name string) error {
 	if err := composeEnv(results, cfg); err != nil {
 		return err
 	}
 
 	if name == "" {
-		if len(results.CommitID) > 6 {
-			results.Name = results.CommitID[:6]
+		if len(results.CommitId) > 6 {
+			results.Name = results.CommitId[:6]
 		} else {
-			results.Name = results.CommitID
+			results.Name = results.CommitId
 		}
 	} else {
 		results.Name = name
@@ -168,18 +168,18 @@ func composeResults(results *apistructs.TestResults, cfg *conf.Conf, name string
 	return nil
 }
 
-func composeEnv(results *apistructs.TestResults, cfg *conf.Conf) error {
-	results.OperatorID = cfg.OperatorID
+func composeEnv(results *pb.TestResult, cfg *conf.Conf) error {
+	results.OperatorId = cfg.OperatorID
 	results.OperatorName = cfg.OperatorName
-	results.ApplicationID = int64(cfg.AppID)
-	results.ProjectID = int64(cfg.ProjectID)
+	results.ApplicationId = int64(cfg.AppID)
+	results.ProjectId = int64(cfg.ProjectID)
 	results.ApplicationName = cfg.AppName
-	results.BuildID = cfg.BuildID
+	results.BuildId = cfg.BuildID
 	results.GitRepo = cfg.GittarRepo
 	results.Branch = cfg.GittarBranch
-	results.CommitID = cfg.GittarCommit
+	results.CommitId = cfg.GittarCommit
 	results.Workspace = cfg.Workspace
-	results.UUID = cfg.UUID
+	results.Uuid = cfg.UUID
 
 	return nil
 }

@@ -6,9 +6,8 @@ import (
 
 	"gopkg.in/stretchr/testify.v1/assert"
 
-	"github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/conf"
 	_go "github.com/erda-project/erda-actions/actions/unit-test/1.0/internal/parser/go"
-	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda-proto-go/dop/qa/unittest/pb"
 )
 
 func TestCheckLanguage(t *testing.T) {
@@ -18,12 +17,9 @@ func TestCheckLanguage(t *testing.T) {
 }
 
 func TestGetResults(t *testing.T) {
-	cfg := conf.Conf{}
-	cfg.GoDir = "/Users/ddy/go/src/terminus.io/dice/dice/internal"
+	var suites []*pb.TestSuite
 
-	var suites []*apistructs.TestSuite
-
-	suite, err := _go.GoTest("")
+	suite, _, err := _go.GoTest("")
 	assert.Nil(t, err)
 
 	suites = append(suites, suite)
