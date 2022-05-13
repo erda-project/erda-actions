@@ -20,6 +20,9 @@ params:
   - name: pipeline_yml_name
     desc: ${{ i18n.params.pipeline_yml_name.desc }}
     required: true
+  - name: fail_on_status_failed
+    desc: ${{ i18n.params.fail_on_status_failed.desc }}
+    default: false
 
 outputs:
   - name: pipelineID
@@ -51,6 +54,7 @@ locale:
     params.application_name.desc: 应用名称
     params.branch.desc: 分支名称
     params.pipeline_yml_name.desc: 流水线名称
+    params.fail_on_status_failed.desc: 失败终止
   en-US:
     desc: Execute pipeline and wait for it to complete according to the pipeline file in the repository
     displayName: Application execution
@@ -59,3 +63,6 @@ locale:
     params.application_name.desc: Application name
     params.branch.desc: Branch name
     params.pipeline_yml_name.desc: Pipelien name
+    params.fail_on_status_failed.desc: Terminate after failure
+
+

@@ -102,7 +102,16 @@ func handleAPIs() error {
 
 			runtimeIDs := getDiceTaskRuntimeIDs(dto)
 
-			return storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
+			err = storeMetaFile(dto.ID, dto.Status.String(), runtimeIDs)
+			if err != nil {
+				return err
+			}
+
+			if dto.Status.IsFailedStatus() && conf.ActionFailOnStatusFailed() {
+				return fmt.Errorf("pipeline status %v", dto.Status.String())
+			} else {
+				return nil
+			}
 		}
 
 		time.Sleep(10 * time.Second)

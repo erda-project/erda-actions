@@ -4,9 +4,10 @@ import "github.com/erda-project/erda/pkg/envconf"
 
 // Conf action 入参
 type Conf struct {
-	ActionBranch          string `env:"ACTION_BRANCH" required:"true"`
-	ActionApplicationName string `env:"ACTION_APPLICATION_NAME" required:"true"`
-	ActionPipelineYmlName string `env:"ACTION_PIPELINE_YML_NAME" required:"true"`
+	ActionBranch             string `env:"ACTION_BRANCH" required:"true"`
+	ActionApplicationName    string `env:"ACTION_APPLICATION_NAME" required:"true"`
+	ActionPipelineYmlName    string `env:"ACTION_PIPELINE_YML_NAME" required:"true"`
+	ActionFailOnStatusFailed bool   `env:"ACTION_FAIL_ON_STATUS_FAILED"`
 
 	// env
 	MetaFile             string `env:"METAFILE"`
@@ -70,6 +71,10 @@ func WorkDir() string {
 
 func ActionApplicationName() string {
 	return cfg.ActionApplicationName
+}
+
+func ActionFailOnStatusFailed() bool {
+	return cfg.ActionFailOnStatusFailed
 }
 
 func ActionPipelineYmlName() string {

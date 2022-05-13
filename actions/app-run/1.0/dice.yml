@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   api-run:
-    image: registry.erda.cloud/erda-actions/app-run-action:1.0-20211015-642a763
+    image: registry.erda.cloud/erda-actions/app-run-action:1.0-20220513-6134f82
     resources:
       cpu: 0.5
       mem: 1024
