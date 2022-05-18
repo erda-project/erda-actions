@@ -9,6 +9,7 @@ package diceyml
 import (
 	"strings"
 
+	dockerref "github.com/docker/distribution/reference"
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 )
@@ -263,6 +264,9 @@ func (d *DiceYaml) InsertImage(images map[string]string) error {
 	services := d.Services()
 	jobs := d.Jobs()
 	for name, image := range images {
+		if err := ValidImageName(image); err != nil {
+			return err
+		}
 		if services != nil {
 			if service, ok := services[name]; ok {
 				service["image"] = image
@@ -277,6 +281,14 @@ func (d *DiceYaml) InsertImage(images map[string]string) error {
 	}
 	d.SetJobs(jobs)
 	d.SetServices(services)
+	return nil
+}
+
+func ValidImageName(image string) error {
+	_, err := dockerref.ParseNormalizedNamed(image)
+	if err != nil {
+		return errors.Errorf("couldn't parse image reference %q: %v", image, err)
+	}
 	return nil
 }
 
