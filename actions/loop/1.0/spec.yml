@@ -5,6 +5,13 @@ category: custom_task
 displayName: ${{ i18n.displayName }}
 desc: ${{ i18n.desc }}
 public: true
+loop:
+  break: task_status == 'Success'
+  strategy:
+    max_times: 5
+    decline_limit_sec: 480
+    interval_sec: 15
+    decline_ratio: 2
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
