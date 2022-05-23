@@ -5,7 +5,7 @@ go 1.16
 replace (
 	github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.5
 	github.com/docker/spdystream => github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96
-	github.com/erda-project/erda => github.com/erda-project/erda v0.0.0-20220511095828-bb180bec0f59
+	github.com/erda-project/erda => github.com/erda-project/erda v1.3.0-rc.0.20220523061923-b971304740e2
 	github.com/erda-project/erda-proto-go => github.com/erda-project/erda/api/proto-go v0.0.0-20220511095828-bb180bec0f59
 	github.com/google/gnostic => github.com/googleapis/gnostic v0.4.0
 	github.com/googlecloudplatform/flink-operator => github.com/googlecloudplatform/flink-on-k8s-operator v0.0.0-20200909223554-f302312417ee
