@@ -5,6 +5,7 @@ category: test_management
 public: true
 isDefault: true
 displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/21/825d9774-c095-4b4f-a729-2efd5a33509a.png
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.14"
@@ -188,6 +189,7 @@ accessibleAPIs:
 locale:
   zh-CN:
     displayName: Sonar 代码质量检测
+    desc: 用于对代码仓库执行代码质量检测，生成质量检测报告
     params.code_dir.desc: 执行代码质量分析的目录
     params.delete_project.desc: 分析完成后是否删除 sonar 里对应的项目。默认为 true
     params.language.desc: 语言类型，当前版本需要用户需要明确指定。支持 java / go / js
@@ -204,6 +206,7 @@ locale:
 
   en-US:
     displayName: Sonar Code Quality Check
+    desc: Used to perform code quality inspection on the code warehouse and generate quality inspection reports
     params.code_dir.desc: The directory of code to be analyzed
     params.delete_project.desc: Whether to delete the project after analysis. The default is true
     params.language.desc: The language type. Currently only supports java / go / js
