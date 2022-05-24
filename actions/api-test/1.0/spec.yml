@@ -34,6 +34,8 @@ accessibleAPIs:
     schema: http
 locale:
   zh-CN:
-    displayName: api测试
+    desc: 执行单个接口测试。上层可以通过 pipeline.yml 编排一组接口测试的执行顺序。
+    displayName: 接口测试
   en-US:
-    displayName: API test
+    desc: Execute test of a single interface. The upper layer can orchestrate the execution sequence of interfaces via pipeline.yml.
+    displayName: API testing

@@ -53,11 +53,11 @@ params:
 locale:
   zh-CN:
     desc: 文件同步Action允许用户从对象存储系统中上传或下载文件,当前支持Minio和阿里云OSS
-    displayName: 对象存储系统文件同步
+    displayName: 对象存储文件同步
     params.destFile.desc: 目标文件：云存储上传对应的objectFile,下载对应下载到某个目标地址
     params.srcFile.desc: 源文件：云存储上传对应的本地文件或者下载对应的objectFile
   en-US:
     desc: File Sync Action allows users to upload or download files from the object storage system,Currently supports Minio and Alibaba Cloud OSS
-    displayName: Object Storage System File Sync
+    displayName: Object Storage File Sync
     params.destFile.desc: Target file：objectFile on cloud storage, download to a target address
     params.srcFile.desc: Source File：Upload local file or download objectFile

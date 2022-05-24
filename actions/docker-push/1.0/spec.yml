@@ -2,6 +2,7 @@ name: docker-push
 version: "1.0"
 type: action
 displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 category: custom_task
 params:
 public: true
@@ -13,6 +14,8 @@ supportedErdaVersions:
   - ">= 1.0"
 locale:
   zh-CN:
-    displayName: 容器推送
+    displayName: 容器镜像推送
+    desc: 推送容器镜像到指定仓库
   en-US:
-    displayName: Container push
+    displayName: Container image push
+    desc: Push container image to the specified repo

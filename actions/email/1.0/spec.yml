@@ -33,13 +33,13 @@ accessibleAPIs:
 locale:
   zh-CN:
     desc: 邮件发送
-    displayName: 邮件发送
+    displayName: 用于发送邮件到指定邮箱地址
     params.email_template_addr.desc: 邮件模板文件地址
     params.email_template_object.desc: 邮件模板渲染对象
     params.to_email.desc: 接收人
   en-US:
     desc: Email send
-    displayName: Email send
+    displayName: Used to send mail to the specified email address
     params.email_template_addr.desc: Email template address
     params.email_template_object.desc: Email template rendering object
     params.to_email.desc: Recipient

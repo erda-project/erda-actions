@@ -70,7 +70,7 @@ params:
 locale:
   zh-CN:
     desc: SQL Action执行用户配置的SQL脚本。
-    displayName: sql脚本执行器
+    displayName: SQL 脚本执行器
     params.frequency.desc: 周期大小
     params.inputTables.desc: sql action执行依赖输入表
     params.outputTables.desc: sql action执行输出表
@@ -85,7 +85,7 @@ locale:
 
   en-US:
     desc: SQL Action execute user configed SQL script.
-    displayName: sql executor
+    displayName: SQL Executor
     params.frequency.desc: period size
     params.inputTables.desc: sql action execute depend input table
     params.outputTables.desc: sql action execute output table

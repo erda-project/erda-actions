@@ -65,7 +65,7 @@ outputs:
 locale:
   zh-CN:
     desc: contrast扫描
-    displayName: contrast扫描
+    displayName: 用于ContrastSecurity安全漏洞扫描
     outputs.count.desc: 漏洞总数
     outputs.traces.desc: 漏洞扫描信息
     params.assert_count.desc: 总数断言(>=)
@@ -74,7 +74,7 @@ locale:
     params.status.desc: 状态
     params.username.desc: 用户名
   en-US:
-    desc: Contrast scanning
+    desc: For contractsecurity security vulnerability scanning
     displayName: Contrast scanning
     outputs.count.desc: Total Vulnerability
     outputs.traces.desc: Vulnerability scanning information

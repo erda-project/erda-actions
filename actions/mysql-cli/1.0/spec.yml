@@ -70,7 +70,7 @@ accessibleAPIs:
 locale:
   zh-CN:
     desc: 在对应的数据源中执行 sql 语句
-    displayName: mysql 配置单
+    displayName: mysql 命令行
     formProps.params.componentProps.title: 任务参数
     formProps.params.database.componentProps.placeHolder: 请输入数据
     formProps.params.database.labelTip: 数据库名称
@@ -84,7 +84,7 @@ locale:
 
   en-US:
     desc: Execute sql in the corresponding data source
-    displayName: mysql config sheet
+    displayName: mysql command line
     formProps.params.componentProps.title: Task Parameters
     formProps.params.database.componentProps.placeHolder: Please enter data
     formProps.params.database.labelTip: Database name

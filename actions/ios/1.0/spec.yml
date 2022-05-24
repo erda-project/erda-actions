@@ -3,7 +3,7 @@ version: "1.0"
 type: action
 category: build_management
 displayName: ${{ i18n.displayName }}
-desc: ios remote action
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
@@ -57,7 +57,8 @@ accessibleAPIs:
 
 locale:
   zh-CN:
-    displayName: ios构建
+    desc: 构建 iOS 安装包
+    displayName: iOS构建
     params.commands.desc: 构建命令列表
     params.context.desc: 代码路径
     params.mobile_provision.desc: mobileprovision文件
@@ -70,7 +71,8 @@ locale:
     params.targets.desc: 构建产物路径
 
   en-US:
-    displayName: ios build
+    desc: Build iOS package
+    displayName: iOS build
     params.commands.desc: build command list
     params.context.desc: code path
     params.mobile_provision.desc: mobileprovision file

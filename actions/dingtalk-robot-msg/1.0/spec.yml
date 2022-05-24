@@ -2,7 +2,8 @@ name: dingtalk-robot-msg
 version: "1.0"
 type: action
 category: build_management
-desc: Notify to dingtalk by robot
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedErdaVersions:
   - ">= 1.5"
@@ -16,3 +17,13 @@ params:
     desc: message context, used in jsonnet
   - name: msg_file
     desc: message file path
+
+
+locale:
+  zh-CN:
+    desc: 用于对接钉钉机器人，发送钉钉通知
+    displayName: 发送钉钉通知
+
+  en-US:
+    desc: Used for docking nail robot and sending nail notification
+    displayName: Send DingTalk Message

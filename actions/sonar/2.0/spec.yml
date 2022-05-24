@@ -4,6 +4,7 @@ type: action
 category: test_management
 public: true
 displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/21/825d9774-c095-4b4f-a729-2efd5a33509a.png
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.14"
@@ -36,6 +37,7 @@ accessibleAPIs:
 locale:
   zh-CN:
     displayName: Sonar 代码质量检测
+    desc: 用于对代码仓库执行代码质量检测，生成质量检测报告
     params.code_dir.desc: 执行代码质量分析的目录
     params.must_gate_status_ok.desc: 是否要求代码门禁检查状态为 ok
     params.sonar_project_key.desc: 对应 sonar 里的 project key。若不填写，使用应用配置里的sonar project key
@@ -45,6 +47,7 @@ locale:
 
   en-US:
     displayName: Sonar Code Quality Check
+    desc: Used to perform code quality inspection on the code warehouse and generate quality inspection reports
     params.code_dir.desc: The directory of code to be analyzed
     params.must_gate_status_ok.desc: Whether the code gate status is required as ok
     params.sonar_project_key.desc: The project key in sonar. If not filled in, the system will use the project key in the application configuration

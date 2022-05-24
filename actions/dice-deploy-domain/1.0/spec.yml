@@ -3,7 +3,7 @@ version: "1.0"
 type: action
 category: deploy_management
 desc: ${{ i18n.desc }}
-public: true
+public: false
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.19"
 supportedErdaVersions:

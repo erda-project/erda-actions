@@ -4,7 +4,7 @@ type: action
 category: build_management
 displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/666f1bf9-5e6d-43cb-803b-2d217361e28e.png
-desc: golang action
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
@@ -32,6 +32,7 @@ outputs:
     desc: ${{ i18n.outputs.image.desc }}
 locale:
   zh-CN:
+    desc: 构建 go 语言应用
     displayName: go语言构建打包
     outputs.image.desc: 镜像
     params.assets.desc: 资源文件
@@ -42,6 +43,7 @@ locale:
     params.target.desc: 构建产物路径
 
   en-US:
+    desc: Build go-lang application
     displayName: go build and package
     outputs.image.desc: Image
     params.assets.desc: Assets

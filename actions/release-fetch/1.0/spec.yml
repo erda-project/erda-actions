@@ -1,9 +1,10 @@
 name: release-fetch
 version: "1.0"
 type: action
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 logoUrl: http://terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2022/04/15/b23127cf-0ba7-48d1-b763-b8cd8c6e26d4.png
 category: deploy_management
-desc: Fetch release by query
 public: true
 supportedErdaVersions:
   - ">= 1.5"
@@ -26,3 +27,12 @@ accessibleAPIs:
   - path: /api/releases
     method: GET
     schema: http
+
+locale:
+  zh-CN:
+    desc: 用于根据 ID 获取 Erda 制品的详细信息
+    displayName: 获取制品详情
+
+  en-US:
+    desc: It is used to obtain the details of Erda products according to the ID
+    displayName: Get Release Detail

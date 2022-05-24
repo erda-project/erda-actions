@@ -3,7 +3,7 @@ version: "1.0"
 type: action
 category: build_management
 displayName: ${{ i18n.displayName }}
-desc: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.10"
@@ -38,7 +38,7 @@ formProps:
 
 locale:
   zh-CN:
-    desc: gitbook构建
+    desc: 构建 gitbook 应用
     displayName: gitbook构建
     formProps.params.componentProps.title: 任务参数
     formProps.params.workdir.componentProps.placeHolder: 请输入数据
@@ -47,7 +47,7 @@ locale:
     params.workdir.desc: gitbook doc目录
 
   en-US:
-    desc: gitbook build
+    desc: Build gitbook application
     displayName: gitbook build
     formProps.params.componentProps.title: Task Parameters
     formProps.params.workdir.componentProps.placeHolder: Please enter data
