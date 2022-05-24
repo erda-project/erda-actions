@@ -3,7 +3,7 @@ version: "4.0"
 type: action
 category: big_data
 displayName: ${{ i18n.displayName }}
-desc: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
 loop:
   break: task_status == 'Success'
   strategy:
@@ -24,11 +24,11 @@ params:
     desc: ${{ i18n.params.config.desc }}
 locale:
   zh-CN:
-    desc: python执行
-    displayName: python执行
+    desc: 用于执行 Python 脚本
+    displayName: Python 执行
     params.config.desc: action 配置
 
   en-US:
-    desc: python execute
-    displayName: python execute
+    desc: For executing Python script
+    displayName: Python execute
     params.config.desc: action config

@@ -37,8 +37,8 @@ params:
     default: ""
 locale:
   zh-CN:
-    desc: 上传文件到OSS
-    displayName: oss文件上传
+    desc: 用于上传文件到OSS
+    displayName: OSS文件上传
     params.endpoint.desc: 区域endpoint
     params.local_path.desc: 本地路径,支持目录和文件
     params.meta.desc: 文件元信息

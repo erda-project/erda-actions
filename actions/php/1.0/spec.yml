@@ -4,7 +4,7 @@ type: action
 category: build_management
 displayName: ${{ i18n.displayName }}
 logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/7f3b441c-52ca-4a7b-805d-d11b0ebc80e5.jpeg
-desc: php action
+desc: ${{ i18n.desc }}
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.9"
@@ -24,12 +24,14 @@ outputs:
 
 locale:
   zh-CN:
-    displayName: php镜像构建
+    desc: 用于构建 PHP 应用
+    displayName: PHP 镜像构建
     outputs.image.desc: 镜像
     params.context.desc: 代码路径
     params.index_path.desc: 启动目录
 
   en-US:
+    desc: build php application
     displayName: php image build
     outputs.image.desc: Image
     params.context.desc: Code path

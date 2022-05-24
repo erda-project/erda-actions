@@ -2,7 +2,7 @@ name: mysqldump
 version: 1.0
 type: action
 category: test_management
-desc: mysqldump
+desc: ${{ i18n.desc }}
 logoUrl: ""
 public: true
 supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
@@ -68,6 +68,7 @@ params:
     desc: ${{ i18n.params.post_commands.desc }}
 locale:
   zh-CN:
+    desc: MySQL 逻辑备份工具
     params.dump_all_tables.desc: 是否操作指定数据库下的所有表。可配合 dump_all_tables_ignore_regexp 使用，即导出所有表，除了指定的需要忽略的表
     params.dump_all_tables_ignore_regexp.desc: 导出指定数据库下的所有表时(dump_all_tables=true)，忽略匹配正则表达式的表。例如：^(fdp|pmp).*$ 忽以 fdp 或 pmp 开头的表
     params.global_charset.desc: 全局字符集
@@ -86,6 +87,7 @@ locale:
     params.post_commands.desc: dump 完成后执行一组后置命令，例如 sed 等。dump 文件可以使用环境变量 DUMP_FILE_PATH 获取，例如：head ${DUMP_FILE_PATH}
 
   en-US:
+    desc: MySQL logical backup tool
     params.dump_all_tables.desc: Whether to operate all tables of the specified database. Can be used together with dump_all_tables_ignore_regexp to export all tables, except for the specified tables to be ignored
     params.dump_all_tables_ignore_regexp.desc: "When exporting all tables of the specified database (dump_all_tables=true), ignore the tables matching the regular expression. For example: ^(fdp|pmp).*$ ignores tables starting with fdp or pmp"
     params.global_charset.desc: Global character set

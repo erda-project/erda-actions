@@ -1,4 +1,5 @@
 name: project-package
+displayName: ${{ i18n.displayName }}
 version: "1.0"
 type: action
 category: version_management
@@ -42,6 +43,7 @@ outputs:
 
 locale:
   zh-CN:
+    displayName: 构建 Erda 项目制品
     desc: 用于 Erda 平台制作项目工程包
     outputs.package_url.desc: 项目工程包压缩文件下载链接
     params.artifacts.struct.name.desc: 制品名称
@@ -49,6 +51,7 @@ locale:
     params.artifacts.struct.version.desc: 制品版本
     params.wait_minutes.desc: 等待分钟数
   en-US:
+    displayName: Erda Project Release Build
     desc: Used to produce package for project on the Erda platform
     outputs.package_url.desc: Project package zip file download url
     params.artifacts.struct.name.desc: Artifact name

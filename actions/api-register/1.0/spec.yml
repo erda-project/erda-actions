@@ -36,8 +36,8 @@ outputs:
 
 locale:
   zh-CN:
-    desc: 用于Api的注册
-    displayName: api注册
+    desc: 用于注册API到网关
+    displayName: API 注册
     outputs.registerId.desc: 注册id
     params.runtime_id.desc: runtime_id值 eg:${dice:OUTPUT:runtimeID}
     params.service_addr.desc: 如果是外部服务需要填写

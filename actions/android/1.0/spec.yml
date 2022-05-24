@@ -3,7 +3,7 @@ version: "1.0"
 type: action
 displayName: android
 category: build_management
-desc: android action
+desc:  ${{ i18n.desc }}
 public: true
 labels:
   eci_disable: true
@@ -25,11 +25,13 @@ params:
 
 locale:
   zh-CN:
+    desc: 用于构建 Andriod 安装包的 action
     params.commands.desc: 构建命令列表
     params.context.desc: 代码路径
     params.target.desc: 构建产物路径
 
   en-US:
+    desc: Action for building Android installation package
     params.commands.desc: Build command list
     params.context.desc: Code path
     params.target.desc: Build product path
