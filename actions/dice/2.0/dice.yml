@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   dice:
-    image: registry.erda.cloud/erda-actions/dice-action:2.0-20220424-44eb6b9
+    image: registry.erda.cloud/erda-actions/dice-action:2.0-20220526091954-7f89081
     resources:
       cpu: 0.2
       mem: 512

@@ -4,7 +4,6 @@ import (
 	"time"
 	"strconv"
 	"fmt"
-	"strings"
 	"encoding/json"
 
 	"github.com/sirupsen/logrus"
@@ -13,25 +12,18 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/retry"
-	"github.com/erda-project/erda/pkg/http/httpclient"
-	"github.com/erda-project/erda/pkg/http/httputil"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/common"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
+	"github.com/erda-project/erda-actions/pkg/metawriter"
 )
 
 func BatchReportRuntimeInfo(conf *conf.Conf, rets map[string]*common.DeployResult) error {
-	runtimeIds := make([]string, 0)
-
-	cb := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
-			{Name: apistructs.ActionCallbackOperatorID, Value: conf.OperatorID},
-		},
-		PipelineID:     conf.PipelineBuildID,
-		PipelineTaskID: conf.PipelineTaskID,
+	if err := metawriter.WriteKV(apistructs.ActionCallbackOperatorID, conf.OperatorID); err != nil {
+		logrus.Errorf("failed to write operator id to meta: %v", err)
 	}
 
+	runtimeIds := make([]string, 0, len(rets))
 	for appName, result := range rets {
 		runtimeId := strconv.FormatUint(result.RuntimeId, 10)
 		runtimeIds = append(runtimeIds, runtimeId)
@@ -43,52 +35,17 @@ func BatchReportRuntimeInfo(conf *conf.Conf, rets map[string]*common.DeployResul
 		// TODO: report all applicationName_runtimeId format, link to deployment order info
 		switch utils.ConvertType(conf.ReleaseTye) {
 		case common.TypeProjectRelease, common.TypeApplicationRelease:
-			cb.Metadata = append(cb.Metadata, apistructs.MetadataField{
-				Name:  fmt.Sprintf("%s_%s", appName, apistructs.ActionCallbackRuntimeID),
-				Value: runtimeId,
-			})
+			if err := metawriter.WriteKV(fmt.Sprintf("%s_%s", appName, apistructs.ActionCallbackRuntimeID), runtimeId); err != nil {
+				logrus.Errorf("failed to write %s_%s to meta: %v", appName, apistructs.ActionCallbackRuntimeID, err)
+			}
 		default:
-			cb.Metadata = append(cb.Metadata, apistructs.MetadataField{
-				Name:  apistructs.ActionCallbackRuntimeID,
-				Value: runtimeId,
-				Type:  apistructs.ActionCallbackTypeLink,
-			})
+			if err := metawriter.WriteLink(apistructs.ActionCallbackRuntimeID, runtimeId); err != nil {
+				logrus.Errorf("failed to write runtime %s link to meta: %v", runtimeId, err)
+			}
 			break
 		}
 	}
 
-	b, err := json.Marshal(&cb)
-	if err != nil {
-		return err
-	}
-
-	var cbReq apistructs.PipelineCallbackRequest
-	cbReq.Type = string(apistructs.PipelineCallbackTypeOfAction)
-	cbReq.Data = b
-
-	if err = retry.DoWithInterval(func() error {
-		var resp apistructs.PipelineCallbackResponse
-		r, err := httpclient.New(httpclient.WithCompleteRedirect()).
-			Post(conf.DiceOpenapiPrefix).
-			Path("/api/pipelines/actions/callback").
-			Header("Authorization", conf.DiceOpenapiToken).
-			Header(httputil.UserHeader, conf.UserID).
-			Header(httputil.InternalHeader, conf.InternalClient).
-			JSONBody(&cbReq).
-			Do().
-			JSON(&resp)
-		if err != nil {
-			return err
-		}
-		if !r.IsOK() || !resp.Success {
-			return errors.Errorf("status-code %d, resp %#v", r.StatusCode(), resp)
-		}
-		logrus.Infof("report runtimeID %s to pipeline platform successfully!", strings.Join(runtimeIds, ","))
-		return nil
-	}, 3, time.Millisecond*500); err != nil {
-		logrus.Infof("report runtimeID to pipeline platform failed! err: %v", err)
-		return err
-	}
 	return nil
 }
 
