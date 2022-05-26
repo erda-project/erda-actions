@@ -1,7 +1,7 @@
 name: java-lint
 version: "1.0"
 type: action
-category: lint_management
+category: source_code_management
 displayName: ${{ i18n.displayName }}
 desc: ${{ i18n.desc }}
 labels:

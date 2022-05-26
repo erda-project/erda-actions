@@ -1,7 +1,7 @@
 name: java-unit
 version: "1.0"
 type: action
-category: unit_management
+category: test_management
 displayName: ${{ i18n.displayName }}
 desc: ${{ i18n.desc }}
 labels:

@@ -1,7 +1,7 @@
 name: testplan
 version: "1.0"
 type: action
-category: testplan_management
+category: test_management
 displayName: ${{ i18n.displayName }}
 desc: ${{ i18n.desc }}
 labels:
