@@ -4,6 +4,7 @@ type: action
 displayName: ${{ i18n.displayName }}
 desc: ${{ i18n.desc }}
 public: true
+category: custom_task
 executor:
   kind: "WAIT"
   name: "wait"
