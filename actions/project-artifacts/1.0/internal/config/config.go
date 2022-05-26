@@ -15,6 +15,7 @@ package config
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 	"time"
@@ -108,6 +109,10 @@ func (cfg Config) Print() {
 	}
 }
 
+func (cfg Config) AppendChangLog(s string) {
+	cfg.ChangeLog += s
+}
+
 type Mode struct {
 	DependOn []string `json:"dependOn" yaml:"dependOn"`
 	Expose   bool     `json:"expose" yaml:"expose"`
@@ -142,5 +147,10 @@ func GetConfig() (*Config, error) {
 		}
 		c.Version += "+" + time.Now().In(location).Format("20060102150405")
 	}
+
+	if data, err := ioutil.ReadFile(c.ChangeLog); err == nil && len(data) > 0 {
+		c.ChangeLog = string(data)
+	}
+
 	return c, nil
 }
