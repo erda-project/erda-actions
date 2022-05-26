@@ -60,7 +60,7 @@ func main() {
 		}
 	}
 
-	cfg.ChangeLog += "\n### " + time.Now().Format("2006-01-02 15:04:05")
+	cfg.AppendChangLog("\n### " + time.Now().Format("2006-01-02 15:04:05"))
 
 	modes := make(map[string]oapi.Mode)
 	for name, mode := range cfgModes {
@@ -82,13 +82,13 @@ func main() {
 						i, j, app.Name, app.Branch)
 					_ = metawriter.WriteWarn(fmt.Sprintf("missing group[%v].applications[%v], name: %s, branch: %s, releaseID: %s",
 						i, j, app.Name, app.Branch, app.ReleaseID))
-					cfg.ChangeLog += fmt.Sprintf("\n- [ ] %s %s %s", app.Name, app.Branch, app.ReleaseID)
+					cfg.AppendChangLog(fmt.Sprintf("\n- [ ] %s %s %s", app.Name, app.Branch, app.ReleaseID))
 					continue
 				}
 				infoL.Infof("group[%v].applications[%v], name: %s, branch: %s, releaseID: %s",
 					i, j, app.Name, app.Branch, releaseID)
 				releases[i] = append(releases[i], releaseID)
-				cfg.ChangeLog += fmt.Sprintf("\n- [x] %s %s %s", app.Name, app.Branch, app.ReleaseID)
+				cfg.AppendChangLog(fmt.Sprintf("\n- [x] %s %s %s", app.Name, app.Branch, app.ReleaseID))
 			}
 		}
 		modes[name] = oapi.Mode{
@@ -97,7 +97,7 @@ func main() {
 			ApplicationReleaseList: releases,
 		}
 	}
-	cfg.ChangeLog += "\n"
+	cfg.AppendChangLog("\n")
 
 	releaseID, err := oapi.CreateProjectRelease(cfg, modes)
 	if err != nil {

@@ -16,7 +16,7 @@ FROM --platform=linux/amd64 registry.erda.cloud/erda/centos:7
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
 # build go
-RUN wget https://go.dev/dl/go1.17.7.linux-amd64.tar.gz
+RUN wget https://golang.google.cn/dl/go1.17.7.linux-amd64.tar.gz
 RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.7.linux-amd64.tar.gz
 
 # build cmd
@@ -24,7 +24,7 @@ COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions/actions
 RUN rm -rf `ls | grep -v project-artifacts`
 WORKDIR /go/src/github.com/erda-project/erda-actions
-RUN /usr/local/go/bin/go env -w GOPROXY="https://goproxy.io,https://goproxy.cn,direct"
+RUN /usr/local/go/bin/go env -w GOPROXY="https://goproxy.cn,direct"
 RUN /usr/local/go/bin/go env -w GOOS="linux"
 RUN /usr/local/go/bin/go env -w GOARCH="amd64"
 RUN /usr/local/go/bin/go mod tidy
