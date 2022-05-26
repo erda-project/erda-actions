@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 GitBranch=$(shell git rev-parse --abbrev-ref HEAD)
 GitCommit=$(shell git rev-parse --short HEAD)
-Date=$(shell date +"%Y%m%d")
+Date=$(shell date '+%Y%m%d%H%M%S')
 BuildTime=$(shell date '+%Y-%m-%d %T%z')
 Registry="registry.erda.cloud/erda-actions"
 RegistryForPush="registry.erda.cloud/erda-actions"

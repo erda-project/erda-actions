@@ -31,19 +31,28 @@ var (
 	m = meta{}
 )
 
+type MetadataLevel string
+
+var (
+	MetadataLevelError MetadataLevel = "ERROR"
+	MetadataLevelWarn  MetadataLevel = "WARN"
+	MetadataLevelInfo  MetadataLevel = "INFO"
+)
+
 type meta struct {
 	Metadata []ele `json:"metadata"`
 }
 
 type ele struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
-	Type  string `json:"type,omitempty"`
+	Name  string        `json:"name"`
+	Value string        `json:"value"`
+	Type  string        `json:"type,omitempty"`
+	Level MetadataLevel `json:"level,omitempty"`
 }
 
 // Write is the shortcut for New(filename).Write(key, value)
 func Write(values map[string]interface{}) (err error) {
-	return w.Write(values)
+	return w.Write(values, MetadataLevelInfo)
 }
 
 // WriteKV is the shortcut for New(filename).Write(key, value)
@@ -79,9 +88,9 @@ func New(filename string) *Writer {
 	return &Writer{filename: filename}
 }
 
-func (w Writer) Write(values map[string]interface{}) error {
+func (w Writer) Write(values map[string]interface{}, level MetadataLevel) error {
 	for k, v := range values {
-		m.Metadata = append(m.Metadata, ele{Name: k, Value: fmt.Sprintf("%v", v)})
+		m.Metadata = append(m.Metadata, ele{Name: k, Value: fmt.Sprintf("%v", v), Level: level})
 	}
 	data, err := json.Marshal(m)
 	if err != nil {
@@ -91,7 +100,7 @@ func (w Writer) Write(values map[string]interface{}) error {
 }
 
 func (w Writer) WriteKV(k string, v interface{}) error {
-	return w.Write(map[string]interface{}{k: v})
+	return w.Write(map[string]interface{}{k: v}, MetadataLevelInfo)
 }
 
 // WriteSuccess writes the final result is whether success or fails.
@@ -102,17 +111,19 @@ func (w Writer) WriteSuccess(success bool) error {
 // WriteLink writes key-value with link
 func (w Writer) WriteLink(k string, v interface{}) error {
 	m.Metadata = append(m.Metadata, ele{Name: k, Value: fmt.Sprintf("%v", v), Type: "link"})
-	return w.Write(make(map[string]interface{}))
+	return w.Write(make(map[string]interface{}), MetadataLevelInfo)
 }
 
 // WriteWarn writes warn info to meta file
 func (w Writer) WriteWarn(v interface{}) error {
 	warnIndex++
-	return w.WriteKV("warn-"+strconv.FormatUint(warnIndex, 10), v)
+	k := "warn-" + strconv.FormatUint(warnIndex, 10)
+	return w.Write(map[string]interface{}{k: v}, MetadataLevelWarn)
 }
 
 // WriteError writes err info to meta file
 func (w Writer) WriteError(v interface{}) error {
 	errIndex++
-	return w.WriteKV("err-"+strconv.FormatUint(errIndex, 10), v)
+	k := "err-" + strconv.FormatUint(errIndex, 10)
+	return w.Write(map[string]interface{}{k: v}, MetadataLevelError)
 }

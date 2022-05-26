@@ -47,10 +47,6 @@ accessibleAPIs:
   - path: /api/deployment-orders/<deploymentOrderID>
     method: GET
     schema: http
-  # pipeline callback
-  - path: /api/pipelines/actions/callback
-    method: GET
-    schema: http
   # cancel deployment order deploying
   - path: /api/deployment-orders/<deploymentOrderID>/actions/cancel
     method: POST

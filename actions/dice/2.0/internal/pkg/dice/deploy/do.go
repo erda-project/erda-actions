@@ -14,11 +14,13 @@ import (
 	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
+	"github.com/erda-project/erda-actions/pkg/metawriter"
 )
 
 func (d *deploy) Do() (string, map[string]*common.DeployResult, error) {
 	// preCheck params
 	if err := paramsPreCheck(d.cfg); err != nil {
+		_ = metawriter.WriteError(err.Error())
 		return "", nil, err
 	}
 
@@ -56,6 +58,7 @@ func (d *deploy) Do() (string, map[string]*common.DeployResult, error) {
 			}
 			// if deployment order already created, break
 			deployError = respErr
+			_ = metawriter.WriteError(resp.Err.Message)
 			return nil
 		}
 
