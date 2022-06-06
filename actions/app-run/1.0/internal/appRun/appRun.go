@@ -185,12 +185,12 @@ func startPipeline(req apistructs.PipelineCreateRequest) (*apistructs.PipelineDT
 		return nil, fmt.Errorf("start pipeline error %s", err)
 	}
 
-	if !resp.Success {
-		return nil, fmt.Errorf("start pipeline not success %s", resp.Error.Msg)
+	if !r.IsOK() {
+		return nil, fmt.Errorf("start pipeline failed, status code: %d, resp body: %s", r.StatusCode(), string(r.Body()))
 	}
 
-	if !r.IsOK() {
-		return nil, fmt.Errorf("start pipeline failed")
+	if !resp.Success {
+		return nil, fmt.Errorf("start pipeline not success %s, status code: %d, resp body: %s", resp.Error.Msg, r.StatusCode(), string(r.Body()))
 	}
 
 	return resp.Data, nil
@@ -204,7 +204,7 @@ type PipelineDetailRequest struct {
 func pipelineSimpleDetail(req PipelineDetailRequest) (*apistructs.PipelineDetailDTO, error) {
 
 	var resp apistructs.PipelineDetailResponse
-	response, err := httpclient.New(httpclient.WithCompleteRedirect()).
+	r, err := httpclient.New(httpclient.WithCompleteRedirect()).
 		Get(conf.DiceOpenapiPublicUrl()).
 		Path("/api/cicds/actions/pipeline-detail").
 		Param("simplePipelineBaseResult", strconv.FormatBool(req.SimplePipelineBaseResult)).
@@ -215,12 +215,13 @@ func pipelineSimpleDetail(req PipelineDetailRequest) (*apistructs.PipelineDetail
 		return nil, fmt.Errorf("failed to request (%s)", err.Error())
 	}
 
-	if !response.IsOK() {
-		return nil, fmt.Errorf(fmt.Sprintf("failed to request, status-code: %d, content-type: %s", response.StatusCode(), response.ResponseHeader("Content-Type")))
+	if !r.IsOK() {
+		return nil, fmt.Errorf(fmt.Sprintf("failed to request, status code: %d, resp body: %s", r.StatusCode(), string(r.Body())))
 	}
 
 	if !resp.Success {
-		return nil, fmt.Errorf(fmt.Sprintf("failed to request, error code: %s, error message: %s", resp.Error.Code, resp.Error.Msg))
+		return nil, fmt.Errorf(fmt.Sprintf("failed to request, error code: %s, error message: %s, status code: %d, resp body: %s",
+			resp.Error.Code, resp.Error.Msg, r.StatusCode(), string(r.Body())))
 	}
 
 	return resp.Data, nil

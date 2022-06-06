@@ -45,12 +45,12 @@ func cancelPipeline(pipelineID uint64) error {
 		return fmt.Errorf("cancel pipeline error %s", err)
 	}
 
-	if !resp.Success {
-		return fmt.Errorf("cancel pipeline not success %s", resp.Error.Msg)
+	if !r.IsOK() {
+		return fmt.Errorf("cancel pipeline failed, status-code: %d, resp-body: %s", r.StatusCode(), string(r.Body()))
 	}
 
-	if !r.IsOK() {
-		return fmt.Errorf("cancel pipeline failed")
+	if !resp.Success {
+		return fmt.Errorf("cancel pipeline not success %s, status-code: %d, resp-body: %s", resp.Error.Msg, r.StatusCode(), string(r.Body()))
 	}
 
 	return nil
