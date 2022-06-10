@@ -2,6 +2,6 @@ jobs:
   loop:
     image: registry.erda.cloud/erda-actions/loop-action:20200710-d0aace2
     resources:
-      cpu: 0.01
-      mem: 32
+      cpu: 0.1
+      mem: 128
       disk: 0
