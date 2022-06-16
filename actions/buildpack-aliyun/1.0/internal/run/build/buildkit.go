@@ -106,8 +106,7 @@ func dockerBuildForBuildkit() error {
 	}
 	//TODO: buildkitd addr from env
 	buildCmdArgs := []string{
-		"--addr",
-		"tcp://buildkitd.default.svc.cluster.local:1234",
+		"--addr", conf.Params().BuildkitdAddr,
 		"--tlscacert=/.buildkit/ca.pem",
 		"--tlscert=/.buildkit/cert.pem",
 		"--tlskey=/.buildkit/key.pem",

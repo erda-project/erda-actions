@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   golang:
-    image: registry.erda.cloud/erda-actions/golang-action:1.0-20220507-220e7a1
+    image: registry.erda.cloud/erda-actions/golang-action:1.0-20220616133117-4116644
     resources:
       cpu: 0.5
       mem: 1024

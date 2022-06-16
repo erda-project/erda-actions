@@ -28,7 +28,8 @@ type Conf struct {
 	LocalRegistryUserName string `env:"BP_DOCKER_ARTIFACT_REGISTRY_USERNAME"`
 	LocalRegistryPassword string `env:"BP_DOCKER_ARTIFACT_REGISTRY_PASSWORD"`
 	// pipeline注入，docker build资源限制
-	CPU    float64 `env:"PIPELINE_LIMITED_CPU" default:"1"`    // 核数, eg: 1
-	Memory int     `env:"PIPELINE_LIMITED_MEM" default:"2048"` // 单位: M
-	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
+	CPU            float64 `env:"PIPELINE_LIMITED_CPU" default:"1"`    // 核数, eg: 1
+	Memory         int     `env:"PIPELINE_LIMITED_MEM" default:"2048"` // 单位: M
+	BuildkitEnable string  `env:"BUILDKIT_ENABLE"`
+	BuildkitdAddr  string  `env:"BUILDKITD_ADDR" default:"tcp://buildkitd.default.svc.cluster.local:1234"`
 }

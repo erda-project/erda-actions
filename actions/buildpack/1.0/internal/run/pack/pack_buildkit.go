@@ -123,8 +123,7 @@ func dockerPackBuildForBuildkit() ([]byte, error) {
 	}
 
 	buildCmdArgs := []string{
-		"--addr",
-		"tcp://buildkitd.default.svc.cluster.local:1234",
+		"--addr", conf.Params().BuildkitdAddr,
 		"--tlscacert=/.buildkit/ca.pem",
 		"--tlscert=/.buildkit/cert.pem",
 		"--tlskey=/.buildkit/key.pem",
@@ -178,7 +177,7 @@ func dockerPackBuildForBuildkit() ([]byte, error) {
 			return nil, err
 		}
 		tagPushScript = append(tagPushScript,
-			fmt.Sprintf("buildctl --addr tcp://buildkitd.default.svc.cluster.local:1234 --tlscacert=/.buildkit/ca.pem --tlscert=/.buildkit/cert.pem --tlskey=/.buildkit/key.pem build --frontend dockerfile.v0 --local context=. --local dockerfile=%s --output type=image,name=%s,push=true", filepath.Dir(dockerfileForARGPath), m.Image.Name),
+			fmt.Sprintf("buildctl --addr %s --tlscacert=/.buildkit/ca.pem --tlscert=/.buildkit/cert.pem --tlskey=/.buildkit/key.pem build --frontend dockerfile.v0 --local context=. --local dockerfile=%s --output type=image,name=%s,push=true", conf.Params().BuildkitdAddr, filepath.Dir(dockerfileForARGPath), m.Image.Name),
 		)
 
 		packResult = append(packResult, ModuleImage{m.Name, m.Image.Name})

@@ -68,8 +68,9 @@ type params struct {
 	BpArgs         map[string]string
 	ForceBuildpack bool `env:"ACTION_FORCE_BUILDPACK"`
 
-	JavaOpts string `env:"ACTION_JAVA_OPTS"`
+	JavaOpts       string `env:"ACTION_JAVA_OPTS"`
 	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
+	BuildkitdAddr  string `env:"BUILDKITD_ADDR" default:"tcp://buildkitd.default.svc.cluster.local:1234"`
 }
 
 type Module struct {

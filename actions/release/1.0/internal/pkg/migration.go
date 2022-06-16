@@ -124,7 +124,7 @@ func packAndPushAppImage(cfg *conf.Conf) (string, error) {
 	repo := getRepo(*cfg)
 
 	if cfg.BuildkitEnable == "true" {
-		if err := packWithBuildkit(repo); err != nil {
+		if err := packWithBuildkit(cfg.BuildkitdAddr, repo); err != nil {
 			return "", err
 		}
 	} else {
@@ -161,10 +161,9 @@ func packWithDocker(repo string) error {
 	return nil
 }
 
-func packWithBuildkit(repo string) error {
+func packWithBuildkit(buildkitdAddr, repo string) error {
 	packCmd := exec.Command("buildctl",
-		"--addr",
-		"tcp://buildkitd.default.svc.cluster.local:1234",
+		"--addr", buildkitdAddr,
 		"--tlscacert=/.buildkit/ca.pem",
 		"--tlscert=/.buildkit/cert.pem",
 		"--tlskey=/.buildkit/key.pem",
