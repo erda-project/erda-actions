@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   gitbook:
-    image: registry.erda.cloud/erda-actions/gitbook-action:1.0-20211221-641f8b6
+    image: registry.erda.cloud/erda-actions/gitbook-action:1.0-20220616134008-b0e1554
     resources:
       cpu: 1
       mem: 512

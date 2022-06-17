@@ -62,6 +62,7 @@ type Conf struct {
 	DiceVersion    string `env:"DICE_VERSION"`
 	Base64Switch   bool   `env:"BASE64_SWITCH"` // base64 开关
 	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
+	BuildkitdAddr  string `env:"BUILDKITD_ADDR" default:"tcp://buildkitd.default.svc.cluster.local:1234"`
 }
 
 func (c Conf) GetAppIDOrName() interface{} {

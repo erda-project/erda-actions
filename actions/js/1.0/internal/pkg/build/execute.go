@@ -277,8 +277,7 @@ func packWithDocker(repo string, cfg conf.Conf) error {
 
 func packWithBuildkit(repo string, cfg conf.Conf) error {
 	packCmd := exec.Command("buildctl",
-		"--addr",
-		"tcp://buildkitd.default.svc.cluster.local:1234",
+		"--addr", cfg.BuildkitdAddr,
 		"--tlscacert=/.buildkit/ca.pem",
 		"--tlscert=/.buildkit/cert.pem",
 		"--tlskey=/.buildkit/key.pem",

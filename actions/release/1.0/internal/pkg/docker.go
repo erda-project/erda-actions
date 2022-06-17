@@ -146,7 +146,7 @@ func buildDockerFile(service conf.Service, imageName string, cfg *conf.Conf) boo
 
 	//build
 	if cfg.BuildkitEnable == "true" {
-		return buildWithBuildkit(imageName, dockerFileAddr, service)
+		return buildWithBuildkit(cfg.BuildkitdAddr, imageName, dockerFileAddr, service)
 	} else {
 		return buildWithDocker(imageName, dockerFileAddr, service)
 	}
@@ -168,10 +168,9 @@ func buildWithDocker(imageName string, dockerFileAddr string, service conf.Servi
 	return true
 }
 
-func buildWithBuildkit(imageName string, dockerFileAddr string, service conf.Service) bool {
+func buildWithBuildkit(buildkitdAddr, imageName, dockerFileAddr string, service conf.Service) bool {
 	packCmd := exec.Command("buildctl",
-		"--addr",
-		"tcp://buildkitd.default.svc.cluster.local:1234",
+		"--addr", buildkitdAddr,
 		"--tlscacert=/.buildkit/ca.pem",
 		"--tlscert=/.buildkit/cert.pem",
 		"--tlskey=/.buildkit/key.pem",

@@ -1,11 +1,11 @@
 FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
-FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
+FROM registry.erda.cloud/erda/terminus-golang:1.16.7 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
 # go build
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run github.com/erda-project/erda-actions/actions/js/1.0/internal/cmd
+RUN GOPROXY=https://goproxy.cn,direct GOOS=linux GOARCH=amd64 go build -o /opt/action/run github.com/erda-project/erda-actions/actions/js/1.0/internal/cmd
 RUN mkdir -p /opt/action/comp && \
     cp -r actions/js/1.0/comp/* /opt/action/comp
 
