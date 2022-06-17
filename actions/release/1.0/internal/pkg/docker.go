@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
+	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/labstack/gommon/random"
 	"github.com/sirupsen/logrus"
 )
@@ -152,7 +153,6 @@ func buildDockerFile(service conf.Service, imageName string, cfg *conf.Conf) boo
 	}
 }
 
-
 func buildWithDocker(imageName string, dockerFileAddr string, service conf.Service) bool {
 	cmd := fmt.Sprintf(" docker build -t %s -f %s ./%s", imageName, dockerFileAddr, getServiceTempPath(service.Name))
 	fmt.Println("build cmd :", cmd)
@@ -161,7 +161,7 @@ func buildWithDocker(imageName string, dockerFileAddr string, service conf.Servi
 		return false
 	}
 
-	if err := runCommand(fmt.Sprintf(" docker push %s", imageName)); err != nil {
+	if err := docker.PushByCmd(imageName, ""); err != nil {
 		logrus.Errorf(" services %v:  docker run push error: %v ", service.Name, err)
 		return false
 	}
@@ -176,9 +176,9 @@ func buildWithBuildkit(buildkitdAddr, imageName, dockerFileAddr string, service 
 		"--tlskey=/.buildkit/key.pem",
 		"build",
 		"--frontend", "dockerfile.v0",
-		"--local", "context=./" + getServiceTempPath(service.Name),
-		"--local", "dockerfile=" + filepath.Dir(dockerFileAddr),
-		"--output", "type=image,name=" + imageName + ",push=true")
+		"--local", "context=./"+getServiceTempPath(service.Name),
+		"--local", "dockerfile="+filepath.Dir(dockerFileAddr),
+		"--output", "type=image,name="+imageName+",push=true")
 
 	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
 	packCmd.Stdout = os.Stdout
@@ -187,9 +187,8 @@ func buildWithBuildkit(buildkitdAddr, imageName, dockerFileAddr string, service 
 		logrus.Errorf(" services %v:  build image from buildkit error: %v ", service.Name, err)
 		return false
 	}
-	return  true
+	return true
 }
-
 
 func getServiceTempPath(serviceName string) string {
 	return serviceName + "_temp/"

@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   release:
-    image: registry.erda.cloud/erda-actions/release-action:1.0-20220616131949-96713b1
+    image: registry.erda.cloud/erda-actions/release-action:1.0-20220617152943-fd2e81a
     envs:
       BASE64_SWITCH: false
     resources:
