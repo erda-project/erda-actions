@@ -1,0 +1,45 @@
+name: js-pack
+version: "1.0"
+type: action
+category: build_management
+displayName: ${{ i18n.displayName }}
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/09/28/ba477ac1-c375-4fd4-ba23-b76966830daf.jpeg
+desc: ${{ i18n.desc }}
+public: true
+labels:
+  project_level_app: true
+supportedErdaVersions:
+  - ">= 1.0"
+
+params:
+  - name: node_version
+    type: string
+    desc: ${{ i18n.params.node_version.desc }}
+    default: "14"
+  - name: workdir
+    type: string
+    desc: ${{ i18n.params.workdir.desc }}
+    required: true
+  - name: build_cmd
+    type: string_array
+    desc: ${{ i18n.params.build_cmd.desc }}
+    required: true
+  - name: preserve_time
+    type: string
+    desc: ${{ i18n.params.preserve_time.desc }}
+locale:
+  zh-CN:
+    desc: 针对 js 工程的编译打包任务
+    displayName: js 工程打包
+    params.build_cmd.desc: 编译 nodejs 命令
+    params.workdir.desc: 编译 nodejs 命令
+    params.node_version.desc: 版本
+    params.preserve_time.desc: 出错时 job 容器的保留时间（单位为秒）
+
+  en-US:
+    desc: A task to compile and package js project
+    displayName: js project build and package
+    params.build_cmd.desc: Build command
+    params.workdir.desc: Build command
+    params.node_version.desc: Version
+    params.preserve_time.desc: job container reverse time when failed (unit is second)

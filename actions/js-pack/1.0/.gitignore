@@ -1,0 +1,26 @@
+# Files for macos
+*.DS_Store
+._*
+
+# Files for ideas
+.idea/*
+*.iml
+
+# Files for vim
+.*.sw?
+
+# Files for direnv
+.envrc
+
+# Files for vscode
+**/.vscode/*
+.vendor/*
+
+# Dependency directories (remove the comment below to include it)
+node_modules/
+dist
+
+# for local debug
+report.*.json
+npm-debug.log
+yarn-error.log

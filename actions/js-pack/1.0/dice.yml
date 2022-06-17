@@ -1,0 +1,7 @@
+### job 配置项
+jobs:
+  js-build:
+    image: registry.erda.cloud/erda-actions/js-pack:1.0
+    resources:
+      cpu: 1
+      mem: 2048
