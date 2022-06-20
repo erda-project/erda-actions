@@ -40,5 +40,7 @@ Examples:
 - java-dependency-check:
     params:
       code_dir: ${git-checkout} # 代码目录
+	  goal: check # available values: check, aggregate, default: check
+	  fail_build_on_cvss: 9.0 # cvss score: 0-10, default: 9.0
 ```
 
