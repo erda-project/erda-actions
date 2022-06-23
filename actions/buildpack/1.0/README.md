@@ -167,28 +167,29 @@ bp_args 指定构建过程中可以使用的 K/V 对，格式为 map[string]stri
 
 目前开放的参数：
 
-#### MAVEN_OPTS
+1. MAVEN_OPTS
+
+> build_type: maven / maven_edas
+ 
+> 生效位置：`${MAVEN_OPTS} mvn clean pacakge ...`
+
+2. MAVEN_EXTRA_ARGS
 
 > build_type: maven / maven_edas
 
-`${MAVEN_OPTS} mvn clean pacakge ...`
-
-#### MAVEN_EXTRA_ARGS
-
-> build_type: maven / maven_edas
-
-`mvn clean package ${MAVEN_EXTRA_ARGS}`
-
+> 生效位置：`mvn clean package ${MAVEN_EXTRA_ARGS}`
+ 
 一般用来指定 profile，例如 "-P dev"
 
-#### NODE_OPTIONS
+3. NODE_OPTIONS
 
 > build_type: npm
 
-- `${NODE_OPTIONS} npm ci`
-- `${NODE_OPTIONS} DICE_WORKSPACE=${DICE_WORKSPACE} npm run build`
+> 生效位置：`${NODE_OPTIONS} npm ci`
+>
+> 生效位置：`${NODE_OPTIONS} DICE_WORKSPACE=${DICE_WORKSPACE} npm run build`
 
-#### DEP_CMD
+4. DEP_CMD
 
 > build_type: npm
 
@@ -196,7 +197,7 @@ bp_args 指定构建过程中可以使用的 K/V 对，格式为 map[string]stri
 
 例如：`npm i` 或 `yum install -y gcc && npm ci`
 
-#### WEBPACK_DLL_CONFIG
+5. WEBPACK_DLL_CONFIG
 
 > build_type: npm
 
@@ -204,7 +205,7 @@ bp_args 指定构建过程中可以使用的 K/V 对，格式为 map[string]stri
 
 若为 true，则会执行 `DICE_WORKSPACE=${DICE_WORKSPACE} npm run dll`
 
-#### PUBLIC_DIR
+6. PUBLIC_DIR
 
 > container_type: spa
 
@@ -212,7 +213,7 @@ spa 应用在执行 `npm run build` 后生成的静态文件的目录。
 
 默认值为 public。
 
-### only_build
+7. only_build
 
 选填。
 
