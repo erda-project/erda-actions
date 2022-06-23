@@ -52,7 +52,7 @@ require (
 	github.com/cespare/trie v0.0.0-20150610204604-3fe1a95cbba9 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/docker/cli v20.10.5+incompatible
-	github.com/docker/distribution v2.7.1+incompatible
+	github.com/docker/distribution v2.8.0+incompatible
 	github.com/erda-project/erda v1.5.0
 	github.com/erda-project/erda-proto-go v0.0.0
 	github.com/hashicorp/go-multierror v1.1.0
