@@ -29,6 +29,9 @@ func Execute() error {
 	if err := os.Chdir(cfg.Context); err != nil {
 		return err
 	}
+	if len(cfg.Target) == 0 && len(cfg.Targets) == 0 {
+		return errors.New("no target specified")
+	}
 	// pipelineID is bigger than the max versionCode(2100000000)
 	// see: https://developer.android.com/studio/publish/versioning
 	//if err := createAndroidBuildCfg(); err != nil {
@@ -54,14 +57,15 @@ func Execute() error {
 	}
 	fmt.Fprintln(os.Stdout, fmt.Sprintf("build target success"))
 
-	if _, err := os.Stat(cfg.Target); err != nil {
-		if os.IsNotExist(err) {
-			return errors.New(fmt.Sprintf("target file %s not exist", cfg.Target))
+	if len(cfg.Target) > 0 {
+		if err := cpTarget(cfg.Target); err != nil {
+			return err
 		}
-		return err
 	}
-	if err := cp(cfg.Target, cfg.WorkDir); err != nil {
-		return err
+	for _, target := range cfg.Targets {
+		if err := cpTarget(target); err != nil {
+			return err
+		}
 	}
 
 	fmt.Fprintln(os.Stdout, "target files")
@@ -77,6 +81,19 @@ func runCommand(cmd ...string) error {
 	buildCmd.Stdout = os.Stdout
 	buildCmd.Stderr = os.Stderr
 	if err := buildCmd.Run(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func cpTarget(target string) error {
+	if _, err := os.Stat(target); err != nil {
+		if os.IsNotExist(err) {
+			return errors.New(fmt.Sprintf("target file %s not exist", target))
+		}
+		return err
+	}
+	if err := cp(target, cfg.WorkDir); err != nil {
 		return err
 	}
 	return nil

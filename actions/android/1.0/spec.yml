@@ -21,7 +21,9 @@ params:
     desc: ${{ i18n.params.commands.desc }}
   - name: target
     desc: ${{ i18n.params.target.desc }}
-    required: true
+  - name: targets
+    type: string_array
+    desc: ${{ i18n.params.targets.desc }}
 
 locale:
   zh-CN:
@@ -29,10 +31,12 @@ locale:
     params.commands.desc: 构建命令列表
     params.context.desc: 代码路径
     params.target.desc: 构建产物路径
+    params.targets.desc: 多构建产物路径
 
   en-US:
     desc: Action for building Android installation package
     params.commands.desc: Build command list
     params.context.desc: Code path
     params.target.desc: Build product path
+    params.targets.desc: Multiple build product path
 

@@ -1,8 +1,8 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.14 as builder
+FROM registry.erda.cloud/retag/golang:1.16-alpine3.14 as builder
 
 MAINTAINER shenli shenli@terminus.io
 
-ENV GOLANG_VERSION 1.12.7
+ENV GOLANG_VERSION 1.16.7
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
