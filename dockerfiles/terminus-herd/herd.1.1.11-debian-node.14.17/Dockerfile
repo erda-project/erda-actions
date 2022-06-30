@@ -45,7 +45,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
        git gcc make g++ vim \
        # SEE: https://github.com/BurntSushi/ripgrep
        # SEE: https://github.com/sharkdp/fd#installation
-       tree fd-find ripgrep htop bzip2 unzip lsof \
+       tree fd-find ripgrep htop bzip2 unzip lsof procps \
     # Make /bin/sh symlink to bash instead of dash:
     && echo "dash dash/sh boolean false" | debconf-set-selections \
     && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash \
