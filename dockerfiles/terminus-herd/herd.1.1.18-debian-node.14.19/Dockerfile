@@ -1,11 +1,11 @@
 # Git: git version 2.30.2
 # gcc version 10.2.1 20210110 (Debian 10.2.1-6)
-# Node: 14.18.2 LTS, npm: 6.14.15, yarn: 1.22.15, herd: 1.1.11, pnpm: 6.25.0
+# Node: 14.19.3 LTS, npm: 6.14.17, yarn: 1.22.19, herd: 1.1.18, pnpm: 7.4.0, fnm: 1.31.0
 # /etc/os-release: Debian: Debian GNU/Linux 11 (bullseye)
-# Kernel: Linux 08f4f27793e7 5.10.47-linuxkit Sat Jul 3 21:51:47 2021 x86_64
-# Build cmd: docker build . -t terminus/debian-node.14-herd.1.1.11
-# Other tags: terminus/debian-herd:1.1.11-n14.18,terminus/debian-herd:1.1.11
-FROM registry.erda.cloud/retag/node:14.18.2-bullseye-slim
+# Kernel: Linux cd92393eb566 5.10.104-linuxkit Thu Mar 17 17:08:06 UTC 2022 x86_64 GNU/Linux
+# Build cmd: docker build . -t terminus/debian-node.14-herd.1.1.18
+# Other tags: terminus/debian-herd:1.1.18-n14.19,terminus/debian-herd:1.1.18
+FROM node:14.19.3-bullseye-slim
 
 LABEL maintainer=hustcer<majun@terminus.io>
 
@@ -66,7 +66,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && echo 'set enc=utf8' >> /etc/vim/vimrc \
     && echo 'set fencs=utf8,gbk,gb2312,gb18030' >> /etc/vim/vimrc \
     # Add --unsafe-perm to fix 'Error: EACCES: permission denied, mkdir...' issue while install node-sass
-    && npm i -g --unsafe-perm @terminus/herd@1.1.11 \
+    && npm i -g --unsafe-perm @terminus/herd@1.1.18 \
     && npm i -g pnpm@latest \
     && rm -rf /var/lib/apt/lists/* && apt autoremove -y \
     # Add dice and erda user and create home dir
