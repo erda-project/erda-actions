@@ -5,7 +5,7 @@
 # Kernel: Linux cd92393eb566 5.10.104-linuxkit Thu Mar 17 17:08:06 UTC 2022 x86_64 GNU/Linux
 # Build cmd: docker build . -t terminus/debian-node.14-herd.1.1.18
 # Other tags: terminus/debian-herd:1.1.18-n14.19,terminus/debian-herd:1.1.18
-FROM node:14.19.3-bullseye-slim
+FROM --platform=$TARGETPLATFORM node:14.19.3-bullseye-slim
 
 LABEL maintainer=hustcer<majun@terminus.io>
 
