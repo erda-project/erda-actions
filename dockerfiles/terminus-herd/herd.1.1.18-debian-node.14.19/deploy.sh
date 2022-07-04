@@ -3,7 +3,6 @@ set -eo pipefail
 
 image=registry.erda.cloud/erda-actions/terminus-debian-herd:1.1.18-n14.19
 
-docker build . -t ${image}
-docker push ${image}
+docker buildx build --platform linux/amd64 -t ${image} --push . -f Dockerfile
 
 echo "action meta: terminus-debian-herd-1.1.18-n14.19=$image"
