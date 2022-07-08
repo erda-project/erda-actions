@@ -12,10 +12,17 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
   - ">= 3.5"
 supportedErdaVersions:
   - ">= 1.0"
+
+outputs:
+  - name: image
+    desc: ${{ i18n.image }}
+
 locale:
   zh-CN:
     displayName: 容器镜像推送
     desc: 推送容器镜像到指定仓库
+    image: 镜像
   en-US:
     displayName: Container image push
     desc: Push container image to the specified repo
+    image: image

@@ -12,10 +12,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/pkg/docker"
+	"github.com/erda-project/erda-actions/pkg/envconf"
+	"github.com/erda-project/erda-actions/pkg/meta"
 	"github.com/erda-project/erda-actions/pkg/pack"
 )
 
@@ -49,6 +51,7 @@ func run() error {
 		cfg         Conf
 		resultBytes []byte
 		err         error
+		image       string
 	)
 	if err := envconf.Load(&cfg); err != nil {
 		return err
@@ -62,9 +65,11 @@ func run() error {
 	}
 
 	if !cfg.Pull {
+		image = cfg.Image
 		resultBytes, err = pushImage(cfg)
 	} else {
-		resultBytes, err = pullImage(cfg)
+		image = docker.GetInnerRepoAddr(cfg.ProjectAppAbbr, cfg.DiceOperatorId, cfg.TaskName, cfg.LocalRegistry)
+		resultBytes, err = pullImage(cfg, image)
 	}
 
 	if err != nil {
@@ -72,10 +77,14 @@ func run() error {
 		return err
 	}
 
+	collector := meta.NewResultMetaCollector()
+	collector.Add("image", image)
+	logrus.Infof("successfully upload metafile")
+
 	if err := filehelper.CreateFile(filepath.Join(cfg.WorkDir, "pack-result"), string(resultBytes), 0644); err != nil {
 		return err
 	}
-
+	logrus.Infof("successfully write pack-result")
 	return nil
 }
 
@@ -123,9 +132,7 @@ func pushImage(cfg Conf) ([]byte, error) {
 	return json.MarshalIndent(imageResult, "", "  ")
 }
 
-func pullImage(cfg Conf) ([]byte, error) {
-	fmt.Fprintf(os.Stdout, "config: %+v\n", cfg)
-	toImage := docker.GetInnerRepoAddr(cfg.ProjectAppAbbr, cfg.DiceOperatorId, cfg.TaskName, cfg.LocalRegistry)
+func pullImage(cfg Conf, toImage string) ([]byte, error) {
 	fmt.Fprintf(os.Stdout, "image from: %s\n", cfg.Image)
 	fmt.Fprintf(os.Stdout, "image to: %s\n", toImage)
 
@@ -191,6 +198,12 @@ func simpleRun(name string, arg ...string) error {
 }
 
 func main() {
+	logrus.SetFormatter(&logrus.TextFormatter{
+		DisableColors:    true,
+		DisableTimestamp: true,
+	})
+	logrus.SetOutput(os.Stdout)
+
 	if err := run(); err != nil {
 		fmt.Fprintf(os.Stdout, "docker-push failed, %v", err)
 		os.Exit(1)
