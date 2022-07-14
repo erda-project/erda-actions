@@ -5,8 +5,7 @@ go 1.16
 replace (
 	github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.5
 	github.com/docker/spdystream => github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96
-	github.com/erda-project/erda => github.com/erda-project/erda v1.3.0-rc.0.20220523061923-b971304740e2
-	github.com/erda-project/erda-proto-go => github.com/erda-project/erda/api/proto-go v0.0.0-20220511095828-bb180bec0f59
+	github.com/erda-project/erda-proto-go => ../erda/api/proto-go
 	github.com/google/gnostic => github.com/googleapis/gnostic v0.4.0
 	github.com/googlecloudplatform/flink-operator => github.com/googlecloudplatform/flink-on-k8s-operator v0.0.0-20200909223554-f302312417ee
 	github.com/influxdata/influxql => github.com/erda-project/influxql v1.1.0-ex
@@ -53,7 +52,7 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/docker/cli v20.10.5+incompatible
 	github.com/docker/distribution v2.8.0+incompatible
-	github.com/erda-project/erda v1.5.0
+	github.com/erda-project/erda f2632ae42163622ae1fdaf17ddb68ee341233343
 	github.com/erda-project/erda-proto-go v0.0.0
 	github.com/hashicorp/go-multierror v1.1.0
 	github.com/labstack/gommon v0.3.0
