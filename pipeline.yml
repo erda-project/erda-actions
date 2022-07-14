@@ -1,0 +1,350 @@
+version: "1.1"
+name: ""
+stages:
+  - stage:
+      - git-checkout:
+          alias: git-checkout
+          description: 代码仓库克隆
+          version: "1.0"
+          params:
+            branch: ((gittar.branch))
+            depth: 1
+            uri: ((gittar.uri))
+          timeout: 3600
+      - git-checkout:
+          alias: raw-erda
+          version: "1.0"
+          params:
+            branch: master
+            depth: 1
+            password: ((gittar.password))
+            uri: https://github.com/erda-project/erda.git
+            username: ((gittar.username))
+          timeout: 3600
+  - stage:
+      - custom-script:
+          alias: erda
+          image: registry.erda.cloud/erda/gohub:1.0.7
+          commands:
+            - cp -a ${{ dirs.raw-erda }}/. .
+            - make proto-go-in-local
+          resources:
+            cpu: 0.5
+            mem: 2048
+  - stage:
+      - custom-script:
+          alias: make-As
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make add-nodes
+            - VERSION='1.0' make agent
+            - VERSION='1.0' make android
+            - VERSION='1.0' make api-publish
+            - VERSION='1.0' make api-register
+            - VERSION='1.0' make api-test
+            - VERSION='2.0' make api-test
+            - VERSION='1.0' make app-create
+            - VERSION='1.0' make app-run
+            - VERSION='1.0' make archive-extensions
+            - VERSION='1.0' make archive-release
+            - VERSION='1.0' make assert
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Bs
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make buildpack
+            - VERSION='1.0' make buildpack-aliyun
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Cs
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make cloud-resource
+            - VERSION='1.0' make cluster-resource
+            - VERSION='1.0' make contrast-security
+            - VERSION='1.0' make cs-kubernetes
+            - VERSION='1.0' make cs-kubernetes-scale
+            - VERSION='1.0' make custom-script
+            - VERSION='2.0' make custom-script
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Ds
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make datax
+            - VERSION='1.1' make datax
+            - VERSION='1.2' make datax
+            - VERSION='1.0' make delete-ess-nodes
+            - VERSION='1.0' make dice
+            - VERSION='2.0' make dice
+            - VERSION='1.0' make dice-deploy
+            - VERSION='1.0' make dice-deploy-addon
+            - VERSION='1.0' make dice-deploy-domain
+            - VERSION='1.0' make dice-deploy-redeploy
+            - VERSION='1.0' make dice-deploy-release
+            - VERSION='1.0' make dice-deploy-rollback
+            - VERSION='1.0' make dice-deploy-service
+            - VERSION='1.0' make dingtalk-robot-msg
+            - VERSION='1.0' make docker-push
+            - VERSION='1.0' make dockerfile
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Es
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='0.1' make echo
+            - VERSION='1.0' make echo
+            - VERSION='1.3' make echo
+            - VERSION='1.0' make email
+            - VERSION='1.0' make erda-add-app-config
+            - VERSION='1.0' make erda-create-custom-addon
+            - VERSION='1.0' make erda-get-addon-info
+            - VERSION='1.0' make erda-get-service-addr
+            - VERSION='1.0-56' make erda-mysql-migration
+            - VERSION='1.0-57' make erda-mysql-migration
+            - VERSION='1.0-80' make erda-mysql-migration
+            - VERSION='1.0' make ess-info
+            - VERSION='1.0' make extract-repo-version
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Fs
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make file-sync
+            - VERSION='1.1' make file-sync
+            - VERSION='1.0' make flink-upload
+            - VERSION='1.1' make flink-upload
+          resources:
+            cpu: 0.5
+            mem: 2048
+  - stage:
+      - custom-script:
+          alias: make-Gs
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make git-checkout
+            - VERSION='1.0' make git-push
+            - VERSION='1.0' make gitbook
+            - VERSION='1.0' make golang
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Is
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make integration-test
+            - VERSION='1.0' make ios
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Js
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make java
+            - VERSION='1.0' make java-agent
+            - VERSION='1.0' make java-build
+            - VERSION='1.0' make java-dependency-check
+            - VERSION='1.0' make java-deploy
+            - VERSION='1.0' make java-lint
+            - VERSION='1.0' make java-unit
+            - VERSION='1.0' make js
+            - VERSION='1.0' make js-build
+            - VERSION='1.0' make js-deploy
+            - VERSION='1.0' make js-pack
+            - VERSION='1.0' make js-script
+            - VERSION='1.0' make jsonparse
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Ks
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make k8sflink
+            - VERSION='1.0' make k8sspark
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Ls
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make lib-publish
+            - VERSION='1.0' make loop
+          resources:
+            cpu: 0.5
+            mem: 2048
+  - stage:
+      - custom-script:
+          alias: make-Ms
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make manual-review
+            - VERSION='1.0' make maven-deploy
+            - VERSION='1.0' make mobile-publish
+            - VERSION='1.0' make mobile-template
+            - VERSION='1.4' make model-publish
+            - VERSION='2.0' make model-publish
+            - VERSION='3.21' make model-publish
+            - VERSION='1.0' make mysql-assert
+            - VERSION='1.0' make mysql-cli
+            - VERSION='1.0' make mysqldump
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-NOPQs
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make npm-publish
+            - VERSION='1.0' make oss-upload
+            - VERSION='1.0' make php
+            - VERSION='1.0' make project-artifacts
+            - VERSION='1.0' make project-package
+            - VERSION='1.0' make publish-api-asset
+            - VERSION='1.0' make push-extensions
+            - VERSION='3.21' make python-script
+            - VERSION='4.0' make python-script
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-Rs
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make redis-cli
+            - VERSION='1.0' make release
+            - VERSION='1.0' make release-fetch
+            - VERSION='1.0' make reportengine
+            - VERSION='2.0' make reportengine
+            - VERSION='1.0' make rm-nodes
+          resources:
+            cpu: 0.5
+            mem: 2048
+  - stage:
+      - custom-script:
+          alias: make-Ss
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='1.0' make service-deploy
+            - VERSION='1.0' make sftp-access
+            - VERSION='1.0' make sonar
+            - VERSION='2.0' make sonar
+            - VERSION='1.0' make spark
+            - VERSION='1.0' make spark-upload
+            - VERSION='1.1' make spark-upload
+            - VERSION='1.0' make sql
+            - VERSION='1.1' make sql
+            - VERSION='1.2' make sql
+          resources:
+            cpu: 0.5
+            mem: 2048
+      - custom-script:
+          alias: make-TUVWs
+          description: 运行自定义命令
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - cp -a ${{ dirs.erda }} .erda
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - VERSION='3.21' make tagging
+            - VERSION='4.0' make tagging
+            - VERSION='1.0' make testplan
+            - VERSION='1.0' make testplan-run
+            - VERSION='1.0' make testscene-run
+            - VERSION='1.0' make unit-test
+            - VERSION='1.0' make upgrade-edge-cluster
+            - VERSION='1.0' make virtual-offline-image
+            - VERSION='1.0' make wait
+          resources:
+            cpu: 0.5
+            mem: 2048
