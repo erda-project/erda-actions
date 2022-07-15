@@ -5,8 +5,7 @@ go 1.16
 replace (
 	github.com/coreos/bbolt => go.etcd.io/bbolt v1.3.5
 	github.com/docker/spdystream => github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96
-	github.com/erda-project/erda => github.com/erda-project/erda v1.3.0-rc.0.20220523061923-b971304740e2
-	github.com/erda-project/erda-proto-go => github.com/erda-project/erda/api/proto-go v0.0.0-20220511095828-bb180bec0f59
+	github.com/erda-project/erda-proto-go => ./.erda/api/proto-go
 	github.com/google/gnostic => github.com/googleapis/gnostic v0.4.0
 	github.com/googlecloudplatform/flink-operator => github.com/googlecloudplatform/flink-on-k8s-operator v0.0.0-20200909223554-f302312417ee
 	github.com/influxdata/influxql => github.com/erda-project/influxql v1.1.0-ex
@@ -53,7 +52,7 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/docker/cli v20.10.5+incompatible
 	github.com/docker/distribution v2.8.0+incompatible
-	github.com/erda-project/erda v1.5.0
+	github.com/erda-project/erda v1.3.0-rc.0.20220714030625-f2632ae42163
 	github.com/erda-project/erda-proto-go v0.0.0
 	github.com/hashicorp/go-multierror v1.1.0
 	github.com/labstack/gommon v0.3.0
@@ -68,7 +67,7 @@ require (
 	github.com/sabhiram/go-gitignore v0.0.0-20201211210132-54b8a0bf510f
 	github.com/shogo82148/androidbinary v1.0.2
 	github.com/sirupsen/logrus v1.8.1
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2
 	github.com/toqueteos/trie v0.0.0-20150530104557-56fed4a05683 // indirect
 	golang.org/x/crypto v0.0.0-20210920023735-84f357641f63
