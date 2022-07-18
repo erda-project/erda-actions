@@ -5,12 +5,11 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/pkg/errors"
-	"gopkg.in/yaml.v2"
-
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/diceyml"
 	"github.com/erda-project/erda/apistructs"
+	"github.com/pkg/errors"
+	yaml "gopkg.in/yaml.v2"
 )
 
 func fillDiceYml(cfg *conf.Conf, storage *StorageURL) (string, error) {
@@ -23,6 +22,20 @@ func fillDiceYml(cfg *conf.Conf, storage *StorageURL) (string, error) {
 		return "", err
 	}
 
+	jobs := d.Jobs()
+	svcs := d.Services()
+	for name, job := range jobs {
+		image, _ := job["image"].(string)
+		if err := diceyml.ValidImageName(image); err != nil {
+			return "", errors.Errorf("\"%s\" is not a valid image name for job %s", image, name)
+		}
+	}
+	for name, svc := range svcs {
+		image, _ := svc["image"].(string)
+		if err := diceyml.ValidImageName(image); err != nil {
+			return "", errors.Errorf("\"%s\" is not a valid image name for service %s", image, name)
+		}
+	}
 	// push db to oss/disk
 	if cfg.InitSQL != "" {
 		if err = executeSQL(cfg, storage, d); err != nil {

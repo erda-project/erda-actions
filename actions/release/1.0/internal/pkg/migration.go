@@ -20,6 +20,7 @@ import (
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/metadata"
 )
 
 // migration flyway migration 文件镜像release
@@ -186,7 +187,7 @@ func packWithBuildkit(buildkitdAddr, repo string) error {
 // storeMetaFile upload metadata
 func storeMigrationMetaFile(cfg *conf.Conf, image string) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "migration_image",
 				Value: image,

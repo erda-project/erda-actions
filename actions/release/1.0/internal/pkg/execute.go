@@ -21,6 +21,7 @@ import (
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/erda-project/erda/pkg/strutil"
 )
 
@@ -307,8 +308,8 @@ func Execute() error {
 		return errors.Wrap(err, "failed to store release id")
 	}
 	// write metafile
-	metaInfos := make([]apistructs.MetadataField, 0, 1)
-	metaInfos = append(metaInfos, apistructs.MetadataField{
+	metaInfos := make([]metadata.MetadataField, 0, 1)
+	metaInfos = append(metaInfos, metadata.MetadataField{
 		Name:  apistructs.ActionCallbackReleaseID,
 		Value: releaseID,
 		Type:  apistructs.ActionCallbackTypeLink,
