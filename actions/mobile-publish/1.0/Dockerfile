@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
+FROM registry.erda.cloud/erda/terminus-golang:1.16.7 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions

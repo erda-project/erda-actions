@@ -28,8 +28,8 @@ func GetRelease(cfg conf.Conf, releaseID string) (*apistructs.ReleaseGetResponse
 	return &resp, nil
 }
 
-func GetAppPublishItemRelations(cfg conf.Conf) (*apistructs.QueryAppPublishItemRelationResponse, error) {
-	var resp apistructs.QueryAppPublishItemRelationResponse
+func GetAppPublishItemRelations(cfg conf.Conf) (*apistructs.QueryAppPublishItemRelationGroupByENVResponse, error) {
+	var resp apistructs.QueryAppPublishItemRelationGroupByENVResponse
 	request := httpclient.New(httpclient.WithCompleteRedirect()).Get(cfg.DiceOpenapiPrefix).
 		Path(fmt.Sprintf("/api/applications/%d/actions/get-publish-item-relations", cfg.AppID)).
 		Header("Authorization", cfg.CiOpenapiToken)
