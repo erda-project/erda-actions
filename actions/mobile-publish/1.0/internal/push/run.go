@@ -13,6 +13,7 @@ import (
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/metadata"
 )
 
 func Run() error {
@@ -56,7 +57,9 @@ func Run() error {
 	)
 	// android和ios区分以后，release 时保证了 resource 只有一种，如果出现多个则是 release 时出现了bug
 	for _, v := range release.Data.Resources {
-		resourceType = v.Type
+		if isMobileResource(v.Type) {
+			resourceType = v.Type
+		}
 		if _, ok := v.Meta["h5VersionInfo"]; ok {
 			decodeBytes, err := base64.StdEncoding.DecodeString(v.Meta["h5VersionInfo"].(string))
 			if err != nil {
@@ -99,20 +102,20 @@ func Run() error {
 	}
 
 	// write metafile
-	metaInfos := make([]apistructs.MetadataField, 0, 1)
-	metaInfos = append(metaInfos, apistructs.MetadataField{
+	metaInfos := make([]metadata.MetadataField, 0, 1)
+	metaInfos = append(metaInfos, metadata.MetadataField{
 		Name:  apistructs.ActionCallbackPublisherID,
 		Value: strconv.FormatUint(uint64(relation.PublisherID), 10),
 	})
-	metaInfos = append(metaInfos, apistructs.MetadataField{
+	metaInfos = append(metaInfos, metadata.MetadataField{
 		Name:  apistructs.ActionCallbackPublishItemID,
 		Value: strconv.FormatUint(uint64(relation.PublishItemID), 10),
 	})
-	metaInfos = append(metaInfos, apistructs.MetadataField{
+	metaInfos = append(metaInfos, metadata.MetadataField{
 		Name:  apistructs.ActionCallbackPublishItemVersionID,
 		Value: strconv.FormatUint(publishItemResponse.Data.ID, 10),
 	})
-	metaInfos = append(metaInfos, apistructs.MetadataField{
+	metaInfos = append(metaInfos, metadata.MetadataField{
 		Name:  "type",
 		Value: apistructs.PublishItemTypeMobile,
 	})
@@ -123,4 +126,14 @@ func Run() error {
 	}
 
 	return nil
+}
+
+func isMobileResource(resourceType apistructs.ResourceType) bool {
+	switch resourceType {
+	case apistructs.ResourceTypeAndroid, apistructs.ResourceTypeIOS,
+		apistructs.ResourceTypeH5, apistructs.ResourceTypeAndroidAppBundle:
+		return true
+	default:
+		return false
+	}
 }
