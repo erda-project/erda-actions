@@ -410,6 +410,8 @@ github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3
 github.com/doug-martin/goqu/v9 v9.18.0/go.mod h1:nf0Wc2/hV3gYK9LiyqIrzBEVGlI8qW3GuDCEobC4wBQ=
 github.com/dsnet/compress v0.0.1/go.mod h1:Aw8dCMJ7RioblQeTqt88akK31OvO8Dhf5JflhBbQEHo=
 github.com/dsnet/golib v0.0.0-20171103203638-1ea166775780/go.mod h1:Lj+Z9rebOhdfkVLjJ8T6VcRQv3SXugXy999NBtR9aFY=
+github.com/dspo/erda v0.0.0-20220721060237-38bac49d80f5 h1:T340GoVEfhqVIKL1+0RPtpJXpO4OQKhzqgok3LV4jxM=
+github.com/dspo/erda v0.0.0-20220721060237-38bac49d80f5/go.mod h1:HJjaYTwCU1Ltceg5qQVWmp3s8PkeRRgIHFm+gkxEGGg=
 github.com/dustin/go-humanize v0.0.0-20171111073723-bb3d318650d4/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
 github.com/dustin/go-humanize v0.0.0-20180421182945-02af3965c54e/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
 github.com/dustin/go-humanize v1.0.0 h1:VSnTsYCnlFHaM2/igO1h6X3HA71jcobQuxemgkq4zYo=
@@ -436,11 +438,9 @@ github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.m
 github.com/envoyproxy/protoc-gen-validate v0.1.0 h1:EQciDnbrYxy13PgWoY8AqoxGiPrpgBZ1R8UNe3ddc+A=
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
 github.com/erda-project/elastic v0.0.1-ex/go.mod h1:iAVsas6fcmt9pxtge1+dErMhecv+RLSXlD4rnZRJVW0=
-github.com/erda-project/erda v1.3.0-rc.0.20220714030625-f2632ae42163 h1:2r2fvHw/N0qRpVU0RasrQETJ63nWpV7St8T+zWIAebk=
-github.com/erda-project/erda v1.3.0-rc.0.20220714030625-f2632ae42163/go.mod h1:IeXAjf0t0HRT2xuCB1horvI8sTPli4YI80eJHHgfUCA=
 github.com/erda-project/erda-infra v1.0.7/go.mod h1:H2p2acOXt282EpRaNNBDIk6XgLEzk4lylKboEee7Xbs=
-github.com/erda-project/erda-infra v1.0.8-0.20220708110412-6dbe90314b3d h1:wn4xfCwatm4BPshY7RGN4j+I/w3wv4fkgq5inMFKVzY=
-github.com/erda-project/erda-infra v1.0.8-0.20220708110412-6dbe90314b3d/go.mod h1:oI3saG68KaWiDFGfQsl3t//D8eN1Q9a66GOcEJH7Sl8=
+github.com/erda-project/erda-infra v1.0.8-0.20220719085140-e0758b0a6cf2 h1:KY5NhvdhDojF8oiiZxWs/A8L1glI+avhWF2CMZHBNy8=
+github.com/erda-project/erda-infra v1.0.8-0.20220719085140-e0758b0a6cf2/go.mod h1:oI3saG68KaWiDFGfQsl3t//D8eN1Q9a66GOcEJH7Sl8=
 github.com/erda-project/erda-infra/tools v0.0.0-20220610035420-a679a31ae3f5/go.mod h1:HyZ0md4CO0J57qWahnbgFX2mhxS2J1i77e735e804vc=
 github.com/erda-project/erda-oap-thirdparty-protocol v0.0.0-20210907135609-15886a136d5b/go.mod h1:H/f81Thef2Tnz4nUeLt0r4VwHdOznthpyXBwT9vDWo0=
 github.com/erda-project/erda-sourcecov v0.1.0/go.mod h1:eOMWjU0sXF9sLFqh6MkPpzuo+FkdQW7UCQ0rj3h+sXw=
