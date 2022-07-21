@@ -8,5 +8,5 @@ RUN curl -sSL "${GRADLE_SDK_URL}" -o gradle-${GRADLE_VERSION}-bin.zip  \
 	&& rm -rf gradle-${GRADLE_VERSION}-bin.zip
 ENV GRADLE_HOME ${SDK_HOME}/gradle-${GRADLE_VERSION}
 ENV PATH ${GRADLE_HOME}/bin:$PATH
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
 RUN apt-get update && apt-get install -y nodejs git wget g++ gcc vim net-tools make dnsutils && apt-get clean
