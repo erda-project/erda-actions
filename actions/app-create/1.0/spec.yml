@@ -42,7 +42,7 @@ accessibleAPIs:
   - path: /api/applications
     method: GET
     schema: http
-  - path: /api/applications/<applicationId>
+  - path: /api/applications/<applicationIDOrName>
     method: GET
     schema: http
   - path: /api/applications
