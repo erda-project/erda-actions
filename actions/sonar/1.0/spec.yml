@@ -28,9 +28,9 @@ params:
   - name: sonar_password
     required: false
     desc: ${{ i18n.params.sonar_password.desc }}
-  - name: sonar_exclustions
+  - name: sonar_exclusions
     requied: false
-    desc: ${{ i18n.params.sonar_exclustions.desc }}
+    desc: ${{ i18n.params.sonar_exclusions.desc }}
   - name: sonar_log_level
     requied: false
     desc: ${{ i18n.params.sonar_log_level.desc }}
@@ -197,7 +197,7 @@ locale:
     params.quality_gate.desc: 自定义质量门禁
     params.quality_gate.struct.error.desc: 门槛值，超过该值即为不通过质量门禁
     params.quality_gate.struct.op.desc: 比较操作。可选值：GT / LT
-    params.sonar_exclustions.desc: 声明哪些文件不进行代码质量扫描。参考文档：https://docs.sonarqube.org/latest/project-administration/narrowing-the-focus/
+    params.sonar_exclusions.desc: 声明哪些文件不进行代码质量扫描。参考文档：https://docs.sonarqube.org/latest/project-administration/narrowing-the-focus/
     params.sonar_host_url.desc: sonar 服务器地址，用户可以手动指定。若不填写，则使用平台提供的 sonar 服务
     params.sonar_log_level.desc: sonar 分析时的日志级别，级别越高，打印的日志越详细。可选值：INFO（默认值） / DEBUG / TRACE
     params.sonar_login.desc: 用于登录 sonar 服务器的用户名或 token。若不填写，使用平台 sonar 服务自动生成的 token
@@ -214,7 +214,7 @@ locale:
     params.quality_gate.desc: Custom quality gate
     params.quality_gate.struct.error.desc: The threshold value of the quality gate. If the value exceeds this threshold, it is not passed
     params.quality_gate.struct.op.desc: The comparison operation. The default is GT
-    params.sonar_exclustions.desc: "Declare which files are not to be analyzed. Refer to the documentation: https://docs.sonarqube.org/latest/project-administration/narrowing-the-focus/"
+    params.sonar_exclusions.desc: "Declare which files are not to be analyzed. Refer to the documentation: https://docs.sonarqube.org/latest/project-administration/narrowing-the-focus/"
     params.sonar_host_url.desc: The address of the sonar server. If not filled in, the system will use the platform provided sonar server
     params.sonar_log_level.desc: The log level of the sonar analysis. The higher the level, the more detailed the log. The default is INFO
     params.sonar_login.desc: The username or token to login to the sonar server. If not filled in, the system will automatically generate a token
