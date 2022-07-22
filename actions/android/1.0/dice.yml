@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   android:
-    image: registry.erda.cloud/erda-actions/android-action:1.0-20220627140805-895b3be
+    image: registry.erda.cloud/erda-actions/android-action:1.0-20220721205809-68c4dfc
     resources:
       cpu: 2
       mem: 4096

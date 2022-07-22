@@ -11,7 +11,7 @@ WORKDIR /go/src/github.com/erda-project/erda-actions
 ENV GOPROXY=https://goproxy.io,https://goproxy.cn,direct
 RUN GOOS=linux GOARCH=amd64 go build -o /assets/run /go/src/github.com/erda-project/erda-actions/actions/android/1.0/internal/cmd/main.go
 
-FROM registry.erda.cloud/erda/android-gradle-node:v29
+FROM registry.erda.cloud/erda/android-gradle-node:v30-20220721203530
 ENV SASS_BINARY_SITE="https://npmmirror.com/mirrors/node-sass"
 ENV NODEJS_ORG_MIRROR="https://npmmirror.com/dist"
 RUN npm config set @terminus:registry http://registry.npm.terminus.io/ && \
