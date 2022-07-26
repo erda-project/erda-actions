@@ -10,8 +10,8 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/encoding/jsonparse"
 	"github.com/erda-project/erda/pkg/crypto/uuid"
+	"github.com/erda-project/erda/pkg/encoding/jsonparse"
 )
 
 // Analysis 使用 sonar-scanner 进行代码质量分析
@@ -69,7 +69,7 @@ func (sonar *Sonar) Analysis(cfg *Conf) (*ResultMetas, error) {
 
 	// exclusions
 	if cfg.ActionParams.SonarExclusions != "" {
-		args = append(args, fmt.Sprintf("-Dsonar.exclustions=%s", cfg.ActionParams.SonarExclusions))
+		args = append(args, fmt.Sprintf("-Dsonar.exclusions=%s", cfg.ActionParams.SonarExclusions))
 	}
 
 	// scm
