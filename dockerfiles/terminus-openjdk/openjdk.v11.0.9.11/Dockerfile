@@ -21,5 +21,5 @@ RUN mkdir /tmp/greys && \
     cp ./greys.sh /bin/greys && \
     popd && rm -rf /tmp/greys
 ## arthas
-RUN mkdir /opt/arthas && \
-    curl -sf https://arthas.aliyun.com/arthas-boot.jar -o /opt/arthas/arthas-boot.jar
+#RUN mkdir /opt/arthas && \
+#    curl -sf https://arthas.aliyun.com/arthas-boot.jar -o /opt/arthas/arthas-boot.jar

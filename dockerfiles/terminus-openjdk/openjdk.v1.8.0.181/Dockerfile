@@ -17,5 +17,5 @@ RUN apt update && apt install tzdata locales -y \
 RUN curl -sLk https://ompc.oss.aliyuncs.com/greys/install.sh | bash && cp ./greys.sh /bin/greys && (greys || true)
 
 ## arthas
-RUN mkdir /opt/arthas && \
-    curl -sf https://arthas.aliyun.com/arthas-boot.jar -o /opt/arthas/arthas-boot.jar
+#RUN mkdir /opt/arthas && \
+#    curl -sf https://arthas.aliyun.com/arthas-boot.jar -o /opt/arthas/arthas-boot.jar
