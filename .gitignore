@@ -54,3 +54,6 @@ backup
 
 # Local History dir
 .history/
+
+# proto-go
+.erda/api

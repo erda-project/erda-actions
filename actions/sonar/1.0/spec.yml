@@ -46,6 +46,9 @@ params:
     type: bool
     defaule: true
     desc: ${{ i18n.params.use_platform_quality_gate.desc }}
+  - name: sonar_java_libraries
+    required: false
+    desc: ${{ i18n.params.sonar_java_libraries.desc }}
   - name: quality_gate
     required: false
     desc: ${{ i18n.params.quality_gate.desc }}
@@ -203,6 +206,7 @@ locale:
     params.sonar_login.desc: 用于登录 sonar 服务器的用户名或 token。若不填写，使用平台 sonar 服务自动生成的 token
     params.sonar_password.desc: 用于登录 sonar 服务器的密码。若不填写，使用平台 sonar 服务自动生成的 token。特别的，当 sonar_login 为 token 而非 username 方式时，sonar_password 无需填写
     params.use_platform_quality_gate.desc: 是否加载平台的门禁
+    params.sonar_java_libraries.desc: 包含您的测试使用的第三方库（JAR 或 Zip 文件）的文件的逗号分隔路径
 
   en-US:
     displayName: Sonar Code Quality Check
@@ -220,3 +224,4 @@ locale:
     params.sonar_login.desc: The username or token to login to the sonar server. If not filled in, the system will automatically generate a token
     params.sonar_password.desc: "The password to login to the sonar server. If not filled in, the system will automatically generate a token. Special note: When sonar_login is token and not username, sonar_password is not required"
     params.use_platform_quality_gate.desc: Whether to load the platform quality gate
+    params.sonar_java_libraries.desc: Comma-separated paths to files with third-party libraries (JAR or Zip files) used by your tests. (For example, this should include the junit jar)

@@ -106,6 +106,8 @@ type ActionParams struct {
 	// DeleteProject after analysis finished
 	// +optional
 	DeleteProject bool `env:"ACTION_DELETE_PROJECT"`
+	// +optional
+	SonarJavaLibraries string `env:"ACTION_SONAR_JAVA_LIBRARIES"`
 
 	// 使用平台配置
 	UsePlatformQualityGate bool `env:"ACTION_USE_PLATFORM_QUALITY_GATE"`

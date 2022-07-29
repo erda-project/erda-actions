@@ -64,6 +64,9 @@ func (sonar *Sonar) Analysis(cfg *Conf) (*ResultMetas, error) {
 			sonarJavaBinary = "."
 		}
 		args = append(args, fmt.Sprintf("-Dsonar.java.binaries=%s", sonarJavaBinary))
+		if cfg.ActionParams.SonarJavaLibraries != "" {
+			args = append(args, fmt.Sprintf("-Dsonar.java.libraries=%s", cfg.ActionParams.SonarJavaBinaries))
+		}
 	}
 	results.Add(ResultKeyLanguage, string(cfg.ActionParams.Language))
 
