@@ -195,10 +195,7 @@ func (sonar *Sonar) Analysis(cfg *Conf) (*ResultMetas, error) {
 		// log
 		fmt.Printf("metric: %s, status: %s\n", condition.MetricKey, condition.Status)
 		fmt.Printf("metric(detail): %s, detail: %s\n", condition.MetricKey, jsonparse.JsonOneLine(condition))
-		// if not ok, add to meta and show it
-		if condition.Status == SonarQualityGateStatusOK {
-			continue
-		}
+		// show quality gate result
 		results.Add(ResultKey(fmt.Sprintf("metric: %s", condition.MetricKey)), string(condition.Status))
 		results.Add(ResultKey(fmt.Sprintf("metric(detail): %s", condition.MetricKey)), jsonparse.JsonOneLine(condition))
 	}
