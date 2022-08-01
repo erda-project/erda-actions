@@ -18,7 +18,7 @@ COPY pre_start.sh /pre_start.sh
 RUN chmod +x /pre_start.sh
 
 COPY comp/fonts /usr/share/fonts/custom
-COPY comp/arthas-boot.jar /
+#COPY comp/arthas-boot.jar /
 COPY comp/jacocoagent.jar /opt/jacoco/jacocoagent.jar
 
 ARG ERDA_VERSION
