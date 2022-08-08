@@ -36,7 +36,7 @@ func Execute() error {
 func build(cfg conf.Conf) error {
 	// 切换工作目录
 	if cfg.Context != "" {
-		fmt.Fprintf(os.Stdout, "change workding directory to: %s\n", cfg.Context)
+		fmt.Fprintf(os.Stdout, "change working directory to: %s\n", cfg.Context)
 		if err := os.Chdir(cfg.Context); err != nil {
 			return err
 		}
