@@ -1,0 +1,46 @@
+name: semgrep
+version: "1.0"
+type: action
+category: test_management
+public: true
+displayName: ${{ i18n.displayName }}
+desc: ${{ i18n.desc }}
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2020/10/21/825d9774-c095-4b4f-a729-2efd5a33509a.png
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.14"
+supportedErdaVersions:
+  - ">= 1.0"
+
+params:
+  - name: code_dir
+    required: true
+    desc: ${{ i18n.params.code_dir.desc }}
+  - name: config
+    required: true
+    desc: ${{ i18n.params.config.desc }}
+  - name: format
+    required: false
+    desc: ${{ i18n.params.format.desc }}
+  - name: args
+    required: false
+    desc: ${{ i18n.params.args.desc }}
+    type: string_array
+accessibleAPIs:
+  - path: /api/files
+    method: POST
+    schema: http
+locale:
+  zh-CN:
+    displayName: Semgrep 代码扫描
+    desc: 以惊人的速度进行代码分析，查找错误，在 CI 中运行安全扫描，并在整个组织中实施安全标准。
+    params.code_dir.desc: 执行代码质量分析的目录
+    params.config.desc: 扫描的规则
+    params.format.desc: 报告的格式，可选值：json、sarif
+    params:args.dess: semgrep 命令自定义参数
+  en-US:
+    displayName: Semgrep Code Analysis
+    desc: Code Analysis at Ludicrous Speed, find bugs, run security scans in CI, and enforce security standards across your organization.
+    params.code_dir.desc: The directory of code to be analyzed
+    params.config.desc: The rules to be used for analysis
+    params.format.desc: The format of the report, optional value json, sarif
+    params.args.desc: semgrep custom arguments

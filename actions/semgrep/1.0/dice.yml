@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  sonar:
+    image: registry.erda.cloud/erda-actions/semgrep-action:1.0-20220816205905-8dd050b
+    resources:
+      cpu: 1
+      mem: 2048
+      disk: 1024
