@@ -176,17 +176,17 @@ func (sonar *Sonar) Analysis(cfg *Conf) (*ResultMetas, error) {
 	}
 	_ = reportFile
 
-	// report sonar issues to qa
-	if _, err := sonar.reportSonarIssues2QA(projectKey, cfg); err != nil {
-		logrus.Infof("Failed to report sonar issues to QA Platform, err: %v", err)
-		return nil, fmt.Errorf("failed to report sonar issue to QA Platform, projectKey: %s, err: %v", projectKey, err)
-	}
-
 	// quality gate
 	qualityGateResult, err := sonar.getSonarQualityGateStatus(ceTask.AnalysisID)
 	if err != nil {
 		return results, err
 	}
+	// report sonar issues to qa
+	if _, err := sonar.reportSonarIssues2QA(projectKey, cfg, qualityGateResult); err != nil {
+		logrus.Infof("Failed to report sonar issues to QA Platform, err: %v", err)
+		return nil, fmt.Errorf("failed to report sonar issue to QA Platform, projectKey: %s, err: %v", projectKey, err)
+	}
+
 	qualityGateStatus := qualityGateResult.Status
 	results.Add(ResultKeyQualityGateStatus, string(qualityGateStatus))
 	// add condition results to meta

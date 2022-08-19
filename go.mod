@@ -7,43 +7,47 @@ replace (
 	github.com/docker/spdystream => github.com/docker/spdystream v0.0.0-20160310174837-449fdfce4d96
 	github.com/erda-project/erda-proto-go => ./.erda/api/proto-go
 	github.com/google/gnostic => github.com/googleapis/gnostic v0.4.0
-	github.com/googlecloudplatform/flink-operator => github.com/googlecloudplatform/flink-on-k8s-operator v0.0.0-20200909223554-f302312417ee
+	github.com/googlecloudplatform/flink-operator => github.com/erda-project/flink-on-k8s-operator v0.0.0-20220211023605-1a64c463171a
 	github.com/influxdata/influxql => github.com/erda-project/influxql v1.1.0-ex
 	github.com/olivere/elastic v6.2.35+incompatible => github.com/erda-project/elastic v0.0.1-ex
+	github.com/pingcap/pd/v4 => github.com/tikv/pd v1.0.8
 	github.com/rancher/remotedialer => github.com/erda-project/remotedialer v0.2.6-0.20210618084817-52c879aadbcb
+	go.etcd.io/bbolt => github.com/coreos/bbolt v1.3.5
 	go.etcd.io/bbolt v1.3.5 => github.com/coreos/bbolt v1.3.5
+	go.opentelemetry.io/otel => go.opentelemetry.io/otel v1.2.0
+	go.opentelemetry.io/otel/exporters/stdout => go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.2.0
+	go.opentelemetry.io/proto/otlp v0.11.0 => github.com/recallsong/opentelemetry-proto-go/otlp v0.11.1-0.20211202093058-995eca7123f5
 	google.golang.org/grpc => google.golang.org/grpc v1.26.0
-
-	k8s.io/api => k8s.io/api v0.18.3
-	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.18.3
-	k8s.io/apimachinery => k8s.io/apimachinery v0.18.3
-	k8s.io/apiserver => k8s.io/apiserver v0.18.3
-	k8s.io/cli-runtime => k8s.io/cli-runtime v0.18.3
-	k8s.io/client-go => k8s.io/client-go v0.18.3
-	k8s.io/cloud-provider => k8s.io/cloud-provider v0.18.3
-	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.18.3
-	k8s.io/code-generator => k8s.io/code-generator v0.18.3
-	k8s.io/component-base => k8s.io/component-base v0.18.3
-	k8s.io/component-helpers => k8s.io/component-helpers v0.18.3
-	k8s.io/controller-manager => k8s.io/controller-manager v0.18.3
-	k8s.io/cri-api => k8s.io/cri-api v0.18.3
-	k8s.io/csi-translation-lib => k8s.io/csi-translation-lib v0.18.3
+	k8s.io/api => k8s.io/api v0.21.2
+	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.21.2
+	k8s.io/apimachinery => k8s.io/apimachinery v0.21.2
+	k8s.io/apiserver => k8s.io/apiserver v0.21.2
+	k8s.io/cli-runtime => k8s.io/cli-runtime v0.21.2
+	k8s.io/client-go => k8s.io/client-go v0.21.2
+	k8s.io/cloud-provider => k8s.io/cloud-provider v0.21.2
+	k8s.io/cluster-bootstrap => k8s.io/cluster-bootstrap v0.21.2
+	k8s.io/code-generator => k8s.io/code-generator v0.21.2
+	k8s.io/component-base => k8s.io/component-base v0.21.2
+	k8s.io/component-helpers => k8s.io/component-helpers v0.21.2
+	k8s.io/controller-manager => k8s.io/controller-manager v0.21.2
+	k8s.io/cri-api => k8s.io/cri-api v0.21.2
+	k8s.io/csi-translation-lib => k8s.io/csi-translation-lib v0.21.2
 	k8s.io/klog => k8s.io/klog v1.0.0
-	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.18.3
-	k8s.io/kube-controller-manager => k8s.io/kube-controller-manager v0.18.3
-	k8s.io/kube-proxy => k8s.io/kube-proxy v0.18.3
-	k8s.io/kube-scheduler => k8s.io/kube-scheduler v0.18.3
-	k8s.io/kubectl => k8s.io/kubectl v0.18.3
-	k8s.io/kubelet => k8s.io/kubelet v0.18.3
-	k8s.io/kubernetes => k8s.io/kubernetes v1.18.3
-	k8s.io/legacy-cloud-providers => k8s.io/legacy-cloud-providers v0.18.3
-	k8s.io/metrics => k8s.io/metrics v0.18.3
-	k8s.io/mount-utils => k8s.io/mount-utils v0.18.3
-	k8s.io/sample-apiserver => k8s.io/sample-apiserver v0.18.3
+	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.21.2
+	k8s.io/kube-controller-manager => k8s.io/kube-controller-manager v0.21.2
+	k8s.io/kube-proxy => k8s.io/kube-proxy v0.21.2
+	k8s.io/kube-scheduler => k8s.io/kube-scheduler v0.21.2
+	k8s.io/kubectl => k8s.io/kubectl v0.21.2
+	k8s.io/kubelet => k8s.io/kubelet v0.21.2
+	k8s.io/kubernetes => k8s.io/kubernetes v1.21.2
+	k8s.io/legacy-cloud-providers => k8s.io/legacy-cloud-providers v0.21.2
+	k8s.io/metrics => k8s.io/metrics v0.21.2
+	k8s.io/mount-utils => k8s.io/mount-utils v0.21.2
+	k8s.io/sample-apiserver => k8s.io/sample-apiserver v0.21.2
 )
 
 require (
-	github.com/aliyun/alibaba-cloud-sdk-go v1.61.426
+	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1600
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.4+incompatible
 	github.com/andrianbdn/iospng v0.0.0-20180730113000-dccef1992541
 	github.com/bitly/go-simplejson v0.5.1-0.20181114203107-9db4a59bd4d8
@@ -52,7 +56,7 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/docker/cli v20.10.5+incompatible
 	github.com/docker/distribution v2.8.0+incompatible
-	github.com/erda-project/erda v1.3.0-rc.0.20220714030625-f2632ae42163
+	github.com/erda-project/erda v0.0.0-20220805082201-6afe57015ed0
 	github.com/erda-project/erda-proto-go v0.0.0
 	github.com/hashicorp/go-multierror v1.1.0
 	github.com/labstack/gommon v0.3.0

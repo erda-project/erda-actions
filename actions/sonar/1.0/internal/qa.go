@@ -14,7 +14,7 @@ import (
 )
 
 // reportSonarIssues2QA 将 sonar issue 转换为 qa issue 并上报
-func (sonar *Sonar) reportSonarIssues2QA(projectKey string, cfg *Conf) (*apistructs.SonarStoreRequest, error) {
+func (sonar *Sonar) reportSonarIssues2QA(projectKey string, cfg *Conf, qualityGateResult *SonarQualityGateResult) (*apistructs.SonarStoreRequest, error) {
 	logrus.Infof("Begin report sonar issues to QA Platform...")
 	defer func() {
 		logrus.Infof("End report sonar issue to QA Platform")
@@ -77,6 +77,10 @@ func (sonar *Sonar) reportSonarIssues2QA(projectKey string, cfg *Conf) (*apistru
 	}
 	store.Duplications = duplications
 
+	// gate result
+	gateResult := sonar.convert2GateResult(qualityGateResult)
+	store.QualityGateResult = gateResult
+
 	if err := retry.DoWithInterval(func() error {
 		var body bytes.Buffer
 		r, err := httpclient.New(httpclient.WithCompleteRedirect(), httpclient.WithTimeout(30*time.Second, 180*time.Second)).
@@ -133,4 +137,20 @@ func (sonar *Sonar) convert2QaIssues(projectKey string, issueType IssueType) ([]
 	}
 
 	return qaIssues, nil
+}
+
+func (sonar *Sonar) convert2GateResult(qualityGateResult *SonarQualityGateResult) apistructs.QualityGateResult {
+	var result apistructs.QualityGateResult
+	result.Status = string(qualityGateResult.Status)
+	result.Conditions = make([]apistructs.QualityGateConditionResult, 0, len(result.Conditions))
+	for _, condition := range qualityGateResult.Conditions {
+		var conditionResult apistructs.QualityGateConditionResult
+		conditionResult.MetricKey = string(condition.MetricKey)
+		conditionResult.Comparator = condition.Comparator
+		conditionResult.Status = string(condition.Status)
+		conditionResult.ErrorThreshold = condition.ErrorThreshold
+		conditionResult.ActualValue = condition.ActualValue
+		result.Conditions = append(result.Conditions, conditionResult)
+	}
+	return result
 }
