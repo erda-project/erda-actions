@@ -37,7 +37,7 @@ type Config struct {
 	OapiToken string `env:"DICE_OPENAPI_TOKEN" required:"true"`
 	OapiHost  string `env:"DICE_OPENAPI_ADDR" required:"true"`
 	ProjectID int64  `env:"DICE_PROJECT_ID" required:"true"`
-	UserID    string `env:"DICE_USER_ID" required:"true"`
+	UserID    string `env:"DICE_OPERATOR_ID" required:"true"`
 
 	// action envs
 	Version   string `env:"ACTION_VERSION"`
