@@ -17,6 +17,7 @@ import (
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/metawriter"
+	"github.com/erda-project/erda-proto-go/core/file/pb"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
@@ -28,6 +29,7 @@ import (
 var errReleaseTypeCheck = errors.New(`一个release action只能发布一种操作系统类型的移动应用，如果有多种操作系统类型，请拆分成多个release acction`)
 
 const (
+	androidApp   = ".aab"
 	andriodExt   = ".apk"
 	iosExt       = ".ipa"
 	distFilePath = "/tmp/dist.zip"
@@ -92,7 +94,7 @@ func Execute() error {
 		// 一次release只能release一种类型的移动应用
 		for _, appFilePath := range cfg.ReleaseMobile.Files {
 			ext := filepath.Ext(appFilePath)
-			if ext == andriodExt || ext == iosExt || (ext == "" && filepath.Base(appFilePath) == "dist") {
+			if ext == andriodExt || ext == iosExt || ext == androidApp || (ext == "" && filepath.Base(appFilePath) == "dist") {
 				typeCounts++
 			}
 		}
@@ -115,7 +117,7 @@ func Execute() error {
 				resourceType = apistructs.ResourceTypeDataSet
 			}
 
-			var mobileFileUploadResult *apistructs.FileDownloadFailResponse
+			var mobileFileUploadResult *pb.FileUploadResponse
 			if resourceType != apistructs.ResourceTypeH5 {
 				mobileFileUploadResult, err = UploadFileNew(appFilePath, cfg)
 				if err != nil {
@@ -153,27 +155,23 @@ func Execute() error {
 				}
 				req.Version = version
 			}
-			// TODO Change get information from configuration to extract from abb file
 			if resourceType == apistructs.ResourceTypeAndroidAppBundle {
-				// info, err := GetAndroidAppBundleInfo(appFilePath)
-				// if err != nil {
-				// 	return err
-				// }
+				info, err := GetAndroidAppBundleInfo(appFilePath)
+				if err != nil {
+					return err
+				}
 				if cfg.AABInfo.PackageName == "" {
 					return errors.Errorf("aab's package name is empty")
 				}
-				versionCode := cfg.PipelineID
-				if cfg.AABInfo.VersionCode != "" {
-					versionCode = strutil.String(cfg.AABInfo.VersionCode)
-				}
-				meta["packageName"] = cfg.AABInfo.PackageName
-				meta["version"] = cfg.AABInfo.VersionName
+				versionCode := strconv.FormatInt(int64(info.VersionCode), 10)
+				meta["packageName"] = info.PackageName
+				meta["version"] = info.Version
 				meta["buildID"] = versionCode
-				meta["displayName"] = cfg.AABInfo.VersionName
+				meta["displayName"] = info.Version
 				if cfg.ReleaseMobile.Version == "" {
 					cfg.ReleaseMobile.Version = strutil.String(cfg.AABInfo.VersionName)
 				}
-				req.Version = strutil.String(cfg.AABInfo.VersionName)
+				req.Version = info.Version
 			}
 
 			if resourceType == apistructs.ResourceTypeIOS {

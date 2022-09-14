@@ -14,12 +14,12 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
-	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda-proto-go/core/file/pb"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 )
 
 // UploadFileNew 上传到api/files接口
-func UploadFileNew(filePath string, cfg conf.Conf) (*apistructs.FileDownloadFailResponse, error) {
+func UploadFileNew(filePath string, cfg conf.Conf) (*pb.FileUploadResponse, error) {
 	logrus.Infof("upload file %s", filePath)
 	f, err := os.Open(filePath)
 	if err != nil {
@@ -44,7 +44,7 @@ func UploadFileNew(filePath string, cfg conf.Conf) (*apistructs.FileDownloadFail
 		return nil, fmt.Errorf("writerClose: %v", err)
 	}
 
-	var resp apistructs.FileDownloadFailResponse
+	var resp pb.FileUploadResponse
 	request := httpclient.New(httpclient.WithCompleteRedirect()).Post(cfg.DiceOpenapiPrefix).
 		Path("/api/files").
 		Param("fileFrom", "release").

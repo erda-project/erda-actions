@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -12,17 +13,17 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"os/exec"
 	"regexp"
 	"strings"
 
 	"github.com/andrianbdn/iospng"
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/template"
 	"github.com/pkg/errors"
 	"github.com/shogo82148/androidbinary/apk"
 	"github.com/sirupsen/logrus"
 	"howett.net/plist"
-
-	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/template"
 )
 
 const (
@@ -89,10 +90,24 @@ func GetAndroidAppInfo(appFilePath string) (*AndroidAppInfo, error) {
 	return info, nil
 }
 
-// TODO complete this method, extract the package name from the aab file
-// Maybe you can refer to https://github.com/chenquincy/app-info-parser/issues/63
 func GetAndroidAppBundleInfo(appFilePath string) (*AndroidAppInfo, error) {
-	return nil, nil
+	bundleCmd := exec.Command("java", "-jar", "/opt/action/bundletool-all-1.11.1.jar", "dump", "manifest", "--bundle", appFilePath)
+	bundleCmd.Stderr = os.Stderr
+	data := new(bytes.Buffer)
+	bundleCmd.Stdout = data
+	if err := bundleCmd.Run(); err != nil {
+		return nil, err
+	}
+	var info apk.Manifest
+	if err := xml.Unmarshal(data.Bytes(), &info); err != nil {
+		return nil, err
+	}
+	app := &AndroidAppInfo{}
+	app.PackageName = info.Package.MustString()
+	app.VersionCode = info.VersionCode.MustInt32()
+	app.Version = info.VersionName.MustString()
+	app.DisplayName = info.App.Name.MustString()
+	return app, nil
 }
 
 func SaveImageToFile(icon image.Image, logoPath string) error {
