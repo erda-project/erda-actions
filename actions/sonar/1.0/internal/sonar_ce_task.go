@@ -11,8 +11,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda/pkg/encoding/jsonparse"
+	"github.com/erda-project/erda/pkg/http/httpclient"
 )
 
 type SonarCeTaskStatus string
@@ -22,6 +22,7 @@ var (
 	SonarCeTaskStatusFailed     SonarCeTaskStatus = "FAILED"
 	SonarCeTaskStatusCanceled   SonarCeTaskStatus = "CANCELED"
 	SonarCeTaskStatusInProgress SonarCeTaskStatus = "IN_PROGRESS"
+	SonarCeTaskStatusPending    SonarCeTaskStatus = "PENDING"
 )
 
 // SonarCeTask sonar scanner task result
@@ -100,7 +101,7 @@ func (sonar *Sonar) handleScannerReportTaskFile(filePath string) (*ScannerReport
 			return nil, ceTask, nil
 		case SonarCeTaskStatusFailed, SonarCeTaskStatusCanceled:
 			return nil, ceTask, fmt.Errorf("ce task status: %s, errMessage: %s, errStackTrace: %s\n", ceTask.Status, ceTask.ErrorMessage, ceTask.ErrorStacktrace)
-		case SonarCeTaskStatusInProgress:
+		case SonarCeTaskStatusInProgress, SonarCeTaskStatusPending:
 			logrus.Infof("ce task status: %s, waiting...\n", ceTask.Status)
 		default:
 			return nil, ceTask, fmt.Errorf("ce task status: %s, invalid", ceTask.Status)
