@@ -24,6 +24,8 @@ params:
   - name: targets
     type: string_array
     desc: ${{ i18n.params.targets.desc }}
+  - name: jdk_version
+    desc: ${{ i18n.params.jdk_version.desc }}
 
 locale:
   zh-CN:
@@ -32,6 +34,7 @@ locale:
     params.context.desc: 代码路径
     params.target.desc: 构建产物路径
     params.targets.desc: 多构建产物路径
+    params.jdk_version.desc: 构建使用的jdk版本, 支持8,11, 默认使用jdk8
 
   en-US:
     desc: Action for building Android installation package
@@ -39,4 +42,5 @@ locale:
     params.context.desc: Code path
     params.target.desc: Build product path
     params.targets.desc: Multiple build product path
+    params.jdk_version.desc: Build use jdk version, support 8, 11, use jdk8 by default
 

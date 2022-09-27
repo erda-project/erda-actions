@@ -6,6 +6,7 @@ type Conf struct {
 	Target        string   `env:"ACTION_TARGET"`
 	Targets       []string `env:"ACTION_TARGETS"`
 	Context       string   `env:"ACTION_CONTEXT"`
+	JDKVersion    string   `env:"ACTION_JDK_VERSION"`
 	NexusUrl      string   `env:"BP_NEXUS_URL"`
 	NexusUsername string   `env:"BP_NEXUS_USERNAME"`
 	NexusPassword string   `env:"BP_NEXUS_PASSWORD"`

@@ -16,5 +16,7 @@ ENV SASS_BINARY_SITE="https://npmmirror.com/mirrors/node-sass"
 ENV NODEJS_ORG_MIRROR="https://npmmirror.com/dist"
 RUN npm config set @terminus:registry http://registry.npm.terminus.io/ && \
     npm config set registry http://registry.npmmirror.com/
+RUN apt-get update
+RUN apt-get install -y openjdk-11-jdk
 COPY actions/android/1.0/comp/init.gradle /root/.gradle/init.gradle
 COPY --from=builder /assets /opt/action

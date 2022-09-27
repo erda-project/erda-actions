@@ -21,6 +21,28 @@ const (
 	scriptPath       = "/opt/action/command.sh"
 )
 
+type JDKConfig struct {
+	JavaHome  string
+	SwitchCmd []string
+}
+
+var jdkSwitchCmdMap = map[string]*JDKConfig{
+	"8": {
+		JavaHome: "/usr/lib/jvm/java-8-openjdk-amd64",
+		SwitchCmd: []string{
+			"update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java",
+			"update-alternatives --set javac /usr/lib/jvm/java-8-openjdk-amd64/bin/javac",
+		},
+	},
+	"11": {
+		JavaHome: "/usr/lib/jvm/java-11-openjdk-amd64",
+		SwitchCmd: []string{
+			"update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java",
+			"update-alternatives --set javac /usr/lib/jvm/java-11-openjdk-amd64/bin/javac",
+		},
+	},
+}
+
 var cfg conf.Conf
 
 func Execute() error {
@@ -45,6 +67,24 @@ func Execute() error {
 	if err := render.RenderTemplate(gradleConfigPath, cfgMap); err != nil {
 		return err
 	}
+
+	jdkVersion := "8"
+	if cfg.JDKVersion != "" {
+		jdkVersion = fmt.Sprintf("%v", cfg.JDKVersion)
+	}
+	jdkConfig, ok := jdkSwitchCmdMap[jdkVersion]
+	if !ok {
+		return fmt.Errorf("not support java version %s", jdkVersion)
+	}
+	for _, switchCmd := range jdkConfig.SwitchCmd {
+		err := runCommand(switchCmd)
+		if err != nil {
+			return err
+		}
+	}
+
+	runCommand("export JAVA_HOME=" + jdkConfig.JavaHome)
+	runCommand("java -version")
 
 	fmt.Fprintln(os.Stdout, fmt.Sprintf("begin build target"))
 	scriptContent := setupScript(cfg.Commands)
