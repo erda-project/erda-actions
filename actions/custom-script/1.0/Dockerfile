@@ -1,17 +1,17 @@
 FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
-FROM registry.erda.cloud/retag/golang:1.17.12-alpine3.15
+FROM registry.erda.cloud/retag/golang:1.19.1-alpine3.16
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 ENV GOPROXY=https://goproxy.cn/
 RUN apk add --no-cache librdkafka-dev bash libc6-compat  \
     openjdk8 nodejs npm yarn docker-cli libgit2-dev git \
-    musl-dev gcc curl python2 python3 py-pip openssh pkgconfig \
+    musl-dev gcc curl python3 py-pip openssh pkgconfig \
     make
 
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 
-RUN go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.27.0
+RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.27.0
 
 RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
   && curl -fsSL -o /tmp/apache-maven.tar.gz https://mirrors.bfsu.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz \

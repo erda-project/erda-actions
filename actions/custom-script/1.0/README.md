@@ -48,13 +48,12 @@
 
 ### Cached Tools
 #### Go
-- 1.17.12
+- 1.19.1
 
 #### Node.js
 - 12.22.12
 
 #### Python
-- 2.7.18
 - 3.8.10
 
 #### Environment variables

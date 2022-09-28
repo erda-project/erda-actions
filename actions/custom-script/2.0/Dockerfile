@@ -1,5 +1,5 @@
 FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
-FROM registry.erda.cloud/retag/golang:1.17.12-alpine3.15
+FROM registry.erda.cloud/retag/golang:1.19.1-alpine3.16
 
 # use aliyun repo
 RUN echo \
@@ -19,7 +19,7 @@ ENV GO111MODULE=on
 
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 
-RUN go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
+RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
 
 RUN apk add --no-cache librdkafka-dev bash libc6-compat  \
     openjdk8 nodejs npm yarn docker-cli
