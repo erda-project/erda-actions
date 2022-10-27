@@ -99,7 +99,7 @@ accessibleAPIs:
     method: POST
     schema: http
   # get app type
-  - path: /api/applications/<applicationId>
+  - path: /api/applications/<applicationIDOrName>
     method: GET
     schema: http
   # get app id by name

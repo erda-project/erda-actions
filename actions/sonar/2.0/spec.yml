@@ -31,7 +31,7 @@ params:
     required: false
     desc: ${{ i18n.params.sonar_project_key.desc }}
 accessibleAPIs:
-  - path: /api/applications/<applicationId>
+  - path: /api/applications/<applicationIDOrName>
     method: GET
     schema: http
 locale:
