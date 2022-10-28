@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
+FROM registry.erda.cloud/retag/golang:1.17.12-alpine3.15 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
@@ -15,9 +15,9 @@ RUN mkdir /opt/sonarqube && cd /opt/sonarqube && \
 
 # nodejs
 # https://docs.sonarqube.org/latest/analysis/languages/javascript/
-ENV NODE_VERSION 12.13.1
+ENV NODE_VERSION 16.16.0
 RUN \
-    curl --silent --location https://rpm.nodesource.com/setup_12.x | bash - && \
+    curl --silent --location https://rpm.nodesource.com/setup_16.x | bash - && \
     yum install -y nodejs-$NODE_VERSION
 # typescript
 RUN npm install -g typescript
