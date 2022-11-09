@@ -40,6 +40,11 @@ func scan(cfg conf.Conf) error {
 		}
 	}
 
+	// check param goal valid
+	if cfg.Goal != "check" && cfg.Goal != "aggregate" {
+		return fmt.Errorf("invalid param [goal]: %s, available value is check/aggegate", cfg.Goal)
+	}
+
 	// render mvn settings.xml
 	if len(cfg.MavenSettingsXMLPath) > 0 {
 		fmt.Fprintf(os.Stdout, "use user specified maven settings file: %s\n", cfg.MavenSettingsXMLPath)
@@ -61,8 +66,9 @@ func scan(cfg conf.Conf) error {
 	}
 
 	scanCmd := exec.Command("mvn",
-		"org.owasp:dependency-check-maven:"+cfg.MavenPluginVersion+":check",
+		fmt.Sprintf("org.owasp:dependency-check-maven:%s:%s", cfg.MavenPluginVersion, cfg.Goal),
 		"-e", "-B", "--fail-never",
+		"-DfailBuildOnCVSS", fmt.Sprintf("%.1f", cfg.FailBuildOnCVSS),
 		"-DautoUpdate="+strconv.FormatBool(cfg.AutoUpdateNVD),
 		"-DretireJsAnalyzerEnabled=false",
 		"-DnodeAnalyzerEnabled=false",
