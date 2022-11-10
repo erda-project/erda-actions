@@ -7,7 +7,7 @@ ENV GOPROXY=https://goproxy.cn/
 RUN apk add --no-cache librdkafka-dev bash libc6-compat  \
     openjdk8 nodejs npm yarn docker-cli libgit2-dev git \
     musl-dev gcc curl python3 py-pip openssh pkgconfig \
-    make
+    make tzdata
 
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 

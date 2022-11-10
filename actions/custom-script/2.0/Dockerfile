@@ -22,7 +22,7 @@ COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
 
 RUN apk add --no-cache librdkafka-dev bash libc6-compat  \
-    openjdk8 nodejs npm yarn docker-cli
+    openjdk8 nodejs npm yarn docker-cli tzdata
 
 RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
   && curl -fsSL -o /tmp/apache-maven.tar.gz https://mirrors.bfsu.edu.cn/apache/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz  \
