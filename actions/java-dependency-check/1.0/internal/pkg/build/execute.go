@@ -68,7 +68,7 @@ func scan(cfg conf.Conf) error {
 	scanCmd := exec.Command("mvn",
 		fmt.Sprintf("org.owasp:dependency-check-maven:%s:%s", cfg.MavenPluginVersion, cfg.Goal),
 		"-e", "-B", "--fail-never",
-		"-DfailBuildOnCVSS", fmt.Sprintf("%.1f", cfg.FailBuildOnCVSS),
+		fmt.Sprintf("-DfailBuildOnCVSS=%0.1f", cfg.FailBuildOnCVSS),
 		"-DautoUpdate="+strconv.FormatBool(cfg.AutoUpdateNVD),
 		"-DretireJsAnalyzerEnabled=false",
 		"-DnodeAnalyzerEnabled=false",
