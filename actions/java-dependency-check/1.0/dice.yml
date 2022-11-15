@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   java-sec:
-    image: registry.erda.cloud/erda-actions/java-dependency-check-action:20210911-e3ae3a2
+    image: registry.erda.cloud/erda-actions/java-dependency-check-action:1.0-20221114110332-8501675
     resources:
       cpu: 1
       mem: 4096
