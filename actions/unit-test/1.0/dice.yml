@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   unit-test:
-    image: registry.erda.cloud/erda-actions/unit-test-action:1.0-20220511-077901b
+    image: registry.erda.cloud/erda-actions/unit-test-action:1.0-20221125112546-2b7f825
     resources:
       cpu: 0.5
       mem: 2048

@@ -2,6 +2,7 @@ package ut
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -18,6 +19,7 @@ import (
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/erda-project/erda/pkg/qaparser"
 )
 
@@ -191,9 +193,35 @@ func makeUtResults(suites []*pb.TestSuite) (*pb.TestCallBackRequest, error) {
 	return results, nil
 }
 
+// calculateTestCoverage calculate test rate, return passedRate, failedRate, skippedRate
+func calculateTestCoverage(totals *pb.TestCallBackRequest) (float64, float64, float64) {
+	var (
+		total       int64
+		passedRate  float64
+		failedRate  float64
+		skippedRate float64
+	)
+	total = totals.Totals.Statuses[string(apistructs.TestStatusPassed)] +
+		totals.Totals.Statuses[string(apistructs.TestStatusFailed)] +
+		totals.Totals.Statuses[string(apistructs.TestStatusSkipped)] +
+		totals.Totals.Statuses[string(apistructs.TestStatusError)]
+	if total == 0 {
+		passedRate = 0
+		failedRate = 0
+		skippedRate = 0
+	} else {
+		passedRate = float64(totals.Totals.Statuses[string(apistructs.TestStatusPassed)]) / float64(total) * 100
+		failedRate = float64(totals.Totals.Statuses[string(apistructs.TestStatusFailed)]+
+			totals.Totals.Statuses[string(apistructs.TestStatusError)]) / float64(total) * 100
+		skippedRate = float64(totals.Totals.Statuses[string(apistructs.TestStatusSkipped)]) / float64(total) * 100
+	}
+	return passedRate, failedRate, skippedRate
+}
+
 func storeMetaFile(qaID string, req *pb.TestCallBackRequest) error {
+	passedRate, failedRate, skippedRate := calculateTestCoverage(req)
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "projectId",
 				Value: strconv.FormatUint(base.Cfg.ProjectID, 10),
@@ -215,6 +243,18 @@ func storeMetaFile(qaID string, req *pb.TestCallBackRequest) error {
 				Value: qaID,
 				Type:  apistructs.ActionCallbackTypeLink,
 			},
+			{
+				Name:  "passedRate",
+				Value: fmt.Sprintf("%.2f", passedRate),
+			},
+			{
+				Name:  "failedRate",
+				Value: fmt.Sprintf("%.2f", failedRate),
+			},
+			{
+				Name:  "skippedRate",
+				Value: fmt.Sprintf("%.2f", skippedRate),
+			},
 		},
 	}
 
@@ -224,7 +264,7 @@ func storeMetaFile(qaID string, req *pb.TestCallBackRequest) error {
 		if err != nil {
 			return err
 		}
-		meta.Metadata = append(meta.Metadata, apistructs.MetadataField{
+		meta.Metadata = append(meta.Metadata, metadata.MetadataField{
 			Name:  "results",
 			Value: string(resultJson),
 		})
@@ -233,7 +273,7 @@ func storeMetaFile(qaID string, req *pb.TestCallBackRequest) error {
 		if err != nil {
 			return err
 		}
-		meta.Metadata = append(meta.Metadata, apistructs.MetadataField{
+		meta.Metadata = append(meta.Metadata, metadata.MetadataField{
 			Name:  "suites",
 			Value: string(suitesJson),
 		})
@@ -242,7 +282,7 @@ func storeMetaFile(qaID string, req *pb.TestCallBackRequest) error {
 		if err != nil {
 			return err
 		}
-		meta.Metadata = append(meta.Metadata, apistructs.MetadataField{
+		meta.Metadata = append(meta.Metadata, metadata.MetadataField{
 			Name:  "totals",
 			Value: string(totalsJson),
 		})
