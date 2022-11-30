@@ -38,6 +38,10 @@ func (sonar *Sonar) Analysis(cfg *Conf) (*ResultMetas, error) {
 		args = append(args, fmt.Sprintf("-Dsonar.password=%s", sonar.Auth.Password))
 	}
 
+	if cfg.ActionParams.JacocoXmlReportPaths != "" {
+		args = append(args, fmt.Sprintf("-Dsonar.coverage.jacoco.xmlReportPaths=%s", cfg.ActionParams.JacocoXmlReportPaths))
+	}
+
 	// project key
 	projectKey := cfg.ActionParams.ProjectKey
 	if projectKey == "" {
@@ -73,6 +77,11 @@ func (sonar *Sonar) Analysis(cfg *Conf) (*ResultMetas, error) {
 	// exclusions
 	if cfg.ActionParams.SonarExclusions != "" {
 		args = append(args, fmt.Sprintf("-Dsonar.exclusions=%s", cfg.ActionParams.SonarExclusions))
+	}
+
+	// inclusions
+	if cfg.ActionParams.SonarInclusions != "" {
+		args = append(args, fmt.Sprintf("-Dsonar.inclusions=%s", cfg.ActionParams.SonarInclusions))
 	}
 
 	// scm

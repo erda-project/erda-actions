@@ -114,6 +114,12 @@ type ActionParams struct {
 
 	// QualityGate
 	QualityGate []QualityGateCondition `env:"ACTION_QUALITY_GATE"`
+
+	// jacoco XmlReportPath
+	JacocoXmlReportPaths string `env:"ACTION_JACOCO_XML_REPORT_PATHS"`
+
+	// sonar-scanner inclusions
+	SonarInclusions string `env:"ACTION_SONAR_INCLUSIONS"`
 }
 
 func Parse() (*Conf, error) {

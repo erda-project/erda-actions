@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   sonar:
-    image: registry.erda.cloud/erda-actions/sonar-action:1.0-20220927132720-be1133a
+    image: registry.erda.cloud/erda-actions/sonar-action:1.0-20221130114723-92c5240
     resources:
       cpu: 1
       mem: 2048
