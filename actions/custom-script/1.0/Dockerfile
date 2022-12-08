@@ -29,6 +29,8 @@ RUN wget https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.24.1/
     && tar zxvf crictl-v1.24.1-linux-amd64.tar.gz -C /usr/local/bin \
     && rm -f crictl-v1.24.1-linux-amd64.tar.gz
 
+COPY --from=docker/buildx-bin /buildx /usr/libexec/docker/cli-plugins/docker-buildx
+
 WORKDIR $GOPATH
 
 
