@@ -25,6 +25,10 @@ RUN ln -sf /bin/bash /bin/sh
 
 RUN wget http://gosspublic.alicdn.com/ossutil/1.5.0/ossutil64 -O /usr/local/bin/ossutil && chmod 755 /usr/local/bin/ossutil
 
+RUN wget https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.24.1/crictl-v1.24.1-linux-amd64.tar.gz \
+    && tar zxvf crictl-v1.24.1-linux-amd64.tar.gz -C /usr/local/bin \
+    && rm -f crictl-v1.24.1-linux-amd64.tar.gz
+
 WORKDIR $GOPATH
 
 
