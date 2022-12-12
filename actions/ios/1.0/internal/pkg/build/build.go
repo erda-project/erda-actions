@@ -105,7 +105,7 @@ func Execute() error {
 	err = retry.DoWithInterval(
 		func() error {
 			var err error
-			uploadResult, err = dice.UploadFile(uploadReq)
+			uploadResult, err = dice.UploadFile(uploadReq, time.Duration(cfg.UploadTimeout)*time.Second)
 			return err
 		}, 10, time.Second*15,
 	)

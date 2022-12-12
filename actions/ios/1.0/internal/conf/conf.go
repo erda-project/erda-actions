@@ -15,9 +15,10 @@ type Conf struct {
 	Context         string               `env:"ACTION_CONTEXT"`
 	P12Cert         *P12CertFile         `env:"ACTION_P12_CERT"`
 	MobileProvision *MobileProvisionFile `env:"ACTION_MOBILE_PROVISION"`
+	UploadTimeout   uint64               `env:"ACTION_UPLOAD_TIMEOUT" default:"30"`
 
 	// pipeline注入，镜像生成需要
-	PipelineTaskLogID string `env:"PIPELINE_TASK_LOG_ID" `
+	PipelineTaskLogID string `env:"PIPELINE_TASK_LOG_ID"`
 }
 
 type MobileProvisionFile struct {

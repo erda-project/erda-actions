@@ -21,6 +21,9 @@ params:
     type: string_array
     desc: ${{ i18n.params.targets.desc }}
     required: true
+  - name: upload_timeout
+    type: int
+    desc: ${{ i18n.params.upload_timeout.desc }}
   - name: p12_cert
     desc: ${{ i18n.params.p12_cert.desc }}
     type: struct
@@ -61,6 +64,7 @@ locale:
     displayName: iOS构建
     params.commands.desc: 构建命令列表
     params.context.desc: 代码路径
+    params.upload_timeout.desc: 上传文件的超时时间，单位为秒
     params.mobile_provision.desc: mobileprovision文件
     params.mobile_provision.struct.dest.desc: 存储的目标路径
     params.mobile_provision.struct.source.desc: mobileprovision证书配置key
@@ -75,6 +79,7 @@ locale:
     displayName: iOS build
     params.commands.desc: build command list
     params.context.desc: code path
+    params.upload_timeout.desc: upload file timeout, unit is second
     params.mobile_provision.desc: mobileprovision file
     params.mobile_provision.struct.dest.desc: storage destination path
     params.mobile_provision.struct.source.desc: mobileprovision certificate configuration key
