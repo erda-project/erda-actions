@@ -32,6 +32,8 @@ type Conf struct {
 	From     string `env:"ACTION_FROM"`
 	Service  string `env:"ACTION_SERVICE"`
 	Pull     bool   `env:"ACTION_PULL"`
+	Insecure bool   `env:"ACTION_INSECURE" default:"true"`
+
 	// pipeline 自动注入
 	TaskName       string `env:"PIPELINE_TASK_NAME" default:"unknown"`
 	ProjectAppAbbr string `env:"DICE_PROJECT_APPLICATION"` // 用于生成用户镜像repo
@@ -109,7 +111,8 @@ func pushImage(cfg Conf) ([]byte, error) {
 			return nil, err
 		}
 
-		if err := simpleRun("gcrane", "push", imageFile, cfg.Image); err != nil {
+		if err := simpleRun("gcrane", "push", imageFile, cfg.Image, fmt.Sprintf("--insecure=%s",
+			strconv.FormatBool(cfg.Insecure))); err != nil {
 			return nil, err
 		}
 	} else {
@@ -150,7 +153,8 @@ func pullImage(cfg Conf, toImage string) ([]byte, error) {
 			return nil, err
 		}
 
-		if err := simpleRun("gcrane", "push", imageFile, toImage); err != nil {
+		if err := simpleRun("gcrane", "push", imageFile, cfg.Image, fmt.Sprintf("--insecure=%s",
+			strconv.FormatBool(cfg.Insecure))); err != nil {
 			return nil, err
 		}
 	} else {
