@@ -153,7 +153,7 @@ func pullImage(cfg Conf, toImage string) ([]byte, error) {
 			return nil, err
 		}
 
-		if err := simpleRun("gcrane", "push", imageFile, cfg.Image, fmt.Sprintf("--insecure=%s",
+		if err := simpleRun("gcrane", "push", imageFile, toImage, fmt.Sprintf("--insecure=%s",
 			strconv.FormatBool(cfg.Insecure))); err != nil {
 			return nil, err
 		}
