@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.16.7 as builder
+FROM registry.erda.cloud/erda/terminus-golang:1.17.12 as builder
 
 MAINTAINER shenli shenli@terminus.io
 

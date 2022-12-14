@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	"github.com/erda-project/erda-proto-go/core/file/pb"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 )
 
@@ -21,7 +22,7 @@ type UploadFileRequest struct {
 }
 
 // UploadFile 上传到api/files接口
-func UploadFile(req *UploadFileRequest, timeout time.Duration) (*apistructs.FileUploadResponse, error) {
+func UploadFile(req *UploadFileRequest, timeout time.Duration) (*pb.FileUploadResponse, error) {
 	logrus.Infof("upload file %s", req.FilePath)
 	f, err := os.Open(req.FilePath)
 	if err != nil {
@@ -35,7 +36,7 @@ func UploadFile(req *UploadFileRequest, timeout time.Duration) (*apistructs.File
 			Filename: fileName,
 		},
 	}
-	var resp FileUploadResponse
+	var resp pb.FileUploadResponse
 	request := httpclient.New(httpclient.WithCompleteRedirect(), httpclient.WithTimeout(time.Second, timeout)).Post(req.OpenApiPrefix).
 		Path("/api/files").
 		Param("fileFrom", req.From).

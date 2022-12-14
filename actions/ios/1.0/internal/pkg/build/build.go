@@ -17,6 +17,7 @@ import (
 
 	"github.com/erda-project/erda-actions/actions/ios/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/pkg/dice"
+	"github.com/erda-project/erda-proto-go/core/file/pb"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
@@ -101,7 +102,7 @@ func Execute() error {
 		Public:        "true",
 		ExpireIn:      "3600s",
 	}
-	var uploadResult *apistructs.FileUploadResponse
+	var uploadResult *pb.FileUploadResponse
 	err = retry.DoWithInterval(
 		func() error {
 			var err error
