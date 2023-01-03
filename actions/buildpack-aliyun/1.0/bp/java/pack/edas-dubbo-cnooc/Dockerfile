@@ -7,6 +7,8 @@ RUN echo "Asia/Shanghai" | tee /etc/timezone
 ARG TZ="Asia/Shanghai"
 
 WORKDIR /
+RUN wget https://arms-apm-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/2.7.1.4/ArmsAgent.zip -O /opt/ArmsAgent.zip
+RUN rm -rf /cnooc/dice_files/ArmsAgent && unzip /opt/ArmsAgent.zip -d /cnooc/dice_files/
 
 COPY /bp/pack/start.sh /home/admin/bin/start.sh
 RUN chmod +x /home/admin/bin/start.sh

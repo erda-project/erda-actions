@@ -8,6 +8,9 @@ COPY /bp/pack/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 WORKDIR /
+RUN wget https://arms-apm-cn-hangzhou.oss-cn-hangzhou.aliyuncs.com/2.7.1.4/ArmsAgent.zip -O /opt/ArmsAgent.zip
+RUN rm -rf /asia/dice_files/ArmsAgent && unzip /opt/ArmsAgent.zip -d /asia/dice_files/
+RUN rm -rf /chngc/dice_files/ArmsAgent && unzip /opt/ArmsAgent.zip -d /chngc/dice_files/
 
 ARG USE_AGENT=true
 ARG USE_PREVIEW_AGENT=false
