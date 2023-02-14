@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -149,8 +150,8 @@ func storeMetaFile(conf *conf, runtimeID int64, deploymentID int64) error {
 	return nil
 }
 
-func generateMetadata(conf *conf, runtimeID int64, deploymentID int64) *apistructs.Metadata {
-	return &apistructs.Metadata{
+func generateMetadata(conf *conf, runtimeID int64, deploymentID int64) *metadata.Metadata {
+	return &metadata.Metadata{
 		{
 			Name:  "project_id",
 			Value: strconv.FormatUint(conf.ProjectID, 10),

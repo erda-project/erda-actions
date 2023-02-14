@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
@@ -129,7 +130,7 @@ func getRecord(conf *config.Config, id uint64) (apistructs.TestFileRecord, error
 
 func storeMetaFile(conf *config.Config, downloadUrl string) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "package_url",
 				Value: downloadUrl,

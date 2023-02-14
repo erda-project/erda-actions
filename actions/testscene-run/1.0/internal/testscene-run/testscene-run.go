@@ -14,6 +14,7 @@ import (
 	"github.com/erda-project/erda/pkg/encoding/jsonparse"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/erda-project/erda/pkg/strutil"
 )
 
@@ -157,7 +158,7 @@ func getDiceTaskRuntimeIDs(dto *apistructs.PipelineDetailDTO) []string {
 
 func storeMetaFile(pipelineID uint64, status string, runtimeID []string) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "pipelineID",
 				Value: strconv.FormatUint(pipelineID, 10),
@@ -170,12 +171,12 @@ func storeMetaFile(pipelineID uint64, status string, runtimeID []string) error {
 	}
 
 	if len(runtimeID) > 0 {
-		meta.Metadata = append(meta.Metadata, apistructs.MetadataField{
+		meta.Metadata = append(meta.Metadata, metadata.MetadataField{
 			Name:  "runtimeIDs",
 			Value: jsonparse.JsonOneLine(strutil.DedupSlice(runtimeID)),
 		})
 
-		meta.Metadata = append(meta.Metadata, apistructs.MetadataField{
+		meta.Metadata = append(meta.Metadata, metadata.MetadataField{
 			Name:  "runtimeID",
 			Value: runtimeID[0],
 		})

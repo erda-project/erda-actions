@@ -15,6 +15,7 @@ import (
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/erda-project/erda/pkg/strutil"
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
@@ -229,7 +230,7 @@ func getRepo(cfg conf.Conf) string {
 
 func storeMetaFile(cfg *conf.Conf, image string) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "image",
 				Value: image,

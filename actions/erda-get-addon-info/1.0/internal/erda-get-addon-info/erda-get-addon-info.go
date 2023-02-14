@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
@@ -40,9 +41,9 @@ type conf struct {
 	PipelineTaskID  uint64 `env:"PIPELINE_TASK_ID"`
 
 	// params
-	RuntimeID string `env:"ACTION_RUNTIME_ID"`
-	AddonName  string `env:"ACTION_ADDON_NAME"`
-	ApplicationName  string `env:"ACTION_APPLICATION_NAME"`
+	RuntimeID       string `env:"ACTION_RUNTIME_ID"`
+	AddonName       string `env:"ACTION_ADDON_NAME"`
+	ApplicationName string `env:"ACTION_APPLICATION_NAME"`
 }
 
 type dice struct {
@@ -50,7 +51,7 @@ type dice struct {
 }
 
 type Result struct {
-	Info   map[string]string   `json:"addonConfigs"`
+	Info map[string]string `json:"addonConfigs"`
 }
 
 func Run() error {
@@ -58,7 +59,7 @@ func Run() error {
 	if err := envconf.Load(&cfg); err != nil {
 		return err
 	}
-	logrus.Infof("Cfg: %#v",cfg)
+	logrus.Infof("Cfg: %#v", cfg)
 
 	d := &dice{conf: &cfg}
 
@@ -170,28 +171,28 @@ func storeMetaFile(conf *conf, result *Result) error {
 	return nil
 }
 
-func generateMetadata(result *Result) *apistructs.Metadata {
-	addrs := make([]apistructs.MetadataField, 0)
+func generateMetadata(result *Result) *metadata.Metadata {
+	addrs := make([]metadata.MetadataField, 0)
 	for name, addr := range result.Info {
-		addrs = append(addrs, apistructs.MetadataField{
+		addrs = append(addrs, metadata.MetadataField{
 			Name:  name,
 			Value: addr,
-		} )
+		})
 	}
 
-	var ret apistructs.Metadata
+	var ret metadata.Metadata
 	ret = addrs
 	return &ret
 }
 
 // 获取应用程序对应的 Runtime
-func getAddons(conf *conf) ([]apistructs.AddonFetchResponseData, error){
+func getAddons(conf *conf) ([]apistructs.AddonFetchResponseData, error) {
 	var resp apistructs.AddonListResponse
 	r, err := httpclient.New(httpclient.WithCompleteRedirect()).Get(conf.DiceOpenapiPrefix).Path("/api/addons").
 		Param("type", "runtime").
 		Param("workspace", conf.Workspace).
 		Param("value", conf.RuntimeID).
-		Param("projectId", fmt.Sprintf("%d",conf.ProjectID)).
+		Param("projectId", fmt.Sprintf("%d", conf.ProjectID)).
 		Header("User-ID", conf.UserID).
 		Header("Org-ID", strconv.FormatUint(conf.OrgID, 10)).
 		Header("Authorization", conf.DiceOpenapiToken).Do().JSON(&resp)
@@ -205,13 +206,12 @@ func getAddons(conf *conf) ([]apistructs.AddonFetchResponseData, error){
 		logrus.Infof("getAddons for runtimeID %s failed, error msg: %v", conf.RuntimeID, fmt.Errorf(resp.Error.Msg))
 		return nil, fmt.Errorf(resp.Error.Msg)
 	}
-	if len(resp.Data) == 0  {
+	if len(resp.Data) == 0 {
 		logrus.Infof("not found addons for runtimeID %s, error: %v", conf.RuntimeID, fmt.Errorf("runtime ID not found"))
 		return nil, fmt.Errorf("addons for runtimeID %s not found", conf.RuntimeID)
 	}
 	return resp.Data, nil
 }
-
 
 func getAddonByRoutingKeyId(cfg *conf, addonID string) (*apistructs.AddonFetchResponseData, error) {
 	var buffer bytes.Buffer
@@ -238,7 +238,7 @@ func getAddonByRoutingKeyId(cfg *conf, addonID string) (*apistructs.AddonFetchRe
 func getAppID(conf *conf, name string) (uint64, error) {
 	var resp apistructs.ApplicationListResponse
 	r, err := httpclient.New(httpclient.WithCompleteRedirect()).Get(conf.DiceOpenapiPrefix).Path("/api/applications").
-		Param("projectId", fmt.Sprintf("%d",conf.ProjectID)).
+		Param("projectId", fmt.Sprintf("%d", conf.ProjectID)).
 		Param("name", name).
 		Param("pageNo", "1").
 		Param("pageSize", "1").
@@ -260,11 +260,11 @@ func getAppID(conf *conf, name string) (uint64, error) {
 }
 
 // 获取应用程序对应的 Runtime
-func getRuntimeId(conf *conf, name string, appId uint64) (string, error){
+func getRuntimeId(conf *conf, name string, appId uint64) (string, error) {
 	var resp apistructs.RuntimeListResponse
 	r, err := httpclient.New(httpclient.WithCompleteRedirect()).Get(conf.DiceOpenapiPrefix).Path("/api/runtimes").
-		Param("projectId", fmt.Sprintf("%d",conf.ProjectID)).
-		Param("applicationId", fmt.Sprintf("%d",appId)).
+		Param("projectId", fmt.Sprintf("%d", conf.ProjectID)).
+		Param("applicationId", fmt.Sprintf("%d", appId)).
 		Header("User-ID", conf.UserID).
 		Header("Org-ID", strconv.FormatUint(conf.OrgID, 10)).
 		Header("Authorization", conf.DiceOpenapiToken).Do().JSON(&resp)

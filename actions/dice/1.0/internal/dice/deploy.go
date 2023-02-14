@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/hashicorp/go-multierror"
 	"github.com/parnurzeal/gorequest"
 	"github.com/pkg/errors"
@@ -54,7 +55,7 @@ func Run() error {
 	}
 	log.AddNewLine(1)
 	// add msg because of frontend will match regularly, the regular is msg=\"(.+)\"
- 	logrus.Infof("msg=\"deploy starting... ##to_link:applicationId:%d,runtimeId:%d,deploymentId:%d\"",
+	logrus.Infof("msg=\"deploy starting... ##to_link:applicationId:%d,runtimeId:%d,deploymentId:%d\"",
 		result.ApplicationId, result.RuntimeId, result.DeploymentId)
 
 	//Set default deployment timeout is 24h.
@@ -96,8 +97,8 @@ func storeDiceInfo(deploymentId, runtimeId, wd string) error {
 }
 
 // generateMetadata 生成固定Metadata数据
-func generateMetadata(conf *conf, runtimeID int64, deploymentID int64) *apistructs.Metadata {
-	return &apistructs.Metadata{
+func generateMetadata(conf *conf, runtimeID int64, deploymentID int64) *metadata.Metadata {
+	return &metadata.Metadata{
 		{
 			Name:  "projectID",
 			Value: strconv.FormatUint(conf.ProjectID, 10),
@@ -121,16 +122,16 @@ func storeMetaFileWithErr(conf *conf, runtimeID int64, deploymentID int64, deplo
 	if len(deployResult.Data.MoudleErrMsg) == 0 {
 		return storeMetaFile(conf, runtimeID, deploymentID)
 	}
-	metadata := generateMetadata(conf, runtimeID, deploymentID)
+	metaData := generateMetadata(conf, runtimeID, deploymentID)
 	for k, v := range deployResult.Data.MoudleErrMsg {
-		*metadata = append(*metadata, apistructs.MetadataField{
+		*metaData = append(*metaData, metadata.MetadataField{
 			Name:  k,
 			Value: v,
 		})
 	}
 	// remove that the value is empty
-	newMetadata := make([]apistructs.MetadataField, 0)
-	for _, v := range *metadata {
+	newMetadata := make([]metadata.MetadataField, 0)
+	for _, v := range *metaData {
 		if v.Value != "" {
 			newMetadata = append(newMetadata, v)
 		}
@@ -164,7 +165,7 @@ func storeMetaFile(conf *conf, runtimeID int64, deploymentID int64) error {
 
 func reportRuntimeID2PipelinePlatform(conf *conf, runtimeID string) error {
 	cb := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{Name: apistructs.ActionCallbackRuntimeID, Value: runtimeID, Type: apistructs.ActionCallbackTypeLink},
 			{Name: apistructs.ActionCallbackOperatorID, Value: conf.OperatorID},
 		},

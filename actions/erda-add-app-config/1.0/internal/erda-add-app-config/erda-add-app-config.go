@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
@@ -40,8 +41,8 @@ type conf struct {
 	PipelineTaskID  uint64 `env:"PIPELINE_TASK_ID"`
 
 	// params
-	ApplicationName string `env:"ACTION_APPLICATION_NAME"`
-	ConfigWorkspace string `env:"ACTION_CONFIG_WORKSPACE"`
+	ApplicationName string            `env:"ACTION_APPLICATION_NAME"`
+	ConfigWorkspace string            `env:"ACTION_CONFIG_WORKSPACE"`
 	ConfigItems     map[string]string `env:"ACTION_CONFIG_ITEMS"`
 }
 
@@ -85,7 +86,7 @@ func Run() error {
 func (d *dice) GetAppIDByName(conf *conf) (uint64, error) {
 	var resp apistructs.ApplicationListResponse
 	r, err := httpclient.New(httpclient.WithCompleteRedirect()).Get(conf.DiceOpenapiPrefix).Path("/api/applications").
-		Param("projectId", fmt.Sprintf("%d",conf.ProjectID)).
+		Param("projectId", fmt.Sprintf("%d", conf.ProjectID)).
 		Param("name", conf.ApplicationName).
 		Param("pageNo", "1").
 		Param("pageSize", "1").
@@ -106,7 +107,7 @@ func (d *dice) GetAppIDByName(conf *conf) (uint64, error) {
 	return resp.Data.List[0].ID, nil
 }
 
-func (d *dice) AddConfig(conf *conf, appID uint64)  error {
+func (d *dice) AddConfig(conf *conf, appID uint64) error {
 	configNamespace := fmt.Sprintf("app-%d-%s", appID, strings.ToUpper(conf.ConfigWorkspace))
 	var req apistructs.EnvConfigAddOrUpdateRequest
 	for k, v := range conf.ConfigItems {
@@ -158,8 +159,8 @@ func storeMetaFile(conf *conf) error {
 	return nil
 }
 
-func generateMetadata(conf *conf) *apistructs.Metadata {
-	return &apistructs.Metadata{
+func generateMetadata(conf *conf) *metadata.Metadata {
+	return &metadata.Metadata{
 		{
 			Name:  "project_id",
 			Value: strconv.FormatUint(conf.ProjectID, 10),

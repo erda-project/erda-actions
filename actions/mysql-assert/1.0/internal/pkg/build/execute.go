@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
@@ -250,12 +251,12 @@ func simpleRunAndPrint(name string, arg ...string) error {
 
 func storeMetaFile(cfg *conf.Conf, results map[string]string) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{},
+		Metadata: metadata.Metadata{},
 	}
 
 	for key, value := range results {
 		{
-			meta.Metadata = append(meta.Metadata, apistructs.MetadataField{
+			meta.Metadata = append(meta.Metadata, metadata.MetadataField{
 				Name:  key,
 				Value: value,
 			})

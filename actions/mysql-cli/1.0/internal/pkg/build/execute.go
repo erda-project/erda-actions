@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda-actions/actions/mysql-cli/1.0/internal/pkg/conf"
@@ -166,7 +167,7 @@ func simpleRunAndPrint(name string, arg ...string) error {
 
 func storeMetaFile(cfg *conf.Conf, jsonValue string) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "result",
 				Value: jsonValue,

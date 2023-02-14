@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -40,8 +41,8 @@ type conf struct {
 	PipelineTaskID  uint64 `env:"PIPELINE_TASK_ID"`
 
 	// params
-	RuntimeID string `env:"ACTION_RUNTIME_ID"`
-	ApplicationName  string `env:"ACTION_APPLICATION_NAME"`
+	RuntimeID       string `env:"ACTION_RUNTIME_ID"`
+	ApplicationName string `env:"ACTION_APPLICATION_NAME"`
 }
 
 type dice struct {
@@ -70,7 +71,7 @@ func Run() error {
 	if err := envconf.Load(&cfg); err != nil {
 		return err
 	}
-	logrus.Infof("%#v",cfg)
+	logrus.Infof("%#v", cfg)
 
 	d := &dice{conf: &cfg}
 
@@ -150,8 +151,8 @@ func storeMetaFile(conf *conf, runtimeID int64, deploymentID int64) error {
 	return nil
 }
 
-func generateMetadata(conf *conf, runtimeID int64, deploymentID int64) *apistructs.Metadata {
-	return &apistructs.Metadata{
+func generateMetadata(conf *conf, runtimeID int64, deploymentID int64) *metadata.Metadata {
+	return &metadata.Metadata{
 		{
 			Name:  "project_id",
 			Value: strconv.FormatUint(conf.ProjectID, 10),
@@ -176,7 +177,7 @@ func generateMetadata(conf *conf, runtimeID int64, deploymentID int64) *apistruc
 func getAppID(conf *conf, name string) (uint64, error) {
 	var resp apistructs.ApplicationListResponse
 	r, err := httpclient.New(httpclient.WithCompleteRedirect()).Get(conf.DiceOpenapiPrefix).Path("/api/applications").
-		Param("projectId", fmt.Sprintf("%d",conf.ProjectID)).
+		Param("projectId", fmt.Sprintf("%d", conf.ProjectID)).
 		Param("name", name).
 		Param("pageNo", "1").
 		Param("pageSize", "1").
@@ -198,11 +199,11 @@ func getAppID(conf *conf, name string) (uint64, error) {
 }
 
 // 获取应用程序对应的 Runtime
-func getRuntimeId(conf *conf, name string, appId uint64) (string, error){
+func getRuntimeId(conf *conf, name string, appId uint64) (string, error) {
 	var resp apistructs.RuntimeListResponse
 	r, err := httpclient.New(httpclient.WithCompleteRedirect()).Get(conf.DiceOpenapiPrefix).Path("/api/runtimes").
-		Param("projectId", fmt.Sprintf("%d",conf.ProjectID)).
-		Param("applicationId", fmt.Sprintf("%d",appId)).
+		Param("projectId", fmt.Sprintf("%d", conf.ProjectID)).
+		Param("applicationId", fmt.Sprintf("%d", appId)).
 		Param("workspace", conf.Workspace).
 		Param("name", name).
 		Header("User-ID", conf.UserID).

@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
@@ -151,7 +152,7 @@ func runCommand(cmd string, hideStdout bool) error {
 	return nil
 }
 
-//创建审核
+// 创建审核
 func createApplication(req apistructs.ApplicationCreateRequest) (*apistructs.ApplicationDTO, error) {
 
 	var resp apistructs.ApplicationCreateResponse
@@ -235,7 +236,7 @@ func getApplicationList() ([]apistructs.ApplicationDTO, error) {
 
 func storeMetaFile(appID string, appExist bool) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "appId",
 				Value: appID,

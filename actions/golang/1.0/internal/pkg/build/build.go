@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/labstack/gommon/random"
 
 	"github.com/erda-project/erda-actions/actions/golang/1.0/internal/conf"
@@ -202,7 +203,7 @@ func packWithDocker(repo string) error {
 		return err
 	}
 	fmt.Fprintf(os.Stdout, "successfully push app image: %s\n", repo)
-	return  nil
+	return nil
 }
 
 func packWithBuildkit(repo string) error {
@@ -214,9 +215,9 @@ func packWithBuildkit(repo string) error {
 		"build",
 		"--frontend", "dockerfile.v0",
 		"--opt", "build-arg:TARGET=target",
-		"--local", "context=" + cfg.WorkDir,
-		"--local", "dockerfile=" + cfg.WorkDir,
-		"--output", "type=image,name=" + repo + ",push=true")
+		"--local", "context="+cfg.WorkDir,
+		"--local", "dockerfile="+cfg.WorkDir,
+		"--output", "type=image,name="+repo+",push=true")
 
 	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
 	packCmd.Stdout = os.Stdout
@@ -225,7 +226,7 @@ func packWithBuildkit(repo string) error {
 		return err
 	}
 	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
-	return  nil
+	return nil
 }
 
 func getRepo(cfg conf.Conf) string {
@@ -240,7 +241,7 @@ func getRepo(cfg conf.Conf) string {
 
 func storeMetaFile(cfg *conf.Conf, image string) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "image",
 				Value: image,

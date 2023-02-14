@@ -16,6 +16,7 @@ import (
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/metadata"
 )
 
 const (
@@ -86,20 +87,20 @@ func Run() error {
 	}
 	fmt.Fprintf(os.Stdout, "library %s publish succ, version: %s\n", spec.Name, spec.Version)
 
-	metaInfos := make([]apistructs.MetadataField, 0, 1)
-	metaInfos = append(metaInfos, apistructs.MetadataField{
+	metaInfos := make([]metadata.MetadataField, 0, 1)
+	metaInfos = append(metaInfos, metadata.MetadataField{
 		Name:  apistructs.ActionCallbackPublisherID,
 		Value: strconv.FormatUint(uint64(relation.PublisherID), 10),
 	})
-	metaInfos = append(metaInfos, apistructs.MetadataField{
+	metaInfos = append(metaInfos, metadata.MetadataField{
 		Name:  apistructs.ActionCallbackPublishItemID,
 		Value: strconv.FormatUint(uint64(relation.PublishItemID), 10),
 	})
-	metaInfos = append(metaInfos, apistructs.MetadataField{
+	metaInfos = append(metaInfos, metadata.MetadataField{
 		Name:  apistructs.ActionCallbackPublishItemVersionID,
 		Value: strconv.FormatUint(publishItemResponse.Data.ID, 10),
 	})
-	metaInfos = append(metaInfos, apistructs.MetadataField{
+	metaInfos = append(metaInfos, metadata.MetadataField{
 		Name:  "type",
 		Value: apistructs.PublishItemTypeLIBRARY,
 	})

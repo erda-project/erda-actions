@@ -1,18 +1,19 @@
 package store
 
 import (
-	"fmt"
 	"encoding/json"
-	"strconv"
+	"fmt"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/pkg/errors"
-	"github.com/erda-project/erda/apistructs"
 
-	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/common"
+	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/metadata"
 )
 
 type Store interface {
@@ -68,10 +69,10 @@ func (s *store) StoreDiceInfo(orderId string, dr map[string]*common.DeployResult
 
 func (s *store) BatchStoreMetaFile(statusResp map[string]*common.DeploymentStatusRespData) error {
 	if statusResp == nil {
-		return s.storeMetaFile(apistructs.Metadata{})
+		return s.storeMetaFile(metadata.Metadata{})
 	}
 
-	metadata := []apistructs.MetadataField{
+	metaData := []metadata.MetadataField{
 		{Name: "projectID", Value: strconv.FormatUint(s.cfg.ProjectID, 10)},
 	}
 
@@ -85,13 +86,13 @@ func (s *store) BatchStoreMetaFile(statusResp map[string]*common.DeploymentStatu
 				if v == "" {
 					continue
 				}
-				metadata = append(metadata, apistructs.MetadataField{
+				metaData = append(metaData, metadata.MetadataField{
 					Name:  k,
 					Value: v,
 				})
 			}
 		default:
-			metadata = append(metadata, apistructs.Metadata{
+			metaData = append(metaData, metadata.Metadata{
 				{Name: "appID", Value: strconv.FormatUint(s.cfg.AppID, 10)},
 				{Name: "deploymentID", Value: strconv.Itoa(resp.Data.DeploymentId)},
 			}...)
@@ -99,10 +100,10 @@ func (s *store) BatchStoreMetaFile(statusResp map[string]*common.DeploymentStatu
 		}
 	}
 
-	return s.storeMetaFile(metadata)
+	return s.storeMetaFile(metaData)
 }
 
-func (s *store) storeMetaFile(metaData apistructs.Metadata) error {
+func (s *store) storeMetaFile(metaData metadata.Metadata) error {
 	meta := apistructs.ActionCallback{
 		Metadata: metaData,
 	}

@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -227,15 +228,15 @@ func StoreMetaFileWithErr(conf *Conf, runtimeID int64, deploymentID int64, deplo
 	if len(deployResult.Data.MoudleErrMsg) == 0 {
 		return storeMetaFile(conf, runtimeID, deploymentID)
 	}
-	metadata := generateMetadata(conf, runtimeID, deploymentID)
+	metaData := generateMetadata(conf, runtimeID, deploymentID)
 	for k, v := range deployResult.Data.MoudleErrMsg {
-		*metadata = append(*metadata, apistructs.MetadataField{
+		*metaData = append(*metaData, metadata.MetadataField{
 			Name:  k,
 			Value: v,
 		})
 	}
 	meta := apistructs.ActionCallback{
-		Metadata: *metadata,
+		Metadata: *metaData,
 	}
 	b, err := json.Marshal(&meta)
 	if err != nil {
@@ -280,8 +281,8 @@ func GetDeploymentStatus(res *DeployResult, conf *Conf) (*R, error) {
 }
 
 // generateMetadata 生成固定Metadata数据
-func generateMetadata(conf *Conf, runtimeID int64, deploymentID int64) *apistructs.Metadata {
-	return &apistructs.Metadata{
+func generateMetadata(conf *Conf, runtimeID int64, deploymentID int64) *metadata.Metadata {
+	return &metadata.Metadata{
 		{
 			Name:  "project_id",
 			Value: strconv.FormatUint(conf.ProjectID, 10),

@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
@@ -58,7 +59,7 @@ type Err struct {
 }
 
 type Result struct {
-	ServicesAddrs   map[string]string `json:"services"`
+	ServicesAddrs map[string]string `json:"services"`
 }
 
 func Run() error {
@@ -66,7 +67,7 @@ func Run() error {
 	if err := envconf.Load(&cfg); err != nil {
 		return err
 	}
-	logrus.Infof("%#v",cfg)
+	logrus.Infof("%#v", cfg)
 
 	d := &dice{conf: &cfg}
 
@@ -87,7 +88,7 @@ func (d *dice) GetServices(conf *conf) (*Result, error) {
 
 	err := retry.DoWithInterval(func() error {
 		r, err := httpclient.New(httpclient.WithCompleteRedirect()).Get(conf.DiceOpenapiPrefix).Path(fmt.Sprintf("/api/runtimes/%s", conf.RuntimeID)).
-			Param("applicationId", fmt.Sprintf("%d",conf.ProjectID)).
+			Param("applicationId", fmt.Sprintf("%d", conf.ProjectID)).
 			Param("workspace", conf.Workspace).
 			Header("User-ID", conf.UserID).
 			Header("Org-ID", strconv.FormatUint(conf.OrgID, 10)).
@@ -113,7 +114,7 @@ func (d *dice) GetServices(conf *conf) (*Result, error) {
 		return nil, err
 	}
 
-	if resp.Data.ID == 0 || len(resp.Data.Services) == 0  {
+	if resp.Data.ID == 0 || len(resp.Data.Services) == 0 {
 		logrus.Infof("not found runtime for runtime Id %s , error: %v", conf.RuntimeID, fmt.Errorf("runtime not found"))
 		return nil, fmt.Errorf("runtime not found")
 	}
@@ -123,7 +124,7 @@ func (d *dice) GetServices(conf *conf) (*Result, error) {
 
 	for name, svc := range resp.Data.Services {
 		if len(svc.Addrs) > 0 {
-			result.ServicesAddrs[name]= svc.Addrs[0]
+			result.ServicesAddrs[name] = svc.Addrs[0]
 			continue
 		}
 	}
@@ -146,16 +147,16 @@ func storeMetaFile(conf *conf, result *Result) error {
 	return nil
 }
 
-func generateMetadata(result *Result) *apistructs.Metadata {
-	addrs := make([]apistructs.MetadataField, 0)
+func generateMetadata(result *Result) *metadata.Metadata {
+	addrs := make([]metadata.MetadataField, 0)
 	for name, addr := range result.ServicesAddrs {
-		addrs = append(addrs, apistructs.MetadataField{
+		addrs = append(addrs, metadata.MetadataField{
 			Name:  name,
 			Value: addr,
-		} )
+		})
 	}
 
-	var ret apistructs.Metadata
+	var ret metadata.Metadata
 	ret = addrs
 	return &ret
 }

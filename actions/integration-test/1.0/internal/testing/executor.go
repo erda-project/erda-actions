@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
@@ -79,7 +80,7 @@ func callback(req *pb.TestCallBackRequest, cfg *conf.Conf) (string, error) {
 
 func storeMetaFile(cfg *conf.Conf, qaID string) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "projectId",
 				Value: strconv.FormatUint(cfg.ProjectID, 10),

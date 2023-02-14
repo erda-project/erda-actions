@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/contrast-security/1.0/internal/pkg/conf"
@@ -89,7 +90,7 @@ func build(cfg conf.Conf) error {
 
 func storeMetaFile(cfg *conf.Conf, rsp ConstrastSecurityResponse) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "count",
 				Value: strconv.FormatInt(int64(rsp.Count), 10),

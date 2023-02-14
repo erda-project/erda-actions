@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
@@ -77,7 +78,7 @@ func handleAPIs() error {
 	return nil
 }
 
-//通过taskId查询审核记录个数
+// 通过taskId查询审核记录个数
 func getTask(envID uint64) (int64, error) {
 	// invoke
 	var resp ManualReview
@@ -95,7 +96,7 @@ func getTask(envID uint64) (int64, error) {
 	return resp.Data.Total, nil
 }
 
-//通过taskId查询审核状态
+// 通过taskId查询审核状态
 func getReview(envID uint64) (string, error) {
 	// invoke
 	var resp ManualReview
@@ -130,7 +131,7 @@ func getId(envID uint64) (uint64, error) {
 	return resp.Data.Id, nil
 }
 
-//创建审核记录
+// 创建审核记录
 func CreateReview() (error, int64) {
 	// invoke
 	createReq := CreateReviewRequest{
@@ -167,7 +168,7 @@ func CreateReview() (error, int64) {
 	return nil, artifact.Data
 }
 
-//创建审核
+// 创建审核
 func CreateReviewUser(Operator string) (error, *apistructs.CreateReviewUserResponse) {
 	createReq := CreateReviewUserRequest{
 		TaskId:   conf.TaskId(),
@@ -196,7 +197,7 @@ func CreateReviewUser(Operator string) (error, *apistructs.CreateReviewUserRespo
 
 func storeMetaFile(taskID string, processorID string, reviewID string, processorName string) error {
 	meta := apistructs.ActionCallback{
-		Metadata: apistructs.Metadata{
+		Metadata: metadata.Metadata{
 			{
 				Name:  "task_id",
 				Value: taskID,
