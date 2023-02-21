@@ -1,5 +1,5 @@
-FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
-FROM registry.erda.cloud/retag/golang:1.19.1-alpine3.16
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/golang:1.19.1-alpine3.16
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH

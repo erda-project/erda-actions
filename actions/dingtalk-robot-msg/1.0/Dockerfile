@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/alpine:3.14
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/alpine:3.14
 
 RUN echo "http://mirrors.aliyun.com/alpine/v3.14/main/" > /etc/apk/repositories && \
     echo "http://mirrors.aliyun.com/alpine/v3.14/community/" >> /etc/apk/repositories && \

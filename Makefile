@@ -6,6 +6,7 @@ BuildTime=$(shell date '+%Y-%m-%d %T%z')
 Registry="registry.erda.cloud/erda-actions"
 RegistryForPush="registry.erda.cloud/erda-actions"
 DevelopRegistry="registry.cn-hangzhou.aliyuncs.com/dice"
+ARCH ?= $(shell go env GOARCH)
 
 .ONESHELL:
 echo \
@@ -40,16 +41,16 @@ testscene-run testplan-run contrast-security erda-create-custom-addon project-ar
 
 	if [[ "$(DEVELOP_MODE)" == 'true' ]]; then
 		echo "DEVELOP_MODE == true"
-		image="$(DevelopRegistry)/$@-action:$${version}-$(Date)-${GitCommit}"
+		image="$(DevelopRegistry)/${ARCH}/$@-action:$${version}-$(Date)-${GitCommit}"
 		imageForPush=$${image}
 	else
-		image="$(Registry)/$@-action:$${version}-$(Date)-${GitCommit}"
-		imageForPush="$(RegistryForPush)/$@-action:$${version}-$(Date)-${GitCommit}"
+		image="$(Registry)/${ARCH}/$@-action:$${version}-$(Date)-${GitCommit}"
+		imageForPush="$(RegistryForPush)/${ARCH}/$@-action:$${version}-$(Date)-${GitCommit}"
 	fi
 
 	@echo image=$${image}
 
-	dockerbuild="docker build . -f $${dockerfile} -t $${imageForPush} \
+	dockerbuild="DOCKER_BUILDKIT=1 docker build . --platform "linux/${ARCH}" --build-arg ARCH=${ARCH} -f $${dockerfile} -t $${imageForPush} \
 				 --label 'branch=$(GitBranch)' --label 'commit=$(GitCommit)' --label 'build-time=$(BuildTime)'"
 	# --pull
 	if [[ $@ == "java-dependency-check" ]]; then dockerbuild="$${dockerbuild} --pull"; fi

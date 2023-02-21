@@ -11,16 +11,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-FROM registry.erda.cloud/retag/golang:1.15 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/golang:1.15 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
+ARG ARCH
+
 # go build
 ENV GOPROXY=https://goproxy.io,https://goproxy.cn,direct
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run actions/erda-create-custom-addon/1.0/internal/cmd/main.go
+RUN GOOS=linux GOARCH=$ARCH go build -o /opt/action/run actions/erda-create-custom-addon/1.0/internal/cmd/main.go
 
-FROM registry.erda.cloud/erda/terminus-centos:base
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-centos:base
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 

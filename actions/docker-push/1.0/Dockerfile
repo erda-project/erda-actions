@@ -1,12 +1,14 @@
-FROM registry.erda.cloud/retag/golang:1.16-alpine3.14 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/golang:1.16-alpine3.14 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run github.com/erda-project/erda-actions/actions/docker-push/1.0/internal
+ARG ARCH
 
-FROM registry.erda.cloud/retag/gcrane:v0.7.0 as gcrane
-FROM registry.erda.cloud/retag/alpine:3.14
+RUN GOOS=linux GOARCH=$ARCH go build -o /opt/action/run github.com/erda-project/erda-actions/actions/docker-push/1.0/internal
+
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/gcrane:v0.7.0 as gcrane
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/alpine:3.14
 
 COPY --from=gcrane /ko-app/gcrane /usr/bin
 

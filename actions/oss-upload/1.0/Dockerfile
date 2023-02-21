@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-centos:base
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-centos:base
 
 WORKDIR /opt/action
 

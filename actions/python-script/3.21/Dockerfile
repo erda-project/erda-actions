@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/python-script:v1.0
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/python-script:v1.0
 WORKDIR /
 COPY . /
 RUN python -m pip install oss2

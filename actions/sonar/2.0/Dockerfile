@@ -1,11 +1,13 @@
-FROM registry.erda.cloud/retag/golang:1.17.12-alpine3.15 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/golang:1.17.12-alpine3.15 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-RUN GOOS=linux GOARCH=amd64 go build -o /assets/run actions/sonar/2.0/internal/cmd/*.go
+ARG ARCH
 
-FROM registry.erda.cloud/erda/terminus-centos:base AS action
+RUN GOOS=linux GOARCH=$ARCH go build -o /assets/run actions/sonar/2.0/internal/cmd/*.go
+
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-centos:base AS action
 
 RUN yum install -y wget unzip
 

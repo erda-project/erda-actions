@@ -1,12 +1,14 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.17.12 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-# go build
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run github.com/erda-project/erda-actions/actions/js-deploy/1.0/internal/cmd
+ARG ARCH
 
-FROM registry.erda.cloud/erda/terminus-nodejs:12.13
+# go build
+RUN GOOS=linux GOARCH=$ARCH go build -o /opt/action/run github.com/erda-project/erda-actions/actions/js-deploy/1.0/internal/cmd
+
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-nodejs:12.13
 
 ENV NODE_OPTIONS=--max_old_space_size=1024
 

@@ -1,5 +1,5 @@
 # Build app image
-FROM registry.erda.cloud/erda/edas-container:3.4.4-cnooc
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/edas-container:3.4.4-cnooc
 
 RUN echo "Asia/Shanghai" | tee /etc/timezone
 

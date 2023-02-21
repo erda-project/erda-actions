@@ -1,8 +1,10 @@
-FROM registry.erda.cloud/erda/terraform:0.12
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terraform:0.12
+
+ARG ARCH
 
 COPY . /go/src/terminus.io/dice/tools
 WORKDIR /go/src/terminus.io/dice/tools
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/tools/bin/cluster-resource terminus.io/dice/tools/misc/actions/cluster-resource/1.0/internal/cmd
+RUN GOOS=linux GOARCH=$ARCH go build -o /opt/tools/bin/cluster-resource terminus.io/dice/tools/misc/actions/cluster-resource/1.0/internal/cmd
 RUN rm -rf /go/src/terminus.io/
 
 COPY misc/actions/cluster-resource/1.0/internal/run.sh /opt/action/run

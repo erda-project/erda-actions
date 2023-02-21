@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.14
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.17.12
 
 ARG TARGET
 

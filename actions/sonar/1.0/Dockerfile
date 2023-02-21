@@ -1,11 +1,13 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.16.7 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.16.7 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-RUN GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=amd64 go build -o /assets/run actions/sonar/1.0/internal/*.go
+ARG ARCH
 
-FROM registry.erda.cloud/erda/terminus-centos:base AS action
+RUN GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=$ARCH go build -o /assets/run actions/sonar/1.0/internal/*.go
+
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-centos:base AS action
 
 RUN yum install -y wget unzip
 

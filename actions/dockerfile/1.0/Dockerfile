@@ -1,15 +1,17 @@
-FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
-FROM registry.erda.cloud/retag/golang:1.16-alpine3.14 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/golang:1.16-alpine3.14 AS builder
 
 ENV CGO_ENABLED 0
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-RUN GOOS=linux GOARCH=amd64 go build -o /opt/action/run github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/cmd
+ARG ARCH
+
+RUN GOOS=linux GOARCH=$ARCH go build -o /opt/action/run github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/cmd
 
 
-FROM registry.erda.cloud/retag/alpine:3.14
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/alpine:3.14
 
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 

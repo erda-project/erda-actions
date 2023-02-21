@@ -20,6 +20,8 @@ WORKDIR /go/src/github.com/erda-project/erda-actions/actions
 RUN rm -rf `ls | grep -v erda-mysql-migration`
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
+ARG ARCH
+
 # go mod tidy
 RUN go env -w GOPROXY="https://goproxy.cn,direct"
 RUN go env -w GOOS="linux"
@@ -35,7 +37,7 @@ RUN go build -o /opt/action/erda-migrate actions/erda-mysql-migration/1.0-57/int
 RUN chmod 777 /opt/action/run
 RUN chmod 777 /opt/action/erda-migrate
 
-FROM registry.erda.cloud/erda-actions/erda-mysql-migration-sandbox:80-20220509161616
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-actions/erda-mysql-migration-sandbox:80-20220509161616
 
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 

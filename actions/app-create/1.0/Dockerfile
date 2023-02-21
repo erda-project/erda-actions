@@ -1,12 +1,14 @@
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-golang:1.14 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.17.12 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-# go build
-RUN GOOS=linux GOARCH=amd64 go build -o /assets/run actions/app-create/1.0/internal/cmd/*.go
+ARG ARCH
 
-FROM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-centos:base
+# go build
+RUN GOOS=linux GOARCH=$ARCH go build -o /assets/run actions/app-create/1.0/internal/cmd/*.go
+
+FROM --platform=$TARGETPLATFORM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-centos:base
 
 RUN yum install -y git
 COPY --from=builder /assets /opt/action

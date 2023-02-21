@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.17.12 as builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.17.12 as builder
 
 MAINTAINER shenli shenli@terminus.io
 
@@ -6,12 +6,12 @@ ENV GOLANG_VERSION 1.17.12
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
-
+ARG ARCH
 # go build
 ENV GOPROXY=https://goproxy.io,https://goproxy.cn,direct
-RUN GOOS=linux GOARCH=amd64 go build -o /assets/run /go/src/github.com/erda-project/erda-actions/actions/android/1.0/internal/cmd/main.go
+RUN GOOS=linux GOARCH=$ARCH go build -o /assets/run /go/src/github.com/erda-project/erda-actions/actions/android/1.0/internal/cmd/main.go
 
-FROM registry.erda.cloud/erda/android-gradle-node:v30-20220721203530
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/android-gradle-node:v30-20220721203530
 ENV SASS_BINARY_SITE="https://npmmirror.com/mirrors/node-sass"
 ENV NODEJS_ORG_MIRROR="https://npmmirror.com/dist"
 # built-in installation of some google sdk

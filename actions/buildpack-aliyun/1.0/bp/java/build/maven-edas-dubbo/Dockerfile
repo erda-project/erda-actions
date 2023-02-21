@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-maven:3-jdk-8-alpine
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-maven:3-jdk-8-alpine
 
 RUN echo "http://mirrors.aliyun.com/alpine/v3.8/main/" > /etc/apk/repositories && \
     echo "http://mirrors.aliyun.com/alpine/v3.8/community/" >> /etc/apk/repositories

@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.14 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.17.12 AS builder
 
 COPY .  /erda-actions
 WORKDIR /erda-actions
@@ -7,10 +7,12 @@ ENV CGO_ENABLED 0
 
 ENV BUILD_FLAGS="-v -ldflags '-d -s -w' -a -tags netgo -installsuffix netgo"
 
+ARG ARCH
+
 RUN export GOPROXY=https://goproxy.io
 RUN go mod vendor
 # go build
-RUN set -x && eval "GOOS=linux GOARCH=amd64 go build $BUILD_FLAGS -o /opt/action/run actions/mysql-assert/1.0/internal/cmd/main.go"
+RUN set -x && eval "GOOS=linux GOARCH=$ARCH go build $BUILD_FLAGS -o /opt/action/run actions/mysql-assert/1.0/internal/cmd/main.go"
 
 FROM oraclelinux:7-slim
 

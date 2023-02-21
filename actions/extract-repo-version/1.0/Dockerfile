@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-alpine:base
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-alpine:base
 
 RUN echo "http://mirrors.aliyun.com/alpine/v3.12/main/" > /etc/apk/repositories && \
     echo "http://mirrors.aliyun.com/alpine/v3.12/community/" >> /etc/apk/repositories && \

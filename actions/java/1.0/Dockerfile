@@ -1,5 +1,5 @@
-FROM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
-FROM registry.erda.cloud/erda/terminus-golang:1.16.7 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.16.7 AS builder
 
 LABEL maintainer="jiangzhengdong <zhengdong.jzd@alibaba-inc.com>"
 
@@ -11,8 +11,10 @@ ENV BUILD_FLAGS="-v -ldflags '-d -s -w' -a -tags netgo -installsuffix netgo"
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
+ARG ARCH
+
 RUN set -x \
-    	&& eval "GOPROXY=https://goproxy.cn,direct GOOS=linux GOARCH=amd64 go build $BUILD_FLAGS -o /opt/action/run github.com/erda-project/erda-actions/actions/java/1.0/internal/cmd"
+    	&& eval "GOPROXY=https://goproxy.cn,direct GOOS=linux GOARCH=$ARCH go build $BUILD_FLAGS -o /opt/action/run github.com/erda-project/erda-actions/actions/java/1.0/internal/cmd"
 
 RUN mkdir -p /opt/action/comp && \
     cp -r actions/java/1.0/comp/* /opt/action/comp
@@ -21,9 +23,9 @@ RUN mkdir -p /opt/action/comp && \
 RUN bash /opt/action/comp/download_spot_agent.sh
 RUN bash /opt/action/comp/download_fonts.sh
 
-FROM registry.erda.cloud/retag/yannishuber-openjfx8:v1 AS openjfx
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/yannishuber-openjfx8:v1 AS openjfx
 
-FROM registry.erda.cloud/erda/terminus-openjdk:v11.0.6
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-openjdk:v11.0.6
 
 ARG USER_HOME_DIR="/root"
 
