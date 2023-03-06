@@ -14,10 +14,12 @@ RUN apk add coreutils
 WORKDIR ${SONARQUBE_HOME}
 
 # embed plugins
-RUN cd ${SQ_EXTENSIONS_DIR} && \
+RUN cd ${SQ_EXTENSIONS_DIR}/plugins && \
     wget https://terminus-dice.oss-cn-hangzhou.aliyuncs.com/sonarqube/plugins/sonar-go-plugin-1.6.0.719.jar && \
     wget https://terminus-dice.oss-cn-hangzhou.aliyuncs.com/sonarqube/plugins/sonar-java-plugin-6.5.1.22586.jar && \
-    wget https://terminus-dice.oss-cn-hangzhou.aliyuncs.com/sonarqube/plugins/sonar-pmd-plugin-3.2.1.jar
+    wget https://terminus-dice.oss-cn-hangzhou.aliyuncs.com/sonarqube/plugins/sonar-pmd-plugin-3.2.1.jar && \
+    wget https://terminus-dice.oss-cn-hangzhou.aliyuncs.com/sonarqube/plugins/code-check-plugin-1.0-SNAPSHOT.jar
+
 
 ADD ./entrypoint.sh /entrypoint.sh
 ENTRYPOINT /entrypoint.sh
