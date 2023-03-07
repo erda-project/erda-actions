@@ -176,7 +176,7 @@ require (
 	github.com/prometheus/common v0.37.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
 	github.com/rancher/remotedialer v0.2.6-0.20220104192242-f3837f8d649a // indirect
-	github.com/rancher/wrangler v0.8.11-0.20211214201934-f5aa5d9f2e81 // indirect
+	github.com/rancher/wrangler v0.8.11 // indirect
 	github.com/recallsong/go-utils v1.1.2-0.20210826100715-fce05eefa294 // indirect
 	github.com/recallsong/unmarshal v1.0.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20190728182440-6a916e37a237 // indirect
