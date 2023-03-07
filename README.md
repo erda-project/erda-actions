@@ -120,6 +120,13 @@ README.md 是 Ext 的 **介绍文档**。
 
 这就要求每款扩展需要尽最大可能保持向前兼容。如果确实有无法兼容的改动出现，请先与团队沟通，再考虑是否升级这款扩展的版本号。
 
+## 如何进行构建
+
+使用以下命令同时构建对应扩展 amd64/arm64 两个平台的镜像
+```bash
+VERSION=${VERSION} make all-arch action=${ACTION}
+```
+
 ## 使用 dice cli 维护扩展
 
 我们在 dice cli 中提供了 `dice ext` 子命令，方便对扩展进行维护。

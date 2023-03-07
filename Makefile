@@ -95,3 +95,52 @@ sonarqube:
 	@echo use version: $${version}
 	cd actions/sonar/1.0/sonarqube/$${version}
 	docker build . -t registry.cn-hangzhou.aliyuncs.com/dice-third-party/sonar:$${version} -f Dockerfile
+
+all-arch:
+	echo "build all arch for $(action)"
+	version="$${VERSION}"
+	if [[ "$${version}" == "" ]]; then
+		if [[ "`ls -l actions/$@ | wc -l | tr -d ' '`" != "2" ]]; then
+			echo Multi version [$$(echo `ls actions/$(action)` | sed 's/ /, /g')] detected, which version you want to make? \
+				 specify by env: VERSION=1.0
+			exit 1
+		fi
+		version=`ls actions/$(action)`
+		echo Auto select the only version: $${version}
+	fi
+
+	@echo use version: $${version}
+
+	@dockerfile="actions/$(action)/$${version}/Dockerfile"
+	@echo expected Dockerfile: $${dockerfile}
+	if [[ ! -f $${dockerfile} ]]; then echo "expected Dockerfile not exist, stop." && exit 1; fi
+
+	arches=(amd64 arm64)
+	for arch in $${arches[@]}; do
+		if [[ "$(DEVELOP_MODE)" == 'true' ]]; then
+			echo "DEVELOP_MODE == true"
+			image="$(DevelopRegistry)/$$arch/$(action)-action:$${version}-$(Date)-${GitCommit}"
+			imageForPush=$${image}
+		else
+			image="$(Registry)/$$arch/$(action)-action:$${version}-$(Date)-${GitCommit}"
+			imageForPush="$(RegistryForPush)/$$arch/$(action)-action:$${version}-$(Date)-${GitCommit}"
+		fi
+
+		@echo image=$${image}
+
+		dockerbuild="DOCKER_BUILDKIT=1 docker build . --platform "linux/$$arch" --build-arg ARCH=$$arch -f $${dockerfile} -t $${imageForPush} \
+					 --label 'branch=$(GitBranch)' --label 'commit=$(GitCommit)' --label 'build-time=$(BuildTime)'"
+		# --pull
+		if [[ $(action) == "java-dependency-check" ]]; then dockerbuild="$${dockerbuild} --pull"; fi
+		# --no-cache
+		if [[ $(action) == "buildpack" || $(action) == "java" || $(action) == "java-build" || $(action) == "java-agent" ]]; then
+			dockerbuild="$${dockerbuild} --no-cache"
+		fi
+		if [[ $@ == "golang" ]]; then dockerbuild="$${dockerbuild} --build-arg GO_VERSION=${GO_VERSION}"; fi
+		@echo $${dockerbuild}
+		eval "$${dockerbuild}"
+
+		docker push $${imageForPush}
+
+		echo "action meta: $(action)($${version})-$$arch=$${image}"
+	done
