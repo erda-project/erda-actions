@@ -39,17 +39,17 @@ type JDKConfig struct {
 
 var jdkSwitchCmdMap = map[string]*JDKConfig{
 	"8": {
-		JavaHome: "/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64",
+		JavaHome: "/usr/lib/jvm/java-1.8.0",
 		SwitchCmd: []string{
-			"alternatives --set java /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/jre/bin/java",
-			"alternatives --set javac /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.272.b10-1.el7_9.x86_64/bin/javac",
+			"alternatives --set java $(alternatives --list | grep java_sdk_1.8.0 | awk '{print $3}' | head -n 1)/jre/bin/java",
+			"alternatives --set javac $(alternatives --list | grep java_sdk_1.8.0 | awk '{print $3}' | head -n 1)/bin/javac",
 		},
 	},
 	"11": {
-		JavaHome: "/usr/lib/jvm/java-11-openjdk-11.0.6.10-1.el7_7.x86_64",
+		JavaHome: "/usr/lib/jvm/java-11",
 		SwitchCmd: []string{
-			"alternatives --set java /usr/lib/jvm/java-11-openjdk-11.0.6.10-1.el7_7.x86_64/bin/java",
-			"alternatives --set javac /usr/lib/jvm/java-11-openjdk-11.0.6.10-1.el7_7.x86_64/bin/javac",
+			"alternatives --set java $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/java",
+			"alternatives --set javac $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/javac",
 		},
 	},
 }

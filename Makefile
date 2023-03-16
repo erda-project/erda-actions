@@ -7,6 +7,7 @@ Registry="registry.erda.cloud/erda-actions"
 RegistryForPush="registry.erda.cloud/erda-actions"
 DevelopRegistry="registry.cn-hangzhou.aliyuncs.com/dice"
 ARCH ?= $(shell go env GOARCH)
+PLATFORMS ?= linux/arm64,linux/amd64
 
 .ONESHELL:
 echo \
@@ -39,18 +40,16 @@ testscene-run testplan-run contrast-security erda-create-custom-addon project-ar
 	@echo expected Dockerfile: $${dockerfile}
 	if [[ ! -f $${dockerfile} ]]; then echo "expected Dockerfile not exist, stop." && exit 1; fi
 
-	if [[ "$(DEVELOP_MODE)" == 'true' ]]; then
-		echo "DEVELOP_MODE == true"
-		image="$(DevelopRegistry)/${ARCH}/$@-action:$${version}-$(Date)-${GitCommit}"
-		imageForPush=$${image}
-	else
-		image="$(Registry)/${ARCH}/$@-action:$${version}-$(Date)-${GitCommit}"
-		imageForPush="$(RegistryForPush)/${ARCH}/$@-action:$${version}-$(Date)-${GitCommit}"
-	fi
+	@builder="$(shell docker buildx ls | grep erda-actions | awk '{print $1}' | head -n 1)"
+	if [[ "$${builder}" == "" ]]; then docker buildx create --name erda-actions; fi
+
+	docker buildx use erda-actions
+	image="$(Registry)/erda-actions/$@-action:$${version}-$(Date)-${GitCommit}"
+	imageForPush="$(RegistryForPush)/erda-actions/$@-action:$${version}-$(Date)-${GitCommit}"
 
 	@echo image=$${image}
 
-	dockerbuild="DOCKER_BUILDKIT=1 docker build . --platform "linux/${ARCH}" --build-arg ARCH=${ARCH} -f $${dockerfile} -t $${imageForPush} \
+	dockerbuild="docker buildx build --push . --platform=$(PLATFORMS) -f $${dockerfile} -t $${imageForPush} \
 				 --label 'branch=$(GitBranch)' --label 'commit=$(GitCommit)' --label 'build-time=$(BuildTime)'"
 	# --pull
 	if [[ $@ == "java-dependency-check" ]]; then dockerbuild="$${dockerbuild} --pull"; fi
@@ -61,8 +60,6 @@ testscene-run testplan-run contrast-security erda-create-custom-addon project-ar
 	if [[ $@ == "golang" ]]; then dockerbuild="$${dockerbuild} --build-arg GO_VERSION=${GO_VERSION}"; fi
 	@echo $${dockerbuild}
 	eval "$${dockerbuild}"
-
-	docker push $${imageForPush}
 
 	echo "action meta: $@($${version})=$${image}"
 

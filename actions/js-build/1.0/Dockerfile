@@ -1,12 +1,12 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.17.12 AS builder
+FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/terminus-golang:1.19.7 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-ARG ARCH
+ARG TARGETARCH
 
 # go build
-RUN GOOS=linux GOARCH=$ARCH go build -o /opt/action/run github.com/erda-project/erda-actions/actions/js-build/1.0/internal/cmd
+RUN GOOS=linux GOARCH=$TARGETARCH go build -o /opt/action/run github.com/erda-project/erda-actions/actions/js-build/1.0/internal/cmd
 
 SHELL ["/bin/bash", "--login", "-c"]
 

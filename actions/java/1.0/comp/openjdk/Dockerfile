@@ -1,7 +1,5 @@
 # 可选: v1.8.0.242
-ARG CONTAINER_VERSION=v1.8.0.242
-
-FROM {{CENTRAL_REGISTRY}}/erda/terminus-openjdk:$CONTAINER_VERSION
+FROM registry.erda.cloud/erda-x/openjdk:8_11
 
 ARG TARGET
 ARG MONITOR_AGENT=true

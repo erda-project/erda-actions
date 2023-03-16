@@ -39,6 +39,7 @@ type Conf struct {
 	DiceOperatorId    string `env:"DICE_OPERATOR_ID" default:"terminus"`
 	CiOpenapiToken    string `env:"DICE_OPENAPI_TOKEN" required:"true"`
 	DiceOpenapiPrefix string `env:"DICE_OPENAPI_ADDR" required:"true"`
+	DiceArch          string `env:"DICE_ARCH" default:"amd64"`
 	// pipeline注入，集群级别配置
 	CentralRegistry       string `env:"BP_DOCKER_BASE_REGISTRY"`     // 中心集群 registry, eg: registry.erda.cloud
 	LocalRegistry         string `env:"BP_DOCKER_ARTIFACT_REGISTRY"` // 集群内 registry

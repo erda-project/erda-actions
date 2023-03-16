@@ -1,22 +1,16 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/golang:1.16-alpine3.14 AS builder
+FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/buildkit:v0.11.3 as buildkit
+FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/terminus-golang:1.19.7 AS builder
 
 ENV CGO_ENABLED 0
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-ARG ARCH
+ARG TARGETARCH
 
-RUN GOOS=linux GOARCH=$ARCH go build -o /opt/action/run github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/cmd
-
-
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/alpine:3.14
+RUN GOOS=linux GOARCH=$TARGETARCH go build -o /opt/action/run github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/cmd
 
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 
-RUN echo "http://mirrors.aliyun.com/alpine/v3.9/main/" > /etc/apk/repositories && \
-    echo "http://mirrors.aliyun.com/alpine/v3.9/community/" >> /etc/apk/repositories && \
-    apk update && apk add --no-cache docker bash
-
-COPY --from=builder /opt/action/run /opt/action/run
+RUN yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo \
+    && yum install -y docker-ce-cli
