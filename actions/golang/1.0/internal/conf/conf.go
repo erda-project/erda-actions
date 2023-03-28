@@ -1,5 +1,7 @@
 package conf
 
+import "github.com/erda-project/erda-actions/pkg/envconf"
+
 type Conf struct {
 	MetaFile string   `env:"METAFILE"`
 	WorkDir  string   `env:"WORKDIR"`
@@ -29,4 +31,6 @@ type Conf struct {
 	Memory         int     `env:"PIPELINE_LIMITED_MEM" default:"2048"` // 单位: M
 	BuildkitEnable string  `env:"BUILDKIT_ENABLE"`
 	BuildkitdAddr  string  `env:"BUILDKITD_ADDR" default:"tcp://buildkitd.default.svc.cluster.local:1234"`
+
+	envconf.PlatformParams
 }

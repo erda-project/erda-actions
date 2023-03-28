@@ -1,11 +1,11 @@
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/gcrane:v0.7.0 as gcrane
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/buildkit:v0.11.3 as buildkit
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/terminus-golang:1.19.7
+FROM --platform=$BUILDPLATFORM registry.erda.cloud/retag/gcrane:v0.7.0 as gcrane
+FROM --platform=$BUILDPLATFORM registry.erda.cloud/retag/buildkit:v0.11.3 as buildkit
+FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda/terminus-golang:1.19.7
 
 ARG TARGETARCH
 
 # install packages
-RUN apk add --update git openssh make curl libgit2-dev pkgconfig gcc musl-dev sed python3 build-base binutils-gold
+RUN yum update -y && yum -y install git openssh make curl libgit2-dev pkgconfig gcc musl-dev sed python3 build-base binutils-gold
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
@@ -17,8 +17,8 @@ COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 
 RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.2
 
-RUN apk add --no-cache librdkafka-dev bash libc6-compat  \
-    openjdk8 nodejs npm yarn docker-cli tzdata
+RUN yum -y install librdkafka-dev bash libc6-compat  \
+    openjdk8 nodejs npm yarn docker-cli tzdata wget
 
 RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
   && curl -fsSL -o /tmp/apache-maven.tar.gz https://mirrors.bfsu.edu.cn/apache/maven/maven-3/3.9.0/binaries/apache-maven-3.9.0-bin.tar.gz  \
@@ -34,7 +34,7 @@ RUN wget -O nerdctl-1.2.1-linux-${TARGETARCH}.tar.gz https://github.com/containe
     && tar zxvf nerdctl-1.2.1-linux-${TARGETARCH}.tar.gz -C /usr/bin \
     && rm -f nerdctl-1.2.1-linux-${TARGETARCH}.tar.gz
 
-RUN #wget http://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64 -O /usr/local/bin/ossutil && chmod 755 /usr/local/bin/ossutil
+RUN wget http://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64 -O /usr/local/bin/ossutil && chmod 755 /usr/local/bin/ossutil
 
 RUN wget https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.24.1/crictl-v1.24.1-linux-${TARGETARCH}.tar.gz \
     && tar zxvf crictl-v1.24.1-linux-${TARGETARCH}.tar.gz -C /usr/local/bin \

@@ -1,0 +1,5 @@
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk:8_11
+COPY app.jar entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+WORKDIR /
+CMD ["/entrypoint.sh"]

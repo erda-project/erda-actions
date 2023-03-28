@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -170,6 +171,7 @@ func packWithBuildkit(buildkitdAddr, repo string) error {
 		"--tlskey=/.buildkit/key.pem",
 		"build",
 		"--frontend", "dockerfile.v0",
+		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
 		"--local", "context=/opt/action/comp/migration",
 		"--local", "dockerfile=/opt/action/comp/migration",
 		"--output", "type=image,name="+repo+",push=true")

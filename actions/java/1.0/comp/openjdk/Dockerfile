@@ -1,5 +1,5 @@
 # 可选: v1.8.0.242
-FROM registry.erda.cloud/erda-x/openjdk:8_11
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk:8_11
 
 ARG TARGET
 ARG MONITOR_AGENT=true

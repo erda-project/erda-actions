@@ -1,5 +1,5 @@
 FROM --platform=$BUILDPLATFORM gcr.io/go-containerregistry/gcrane:v0.7.0 as gcrane
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/terminus-golang:1.19.7
+FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda/terminus-golang:1.19.7
 
 ARG TARGETARCH
 

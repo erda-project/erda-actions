@@ -1,8 +1,6 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.17.12
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.19.7
 
 ARG TARGET
-
-RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone
 
 COPY assets /opt/service/
 COPY ${TARGET} /opt/service/run

@@ -1,4 +1,4 @@
-FROM {{BP_DOCKER_BASE_REGISTRY}}/erda-actions/terminus-herd:1.1.9-beta.1
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/herd:1.1.20
 
 COPY /bp/pack/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

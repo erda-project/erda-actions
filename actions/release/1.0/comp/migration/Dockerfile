@@ -1,5 +1,5 @@
 # Build app image
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/migration:1.0.2
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-actions/migration:1.0.2
 
 RUN echo "Asia/Shanghai" | tee /etc/timezone
 

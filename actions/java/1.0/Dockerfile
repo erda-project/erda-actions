@@ -1,5 +1,5 @@
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/buildkit:v0.11.3 as buildkit
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/terminus-golang:1.19.7 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.11.3 as buildkit
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.19.7 AS builder
 
 LABEL maintainer="jiangzhengdong <zhengdong.jzd@alibaba-inc.com>"
 
@@ -23,7 +23,7 @@ RUN mkdir -p /opt/action/comp && \
 RUN bash /opt/action/comp/download_spot_agent.sh
 RUN bash /opt/action/comp/download_fonts.sh
 
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/openjdk-maven:8_11-3.9
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk-maven:8_11-3.9
 
 ARG USER_HOME_DIR="/root"
 

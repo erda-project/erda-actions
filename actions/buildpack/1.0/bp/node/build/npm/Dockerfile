@@ -1,4 +1,4 @@
-FROM {{BP_DOCKER_BASE_REGISTRY}}/erda/terminus-nodejs:12.13
+FROM --platform=$TARGETPLATFORM {{BP_DOCKER_BASE_REGISTRY}}/erda-x/node:14
 
 ARG PACKAGE_LOCK_DIR
 

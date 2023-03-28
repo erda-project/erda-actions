@@ -3,7 +3,6 @@ package build
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -19,6 +18,8 @@ import (
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/conf"
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/langdetect/types"
 	"github.com/erda-project/erda-actions/pkg/dockerfile"
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
+	"github.com/erda-project/erda-actions/pkg/version"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/strutil"
 )
@@ -46,6 +47,7 @@ func BuildkitBuild() error {
 
 /*
 context/
+
 	-- repo/
 	-- bp-backend/
 		-- bp/
@@ -113,6 +115,7 @@ func dockerBuildForBuildkit() error {
 		"--tlskey=/.buildkit/key.pem",
 		"build",
 		"--frontend", "dockerfile.v0",
+		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
 		"--opt", "build-arg:PARENT_POM_DIR=/.cache_pom/parent_pom",
 		"--opt", "build-arg:ALL_POM_DIR=/.cache_pom/all_pom",
 		"--opt", "build-arg:" + fmt.Sprintf("FORCE_UPDATE_SNAPSHOT=%d", time.Now().Unix()),

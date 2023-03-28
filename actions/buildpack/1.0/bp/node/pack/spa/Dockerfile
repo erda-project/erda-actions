@@ -1,4 +1,4 @@
-FROM {{BP_DOCKER_BASE_REGISTRY}}/erda/dice-nginx:1.1.0
+FROM --platform=$TARGETPLATFORM {{BP_DOCKER_BASE_REGISTRY}}/erda-x/openresty:1.21.4.1-jammy
 
 # Set special timezone
 RUN echo "Asia/Shanghai" | tee /etc/timezone

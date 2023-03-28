@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
 	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
@@ -284,6 +285,7 @@ func packWithBuildkit(repo string, cfg conf.Conf) error {
 		"--tlskey=/.buildkit/key.pem",
 		"build",
 		"--frontend", "dockerfile.v0",
+		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
 		"--opt", "build-arg:"+fmt.Sprintf("DSTDIR=%s", cfg.DestDir),
 		"--opt", "build-arg:"+fmt.Sprintf("DICE_VERSION=%s", cfg.DiceVersion),
 		"--local", "context="+cfg.WorkDir,

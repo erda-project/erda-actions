@@ -1,5 +1,5 @@
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/buildkit:v0.11.3 as buildkit
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda-x/terminus-golang:1.19.7 AS builder
+FROM --platform=$BUILDPLATFORM registry.erda.cloud/retag/buildkit:v0.11.3 as buildkit
+FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda/terminus-golang:1.19.7 AS builder
 
 ENV CGO_ENABLED 0
 

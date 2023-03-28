@@ -1,5 +1,5 @@
 # Build app image
-FROM {{BP_DOCKER_BASE_REGISTRY}}/erda/terminus-openjdk:v1.8.0.242
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk:8_11
 
 # set default TZ, modify through `--build-arg TZ=XXX`
 ARG TZ="Asia/Shanghai"

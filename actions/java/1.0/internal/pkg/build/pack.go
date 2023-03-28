@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/labstack/gommon/random"
@@ -205,6 +206,7 @@ func packWithBuildKit(cfg conf.Conf, repo string, args map[string]string) error 
 		"--tlskey=/.buildkit/key.pem",
 		"build",
 		"--frontend", "dockerfile.v0",
+		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
 	}
 
 	// append args, e.g. --opt k=v

@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.16.7 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.19.7 AS builder
 
 LABEL maintainer="jiangzhengdong <zhengdong.jzd@alibaba-inc.com>"
 
@@ -10,10 +10,10 @@ ENV BUILD_FLAGS="-v -ldflags '-d -s -w' -a -tags netgo -installsuffix netgo"
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-ARG ARCH
+ARG TARGETARCH
 
 RUN set -x \
-    	&& eval "GOPROXY=https://goproxy.cn,direct GOOS=linux GOARCH=$ARCH go build $BUILD_FLAGS -o /opt/action/run github.com/erda-project/erda-actions/actions/java-build/1.0/internal/cmd"
+    	&& eval "GOPROXY=https://goproxy.cn,direct GOOS=linux GOARCH=$TARGETARCH go build $BUILD_FLAGS -o /opt/action/run github.com/erda-project/erda-actions/actions/java-build/1.0/internal/cmd"
 
 RUN mkdir -p /opt/action/comp && \
     cp -r actions/java-build/1.0/comp/* /opt/action/comp
@@ -22,18 +22,15 @@ RUN mkdir -p /opt/action/comp && \
 RUN bash /opt/action/comp/download_spot_agent.sh
 RUN bash /opt/action/comp/download_fonts.sh
 
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-openjdk:v11.0.6
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk-maven:8_11-3.9
+
+RUN alternatives --set java $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/java
+RUN alternatives --set javac $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/javac
+ENV JAVA_HOME=/usr/lib/jvm/java-11
 
 ARG USER_HOME_DIR="/root"
 
-RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
-  && curl -fsSL -o /tmp/apache-maven.tar.gz https://mirrors.bfsu.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz \
-  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
-  && rm -f /tmp/apache-maven.tar.gz \
-  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-
-RUN  yum install -y yum-utils java-1.8.0-openjdk-devel-1:1.8.0.272.b10-1.el7_9.x86_64 \
-   && yum-config-manager \
+RUN  yum-config-manager \
          --add-repo \
          http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo \
    && yum install -y docker-ce-cli \

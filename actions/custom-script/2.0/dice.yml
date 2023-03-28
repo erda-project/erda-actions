@@ -1,10 +1,8 @@
 ### job 配置项
 jobs:
   custom-script:
-    image: registry.erda.cloud/erda-actions/erda-x/custom-script-action:2.0-20230313144202-1b78df0
+    image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20230327172908-23426bf
     resources:
       cpu: 0.1
       mem: 1024
       disk: 1024
-    binds:
-      - /data/containerd/run/containerd.sock:/run/containerd/containerd.sock:rw

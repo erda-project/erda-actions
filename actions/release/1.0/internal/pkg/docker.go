@@ -10,6 +10,7 @@ import (
 
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
 	"github.com/labstack/gommon/random"
 	"github.com/sirupsen/logrus"
 )
@@ -38,8 +39,8 @@ func DockerBuildPushAndSetImages(cfg *conf.Conf) bool {
 	return true
 }
 
-//校验service的值
-//todo 目前只是校验值不为空这些，是否可以实现校验值是否正确的校验
+// 校验service的值
+// todo 目前只是校验值不为空这些，是否可以实现校验值是否正确的校验
 func ValidService(serviceMap map[string]conf.Service) bool {
 	if serviceMap == nil {
 		logrus.Errorf("services is empty")
@@ -111,7 +112,7 @@ func buildDockerReturnImage(service conf.Service, cfg *conf.Conf) (bool, string)
 
 }
 
-//根据service和image的名称，用docker build构建其image
+// 根据service和image的名称，用docker build构建其image
 func buildDockerFile(service conf.Service, imageName string, cfg *conf.Conf) bool {
 	dockerFileAddr := getDockerFileAddrByName(service.Name)
 
@@ -176,6 +177,7 @@ func buildWithBuildkit(buildkitdAddr, imageName, dockerFileAddr string, service 
 		"--tlskey=/.buildkit/key.pem",
 		"build",
 		"--frontend", "dockerfile.v0",
+		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
 		"--local", "context=./"+getServiceTempPath(service.Name),
 		"--local", "dockerfile="+filepath.Dir(dockerFileAddr),
 		"--output", "type=image,name="+imageName+",push=true")
@@ -194,7 +196,7 @@ func getServiceTempPath(serviceName string) string {
 	return serviceName + "_temp/"
 }
 
-//根据服务名称和cfg中的一些值，构建出image的名称
+// 根据服务名称和cfg中的一些值，构建出image的名称
 func getRepoName(cfg *conf.Conf, serviceName string) string {
 	repository := cfg.ProjectAppAbbr
 	if repository == "" {
@@ -212,7 +214,7 @@ func getRepoName(cfg *conf.Conf, serviceName string) string {
 //	return true
 //}
 
-//根据service中的值，构建对应的Dockerfile文件和内容
+// 根据service中的值，构建对应的Dockerfile文件和内容
 func createDockerFile(service conf.Service) bool {
 	//写入image
 	writeToDockerFile(fmt.Sprintf("FROM %s", service.Image), service.Name)
@@ -229,18 +231,18 @@ func createDockerFile(service conf.Service) bool {
 	return true
 }
 
-//根据服务名称获取其Dockerfile的绝对路径
+// 根据服务名称获取其Dockerfile的绝对路径
 func getDockerFileAddrByName(fileName string) string {
 	return fmt.Sprintf("%s/Dockerfile", getDockerFileDirByName(fileName))
 }
 
-//根据服务名称获取其Dockerfile所属文件夹的绝对路径
+// 根据服务名称获取其Dockerfile所属文件夹的绝对路径
 func getDockerFileDirByName(fileName string) string {
 	pwd, _ := os.Getwd()
 	return fmt.Sprintf("%s/%s/dockerfiles_temp_2020_/%s", pwd, getServiceTempPath(fileName), fileName)
 }
 
-//根据服务名称，追加写入命令到对应的Dockerfile中
+// 根据服务名称，追加写入命令到对应的Dockerfile中
 func writeToDockerFile(str string, serviceName string) {
 
 	if !notExitCreateFile(serviceName) {
@@ -250,7 +252,7 @@ func writeToDockerFile(str string, serviceName string) {
 	runCommand(fmt.Sprintf("echo '%s' >> %s", str, getDockerFileAddrByName(serviceName)))
 }
 
-//根据服务名判断其Dockerfile文件是否存在，不存在就创建对应的文件
+// 根据服务名判断其Dockerfile文件是否存在，不存在就创建对应的文件
 func notExitCreateFile(serviceName string) bool {
 	if serviceName == "" {
 		return false

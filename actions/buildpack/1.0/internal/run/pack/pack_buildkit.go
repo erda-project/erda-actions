@@ -3,7 +3,6 @@ package pack
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -18,6 +17,8 @@ import (
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/langdetect/types"
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/dockerfile"
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
+	"github.com/erda-project/erda-actions/pkg/version"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/strutil"
 	"github.com/erda-project/erda/pkg/template"
@@ -39,6 +40,7 @@ func PackForBuildkit() ([]byte, error) {
 
 /*
 context/
+
 	-- repo/
 	-- bp-backend/
 		-- bp/
@@ -129,6 +131,7 @@ func dockerPackBuildForBuildkit() ([]byte, error) {
 		"--tlskey=/.buildkit/key.pem",
 		"build",
 		"--frontend", "dockerfile.v0",
+		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
 		"--opt", "build-arg:DICE_VERSION=" + erdaVersion,
 		"--local",
 		"context=" + exactWd,

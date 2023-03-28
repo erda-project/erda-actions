@@ -13,16 +13,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/erda-project/erda/pkg/metadata"
-	"github.com/labstack/gommon/random"
-
 	"github.com/erda-project/erda-actions/actions/golang/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
 	"github.com/erda-project/erda-actions/pkg/pack"
 	"github.com/erda-project/erda-actions/pkg/render"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/metadata"
+	"github.com/labstack/gommon/random"
 )
 
 const (
@@ -215,6 +215,7 @@ func packWithBuildkit(repo string) error {
 		"build",
 		"--frontend", "dockerfile.v0",
 		"--opt", "build-arg:TARGET=target",
+		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
 		"--local", "context="+cfg.WorkDir,
 		"--local", "dockerfile="+cfg.WorkDir,
 		"--output", "type=image,name="+repo+",push=true")
