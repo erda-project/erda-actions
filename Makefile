@@ -45,7 +45,7 @@ testscene-run testplan-run contrast-security erda-create-custom-addon project-ar
 
 	docker buildx use erda-actions
 	image="$(Registry)/$@-action:$${version}-$(Date)-${GitCommit}"
-	imageForPush="$(RegistryForPush)/erda-actions/$@-action:$${version}-$(Date)-${GitCommit}"
+	imageForPush="$(RegistryForPush)/$@-action:$${version}-$(Date)-${GitCommit}"
 
 	@echo image=$${image}
 
