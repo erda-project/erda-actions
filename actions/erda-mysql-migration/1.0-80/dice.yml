@@ -13,7 +13,8 @@
 
 jobs:
   erda-mysql-migration:
-    image: registry.erda.cloud/erda-actions/erda-mysql-migration-action:1.0-80-20220721063421-9ef227f
+    # arm64 registry.erda.cloud/erda-actions/erda-mysql-migration-action:1.0-80-20230508180900-9515bd6
+    image: registry.erda.cloud/erda-actions/erda-mysql-migration-action:1.0-80-20230508180930-9515bd6
     resource:
       cpu: 0.5
       disk: 1024
