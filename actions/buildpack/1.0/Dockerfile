@@ -1,61 +1,14 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.11.3 as buildkit
-
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.19.7 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-actions/custom-script:2.0 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-ARG TARGETARCH
+RUN go build -o /assets/run github.com/erda-project/erda-actions/actions/buildpack/1.0/internal
 
-# go build
-RUN GOPROXY=https://goproxy.cn,direct GOOS=linux GOARCH=$TARGETARCH go build -o /assets/run github.com/erda-project/erda-actions/actions/buildpack/1.0/internal
-
-# async assets
 WORKDIR actions/buildpack/1.0
 RUN bash sync_assets.sh
 
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/oraclelinux:7
-RUN yum install -y yum-utils && \
-    yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && \
-    yum -y install docker-ce-cli
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-actions/custom-script:2.0
 
-COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
-
-COPY actions/buildpack/1.0/bp /opt/action/bp
 COPY --from=builder /assets /opt/action
-# $ tree /opt/action/
-# |-- assets
-# |   `-- java-agent
-# |       |-- 3.10
-# |       |   `-- spot-agent.tar.gz
-# |       `-- 3.11
-# |           `-- spot-agent.tar.gz
-# |-- bp
-# |   |-- dockerfile
-# |   |-- java
-# |   |   |-- build
-# |   |   |   |-- maven
-# |   |   |   |   |-- Dockerfile
-# |   |   |   |   `-- maven-settings.xml
-# |   |   |   `-- maven-edas
-# |   |   |       |-- Dockerfile
-# |   |   |       `-- rewrite_pom.py
-# |   |   `-- pack
-# |   |       |-- edas
-# |   |       |   |-- Dockerfile
-# |   |       |   `-- start.sh
-# |   |       `-- springboot
-# |   |           |-- Dockerfile
-# |   |           `-- entrypoint.sh
-# |   `-- node
-# |       |-- build
-# |       |   `-- npm
-# |       |       `-- Dockerfile
-# |       |
-# |       `-- pack
-# |           |-- herd
-# |           |   |-- Dockerfile
-# |           |   `-- entrypoint.sh
-# |           `-- spa
-# |               `-- Dockerfile
-# `-- run
+COPY actions/buildpack/1.0/bp /opt/action/bp

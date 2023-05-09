@@ -3,7 +3,6 @@ package build
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"log"
 	"os"
@@ -13,13 +12,13 @@ import (
 	"strings"
 
 	"github.com/erda-project/erda-actions/actions/java-build/1.0/internal/pkg/conf"
-	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
-
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/render"
+	"github.com/erda-project/erda-actions/pkg/version"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/strutil"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -110,7 +109,7 @@ func build(cfg conf.Conf) error {
 		}
 	}
 
-	runCommand(fmt.Sprintf(" mkdir $MAVEN_CONFIG "))
+	//runCommand(fmt.Sprintf(" mkdir $MAVEN_CONFIG "))
 	//runCommand(fmt.Sprintf(" cp %s %s ", "/opt/action/comp/maven/settings.xml", "$MAVEN_CONFIG/settings.xml"))
 	runCommand(fmt.Sprintf(" cp %s %s ", "/opt/action/comp/maven/settings.xml", "$MAVEN_HOME/conf/settings.xml"))
 
