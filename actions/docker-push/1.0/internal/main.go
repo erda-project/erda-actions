@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
@@ -105,29 +104,8 @@ func pushImage(cfg Conf) ([]byte, error) {
 		}
 	}
 
-	if cfg.BuildkitEnable == "true" {
-		imageFile := path.Join(os.TempDir(), strconv.FormatInt(time.Now().Unix(), 10))
-		if err := simpleRun("gcrane", "pull", fromImage, imageFile); err != nil {
-			return nil, err
-		}
-
-		if err := simpleRun("gcrane", "push", imageFile, cfg.Image, fmt.Sprintf("--insecure=%s",
-			strconv.FormatBool(cfg.Insecure))); err != nil {
-			return nil, err
-		}
-	} else {
-		if err := simpleRun("docker", "pull", fromImage); err != nil {
-			return nil, err
-		}
-
-		if err := simpleRun("docker", "tag", fromImage, cfg.Image); err != nil {
-			return nil, err
-		}
-
-		// push image
-		if err = docker.PushByCmd(cfg.Image, ""); err != nil {
-			return nil, err
-		}
+	if err := reTag(fromImage, cfg.Image, cfg.Insecure); err != nil {
+		return nil, err
 	}
 
 	imageResult := make([]pack.ModuleImage, 0)
@@ -146,29 +124,8 @@ func pullImage(cfg Conf, toImage string) ([]byte, error) {
 		}
 	}
 
-	if cfg.BuildkitEnable == "true" {
-		imageFile := path.Join(os.TempDir(), strconv.FormatInt(time.Now().Unix(), 10))
-
-		if err := simpleRun("gcrane", "pull", cfg.Image, imageFile); err != nil {
-			return nil, err
-		}
-
-		if err := simpleRun("gcrane", "push", imageFile, toImage, fmt.Sprintf("--insecure=%s",
-			strconv.FormatBool(cfg.Insecure))); err != nil {
-			return nil, err
-		}
-	} else {
-		if err := simpleRun("docker", "pull", cfg.Image); err != nil {
-			return nil, err
-		}
-
-		if err := simpleRun("docker", "tag", cfg.Image, toImage); err != nil {
-			return nil, err
-		}
-
-		if err := simpleRun("docker", "push", toImage); err != nil {
-			return nil, err
-		}
+	if err := reTag(cfg.Image, toImage, cfg.Insecure); err != nil {
+		return nil, err
 	}
 
 	imageResult := make([]pack.ModuleImage, 0)
@@ -177,12 +134,12 @@ func pullImage(cfg Conf, toImage string) ([]byte, error) {
 }
 
 func getFrom(cfg Conf) (string, error) {
-	v, err := ioutil.ReadFile(cfg.From)
+	v, err := os.ReadFile(cfg.From)
 	if err != nil {
 		return "", err
 	}
 	images := make([]pack.ModuleImage, 0)
-	if err := json.Unmarshal([]byte(v), &images); err != nil {
+	if err := json.Unmarshal(v, &images); err != nil {
 		return "", err
 	}
 	for _, i := range images {
@@ -193,12 +150,31 @@ func getFrom(cfg Conf) (string, error) {
 	return "", fmt.Errorf("not found image of service: %s", cfg.Service)
 }
 
-func simpleRun(name string, arg ...string) error {
-	fmt.Fprintf(os.Stdout, "Run: %s, %v\n", name, arg)
-	cmd := exec.Command(name, arg...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+func reTag(from, target string, insecure bool) error {
+	fn := func(arg ...string) error {
+		fmt.Fprintf(os.Stdout, "Run: gcrane, %v\n", arg)
+		cmd := exec.Command("gcrane", arg...)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		return cmd.Run()
+	}
+
+	imageFile := path.Join(os.TempDir(), strconv.FormatInt(time.Now().Unix(), 10))
+	args := []string{
+		fmt.Sprintf("--insecure=%s", strconv.FormatBool(insecure)),
+	}
+
+	pullArgs := append([]string{"pull", from, imageFile}, args...)
+	if err := fn(pullArgs...); err != nil {
+		return err
+	}
+
+	pushArgs := append([]string{"push", imageFile, target}, args...)
+	if err := fn(pushArgs...); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func main() {
