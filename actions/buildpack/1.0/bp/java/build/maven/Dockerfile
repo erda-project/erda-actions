@@ -1,7 +1,7 @@
 ARG DEP_CACHE_IMAGE
 FROM ${DEP_CACHE_IMAGE} as cache-image
 
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk-maven:8_11-3.9
+FROM registry.erda.cloud/erda-x/openjdk-maven:8_11-3.9
 
 ARG MAVEN_OPTS
 ARG MAVEN_EXTRA_ARGS

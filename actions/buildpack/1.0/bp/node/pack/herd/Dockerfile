@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/herd:1.1.20
+FROM registry.erda.cloud/erda-x/herd:1.1.20
 
 COPY /bp/pack/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

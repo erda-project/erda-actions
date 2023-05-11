@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
@@ -188,6 +189,7 @@ func packWithBuildkit(cfg conf.Conf, repo string, args map[string]string) error 
 	buildCmdArgs = append(buildCmdArgs,
 		"--local", "context="+cfg.Context,
 		"--local", "dockerfile="+dfDir,
+		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
 		"--output", "type=image,name="+repo+",push=true",
 	)
 

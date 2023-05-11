@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM {{BP_DOCKER_BASE_REGISTRY}}/erda-addons/openresty:1.21.4
+FROM {{BP_DOCKER_BASE_REGISTRY}}/erda-addons/openresty:1.21.4
 
 # Set special timezone
 RUN echo "Asia/Shanghai" | tee /etc/timezone

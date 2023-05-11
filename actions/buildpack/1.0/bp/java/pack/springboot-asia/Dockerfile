@@ -1,5 +1,5 @@
 # Build app image
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk:8_11
+FROM registry.erda.cloud/erda-x/openjdk:8_11
 
 # set default TZ, modify through `--build-arg TZ=XXX`
 ARG TZ="Asia/Shanghai"
