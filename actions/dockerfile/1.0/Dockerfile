@@ -1,16 +1,13 @@
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/retag/buildkit:v0.11.3 as buildkit
-FROM --platform=$BUILDPLATFORM registry.erda.cloud/erda/terminus-golang:1.19.7 AS builder
+FROM registry.erda.cloud/erda-actions/custom-script:2.0 AS builder
 
 ENV CGO_ENABLED 0
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-ARG TARGETARCH
+RUN go build -o /opt/action/run github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/cmd
 
-RUN GOOS=linux GOARCH=$TARGETARCH go build -o /opt/action/run github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/cmd
+FROM registry.erda.cloud/erda-actions/custom-script:2.0
 
-COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
-
-RUN yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo \
-    && yum install -y docker-ce-cli
+COPY --from=builder /opt/action/run /opt/action/run
+RUN chmod +x /opt/action/run
