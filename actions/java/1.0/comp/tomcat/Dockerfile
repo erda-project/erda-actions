@@ -1,6 +1,9 @@
 # 可选: v8.5.43-jdk8, v7.0.96-jdk8
 ARG CONTAINER_VERSION=v8.5.43-jdk8
 
+# source: dockerfiles/pyroscope/java/Dockerfile
+# /app/pyroscope.jar natively supports amd64/arm64 arch.
+FROM registry.erda.cloud/retag/pyroscope-java:v0.11.3 as pyroscope-java
 FROM registry.erda.cloud/erda-x/tomcat:8.5
 
 ARG TARGET
@@ -25,6 +28,7 @@ RUN \
         mkdir -p /opt/spot; tar -xzf /tmp/spot-agent.tar.gz -C /opt/spot; \
 	fi && rm -rf /tmp/spot-agent.tar.gz
 
+COPY --from=pyroscope-java /app /opt/pyroscope
 COPY comp/jacocoagent.jar /opt/jacoco/jacocoagent.jar
 
 WORKDIR /

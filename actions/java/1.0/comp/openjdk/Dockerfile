@@ -1,3 +1,6 @@
+# source: dockerfiles/pyroscope/java/Dockerfile
+# /app/pyroscope.jar natively supports amd64/arm64 arch.
+FROM registry.erda.cloud/retag/pyroscope-java:v0.11.3 as pyroscope-java
 # 可选: v1.8.0.242
 FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk:8_11
 
@@ -25,6 +28,8 @@ RUN \
 	if [ "${MONITOR_AGENT}" = true ]; then \
         mkdir -p /opt/spot; tar -xzf /tmp/spot-agent.tar.gz -C /opt/spot; \
 	fi && rm -rf /tmp/spot-agent.tar.gz
+
+COPY --from=pyroscope-java /app /opt/pyroscope
 
 # copy target
 RUN mkdir -p /app

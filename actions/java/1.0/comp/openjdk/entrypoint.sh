@@ -58,10 +58,26 @@ fi
 if [ -f /opt/spot/spot-agent/spot-agent.jar ]; then
     export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent/spot-agent.jar"
 fi
+
+
+export PROFILING_ENABLED=${PROFILING_ENABLED:-true}
 ## spot java profiler
-#if [ -f /opt/spot/spot-agent/spot-profiler.jar ]; then
-#    export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent/spot-profiler.jar"
-#fi
+if [[ $PROFILING_ENABLED == true ]] && [ -e "/opt/pyroscope/pyroscope.jar" ]; then
+  echo "profiling enabled"
+
+  export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -javaagent:/opt/pyroscope/pyroscope.jar"
+
+  export PYROSCOPE_APPLICATION_NAME=${PYROSCOPE_APPLICATION_NAME:-$DICE_SERVICE}
+  export PYROSCOPE_SERVER_ADDRESS=${PYROSCOPE_SERVER_ADDRESS:-$DICE_COLLECTOR_URL}
+  export PYROSCOPE_FORMAT=${PYROSCOPE_FORMAT:-jfr}
+  export PYROSCOPE_PROFILER_LOCK=${PYROSCOPE_PROFILER_LOCK:-10ms}
+  export PYROSCOPE_PROFILER_ALLOC=${PYROSCOPE_PROFILER_ALLOC:-2m}
+
+  export PYROSCOPE_LABELS="$PYROSCOPE_LABELS,DICE_SERVICE=${DICE_SERVICE},DICE_WORKSPACE=${DICE_WORKSPACE},DICE_CLUSTER_NAME=${DICE_CLUSTER_NAME},POD_IP=${POD_IP}"
+  export PYROSCOPE_LABELS="$PYROSCOPE_LABELS,DICE_ORG_ID=${DICE_ORG_ID},DICE_PROJECT_ID=${DICE_PROJECT_ID},DICE_APPLICATION_ID=${DICE_APPLICATION_ID},DICE_APPLICATION_NAME=${DICE_APPLICATION_NAME}"
+else
+  echo "profiling disabled"
+fi
 
 if [ "${OPEN_JACOCO_AGENT}" = "true" ]
 then
@@ -74,8 +90,9 @@ then
   export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/jacoco/jacocoagent.jar=address=*,port=$JACOCO_PORT,dumponexit=false,output=tcpserver,includes=$JACOCO_INCLUDES,excludes=$JACOCO_EXCLUDES,inclbootstrapclasses=$JACOCO_INCLBOOTSTRAPCLASSES,inclnolocationclasses=$JACOCO_INCLNOLOCATIONCLASSES"
 fi
 
-# print JAVA_OPTS at first
+# print JAVA_OPTS、JAVA_TOOL_OPTIONS
 echo JAVA_OPTS=${JAVA_OPTS}
+echo JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS}"
 
 export FILEBEAT_CONFIG=${FILEBEAT_CONFIG:-/assets/filebeat-$DICE_WORKSPACE.yml}
 # TODO: for ibm filebeat baseimage
