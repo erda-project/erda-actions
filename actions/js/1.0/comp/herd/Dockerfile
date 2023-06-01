@@ -1,12 +1,9 @@
-FROM {{CENTRAL_REGISTRY}}/erda-actions/terminus-herd:1.1.8-node12
+FROM {{CENTRAL_REGISTRY}}/erda-x/herd:1.1.20
 
 ARG DICE_VERSION
 
-RUN echo "Asia/Shanghai" | tee /etc/timezone
-
 COPY {{DESTDIR}} .
 
-# Set special timezone
 RUN bootjs=$(node -p "require('./package.json').scripts.start" | \
     sed -n -e 's/^.*herd //p') && \
     bootjs=${bootjs:-'Pampasfile-default.js'} && echo ${bootjs} && \

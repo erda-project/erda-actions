@@ -1,4 +1,13 @@
 #!/bin/bash
+
+if [[ "$CONTAINER_VERSION" == v11* ]]; then
+    alternatives --set java $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/java
+    alternatives --set javac $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/javac
+    export JAVA_HOME=/usr/lib/jvm/java-11
+    echo export JAVA_HOME=/usr/lib/jvm/java-11 >> /root/.bashrc
+    echo export JAVA_HOME=/usr/lib/jvm/java-11 >> /home/dice/.bashrc
+fi
+
 limit_in_bytes=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
 
 version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')

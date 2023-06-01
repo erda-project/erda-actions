@@ -1,10 +1,8 @@
-# 可选: v8.5.43-jdk8, v7.0.96-jdk8
-ARG CONTAINER_VERSION=v8.5.43-jdk8
-
-# source: dockerfiles/pyroscope/java/Dockerfile
-# /app/pyroscope.jar natively supports amd64/arm64 arch.
 FROM registry.erda.cloud/retag/pyroscope-java:v0.11.3 as pyroscope-java
 FROM registry.erda.cloud/erda-x/tomcat:8.5
+
+ARG CONTAINER_VERSION=v8
+ENV CONTAINER_VERSION ${CONTAINER_VERSION}
 
 ARG TARGET
 ARG MONITOR_AGENT=true
@@ -12,8 +10,6 @@ ARG SCRIPT_ARGS
 ARG WEB_PATH
 
 ENV SCRIPT_ARGS ${SCRIPT_ARGS}
-
-RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone
 
 COPY comp/tomcat/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
@@ -35,7 +31,6 @@ WORKDIR /
 
 RUN cd ${CATALINA_HOME}/webapps/ && rm -fr *
 
-# biz war
 COPY ${TARGET}/app.war ${CATALINA_HOME}/webapps/${WEB_PATH}.war
 
 CMD ["/entrypoint.sh"]

@@ -3,6 +3,14 @@ limit_in_bytes=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
 
 export USER_JAVA_OPTS="$JAVA_OPTS"
 
+if [[ "$CONTAINER_VERSION" == v11* ]]; then
+    alternatives --set java $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/java
+    alternatives --set javac $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/javac
+    export JAVA_HOME=/usr/lib/jvm/java-11
+    echo export JAVA_HOME=/usr/lib/jvm/java-11 >> /root/.bashrc
+    echo export JAVA_HOME=/usr/lib/jvm/java-11 >> /home/dice/.bashrc
+fi
+
 # If not default limit_in_bytes in cgroup
 if [ "$limit_in_bytes" -ne "9223372036854771712" ]
 then
@@ -40,7 +48,10 @@ then
         fi
     fi
 
-    export JAVA_OPTS="-XX:+UseContainerSupport -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:+PrintGCDetails -XX:+PrintGCTimeStamps $JAVA_OPTS"
+    export JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:+PrintGCDetails -XX:+PrintGCTimeStamps $JAVA_OPTS"
+    if [[ "$CONTAINER_VERSION" != v8* ]]; then
+        export JAVA_OPTS="-XX:+UseContainerSupport $JAVA_OPTS"
+    fi
     echo JAVA_OPTS=$JAVA_OPTS
 fi
 

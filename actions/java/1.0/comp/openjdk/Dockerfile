@@ -1,16 +1,14 @@
-# source: dockerfiles/pyroscope/java/Dockerfile
-# /app/pyroscope.jar natively supports amd64/arm64 arch.
 FROM registry.erda.cloud/retag/pyroscope-java:v0.11.3 as pyroscope-java
-# 可选: v1.8.0.242
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk:8_11
+FROM registry.erda.cloud/erda-x/openjdk:8_11
+
+ARG CONTAINER_VERSION=v8
+ENV CONTAINER_VERSION ${CONTAINER_VERSION}
 
 ARG TARGET
 ARG MONITOR_AGENT=true
 ARG SCRIPT_ARGS
 
 ENV SCRIPT_ARGS ${SCRIPT_ARGS}
-
-RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone
 
 COPY comp/openjdk/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
@@ -31,7 +29,6 @@ RUN \
 
 COPY --from=pyroscope-java /app /opt/pyroscope
 
-# copy target
 RUN mkdir -p /app
 COPY ${TARGET} /app/
 

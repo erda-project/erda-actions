@@ -1,4 +1,4 @@
-FROM {{CENTRAL_REGISTRY}}/erda/terminus-nginx:0.2
+FROM {{CENTRAL_REGISTRY}}/erda-addons/openresty:1.21.4
 
 ARG DSTDIR=public
 

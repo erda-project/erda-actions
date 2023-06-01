@@ -141,7 +141,10 @@ func Execute() error {
 		}
 	}
 
-	runCommand("export JAVA_HOME=" + jdkConfig.JavaHome)
+	// runCommand("export JAVA_HOME=" + jdkConfig.JavaHome)
+	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /root/.bashrc")
+	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /home/dice/.bashrc")
+	runCommand("echo JAVA_HOME=$JAVA_HOME")
 	runCommand("java -version")
 
 	fmt.Fprintln(os.Stdout, "successfully loaded action config")
@@ -326,13 +329,29 @@ func cp(a, b string) error {
 func simpleRun(name string, arg ...string) error {
 	fmt.Fprintf(os.Stdout, "Run: %s, %v\n", name, arg)
 	cmd := exec.Command(name, arg...)
+	cmd.Env = NewEnv()
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 
+func NewEnv() []string {
+	env := []string{
+		"PATH=/opt/go/bin:/go/bin:/opt/nodejs/bin:/opt/maven/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+	}
+
+	if os.Getenv("ACTION_JDK_VERSION") == "11" {
+		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-11")
+	} else {
+		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-1.8.0")
+	}
+
+	return env
+}
+
 func runCommand(cmd string) error {
 	command := exec.Command("/bin/bash", "-c", cmd)
+	command.Env = NewEnv()
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
 	if err := command.Run(); err != nil {
