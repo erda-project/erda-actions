@@ -76,6 +76,8 @@ func Execute() error {
 		}
 	}
 
+	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /root/.bashrc")
+	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /home/dice/.bashrc")
 	runCommand("export JAVA_HOME=" + jdkConfig.JavaHome)
 	runCommand("java -version")
 
@@ -167,6 +169,7 @@ func build(cfg conf.Conf) error {
 
 func runCmdBackResult(cmd string) string {
 	command := exec.Command("/bin/bash", "-c", cmd)
+	command.Env = JDKEnv()
 	out, _ := command.StdoutPipe()
 	defer func() {
 		if out != nil {
@@ -185,13 +188,29 @@ func runCmdBackResult(cmd string) string {
 func simpleRun(name string, arg ...string) error {
 	fmt.Fprintf(os.Stdout, "Run: %s, %v\n", name, arg)
 	cmd := exec.Command(name, arg...)
+	cmd.Env = JDKEnv()
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 
+func JDKEnv() []string {
+	env := []string{
+		"PATH=/opt/go/bin:/go/bin:/opt/nodejs/bin:/opt/maven/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+	}
+
+	if os.Getenv("ACTION_JDK_VERSION") == "11" {
+		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-11")
+	} else {
+		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-1.8.0")
+	}
+
+	return env
+}
+
 func runCommand(cmd string) error {
 	command := exec.Command("/bin/bash", "-c", cmd)
+	command.Env = JDKEnv()
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
 	if err := command.Run(); err != nil {
