@@ -7,6 +7,8 @@ FROM registry.erda.cloud/erda-x/openjdk:8_11
 # set default TZ, modify through `--build-arg TZ=XXX`
 ARG TZ="Asia/Shanghai"
 
+RUN sed -i 's/jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1/jdk.tls.disabledAlgorithms=SSLv3/g' /usr/lib/jvm/java-1.8.0-openjdk/jre/lib/security/java.security
+
 COPY /bp/pack/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
