@@ -54,7 +54,7 @@ require (
 	github.com/caarlos0/env v3.3.1-0.20180521112546-3e0f30cbf50b+incompatible
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
 	github.com/docker/cli v20.10.20+incompatible
-	github.com/docker/distribution v2.8.1+incompatible
+	github.com/docker/distribution v2.8.2+incompatible
 	github.com/erda-project/erda v0.0.0-20221214015351-c24776421f50
 	github.com/erda-project/erda-proto-go v0.0.0
 	github.com/hashicorp/go-multierror v1.1.1
@@ -161,6 +161,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
+	github.com/opencontainers/image-spec v1.1.0-rc2 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
