@@ -117,6 +117,12 @@ func runCommand(cmd string) error {
 	command := exec.Command("/bin/bash", "-c", cmd)
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
+	memory := os.Getenv("PIPELINE_LIMITED_MEM")
+	if memory == "" {
+		memory = "2048"
+	}
+	command.Env = append(command.Environ(), fmt.Sprintf("NODE_OPTIONS=--max-old-space-size=%s",
+		memory))
 	if err := command.Run(); err != nil {
 		return err
 	}
