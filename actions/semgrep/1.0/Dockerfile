@@ -1,17 +1,12 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.16.7 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-actions/custom-script-action:2.0-20230608153022-685950d AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
-ARG ARCH
+RUN GOPROXY=https://goproxy.io,direct go build -o /assert/run actions/semgrep/1.0/internal/cmd/*.go
 
-RUN GOPROXY=https://goproxy.io,direct GOOS=linux GOARCH=$ARCH go build -o /assets/run actions/semgrep/1.0/internal/cmd/*.go
+FROM python:3.11-bullseye as action
 
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-centos:base AS action
+RUN python3 -m pip install --upgrade semgrep  -i https://mirrors.aliyun.com/pypi/simple
 
-RUN yum install -y python3
-RUN python3 -m pip install semgrep  -i https://mirrors.aliyun.com/pypi/simple
-
-COPY --from=builder /assets /opt/action
-
-FROM action
+COPY --from=builder /assert /opt/action
