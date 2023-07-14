@@ -11,7 +11,7 @@ RUN \
     bootjs=$(node -p "require('./package.json').scripts.start" | \
     sed -n -e 's/^.*herd //p') && \
     bootjs=${bootjs:-'Pampasfile-default.js'} && echo ${bootjs} && \
-    npm i @terminus/spot-agent@~x.x.x -g && \
+    npm i @terminus/spot-agent@4.1.3 && \
     npm link @terminus/spot-agent && \
     spot install -r herd -s ${bootjs} || exit -1;
 
