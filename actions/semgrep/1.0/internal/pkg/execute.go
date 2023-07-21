@@ -6,9 +6,12 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 
-	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda-proto-go/core/file/pb"
+	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/sirupsen/logrus"
 )
@@ -22,29 +25,34 @@ func (s *Semgrep) Execute() error {
 	if s.cfg.Config == "" {
 		return fmt.Errorf("missing config rule")
 	}
-	s.cmd.SetDir(s.cfg.CodeDir)
-	s.cmd.Add("--config")
-	s.cmd.Add(s.cfg.Config)
-	if s.cfg.Format != "" {
-		s.cmd.Add(fmt.Sprintf("--%s", s.cfg.Format))
-	} else {
-		s.cmd.Add("--sarif")
-	}
-	s.cmd.Add("-o")
-	s.cmd.Add(outputFile)
+	args := []string{"semgrep"}
 	for _, arg := range s.cfg.Args {
 		logrus.Infof("semgrep add arg: %s", arg)
-		s.cmd.Add(arg)
+		args = append(args, arg)
 	}
+	args = append(args, fmt.Sprintf("--config=%s", s.cfg.Config))
+	if s.cfg.Format != "" {
+		args = append(args, fmt.Sprintf("--%s", s.cfg.Format))
+	} else {
+		args = append(args, "--sarif")
+	}
+	args = append(args, "-o", outputFile)
 	defer func() {
 		if err := s.results.Store(); err != nil {
 			logrus.Errorf("failed to store results: %v", err)
 		}
 		return
 	}()
-	logrus.Infof("running semgrep: %s", s.cmd.String())
-	if err := s.cmd.Run(); err != nil {
-		return fmt.Errorf("semgrep ci failed, err: %v", err)
+	logrus.Infof("running semgrep args: %s", strings.Join(args, " "))
+	os.Chdir(s.cfg.CodeDir)
+	cmd := exec.Command("/bin/sh", "-c", strings.Join(args, " "))
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Dir = s.cfg.CodeDir
+	cmd.Env = NewEnv()
+	cmd.Run()
+	if err := filehelper.CheckExist(outputFile, false); err != nil {
+		return fmt.Errorf("semgrep ci execute failed, err: %v", err)
 	}
 	uploadFile, err := UploadFileNew(outputFile, s.cfg)
 	if err != nil {
@@ -54,8 +62,15 @@ func (s *Semgrep) Execute() error {
 	return nil
 }
 
+func NewEnv() []string {
+	env := []string{
+		"PATH=/opt/go/bin:/go/bin:/opt/nodejs/bin:/opt/maven/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+	}
+	return env
+}
+
 // UploadFileNew 上传到api/files接口
-func UploadFileNew(filePath string, cfg *Conf) (*apistructs.FileDownloadFailResponse, error) {
+func UploadFileNew(filePath string, cfg *Conf) (*pb.FileUploadResponse, error) {
 	logrus.Infof("upload file %s", filePath)
 	f, err := os.Open(filePath)
 	if err != nil {
@@ -80,7 +95,7 @@ func UploadFileNew(filePath string, cfg *Conf) (*apistructs.FileDownloadFailResp
 		return nil, fmt.Errorf("writerClose: %v", err)
 	}
 
-	var resp apistructs.FileDownloadFailResponse
+	var resp pb.FileUploadResponse
 	request := httpclient.New(httpclient.WithCompleteRedirect()).Post(cfg.PlatformParams.OpenAPIAddr).
 		Path("/api/files").
 		Param("fileFrom", "release").
