@@ -1,10 +1,5 @@
 FROM registry.erda.cloud/erda-x/openjdk-maven:8_11-3.9
 
-RUN echo "http://mirrors.aliyun.com/alpine/v3.8/main/" > /etc/apk/repositories && \
-    echo "http://mirrors.aliyun.com/alpine/v3.8/community/" >> /etc/apk/repositories
-
-RUN apk add --no-cache python
-
 COPY /bp/build/maven-settings.xml /root/.m2/settings.xml
 
 ARG MAVEN_OPTS
