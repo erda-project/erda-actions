@@ -13,6 +13,7 @@ type platformEnv struct {
 	ClusterName          string `env:"DICE_CLUSTER_NAME" required:"true"`
 	OpenAPIToken         string `env:"DICE_OPENAPI_TOKEN" required:"true"`
 	DefaultDepCacheImage string `env:"DEFAULT_DEP_CACHE_IMAGE"`
+	ExportCacheType      string `env:"EXPORT_CACHE_TYPE" default:"registry"`
 	PipelineID           uint64 `env:"PIPELINE_ID" required:"true"`
 	ProjectAppAbbr       string `env:"DICE_PROJECT_APPLICATION"`
 	DiceWorkspace        string `env:"DICE_WORKSPACE" required:"true"`
@@ -51,6 +52,11 @@ func initPlatformEnvs() (*platformEnv, error) {
 		if err != nil {
 			return nil, err
 		}
+	}
+	switch env.ExportCacheType {
+	case "inline", "registry", "local", "gha":
+	default:
+		return nil, errors.Errorf("invalid export cache type: %s", env.ExportCacheType)
 	}
 
 	return &env, nil

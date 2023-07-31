@@ -141,7 +141,7 @@ func dockerBuildForBuildkit() error {
 		"--local", "dockerfile="+filepath.Join(conf.PlatformEnvs().WorkDir, "bp", "build"),
 		"--output", "type=image,name="+conf.EasyUse().DockerImageFromBuild+",push=true",
 		"--import-cache", "type=registry,ref="+conf.EasyUse().CalculatedCacheImage,
-		"--export-cache", "type=registry,ref="+conf.EasyUse().CalculatedCacheImage+",push=true",
+		"--export-cache", fmt.Sprintf("type=%s,ref=%s,push=true", conf.PlatformEnvs().ExportCacheType, conf.EasyUse().CalculatedCacheImage),
 	)
 
 	// build
