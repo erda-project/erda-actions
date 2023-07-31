@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   buildpack:
-    image: registry.erda.cloud/erda-actions/buildpack-action:1.0-20230724115200-9439f139
+    image: registry.erda.cloud/erda-actions/buildpack-action:1.0-20230731100249-2a82e3dd
     envs:
       # Dockerfile / Dockerfile.build 中 {{BP_DOCKER_BASE_REGISTRY}} 需要该环境变量进行文件渲染。
       # 作用：Dockerfile 里 FROM XXX，这个 XXX 镜像的 Registry 地址。
@@ -14,6 +14,9 @@ jobs:
       # 1. 需要有 /root/.m2 目录
       # 2. 镜像拉取无需鉴权
       DEFAULT_DEP_CACHE_IMAGE: registry.erda.cloud/erda-actions/terminus-maven:3-jdk-8-alpine
+      # buildkit support cache type: inline, registry, local, gha
+      # more detail: https://github.com/moby/buildkit#export-cache
+      EXPORT_CACHE_TYPE: registry
     resources:
       cpu: 0.5
       mem: 2048
