@@ -1,6 +1,6 @@
 # source: dockerfiles/pyroscope/java/Dockerfile
 # /app/pyroscope.jar natively supports amd64/arm64 arch.
-FROM registry.erda.cloud/retag/pyroscope-java:v0.11.3 as pyroscope-java
+FROM registry.erda.cloud/retag/pyroscope-java:v0.11.5 as pyroscope-java
 # Build app image
 FROM registry.erda.cloud/erda-x/openjdk:8_11
 

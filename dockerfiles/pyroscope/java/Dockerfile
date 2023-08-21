@@ -6,7 +6,7 @@
 ARG DOCKER_REGISTRY="registry.erda.cloud"
 
 FROM ${DOCKER_REGISTRY}/retag/curl:8.0.1-alpine3.18.0 as curl
-ARG PYROSCOPE_JAVA_VERSION="v0.11.3"
+ARG PYROSCOPE_JAVA_VERSION="v0.11.5"
 
 WORKDIR /app
 
