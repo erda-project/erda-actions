@@ -15,10 +15,10 @@ SHELL ["/bin/sh", "--login", "-c"]
 
 RUN yum -y install gcc bzip2 git
 
-#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 COPY actions/js-build/1.0/install.sh /tmp/install.sh
 RUN bash /tmp/install.sh && rm -fv /tmp/install.sh
 
-RUN source ~/.bashrc && nvm install 12 && nvm install 14 && nvm install 16 && nvm install 8 && nvm install 10 && nvm use 12
+RUN source ~/.bashrc && nvm install 12 && nvm install 14 && nvm install 16 && nvm install 18 && nvm install 10 && nvm use 12
 
 RUN source ~/.bashrc && npm install webpack -g && npm install webpack-cli -g && npm install -g cnpm --registry=https://registry.npmmirror.com

@@ -9,6 +9,8 @@ const PRESERVE_TIME = env.ACTION_PRESERVE_TIME;
 const nodeVerMap = {
   12: 'v12.22.5',
   14: 'v14.19.0',
+  16: 'v16.20.2',
+  18: 'v18.17.1',
 }
 const faqUrl = 'https://docs.erda.cloud/latest/manual/faq/faq.html';
 
