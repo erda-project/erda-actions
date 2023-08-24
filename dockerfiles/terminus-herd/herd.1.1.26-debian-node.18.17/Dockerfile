@@ -1,8 +1,8 @@
-# Git: git version 2.39.2
-# gcc version 12.2.0
+# Git: git version 2.39.2, VIM - Vi IMproved 9.0
+# gcc version 12.2.0, curl: 7.88.1, Wget: 1.21.3, GNU bash: 5.2.15
 # Node: 18.17.1 LTS, npm: 9.6.7, yarn: 1.22.19, herd: 1.1.26, pnpm: 8.6.12, fnm: 1.35.1
 # /etc/os-release: Debian GNU/Linux 12 (bookworm)
-# Kernel: Linux cd92393eb566 5.10.104-linuxkit Thu Mar 17 17:08:06 UTC 2022 x86_64 GNU/Linux
+# Kernel: Linux 674a7d667c9d 5.15.49-linuxkit-pr #1 SMP Thu May 25 07:17:40 UTC 2023 x86_64 GNU/Linux
 # Build cmd: docker build . -t terminus/debian-node.18-herd.1.1.26
 # Other tags: terminus/debian-herd:1.1.26-n18.17,terminus/debian-herd:1.1.26
 FROM node:18.17.1-bookworm-slim
@@ -50,8 +50,13 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
        # SEE: https://github.com/sharkdp/fd#installation
        tree fd-find ripgrep htop bzip2 unzip lsof procps \
     # Make /bin/sh symlink to bash instead of dash:
-    && echo "dash dash/sh boolean false" | debconf-set-selections \
-    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash \
+    # REF: https://groups.google.com/g/linux.debian.user/c/2CyfM5UrSOI?pli=1
+    && dpkg-divert --remove --no-rename /usr/share/man/man1/sh.1.gz \
+    && dpkg-divert --remove --no-rename /bin/sh \
+    && ln -sf bash.1.gz /usr/share/man/man1/sh.1.gz \
+    && ln -sf bash /bin/sh \
+    && dpkg-divert --add --local --no-rename /usr/share/man/man1/sh.1.gz \
+    && dpkg-divert --add --local --no-rename /bin/sh \
     # fnm --- Reserved expansion point:
     # See: https://github.com/Schniz/fnm, Fast and simple Node version manager
     # Make it easier and faster to switch to other node versions in the future
