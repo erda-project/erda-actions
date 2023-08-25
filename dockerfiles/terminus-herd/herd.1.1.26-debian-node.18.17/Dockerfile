@@ -70,6 +70,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && echo "alias fd='fdfind'" >> /root/.bashrc \
     && echo "alias ls='ls --color'" >> /root/.bashrc \
     && echo "alias ll='ls -l --color'" >> /root/.bashrc \
+    && echo "export PNPM_HOME=/usr/local/bin" >> /root/.bashrc \
     # Fix vim encoding for cjk characters
     && echo 'set enc=utf8' >> /etc/vim/vimrc \
     && echo 'set fencs=utf8,gbk,gb2312,gb18030' >> /etc/vim/vimrc \

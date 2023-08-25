@@ -43,6 +43,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/  \
     # Fix: fnm can't infer your shell based on the process tree.
     && sed -i 's/fnm env/fnm env --shell=bash/' /root/.bashrc \
     && npm i -g pnpm@latest \
+    && echo "export PNPM_HOME=/usr/local/bin" >> /root/.bashrc \
     && rm -rf /var/lib/apt/lists/* && apt autoremove -y \
     # Make /bin/sh symlink to bash instead of dash:
     && echo "dash dash/sh boolean false" | debconf-set-selections \
