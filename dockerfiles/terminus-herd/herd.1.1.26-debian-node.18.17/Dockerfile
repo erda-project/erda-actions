@@ -70,13 +70,14 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && echo "alias fd='fdfind'" >> /root/.bashrc \
     && echo "alias ls='ls --color'" >> /root/.bashrc \
     && echo "alias ll='ls -l --color'" >> /root/.bashrc \
-    && echo "export PNPM_HOME=/usr/local/bin" >> /root/.bashrc \
     # Fix vim encoding for cjk characters
     && echo 'set enc=utf8' >> /etc/vim/vimrc \
     && echo 'set fencs=utf8,gbk,gb2312,gb18030' >> /etc/vim/vimrc \
     # Add --unsafe-perm to fix 'Error: EACCES: permission denied, mkdir...' issue while install node-sass
     && npm i -g --unsafe-perm @terminus/herd@1.1.26 \
     && npm i -g pnpm@latest \
+    # Fix "Unable to find the global bin directory" error while running `pnpm i -g`
+    && pnpm config set global-bin-dir '/usr/local/bin' \
     && rm -rf /var/lib/apt/lists/* && apt autoremove -y \
     # Add erda user and create home dir
     && useradd -m -s /bin/bash erda

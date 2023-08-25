@@ -35,6 +35,14 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/  \
     && apt update \
     && apt install -y --no-install-recommends --no-install-suggests \
        git curl wget bzip2 unzip openssh-client gcc make g++ \
+    # Make /bin/sh symlink to bash instead of dash:
+    # REF: https://groups.google.com/g/linux.debian.user/c/2CyfM5UrSOI?pli=1
+    && dpkg-divert --remove --no-rename /usr/share/man/man1/sh.1.gz \
+    && dpkg-divert --remove --no-rename /bin/sh \
+    && ln -sf bash.1.gz /usr/share/man/man1/sh.1.gz \
+    && ln -sf bash /bin/sh \
+    && dpkg-divert --add --local --no-rename /usr/share/man/man1/sh.1.gz \
+    && dpkg-divert --add --local --no-rename /bin/sh \
     # fnm --- Reserved expansion point:
     # See: https://github.com/Schniz/fnm, Fast and simple Node version manager
     # Make it easier and faster to switch to other node versions in the future
@@ -43,7 +51,8 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/  \
     # Fix: fnm can't infer your shell based on the process tree.
     && sed -i 's/fnm env/fnm env --shell=bash/' /root/.bashrc \
     && npm i -g pnpm@latest \
-    && echo "export PNPM_HOME=/usr/local/bin" >> /root/.bashrc \
+    # Fix "Unable to find the global bin directory" error while running `pnpm i -g`
+    && pnpm config set global-bin-dir '/usr/local/bin' \
     && rm -rf /var/lib/apt/lists/* && apt autoremove -y \
     # Make /bin/sh symlink to bash instead of dash:
     && echo "dash dash/sh boolean false" | debconf-set-selections \
