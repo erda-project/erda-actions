@@ -1,9 +1,13 @@
 # Author: hustcer
 # Created at 2023-08-29T11:08:18+08:00
-# Git: git version 2.39.2, gcc: 12.2.0, curl: 7.88.1, Wget: 1.21.3
-# Node: 18.17.1 LTS, npm: 9.6.7, yarn: 1.22.19, pnpm: 8.6.12, fnm: 1.35.1，nvm: 0.39.5
+# Tools from terminus-debian-node:18.17-lts:
+#   Git version 2.39.2, gcc: 12.2.0, curl: 7.88.1, Wget: 1.21.3
+#   Node: 18.17.1 LTS, npm: 9.6.7, yarn: 1.22.19, pnpm: 8.6.12, fnm: 1.35.1
+# Newly Added:
+#   nvm: 0.39.5, vite: 4.4.9, rollup: 3.28.1, webpack: 5.88.2, webpack-cli: 5.1.4
+#   Node: v14.21.3 / v16.20.2 / v18.17.1, and default v18.17.1, cnpm: 9.2.0
 # Run the following build command from the root directory of this repository:
-# docker build . -t terminus/js-build-2.0 -f dockerfiles/js-build/Dockerfile
+# docker build . -t terminus/js-build-2.0 -f actions/js-build/1.0/Dockerfile-2.0
 
 FROM --platform=$TARGETPLATFORM golang:1.21.0-bookworm AS builder
 
