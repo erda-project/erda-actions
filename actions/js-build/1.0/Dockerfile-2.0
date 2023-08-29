@@ -1,5 +1,7 @@
 # Author: hustcer
 # Created at 2023-08-29T11:08:18+08:00
+# Git: git version 2.39.2, gcc: 12.2.0, curl: 7.88.1, Wget: 1.21.3
+# Node: 18.17.1 LTS, npm: 9.6.7, yarn: 1.22.19, pnpm: 8.6.12, fnm: 1.35.1，nvm: 0.39.5
 # Run the following build command from the root directory of this repository:
 # docker build . -t terminus/js-build-2.0 -f dockerfiles/js-build/Dockerfile
 
