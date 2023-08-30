@@ -17,7 +17,7 @@ params:
   - name: node_version
     type: string
     desc: ${{ i18n.params.node_version.desc }}
-    default: "12"
+    default: "18"
   - name: workdir
     type: string
     desc: ${{ i18n.params.workdir.desc }}

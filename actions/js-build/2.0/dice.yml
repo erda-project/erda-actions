@@ -3,6 +3,7 @@ jobs:
   js-build:
     image: registry.erda.cloud/erda-actions/js-build-action:2.0-20230830111908-484b8b5
     envs:
+      node_version: "18"
       BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
     resources:
       cpu: 1
