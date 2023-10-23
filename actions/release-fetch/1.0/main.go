@@ -46,7 +46,7 @@ func main() {
 
 	echoMeta("release_id", release.ReleaseID)
 	echoMeta("release_name", release.Version)
-	echoMeta("release_image",release.Images[0])
+	echoMeta("release_image",strings.Join(release.Images, ","))
 	echoMeta("release_branch", release.Labels["gitBranch"])
 	echoMeta("release_commit", release.Labels["gitCommitId"])
 	echoMeta("release_commit_message", release.Labels["gitCommitMessage"])
