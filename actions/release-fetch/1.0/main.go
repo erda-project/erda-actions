@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-
+        "strings"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/http/httpclient"
@@ -46,6 +46,7 @@ func main() {
 
 	echoMeta("release_id", release.ReleaseID)
 	echoMeta("release_name", release.Version)
+	echoMeta("release_image",strings.Join(release.Images, ","))
 	echoMeta("release_branch", release.Labels["gitBranch"])
 	echoMeta("release_commit", release.Labels["gitCommitId"])
 	echoMeta("release_commit_message", release.Labels["gitCommitMessage"])
