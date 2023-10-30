@@ -1,10 +1,10 @@
 # Git: git version 2.30.2
 # gcc version 10.2.1 20210110 (Debian 10.2.1-6)
-# Node: 14.19.3 LTS, npm: 6.14.17, yarn: 1.22.19, herd: 1.1.18, pnpm: 7.4.0, fnm: 1.31.0
+# Node: 14.21.3 LTS, npm: 6.14.18, yarn: 1.22.19, herd: 1.1.27, pnpm: 7.33.6, fnm: 1.35.1
 # /etc/os-release: Debian: Debian GNU/Linux 11 (bullseye)
 # Kernel: Linux cd92393eb566 5.10.104-linuxkit Thu Mar 17 17:08:06 UTC 2022 x86_64 GNU/Linux
-# Build cmd: docker build . -t terminus/debian-node.14-herd.1.1.18
-# Other tags: terminus/debian-herd:1.1.18-n14.19,terminus/debian-herd:1.1.18
+# Build cmd: docker build . -t terminus/debian-node.14-herd.1.1.27
+# Other tags: terminus/debian-herd:1.1.27-n14.21,terminus/debian-herd:1.1.27
 FROM node:14.21.3-bullseye-slim
 
 LABEL maintainer=hustcer<majun@terminus.io>
@@ -67,7 +67,9 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     && echo 'set fencs=utf8,gbk,gb2312,gb18030' >> /etc/vim/vimrc \
     # Add --unsafe-perm to fix 'Error: EACCES: permission denied, mkdir...' issue while install node-sass
     && npm i -g --unsafe-perm @terminus/herd@1.1.27 \
-    && npm i -g pnpm@latest \
+    && npm i -g pnpm@7 \
+    # Fix "Unable to find the global bin directory" error while running `pnpm i -g`
+    && pnpm config set global-bin-dir '/usr/local/bin' \
     && rm -rf /var/lib/apt/lists/* && apt autoremove -y \
     # Add dice and erda user and create home dir
     && useradd -m -s /bin/bash dice \
