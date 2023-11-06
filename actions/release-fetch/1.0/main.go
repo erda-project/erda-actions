@@ -4,11 +4,20 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-
+	"gopkg.in/yaml.v2"
+	"encoding/json"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 )
+
+type ServiceList struct {
+	Services map[string]Service `yaml:"services"`
+}
+
+type Service struct {
+	Image string `yaml:"image"`
+}
 
 type Conf struct {
 	ApplicationName string `env:"ACTION_APPLICATION_NAME" required:"true"`
@@ -44,10 +53,21 @@ func main() {
 		panic(err)
 	}
 
+	serviceInfo, err := GetServiceInfo(release.Diceyml)
+	if err != nil {
+		echoMeta("Error", err.Error())
+		panic(err)
+	}
+	jsonData, err := json.Marshal(serviceInfo)
+	if err != nil {
+		panic(err)
+	}
+
 	echoMeta("release_id", release.ReleaseID)
 	echoMeta("release_name", release.Version)
 	echoMeta("release_branch", release.Labels["gitBranch"])
 	echoMeta("release_commit", release.Labels["gitCommitId"])
+	echoMeta("release_Images", string(jsonData))
 	echoMeta("release_commit_message", release.Labels["gitCommitMessage"])
 
 	// check commit
@@ -104,4 +124,20 @@ func getRelease(hc *httpclient.HTTPClient, appID string) (*apistructs.ReleaseDat
 		return nil, fmt.Errorf("release not found")
 	}
 	return &resp.Data.Releases[0], nil
+}
+
+
+func GetServiceInfo(data string) (map[string]string, error) {
+	var serviceList ServiceList
+	err := yaml.Unmarshal([]byte(data), &serviceList)
+	if err != nil {
+		return nil, err
+	}
+
+	serviceInfo := make(map[string]string)
+	for name, service := range serviceList.Services {
+		serviceInfo[name] = service.Image
+	}
+
+	return serviceInfo, nil
 }
