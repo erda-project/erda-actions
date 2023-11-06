@@ -316,3 +316,26 @@ release action 运行成功后会在当前目录生成 `dicehub-release` 文件�
             - ${bp-item}/pack-result
             - ${bp-web}/pack-result
 ```
+
+#### 对服务镜像进行retag并推送
+```yaml
+- stage:
+  - release:
+      alias: release
+      description: 用于打包完成时，向dicehub 提交完整可部署的dice.yml。用户若没在pipeline.yml里定义该action，CI会自动在pipeline.yml里插入该action
+      params:
+        dice_yml: ${dice-yml}/dice.yml
+        services:
+          trade-runtime:
+            cmd: java ${{ configs.JAVA_OPTS }} -jar /target/trade-runtime.jar
+            copys:
+              - ${trade-runtime:OUTPUT:buildPath}/target/trade-runtime.jar:/target/trade-runtime.jar
+            # 服务的base镜像
+            image: registry.erda.cloud/erda-x/openjdk:8_11
+            # target镜像名称
+            retagImage: ${{ configs.REGISTRY }}/library:trade-runtime-${{ random.timestamp }}
+            # 远端镜像仓库的用户名
+            registryUsername: ${{ secrets.REGISTRY_USERNAME }}
+            # 远端镜像仓库的密码
+            registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
+```

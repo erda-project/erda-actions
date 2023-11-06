@@ -11,6 +11,7 @@ import (
 	"github.com/erda-project/erda-actions/actions/release/1.0/internal/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
 	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
+	"github.com/erda-project/erda-actions/pkg/image"
 	"github.com/labstack/gommon/random"
 	"github.com/sirupsen/logrus"
 )
@@ -148,13 +149,13 @@ func buildDockerFile(service conf.Service, imageName string, cfg *conf.Conf) boo
 
 	//build
 	if cfg.BuildkitEnable == "true" {
-		return buildWithBuildkit(cfg.BuildkitdAddr, imageName, dockerFileAddr, service)
+		return buildWithBuildkit(cfg.BuildkitdAddr, imageName, dockerFileAddr, service, cfg)
 	} else {
-		return buildWithDocker(imageName, dockerFileAddr, service)
+		return buildWithDocker(imageName, dockerFileAddr, service, cfg)
 	}
 }
 
-func buildWithDocker(imageName string, dockerFileAddr string, service conf.Service) bool {
+func buildWithDocker(imageName string, dockerFileAddr string, service conf.Service, cfg *conf.Conf) bool {
 	cmd := fmt.Sprintf(" docker build -t %s -f %s ./%s", imageName, dockerFileAddr, getServiceTempPath(service.Name))
 	fmt.Println("build cmd :", cmd)
 	if err := runCommand(cmd); err != nil {
@@ -166,10 +167,28 @@ func buildWithDocker(imageName string, dockerFileAddr string, service conf.Servi
 		logrus.Errorf(" services %v:  docker run push error: %v ", service.Name, err)
 		return false
 	}
+	if len(service.RetagImage) > 0 {
+		if len(service.RegistryUsername) == 0 {
+			service.RegistryUsername = cfg.RegistryUsername
+		}
+		if len(service.RegistryPassword) == 0 {
+			service.RegistryPassword = cfg.RegistryPassword
+		}
+		if len(service.RegistryUsername) > 0 {
+			if err := docker.Login(service.RetagImage, service.RegistryUsername, service.RegistryPassword); err != nil {
+				logrus.Errorf("services: %s, retag image: %s,  docker login error: %v ", service.Name, service.RetagImage, err)
+				return false
+			}
+		}
+		if err := docker.RetagAndPush(imageName, service.RetagImage); err != nil {
+			logrus.Errorf("services: %s, retag image: %s,  docker retag and push error: %v ", service.Name, service.RetagImage, err)
+			return false
+		}
+	}
 	return true
 }
 
-func buildWithBuildkit(buildkitdAddr, imageName, dockerFileAddr string, service conf.Service) bool {
+func buildWithBuildkit(buildkitdAddr, imageName, dockerFileAddr string, service conf.Service, cfg *conf.Conf) bool {
 	packCmd := exec.Command("buildctl",
 		"--addr", buildkitdAddr,
 		"--tlscacert=/.buildkit/ca.pem",
@@ -188,6 +207,24 @@ func buildWithBuildkit(buildkitdAddr, imageName, dockerFileAddr string, service 
 	if err := packCmd.Run(); err != nil {
 		logrus.Errorf(" services %v:  build image from buildkit error: %v ", service.Name, err)
 		return false
+	}
+	if len(service.RetagImage) > 0 {
+		if len(service.RegistryUsername) == 0 {
+			service.RegistryUsername = cfg.RegistryUsername
+		}
+		if len(service.RegistryPassword) == 0 {
+			service.RegistryPassword = cfg.RegistryPassword
+		}
+		if len(service.RegistryUsername) > 0 {
+			if err := docker.Login(service.RetagImage, service.RegistryUsername, service.RegistryPassword); err != nil {
+				logrus.Errorf("services: %s, retag image: %s,  docker login error: %v ", service.Name, service.RetagImage, err)
+				return false
+			}
+		}
+		if err := image.ReTagByGcrane(imageName, service.RetagImage, true); err != nil {
+			logrus.Errorf("services: %s, retag image: %s,  gcrane retag and push error: %v ", service.Name, service.RetagImage, err)
+			return false
+		}
 	}
 	return true
 }

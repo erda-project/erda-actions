@@ -49,6 +49,22 @@ func Login(registry, username, password string) error {
 	return nil
 }
 
+func RetagAndPush(sourceImage, retagImage string) error {
+	retag := exec.Command("docker", "tag", sourceImage, retagImage)
+	output, err := retag.CombinedOutput()
+	if err != nil {
+		return errors.Errorf("docker tag failed, sourceImage: %s, retagImage: %s, err: %v", sourceImage, retagImage, string(output))
+	}
+
+	push := exec.Command("docker", "push", retagImage)
+	output, err = push.CombinedOutput()
+	if err != nil {
+		return errors.Errorf("docker push failed, retagImage: %s, err: %v", retagImage, string(output))
+	}
+
+	return nil
+}
+
 func LoginWithoutCli(registry, username, password string) error {
 	u, err := url.Parse("//" + registry)
 	if err != nil {

@@ -4,20 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"os/exec"
-	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
-	"time"
 
-	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/envconf"
+	"github.com/erda-project/erda-actions/pkg/image"
 	"github.com/erda-project/erda-actions/pkg/meta"
 	"github.com/erda-project/erda-actions/pkg/pack"
+	"github.com/erda-project/erda/pkg/filehelper"
 )
 
 var getRegistry = func(image string) string { return strings.Split(image, "/")[0] }
@@ -104,7 +101,7 @@ func pushImage(cfg Conf) ([]byte, error) {
 		}
 	}
 
-	if err := reTag(fromImage, cfg.Image, cfg.Insecure); err != nil {
+	if err := image.ReTagByGcrane(fromImage, cfg.Image, cfg.Insecure); err != nil {
 		return nil, err
 	}
 
@@ -124,7 +121,7 @@ func pullImage(cfg Conf, toImage string) ([]byte, error) {
 		}
 	}
 
-	if err := reTag(cfg.Image, toImage, cfg.Insecure); err != nil {
+	if err := image.ReTagByGcrane(cfg.Image, toImage, cfg.Insecure); err != nil {
 		return nil, err
 	}
 
@@ -148,33 +145,6 @@ func getFrom(cfg Conf) (string, error) {
 		}
 	}
 	return "", fmt.Errorf("not found image of service: %s", cfg.Service)
-}
-
-func reTag(from, target string, insecure bool) error {
-	fn := func(arg ...string) error {
-		fmt.Fprintf(os.Stdout, "Run: gcrane, %v\n", arg)
-		cmd := exec.Command("gcrane", arg...)
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		return cmd.Run()
-	}
-
-	imageFile := path.Join(os.TempDir(), strconv.FormatInt(time.Now().Unix(), 10))
-	args := []string{
-		fmt.Sprintf("--insecure=%s", strconv.FormatBool(insecure)),
-	}
-
-	pullArgs := append([]string{"pull", from, imageFile}, args...)
-	if err := fn(pullArgs...); err != nil {
-		return err
-	}
-
-	pushArgs := append([]string{"push", imageFile, target}, args...)
-	if err := fn(pushArgs...); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func main() {
