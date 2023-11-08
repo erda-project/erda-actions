@@ -5,10 +5,14 @@ import (
 	"strconv"
 	"time"
 
+	"encoding/json"
+	"github.com/erda-project/erda/pkg/parser/diceyml"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 )
+
+
 
 type Conf struct {
 	ApplicationName string `env:"ACTION_APPLICATION_NAME" required:"true"`
@@ -44,10 +48,17 @@ func main() {
 		panic(err)
 	}
 
+	serviceInfo, err := GetServerInfo(release.Diceyml)
+	if err != nil {
+		echoMeta("Error", err.Error())
+		panic(err)
+	}
+
 	echoMeta("release_id", release.ReleaseID)
 	echoMeta("release_name", release.Version)
 	echoMeta("release_branch", release.Labels["gitBranch"])
 	echoMeta("release_commit", release.Labels["gitCommitId"])
+	echoMeta("release_images", serviceInfo)
 	echoMeta("release_commit_message", release.Labels["gitCommitMessage"])
 
 	// check commit
@@ -104,4 +115,21 @@ func getRelease(hc *httpclient.HTTPClient, appID string) (*apistructs.ReleaseDat
 		return nil, fmt.Errorf("release not found")
 	}
 	return &resp.Data.Releases[0], nil
+}
+
+
+func GetServiceInfo(data string) (string, error) {
+	diceYaml, err := diceyml.New([]byte(data), false)
+	if err != nil {
+		return "", err
+	}
+	serviceInfo := make(map[string]string)
+	for name, service := range diceYaml.Obj().Services {
+		serviceInfo[name] = service.Image
+	}
+	images, err := json.Marshal(serviceInfo)
+	if err != nil {
+		return "", err
+	}
+	return string(images), nil
 }
