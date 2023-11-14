@@ -59,6 +59,9 @@ type Conf struct {
 	LocalRegistryUserName string `env:"BP_DOCKER_ARTIFACT_REGISTRY_USERNAME"`
 	LocalRegistryPassword string `env:"BP_DOCKER_ARTIFACT_REGISTRY_PASSWORD"`
 
+	RegistryUsername string `env:"ACTION_REGISTRY_USERNAME"`
+	RegistryPassword string `env:"ACTION_REGISTRY_PASSWORD"`
+
 	DiceVersion    string `env:"DICE_VERSION"`
 	Base64Switch   bool   `env:"BASE64_SWITCH"` // base64 开关
 	BuildkitEnable string `env:"BUILDKIT_ENABLE"`
@@ -83,10 +86,13 @@ func (c Conf) GetAppName() string {
 }
 
 type Service struct {
-	Name  string
-	Cmd   string   `json:"cmd"`
-	Image string   `json:"image"`
-	Cps   []string `json:"copys"`
+	Name             string
+	Cmd              string   `json:"cmd"`
+	Image            string   `json:"image"`
+	Cps              []string `json:"copys"`
+	RetagImage       string   `json:"retagImage"`
+	RegistryUsername string   `json:"registryUsername"`
+	RegistryPassword string   `json:"registryPassword"`
 }
 
 type MobileData struct {

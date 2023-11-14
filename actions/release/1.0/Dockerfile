@@ -16,4 +16,4 @@ COPY --from=builder /assets /opt/action
 COPY --from=builder /opt/action/comp /opt/action/comp
 
 #https://github.com/google/bundletool/releases/download/1.11.1/bundletool-all-1.11.1.jar
-COPY bundletool-all-1.11.1.jar /opt/action/
+ADD https://github.com/google/bundletool/releases/download/1.11.1/bundletool-all-1.11.1.jar /opt/action/
