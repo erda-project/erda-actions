@@ -54,9 +54,11 @@ func fillDiceYml(cfg *conf.Conf, storage *StorageURL) (string, error) {
 		return "", err
 	}
 
-	//假如是service模式，需要将service中的cmd塞入dice.yaml中的cmd中
+	//假如是service模式，需要将service中的cmd塞入dice.yaml中的cmd中；并判定是否使用的镜像修改成retag中的镜像
 	if cfg.Services != nil {
 		insertCommands(&dCopy, cfg)
+		// 若RetagImage被定义过，则默认将制品中使用的镜像修改成retag中的镜像
+		useRetagImage(&dCopy, cfg)
 	}
 
 	if err != nil {

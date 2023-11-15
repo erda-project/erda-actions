@@ -317,7 +317,8 @@ release action 运行成功后会在当前目录生成 `dicehub-release` 文件�
             - ${bp-web}/pack-result
 ```
 
-#### 对服务镜像进行retag并推送
+#### 对服务镜像进行retag并推送；默认开启“制品镜像选用retag中的镜像地址”，可以通过`useRetagImage`标识是否开启该功能
+
 ```yaml
 - stage:
   - release:
@@ -338,4 +339,6 @@ release action 运行成功后会在当前目录生成 `dicehub-release` 文件�
             registryUsername: ${{ secrets.REGISTRY_USERNAME }}
             # 远端镜像仓库的密码
             registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
+            # 制品不使用retag中镜像地址
+            useRetagImage: false
 ```
