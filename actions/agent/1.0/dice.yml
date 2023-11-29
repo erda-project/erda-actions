@@ -1,10 +1,10 @@
 ### job 配置项
 jobs:
   agent:
-    image: registry.erda.cloud/erda-actions/action-agent:2.3-alpha-20230530111049-139ac9c59
+    image: registry.erda.cloud/erda-actions/action-agent:2.4-alpha-20231124102514-fd60919fc
     labels:
       # 必填字段
-      MD5: a3dbe69dd1eb4b9644178dd81e97a458
+      MD5: fbf7436210dc875b1050c6ed1da09ce7
     envs:
       # DEBUG mode, will produce more logs
       DEBUG: false
@@ -15,3 +15,4 @@ jobs:
       FILE_STREAM_TIMEOUT_SEC: 60
       DEFAULT_SHELL: sh -x -e
       DEFAULT_TIMEZONE: Asia/Shanghai
+      MAX_CACHE_FILE_MB: 2048
