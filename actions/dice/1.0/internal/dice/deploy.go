@@ -132,7 +132,7 @@ func storeMetaFileWithErr(conf *conf, runtimeID int64, deploymentID int64, deplo
 	}
 	if deployResult.Data.FailCause != "" {
 		*metaData = append(*metaData, metadata.MetadataField{
-			Name:  "ErrReason",
+			Name:  "FailCause",
 			Value: deployResult.Data.FailCause,
 			Level: metadata.MetadataLevelError,
 		})
