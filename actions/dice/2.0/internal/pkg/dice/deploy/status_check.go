@@ -215,15 +215,6 @@ func (d *deploy) check(drMap map[string]*common.DeployResult) (bool, error) {
 		utils.BatchPrintStatusCheckResult(statusResult)
 	}
 
-	// 以下代码在上面用defer执行
-	// error message will store meta and report
-	//if isErr {
-	//	err := d.store.BatchStoreMetaFile(statusResult)
-	//	if err != nil {
-	//		logrus.Errorf("failed to batch store meta file, err: %v", err)
-	//	}
-	//}
-
 	return isDeploying, nil
 }
 
