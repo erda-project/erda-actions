@@ -53,7 +53,6 @@ func (d *deploy) StatusCheck(orderId string, result map[string]*common.DeployRes
 		return nil
 	default:
 		// loop check deployments status
-		logrus.Infof("====> default")
 		if err := d.statusCheckLoop(ctx, result); err != nil {
 			if err == ErrCheckTimeout {
 				ErrTimeOutPrint()
