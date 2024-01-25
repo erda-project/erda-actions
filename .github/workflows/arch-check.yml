@@ -14,8 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Check arch
-        env:
-          ERDA_REGISTRY: registry.erda.cloud
         run: |
           echo "start image architecture check" 
           repo_name=`echo ${{ github.repository }} | awk -F "/" '{print $2}'`
@@ -24,22 +22,24 @@ jobs:
           FILES=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/files" \
             | jq -r '.[].filename')
-          
+
           failed="false"
           
-          files=$(echo "$FILES" | grep -oE '\S*dice.yml')
-          for file in $files; do
-            imageInfo=$(cat $file | grep "image:" | grep -i "$ERDA_REGISTRY/$repo_name" | awk '{print $2}')
-            echo "- checking $file image: $imageInfo"
-            output=$(/arch-check.sh $imageInfo)
-            if [ "$output" != "amd64,arm64" ]; then
-              echo "[FAILED] Image: $imageInfo arch is [$output], does not support dual architecture"
-              failed="true"
+          for file in $FILES; do
+            if [ "$(echo "$file" | grep -o "dice.yml$")" ]; then
+              imageInfo=$(cat $file | grep "image:" | awk '{print $2}')
+              echo "- checking $file image: $imageInfo"
+              output=$(/arch-check.sh $imageInfo)
+              if [ "$output" != "amd64,arm64" ]; then
+                echo "[FAILED] Image: $imageInfo arch is [$output], does not support dual architecture"
+                failed="true"
+              fi
             fi
-          done  
+          done
           
           if [ "$failed" = "true" ]; then
+            echo "arch check failed"
             exit 1
           fi
           
-          echo "arch check done"
+          echo "arch check pass"
