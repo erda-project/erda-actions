@@ -1,0 +1,45 @@
+name: ARCH CHECK
+
+on:
+  push:
+    branches: [ master,develop,release/* ]
+  pull_request:
+
+jobs:
+  ARCH-CHECK:
+    runs-on: ubuntu-latest
+    container:
+      image: registry.erda.cloud/erda/arch-check:1.0.1
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check arch
+        env:
+          ERDA_REGISTRY: registry.erda.cloud
+        run: |
+          echo "start image architecture check" 
+          repo_name=`echo ${{ github.repository }} | awk -F "/" '{print $2}'`
+          
+          PR_NUMBER=$(echo "${{ github.event.pull_request.url }}" | awk -F'/' '{print $NF}')
+          FILES=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER}/files" \
+            | jq -r '.[].filename')
+          
+          failed="false"
+          
+          files=$(echo "$FILES" | grep -oE '\S*dice.yml')
+          for file in $files; do
+            imageInfo=$(cat $file | grep "image:" | grep -i "$ERDA_REGISTRY/$repo_name" | awk '{print $2}')
+            echo "- checking $file image: $imageInfo"
+            output=$(/arch-check.sh $imageInfo)
+            if [ "$output" != "amd64,arm64" ]; then
+              echo "[FAILED] Image: $imageInfo arch is [$output], does not support dual architecture"
+              failed="true"
+            fi
+          done  
+          
+          if [ "$failed" = "true" ]; then
+            exit 1
+          fi
+          
+          echo "arch check done"
