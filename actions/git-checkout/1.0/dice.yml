@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   git-checkout:
-    image: registry.erda.cloud/erda-actions/git-checkout-action:1.0-20230516131755-d565716
+    image: registry.erda.cloud/erda-actions/git-checkout-action:1.0-20240227100946-aed655a
     resources:
       cpu: 0.5
       mem: 1024

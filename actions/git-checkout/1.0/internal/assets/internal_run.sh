@@ -79,6 +79,11 @@ if [ $isCommit = true ]; then
 else
     echo 'clone mode'
     pwd
+
+    gitusername=$(git config  user.name)
+    echo "git config user.name: $gitusername"
+    echo "git command:  git clone --single-branch $depthflag $uri $branchflag $destination"
+
     git clone --single-branch $depthflag $uri $branchflag $destination
     cd $destination
     git fetch origin refs/notes/*:refs/notes/*
