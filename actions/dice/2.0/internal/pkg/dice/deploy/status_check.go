@@ -76,7 +76,7 @@ func (d *deploy) statusCheckLoop(ctx context.Context, drMap map[string]*common.D
 		case <-ticker.C:
 			isDeploying, err := d.check(drMap)
 			if err != nil {
-				logrus.Errorf("failed to check deploy %v", err)
+				logrus.Errorf("failed to check deploy, err: %v", err)
 				return err
 			}
 			// deploy done
@@ -97,7 +97,7 @@ func (d *deploy) checkBatchStatusLoop(ctx context.Context, orderId string) error
 		case <-ticker.C:
 			isDeploying, err := d.checkBatch(orderId)
 			if err != nil {
-				logrus.Errorf("failed to check deploy %v", err)
+				logrus.Errorf("failed to check deploy, err: %v", err)
 				return err
 			}
 			// deploy done
