@@ -13,12 +13,13 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	"github.com/erda-project/erda-actions/pkg/log"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda/pkg/http/httputil"
 	"github.com/erda-project/erda/pkg/retry"
+
+	"github.com/erda-project/erda-actions/pkg/log"
 )
 
 func Run() error {
@@ -119,7 +120,7 @@ func storeMetaFileWithErr(conf *conf, runtimeID int64, deploymentID int64, deplo
 	if deployResult == nil {
 		return storeMetaFile(conf, runtimeID, deploymentID)
 	}
-	if len(deployResult.Data.MoudleErrMsg) == 0 {
+	if len(deployResult.Data.MoudleErrMsg) == 0 && deployResult.Data.FailCause == "" {
 		return storeMetaFile(conf, runtimeID, deploymentID)
 	}
 	metaData := generateMetadata(conf, runtimeID, deploymentID)
@@ -127,6 +128,13 @@ func storeMetaFileWithErr(conf *conf, runtimeID int64, deploymentID int64, deplo
 		*metaData = append(*metaData, metadata.MetadataField{
 			Name:  k,
 			Value: v,
+		})
+	}
+	if deployResult.Data.FailCause != "" {
+		*metaData = append(*metaData, metadata.MetadataField{
+			Name:  "FailCause",
+			Value: deployResult.Data.FailCause,
+			Level: metadata.MetadataLevelError,
 		})
 	}
 	// remove that the value is empty

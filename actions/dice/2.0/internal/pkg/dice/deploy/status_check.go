@@ -1,18 +1,19 @@
 package deploy
 
 import (
-	"fmt"
-	"time"
-	"sync"
 	"context"
+	"fmt"
+	"sync"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda/pkg/http/httpclient"
+
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/common"
-	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/dice/callback"
+	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
 )
 
 var (
@@ -75,7 +76,7 @@ func (d *deploy) statusCheckLoop(ctx context.Context, drMap map[string]*common.D
 		case <-ticker.C:
 			isDeploying, err := d.check(drMap)
 			if err != nil {
-				logrus.Error("failed to check deploy", err)
+				logrus.Errorf("failed to check deploy, err: %v", err)
 				return err
 			}
 			// deploy done
@@ -96,7 +97,7 @@ func (d *deploy) checkBatchStatusLoop(ctx context.Context, orderId string) error
 		case <-ticker.C:
 			isDeploying, err := d.checkBatch(orderId)
 			if err != nil {
-				logrus.Error("failed to check deploy", err)
+				logrus.Errorf("failed to check deploy, err: %v", err)
 				return err
 			}
 			// deploy done
@@ -162,6 +163,16 @@ func (d *deploy) check(drMap map[string]*common.DeployResult) (bool, error) {
 		needPrint, isErr, isDeploying bool
 	)
 
+	defer func() {
+		// error message will store meta and report
+		if isErr {
+			err := d.store.BatchStoreMetaFile(statusResult)
+			if err != nil {
+				logrus.Errorf("failed to batch store meta file, err: %v", err)
+			}
+		}
+	}()
+
 	// analyse status check results
 	for appName, data := range statusResult {
 		if data == nil {
@@ -188,6 +199,7 @@ func (d *deploy) check(drMap map[string]*common.DeployResult) (bool, error) {
 		tmpIsDeploying, err := parseStatus(data)
 		if err != nil {
 			logrus.Debug(err)
+			isErr = true
 			return isDeploying, err
 		}
 
@@ -200,14 +212,6 @@ func (d *deploy) check(drMap map[string]*common.DeployResult) (bool, error) {
 	// one of application deploy status change or process had error message
 	if needPrint {
 		utils.BatchPrintStatusCheckResult(statusResult)
-	}
-
-	// error message will store meta and report
-	if isErr {
-		err := d.store.BatchStoreMetaFile(statusResult)
-		if err != nil {
-			logrus.Errorf("failed to batch store meta file, err: %v", err)
-		}
 	}
 
 	return isDeploying, nil

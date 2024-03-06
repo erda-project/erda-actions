@@ -7,13 +7,13 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/common"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
-	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/metadata"
 )
 
 type Store interface {
@@ -97,6 +97,13 @@ func (s *store) BatchStoreMetaFile(statusResp map[string]*common.DeploymentStatu
 				{Name: "deploymentID", Value: strconv.Itoa(resp.Data.DeploymentId)},
 			}...)
 			break
+		}
+		if resp.Data.FailCause != "" {
+			metaData = append(metaData, metadata.MetadataField{
+				Name:  "FailCause",
+				Value: resp.Data.FailCause,
+				Level: metadata.MetadataLevelError,
+			})
 		}
 	}
 
