@@ -3,6 +3,7 @@ package build
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/erda-project/erda-actions/pkg/dockerfile"
 	"net/url"
 	"os"
 	"os/exec"
@@ -215,6 +216,18 @@ func packAndPushImage(cfg conf.Conf) error {
 
 	// docker build 业务镜像
 	repo := getRepo(cfg)
+	if !cfg.RunningAsRoot {
+		dockerfilePath := fmt.Sprintf("%s/%s/Dockerfile", filepath.Base(compPrefix), cfg.ContainerType)
+		dockerfileContent, err := os.ReadFile(dockerfilePath)
+		if err != nil {
+			return err
+		}
+		dockerfileContent = dockerfile.InsertErdaUserToDockerfile(dockerfileContent)
+		if err = filehelper.CreateFile(dockerfilePath, string(dockerfileContent), 0644); err != nil {
+			return err
+		}
+	}
+
 	if cfg.BuildkitEnable == "true" {
 		if err := packWithBuildkit(repo, cfg); err != nil {
 			return err

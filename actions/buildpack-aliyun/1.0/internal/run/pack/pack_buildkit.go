@@ -39,6 +39,7 @@ func PackForBuildkit() ([]byte, error) {
 
 /*
 context/
+
 	-- repo/
 	-- bp-backend/
 		-- bp/
@@ -89,6 +90,9 @@ func dockerPackBuildForBuildkit() ([]byte, error) {
 		return nil, err
 	}
 	newDockerfileContent := dockerfile.ReplaceOrInsertBuildArgToDockerfile(dockerfileContent, conf.Params().BpArgs)
+	if !conf.Params().RunningAsRoot {
+		newDockerfileContent = dockerfile.InsertErdaUserToDockerfile(newDockerfileContent)
+	}
 
 	//----------------------
 	newDockerfileContentLines := strings.Split(string(newDockerfileContent), "\n")
