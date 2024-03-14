@@ -14,6 +14,7 @@ type Conf struct {
 	NpmUsername   string `env:"ACTION_NPM_USER"`
 	NpmPassword   string `env:"ACTION_NPM_PASSWORD"`
 	Service       string `env:"ACTION_SERVICE"` // 与 dice.yml 里 service 对应，部署时，通过 service 关联镜像 TODO deprecated
+	RunningAsRoot bool   `env:"ACTION_RUNNING_AS_ROOT" default:"false"`
 	// pipeline 注入，镜像生成时使用
 	TaskName       string `env:"PIPELINE_TASK_NAME" default:"unknown"`
 	ClusterName    string `env:"DICE_CLUSTER_NAME" required:"true"`

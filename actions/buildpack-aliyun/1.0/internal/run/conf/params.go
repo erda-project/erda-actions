@@ -52,8 +52,9 @@ type params struct {
 	Modules    []*Module
 	ModulesStr string `env:"ACTION_MODULES" required:"true"`
 
-	HttpProxy  string `env:"ACTION_HTTP_PROXY" required:"false"`
-	HttpsProxy string `env:"ACTION_HTTPS_PROXY" required:"false"`
+	HttpProxy     string `env:"ACTION_HTTP_PROXY" required:"false"`
+	HttpsProxy    string `env:"ACTION_HTTPS_PROXY" required:"false"`
+	RunningAsRoot bool   `env:"ACTION_RUNNING_AS_ROOT" required:"false"`
 
 	// OnlyBuild means no pack step.
 	// +optional

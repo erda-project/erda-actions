@@ -23,6 +23,7 @@ type Conf struct {
 	MonitorAgent     string      `env:"ACTION_MONITOR" default:"true"`    // 是否使用监控 agent，若用户未配置，默认启用, true/false
 	PreStartScript   string      `env:"ACTION_PRE_START_SCRIPT"`          // 执行用户运行前脚本路径+名称，默认为项目根目录
 	PreStartArgs     string      `env:"ACTION_PRE_START_ARGS"`            // 执行用户运行前脚本参数
+	RunningAsRoot    bool        `env:"ACTION_RUNNING_AS_ROOT"`           // whether to run as root user
 	// pipeline注入，镜像生成需要
 	OrgID             int64  `env:"DICE_ORG_ID" required:"true"`
 	OrgName           string `env:"DICE_ORG_NAME" required:"true"`
