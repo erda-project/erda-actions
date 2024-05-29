@@ -4,7 +4,7 @@
 # Linux e2a008c89a1c 6.4.16-linuxkit #1 SMP PREEMPT_DYNAMIC Thu Nov 16 UTC 2023 x86_64 GNU/Linux
 # Build cmd: docker build . -t terminus/debian-node-20.13 -f Dockerfile.debian.npm.10.5 --no-cache
 # Other tags: terminus/debian-node:20.13-lts,terminus/debian-node:20.13
-FROM --platform=$TARGETPLATFORM node:20.13.1-bookworm-slim
+FROM node:20.13.1-bookworm-slim
 
 LABEL maintainer=hustcer<majun@terminus.io>
 
