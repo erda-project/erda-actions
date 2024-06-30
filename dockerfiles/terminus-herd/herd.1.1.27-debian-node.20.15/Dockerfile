@@ -1,6 +1,6 @@
 # Git: git version 2.39.2, VIM - Vi IMproved 9.0
 # gcc version 12.2.0, curl: 7.88.1, Wget: 1.21.3, GNU bash: 5.2.15
-# Node: 20.15.0 LTS, npm: 10.7.0, yarn: 1.22.19, herd: 1.1.27, pnpm: 9.3.0, fnm: 1.37.1
+# Node: 20.15.0 LTS, npm: 10.7.0, yarn: 1.22.22, herd: 1.1.27, pnpm: 9.3.0, fnm: 1.37.1
 # /etc/os-release: Debian GNU/Linux 12 (bookworm)
 # Kernel: Linux 674a7d667c9d 5.15.49-linuxkit-pr #1 SMP Thu May 25 07:17:40 UTC 2023 x86_64 GNU/Linux
 # Build cmd: docker build . -t terminus/debian-node.20-herd.1.1.27
@@ -60,7 +60,7 @@ RUN npm config set @terminus:registry https://registry.npm.terminus.io/ \
     # fnm --- Reserved expansion point:
     # See: https://github.com/Schniz/fnm, Fast and simple Node version manager
     # Make it easier and faster to switch to other node versions in the future
-    # Just do: fnm install 16 && fnm use 16, will finish in 10 seconds.
+    # Just do: fnm install 20 && fnm use 20, will finish in 10 seconds.
     && curl -fsSL https://fnm.vercel.app/install | bash \
     # Fix: fnm can't infer your shell based on the process tree.
     && sed -i 's/fnm env/fnm env --shell=bash/' /root/.bashrc \
