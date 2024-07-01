@@ -20,6 +20,7 @@ var SupportNodeVersionFormatMap = map[string]string{
 	"14": "14",
 	"16": "16",
 	"18": "18",
+	"20": "20",
 }
 
 func Execute() error {
