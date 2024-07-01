@@ -26,10 +26,10 @@ RUN chmod 755 /opt/action/*
 
 SHELL ["/bin/sh", "--login", "-c"]
 
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 COPY actions/js-build/1.0/install.sh /tmp/install.sh
 
 RUN bash /tmp/install.sh && rm -fv /tmp/install.sh \
-    && source ~/.bashrc && nvm install 14 && nvm install 16 && nvm install 18 && nvm use 18 \
+    && source ~/.bashrc && nvm install 14 && nvm install 16 && nvm install 18 && nvm install 20 && nvm use 20 \
     && npm i vite rollup webpack webpack-cli -g && npm i -g cnpm --registry=https://registry.npmmirror.com
