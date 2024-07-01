@@ -11,6 +11,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | b
       && nvm alias default v14.19.0 \
       && nvm use default
 
-COPY run /opt/action/run
+COPY actions/js-pack/1.0/index.js /opt/action/run
 
 RUN chmod 777 /opt/action/run
