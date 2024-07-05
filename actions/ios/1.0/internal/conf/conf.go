@@ -9,6 +9,7 @@ type Conf struct {
 	DiceOpenapiPrefix string `env:"DICE_OPENAPI_ADDR" required:"true"`
 	PipelineTaskID    string `env:"PIPELINE_TASK_ID" required:"true"`
 	PipelineID        string `env:"PIPELINE_ID" required:"true"`
+	DiceOrgID         int64  `env:"DICE_ORG_ID" required:"true"`
 
 	Commands        []string             `env:"ACTION_COMMANDS"`
 	Targets         []string             `env:"ACTION_TARGETS"`
