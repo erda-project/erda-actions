@@ -47,7 +47,7 @@ func UpdateTaskStatus(cfg conf.Conf, taskID int64, status string) error {
 	return nil
 }
 
-func CreateTask(cfg conf.Conf, req *apistructs.CreateRunnerTaskRequest) (int64, error) {
+func CreateTask(cfg conf.Conf, req *CreateRunnerTaskRequest) (int64, error) {
 	var resp apistructs.CreateRunnerTaskResponse
 	request := httpclient.New(httpclient.WithCompleteRedirect()).Post(cfg.DiceOpenapiPrefix).
 		Path(fmt.Sprintf("/api/runner/tasks")).

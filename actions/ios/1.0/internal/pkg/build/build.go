@@ -39,6 +39,11 @@ type RunnerTask struct {
 	ResultDataUrl  string `json:"result_data_url"`
 }
 
+type CreateRunnerTaskRequest struct {
+	apistructs.CreateRunnerTaskRequest
+	OrgID int64 `json:"org_id"`
+}
+
 func Execute() error {
 
 	envconf.MustLoad(&cfg)
@@ -115,15 +120,19 @@ func Execute() error {
 	}
 
 	commands = append(commands, cfg.Commands...)
-	createReq := &apistructs.CreateRunnerTaskRequest{
+	createReq := apistructs.CreateRunnerTaskRequest{
 		JobID:          cfg.PipelineTaskLogID,
 		ContextDataUrl: uploadResult.Data.DownloadURL,
 		Commands:       commands,
 		WorkDir:        strings.Replace(cfg.Context, cfg.PipelineContext+"/", "", -1),
 		Targets:        cfg.Targets,
 	}
+	createReqWithOrg := CreateRunnerTaskRequest{
+		CreateRunnerTaskRequest: createReq,
+		OrgID:                   cfg.DiceOrgID,
+	}
 
-	taskID, err := CreateTask(cfg, createReq)
+	taskID, err := CreateTask(cfg, &createReqWithOrg)
 	if err != nil {
 		return err
 	}
