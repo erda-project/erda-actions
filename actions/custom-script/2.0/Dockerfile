@@ -31,6 +31,8 @@ RUN chown -R dice:dice /home/dice/.m2 \
   && go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.2 \
   && npm install -g yarn
 
+RUN git clone https://github.com/udhos/update-golang && cd update-golang && RELEASE=1.22.5 ./update-golang.sh && source /etc/profile.d/golang_path.sh
+
 ARG TARGETARCH
 RUN yum erase -y git && cd /opt && curl -O -L https://erda-project.oss-cn-hangzhou.aliyuncs.com/erda-addons/git-$TARGETARCH.tgz && tar -xzvf git-$TARGETARCH.tgz && rm -fv git-$TARGETARCH.tgz
 ENV PATH=/opt/git/bin:$PATH
