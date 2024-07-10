@@ -1,18 +1,16 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
 
-	"encoding/json"
-	"github.com/erda-project/erda/pkg/parser/diceyml"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/http/httpclient"
+	"github.com/erda-project/erda/pkg/parser/diceyml"
 )
-
-
 
 type Conf struct {
 	ApplicationName string `env:"ACTION_APPLICATION_NAME" required:"true"`
@@ -48,7 +46,7 @@ func main() {
 		panic(err)
 	}
 
-	serviceInfo, err := GetServerInfo(release.Diceyml)
+	serviceInfo, err := GetServiceInfo(release.Diceyml)
 	if err != nil {
 		echoMeta("Error", err.Error())
 		panic(err)
@@ -116,7 +114,6 @@ func getRelease(hc *httpclient.HTTPClient, appID string) (*apistructs.ReleaseDat
 	}
 	return &resp.Data.Releases[0], nil
 }
-
 
 func GetServiceInfo(data string) (string, error) {
 	diceYaml, err := diceyml.New([]byte(data), false)

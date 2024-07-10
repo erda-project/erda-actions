@@ -19,6 +19,19 @@ outputs:
   - name: release_id
     desc: release id got from query
 
+  - name: release_name
+  - name: release_branch
+  - name: release_commit
+  - name: release_commit_message
+  - name: release_images
+    desc: |-
+      json format:
+      {
+        "svc_a": "image_a",
+        "svc_b": "image_b"
+      }
+
+
 accessibleAPIs:
   - path: /api/applications
     method: GET
