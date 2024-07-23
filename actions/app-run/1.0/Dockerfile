@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.17.12 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/golang:1.22-bookworm AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
