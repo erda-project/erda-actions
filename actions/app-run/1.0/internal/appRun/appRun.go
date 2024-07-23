@@ -68,8 +68,8 @@ func handleAPIs() error {
 		Source:            apistructs.PipelineSourceDice,
 		AutoRun:           true,
 	}
-	b, _ := json.Marshal(&req)
-	logrus.Infof("req: %s", string(b))
+	b, _ := json.MarshalIndent(&req, "", "  ")
+	fmt.Printf("req: %s\n", string(b))
 	pipelineDTO, err := startPipeline(req)
 	if err != nil {
 		return err
