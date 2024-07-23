@@ -72,6 +72,13 @@ func Test_handlerPipelineYmlName(t *testing.T) {
 			},
 			want: "pipeline.yml",
 		},
+		{
+			name: "test ./.erda/pipelines/aa.yml",
+			args: args{
+				ymlName: "./.erda/pipelines/aa.yml",
+			},
+			want: ".erda/pipelines/aa.yml",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

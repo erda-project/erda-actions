@@ -21,12 +21,15 @@ import (
 	"github.com/erda-project/erda/pkg/strutil"
 )
 
-func handlerPipelineYmlName(ymlName string) string {
-	if strings.HasPrefix(ymlName, ".erda/pipelines") {
-		return ymlName
-	}
+const (
+	erdaPipelinesPrefix = ".erda/pipelines/"
+	dicePipelinesPrefix = ".dice/pipelines/"
+)
 
-	if strings.HasPrefix(ymlName, ".dice/pipelines") {
+func handlerPipelineYmlName(ymlName string) string {
+	ymlName = strings.TrimPrefix(ymlName, "./")
+
+	if strutil.HasPrefixes(ymlName, erdaPipelinesPrefix, dicePipelinesPrefix) {
 		return ymlName
 	}
 
@@ -34,7 +37,7 @@ func handlerPipelineYmlName(ymlName string) string {
 		return ymlName
 	}
 
-	return ".dice/pipelines/" + ymlName
+	return dicePipelinesPrefix + ymlName
 }
 
 func handleAPIs() error {
@@ -57,14 +60,17 @@ func handleAPIs() error {
 
 	logrus.Infof("start run pipeline %s", conf.ActionPipelineYmlName())
 	// start pipeline
-	pipelineDTO, err := startPipeline(apistructs.PipelineCreateRequest{
+	req := apistructs.PipelineCreateRequest{
 		AppID:             existApp.ID,
 		Branch:            conf.ActionBranch(),
 		PipelineYmlSource: apistructs.PipelineYmlSourceGittar,
 		PipelineYmlName:   handlerPipelineYmlName(conf.ActionPipelineYmlName()),
 		Source:            apistructs.PipelineSourceDice,
 		AutoRun:           true,
-	})
+	}
+	b, _ := json.Marshal(&req)
+	logrus.Infof("req: %s", string(b))
+	pipelineDTO, err := startPipeline(req)
 	if err != nil {
 		return err
 	}
