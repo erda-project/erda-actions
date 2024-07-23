@@ -10,5 +10,5 @@ ENV GO111MODULE=on
 RUN GOOS=linux GOARCH=$ARCH go build -o /assets/run actions/app-run/1.0/internal/cmd/*.go
 RUN GOOS=linux GOARCH=$ARCH go build -o /assets/when_sigterm  actions/app-run/1.0/internal/appCancel/cmd/*.go
 
-FROM --platform=$TARGETPLATFORM registry.cn-hangzhou.aliyuncs.com/terminus/terminus-centos:base
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/debian:bookworm
 COPY --from=builder /assets /opt/action
