@@ -66,3 +66,4 @@ spa 模式
             - ${js-build}/nginx.conf.template:/etc/nginx/conf.d/
           image: registry.erda.cloud/erda/terminus-nginx:0.2
 ```
+
