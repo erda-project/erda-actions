@@ -9,9 +9,10 @@ type Conf struct {
 	Path         string `env:"ACTION_PATH" required:"true"`
 	BuildArgsStr string `env:"ACTION_BUILD_ARGS"` // 用于渲染 dockerfile
 	BuildArgs    map[string]string
-	Service      string          `env:"ACTION_SERVICE"` // TODO deprecated
-	Image        *DockerImage    `env:"ACTION_IMAGE"`
-	Registry     *DockerRegistry `env:"ACTION_REGISTRY"`
+	BuildContext map[string]string `env:"ACTION_BUILD_CONTEXT"`
+	Service      string            `env:"ACTION_SERVICE"` // TODO deprecated
+	Image        *DockerImage      `env:"ACTION_IMAGE"`
+	Registry     *DockerRegistry   `env:"ACTION_REGISTRY"`
 	// pipeline 注入，镜像生成时使用
 	TaskName       string `env:"PIPELINE_TASK_NAME" default:"unknown"`
 	ProjectAppAbbr string `env:"DICE_PROJECT_APPLICATION"` // 用于生成用户镜像repo

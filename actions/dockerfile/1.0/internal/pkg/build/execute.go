@@ -3,21 +3,16 @@ package build
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"os/exec"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
-	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/metadata"
-	"github.com/erda-project/erda/pkg/strutil"
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
 
@@ -26,6 +21,20 @@ import (
 	"github.com/erda-project/erda-actions/pkg/dockerfile"
 	"github.com/erda-project/erda-actions/pkg/pack"
 )
+
+type Builder interface {
+	Build(p *Params, o *OutPut) error
+}
+
+type OutPut struct {
+	Image string
+	Push  bool
+}
+
+type Params struct {
+	Args         map[string]string
+	BuildContext map[string]string
+}
 
 // Execute 自定义 dockerfile 构建应用镜像
 func Execute() error {
@@ -72,12 +81,12 @@ func packAndPushImage(cfg conf.Conf) error {
 			return err
 		}
 
-		originalDockerfileContent, err := ioutil.ReadFile(cfg.Path)
+		originalDockerfileContent, err := os.ReadFile(cfg.Path)
 		if err != nil {
 			return err
 		}
 		newDockerfileContent := dockerfile.ReplaceOrInsertBuildArgToDockerfile(originalDockerfileContent, cfg.BuildArgs)
-		if err = ioutil.WriteFile(cfg.Path, newDockerfileContent, 0644); err != nil {
+		if err = os.WriteFile(cfg.Path, newDockerfileContent, 0644); err != nil {
 			return err
 		}
 	}
@@ -91,16 +100,37 @@ func packAndPushImage(cfg conf.Conf) error {
 		"DICE_WORKSPACE":   cfg.DiceWorkspace,
 	}
 
-	if cfg.BuildkitEnable == "true" {
-		if err := packWithBuildkit(cfg, repo, buildArgs); err != nil {
-			fmt.Fprintf(os.Stdout, "failed to pack with buildkit: %v\n", err)
-			return err
-		}
+	buildContext := cfg.BuildContext
+	if buildContext == nil {
+		buildContext = make(map[string]string)
+	}
+
+	var builder Builder
+
+	isBuildkitEnable, err := strconv.ParseBool(cfg.BuildkitEnable)
+	if err != nil {
+		fmt.Fprintf(os.Stdout, "unparsed builder keyword: %v\n", err)
+		return err
+	}
+
+	if isBuildkitEnable {
+		builder = NewBuildkit(&cfg)
 	} else {
-		if err := packWithDocker(cfg, repo, buildArgs); err != nil {
-			fmt.Fprintf(os.Stdout, "failed to pack with docker: %v\n", err)
-			return err
-		}
+		builder = NewDocker(&cfg)
+	}
+
+	if err := builder.Build(
+		&Params{
+			Args:         buildArgs,
+			BuildContext: buildContext,
+		},
+		&OutPut{
+			Image: repo,
+			Push:  true, // push default now.
+		},
+	); err != nil {
+		fmt.Fprintf(os.Stdout, "failed to build: %v\n", err)
+		return err
 	}
 
 	// upload metadata
@@ -120,87 +150,6 @@ func packAndPushImage(cfg conf.Conf) error {
 			return err
 		}
 		fmt.Fprintf(os.Stdout, "successfully write image action: %s\n", repo)
-	}
-
-	return nil
-}
-
-func packWithDocker(cfg conf.Conf, repo string, args map[string]string) error {
-	argsSlice := make([]string, 0)
-
-	for k, v := range args {
-		argsSlice = append(argsSlice, "--build-arg", fmt.Sprintf("%s=%s", k, v))
-	}
-
-	buildCmdArgs := []string{"build"}
-	buildCmdArgs = append(buildCmdArgs, argsSlice...)
-	buildCmdArgs = append(buildCmdArgs,
-		"--cpu-quota", strconv.FormatFloat(float64(cfg.CPU*100000), 'f', 0, 64),
-		"--memory", strconv.FormatInt(int64(cfg.Memory*apistructs.MB), 10),
-		"-t", repo,
-		"-f", cfg.Path, ".")
-
-	packCmd := exec.Command("docker", buildCmdArgs...)
-
-	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
-	packCmd.Stdout = os.Stdout
-	packCmd.Stderr = os.Stderr
-	if err := packCmd.Run(); err != nil {
-		return err
-	}
-	fmt.Fprintf(os.Stdout, "successfully build app image: %s\n", repo)
-
-	// docker push 业务镜像至集群 registry
-	if err := docker.PushByCmd(repo, ""); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func packWithBuildkit(cfg conf.Conf, repo string, args map[string]string) error {
-	argsSlice := make([]string, 0)
-
-	for k, v := range args {
-		argsSlice = append(argsSlice, "--opt", fmt.Sprintf("build-arg:%s=%s", k, v))
-	}
-
-	buildCmdArgs := []string{
-		"--addr", cfg.BuildkitdAddr,
-		"--tlscacert=/.buildkit/ca.pem",
-		"--tlscert=/.buildkit/cert.pem",
-		"--tlskey=/.buildkit/key.pem",
-		"build",
-		"--frontend", "dockerfile.v0",
-	}
-
-	// append args, e.g. --opt k=v
-	buildCmdArgs = append(buildCmdArgs, argsSlice...)
-
-	// Get dockerfile dir
-	var dfDir string
-	if path.IsAbs(cfg.Path) {
-		dfDir = filepath.Dir(cfg.Path)
-	} else {
-		dfDir = filepath.Dir(path.Join(cfg.Context, cfg.Path))
-	}
-
-	// append build source and output param.
-	buildCmdArgs = append(buildCmdArgs,
-		"--local", "context="+cfg.Context,
-		"--local", "dockerfile="+dfDir,
-		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
-		"--output", "type=image,name="+repo+",push=true",
-	)
-
-	buildkitCmd := exec.Command("buildctl", buildCmdArgs...)
-	fmt.Println(strutil.Join(buildkitCmd.Args, " ", false))
-
-	buildkitCmd.Dir = cfg.WorkDir
-	buildkitCmd.Stdout = os.Stdout
-	buildkitCmd.Stderr = os.Stderr
-	if err := buildkitCmd.Run(); err != nil {
-		return err
 	}
 
 	return nil
