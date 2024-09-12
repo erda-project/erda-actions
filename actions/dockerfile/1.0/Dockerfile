@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.11.3 as buildkit
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.11.3 AS buildkit
 FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/golang:1.22 AS builder
 
 WORKDIR /go/src/github.com/erda-project/erda-actions
