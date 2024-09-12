@@ -1,5 +1,5 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.11.3 AS buildkit
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/golang:1.22 AS builder
+FROM registry.erda.cloud/retag/buildkit:v0.11.3 AS buildkit
+FROM registry.erda.cloud/erda-x/golang:1.22 AS builder
 
 WORKDIR /go/src/github.com/erda-project/erda-actions
 
@@ -9,7 +9,7 @@ COPY . .
 
 RUN go build -o /opt/action/run github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/cmd
 
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/debian-bookworm:12
+FROM registry.erda.cloud/erda-x/debian-bookworm:12
 
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
