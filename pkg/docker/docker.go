@@ -95,7 +95,7 @@ func LoginWithoutCli(registry, username, password string) error {
 		return err
 	}
 
-	fmt.Printf("refresh %s credential to config", registry)
+	fmt.Printf("refresh %s credential to config\n", registry)
 
 	return nil
 }
