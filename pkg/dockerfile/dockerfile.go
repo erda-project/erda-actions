@@ -11,6 +11,30 @@ import (
 	"github.com/erda-project/erda/pkg/strutil"
 )
 
+var (
+	erdaUser = `RUN groupadd -g 1001 erda -f && useradd -u 1001 -g 1001 erda -o
+	USER erda
+	`
+)
+
+func InsertErdaUserToDockerfile(content []byte) []byte {
+	lines := strutil.Split(string(content), "\n", true)
+	var result []string
+	var hasInserted bool
+	for _, line := range lines {
+		if strings.HasPrefix(line, "ENTRYPOINT") || strings.HasPrefix(line, "CMD") {
+			result = append(result, erdaUser, line)
+			hasInserted = true
+			continue
+		}
+		result = append(result, line)
+	}
+	if !hasInserted {
+		result = append(result, erdaUser)
+	}
+	return []byte(strings.Join(result, "\n"))
+}
+
 func ReplaceOrInsertBuildArgToDockerfile(content []byte, buildArgs map[string]string) []byte {
 
 	// v 使用 json 序列化进行转义
