@@ -19,6 +19,10 @@ type ActionParams struct {
 	// +optional
 	ProjectKey string `env:"ACTION_SONAR_PROJECT_KEY"`
 
+	// Java
+	// +optional
+	SonarJavaBinaries string `env:"ACTION_SONAR_JAVA_BINARIES"`
+
 	MustGateStatusOK bool `env:"ACTION_MUST_GATE_STATUS_OK"`
 }
 

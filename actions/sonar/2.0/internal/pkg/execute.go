@@ -26,6 +26,11 @@ func (s *Sonar) Execute() error {
 		s.cmd.Add(fmt.Sprintf("-Dsonar.password=%s", s.cfg.SonarPassword))
 	}
 
+	// java
+	if s.cfg.SonarJavaBinaries != "" {
+		s.cmd.Add(fmt.Sprintf("-Dsonar.java.binaries=%s", s.cfg.SonarJavaBinaries))
+	}
+
 	projectKey := s.cfg.ProjectKey
 	if projectKey == "" {
 		return fmt.Errorf("missing project key")
