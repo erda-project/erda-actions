@@ -1,0 +1,9 @@
+# registry.erda.cloud/erda-actions/publish-api-asset-action:1.0-20241203163543-c58ff05
+FROM registry.erda.cloud/erda-actions/publish-api-asset-action:20201010-92fb804
+
+# change mirror to aliyun, original mirrors offlined.
+RUN mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup && \
+    curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo && \
+    sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo
+
+RUN yum install -y ca-certificates
