@@ -13,3 +13,8 @@ ENV NODE_OPTIONS=--max_old_space_size=1800
 
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/comp /opt/action/comp
+
+COPY actions/js/1.0/install.sh /tmp/install.sh
+RUN bash /tmp/install.sh && rm -fv /tmp/install.sh
+
+RUN source ~/.bashrc

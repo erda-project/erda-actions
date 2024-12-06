@@ -1,8 +1,10 @@
-FROM {{CENTRAL_REGISTRY}}/erda-x/herd:1.1.20
-
+#FROM {{CENTRAL_REGISTRY}}/erda-x/herd:1.1.20
+FROM docker.io/lirbrary/node:{{NODE_VERSION}}
 ARG DICE_VERSION
 
 COPY {{DESTDIR}} .
+
+RUN npm -g install herd
 
 RUN bootjs=$(node -p "require('./package.json').scripts.start" | \
     sed -n -e 's/^.*herd //p') && \

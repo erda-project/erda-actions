@@ -37,6 +37,11 @@ params:
     type: string
     desc: "npm ${{ i18n.outputs.image.desc }}地址, default: https://registry.npm.terminus.io/"
     required: false
+  - node_version:
+    type: string
+    desc: "nodejs 版本, default: 12"
+    required: false
+    default: "12"
 
 outputs:
   - name: image

@@ -59,6 +59,19 @@ func Execute() error {
 	envconf.MustLoad(&cfg)
 	fmt.Fprintln(os.Stdout, "sucessfully loaded action config")
 
+	userVersion := cfg.NodeVersion
+	// TODO: 这里要加一个是否支持用户指定的版本，要是不支持的话，应该给出提示
+
+	var cmdStr string
+	cmdStr += "source ~/.bashrc"
+	cmdStr += " && nvm use " + userVersion
+
+	changeCmd := exec.Command("bash", "-c", cmdStr)
+	changeCmd.Stdout = os.Stdout
+	changeCmd.Stderr = os.Stderr
+	if err := changeCmd.Run(); err != nil {
+		return err
+	}
 	// docker login
 	if cfg.LocalRegistryUserName != "" {
 		if err := docker.Login(cfg.LocalRegistry, cfg.LocalRegistryUserName, cfg.LocalRegistryPassword); err != nil {
@@ -69,6 +82,7 @@ func Execute() error {
 	cfgMap := make(map[string]string)
 	cfgMap["CENTRAL_REGISTRY"] = cfg.CentralRegistry
 	cfgMap["DESTDIR"] = cfg.DestDir
+	cfgMap["NODE_VERSION"] = userVersion
 	if cfg.NpmRegistry != "" && strings.HasPrefix(cfg.NpmRegistry, "http") {
 		cfgMap["NPM_REGISTRY"] = cfg.NpmRegistry
 	}
