@@ -122,8 +122,7 @@ func build(cfg conf.Conf) error {
 		fmt.Fprintf(os.Stdout, "setting npm registry: %s\n", cfg.NpmRegistry)
 		npmConfigCmdStr := "npm config set registry " + cfg.NpmRegistry
 
-		npmConfigCmdStr += "npm config set @terminus:registry " + cfg.NpmRegistry
-		//npmConfigCmd = exec.Command("npm", "config", "set", "@terminus:registry", cfg.NpmRegistry)
+		npmConfigCmdStr += " && npm config set @terminus:registry " + cfg.NpmRegistry
 
 		npmConfigCmd := exec.Command("bash", "-c", npmConfigCmdStr)
 		npmConfigCmd.Stdout = os.Stdout
@@ -176,7 +175,6 @@ func build(cfg conf.Conf) error {
 	if err := dependencyCmd.Run(); err != nil {
 		return err
 	}
-	fmt.Fprintln(os.Stdout, "successfully downloaded dependencies")
 
 	buildCmd := exec.Command("/bin/bash", "-c", changeCmd+cfg.BuildCmd)
 	buildCmd.Stdout = os.Stdout
