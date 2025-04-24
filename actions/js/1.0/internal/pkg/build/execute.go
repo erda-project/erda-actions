@@ -11,11 +11,11 @@ import (
 	"strings"
 	"time"
 
-	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
-	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
 
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
+	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/erda-project/erda-actions/actions/js/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/pack"
@@ -60,18 +60,9 @@ func Execute() error {
 	fmt.Fprintln(os.Stdout, "sucessfully loaded action config")
 
 	userVersion := cfg.NodeVersion
-	// TODO: 这里要加一个是否支持用户指定的版本，要是不支持的话，应该给出提示
 
-	var cmdStr string
-	cmdStr += "source ~/.bashrc"
-	cmdStr += " && nvm use " + userVersion
+	fmt.Printf("当前使用的node版本: %s\n", userVersion)
 
-	changeCmd := exec.Command("bash", "-c", cmdStr)
-	changeCmd.Stdout = os.Stdout
-	changeCmd.Stderr = os.Stderr
-	if err := changeCmd.Run(); err != nil {
-		return err
-	}
 	// docker login
 	if cfg.LocalRegistryUserName != "" {
 		if err := docker.Login(cfg.LocalRegistry, cfg.LocalRegistryUserName, cfg.LocalRegistryPassword); err != nil {
@@ -112,18 +103,29 @@ func build(cfg conf.Conf) error {
 		}
 	}
 
+	userVersion := cfg.NodeVersion
+
+	// install node version
+	installCmdStr := "source ~/.bashrc && nvm install " + userVersion
+	installCmd := exec.Command("bash", "-c", installCmdStr)
+	installCmd.Stdout = os.Stdout
+	installCmd.Stderr = os.Stderr
+	if err := installCmd.Run(); err != nil {
+		return err
+	}
+
+	changeCmd := "source ~/.bashrc && nvm use " + userVersion + " && "
+
 	// 兼容离线打包
 	if cfg.NpmUsername != "" && cfg.NpmPassword != "" {
 		// npm config
 		fmt.Fprintf(os.Stdout, "setting npm registry: %s\n", cfg.NpmRegistry)
-		npmConfigCmd := exec.Command("npm", "config", "set", "registry", cfg.NpmRegistry)
-		npmConfigCmd.Stdout = os.Stdout
-		npmConfigCmd.Stderr = os.Stderr
-		if err := npmConfigCmd.Run(); err != nil {
-			return err
-		}
+		npmConfigCmdStr := "npm config set registry " + cfg.NpmRegistry
 
-		npmConfigCmd = exec.Command("npm", "config", "set", "@terminus:registry", cfg.NpmRegistry)
+		npmConfigCmdStr += "npm config set @terminus:registry " + cfg.NpmRegistry
+		//npmConfigCmd = exec.Command("npm", "config", "set", "@terminus:registry", cfg.NpmRegistry)
+
+		npmConfigCmd := exec.Command("bash", "-c", npmConfigCmdStr)
 		npmConfigCmd.Stdout = os.Stdout
 		npmConfigCmd.Stderr = os.Stderr
 		if err := npmConfigCmd.Run(); err != nil {
@@ -168,7 +170,7 @@ func build(cfg conf.Conf) error {
 	}
 
 	// 下载应用依赖
-	dependencyCmd := exec.Command("/bin/bash", "-c", cfg.DependencyCmd)
+	dependencyCmd := exec.Command("/bin/bash", "-c", changeCmd+cfg.DependencyCmd)
 	dependencyCmd.Stdout = os.Stdout
 	dependencyCmd.Stderr = os.Stderr
 	if err := dependencyCmd.Run(); err != nil {
@@ -176,7 +178,7 @@ func build(cfg conf.Conf) error {
 	}
 	fmt.Fprintln(os.Stdout, "successfully downloaded dependencies")
 
-	buildCmd := exec.Command("/bin/bash", "-c", cfg.BuildCmd)
+	buildCmd := exec.Command("/bin/bash", "-c", changeCmd+cfg.BuildCmd)
 	buildCmd.Stdout = os.Stdout
 	buildCmd.Stderr = os.Stderr
 	fmt.Fprintf(os.Stdout, "buildCmd: %v\n", buildCmd.Args)
@@ -323,7 +325,7 @@ func getRepo(cfg conf.Conf) string {
 		repository = fmt.Sprintf("%s/%s", cfg.DiceOperatorId, random.String(8, random.Lowercase, random.Numeric))
 	}
 	tag := fmt.Sprintf("%s-%v", cfg.TaskName, time.Now().UnixNano())
-
+	fmt.Printf("tag: %s\n", tag)
 	return strings.ToLower(fmt.Sprintf("%s/%s:%s", filepath.Clean(cfg.LocalRegistry), repository, tag))
 }
 
