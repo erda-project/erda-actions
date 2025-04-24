@@ -39,9 +39,9 @@ params:
     required: false
   - node_version:
     type: string
-    desc: "nodejs 版本, default: 12"
+    desc: "nodejs 版本, default: 18"
     required: false
-    default: "12"
+    default: "18"
 
 outputs:
   - name: image
