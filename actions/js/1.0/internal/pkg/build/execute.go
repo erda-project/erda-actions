@@ -61,7 +61,7 @@ func Execute() error {
 
 	userVersion := cfg.NodeVersion
 
-	fmt.Printf("当前使用的node版本: %s\n", userVersion)
+	fmt.Printf("current node version: %s\n", userVersion)
 
 	// docker login
 	if cfg.LocalRegistryUserName != "" {
