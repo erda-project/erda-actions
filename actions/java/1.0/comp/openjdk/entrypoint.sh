@@ -1,11 +1,19 @@
 #!/bin/bash
 
-if [[ "$CONTAINER_VERSION" == v11* ]]; then
-    alternatives --set java $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/java
-    alternatives --set javac $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/javac
-    export JAVA_HOME=/usr/lib/jvm/java-11
-    echo export JAVA_HOME=/usr/lib/jvm/java-11 >> /root/.bashrc
-    echo export JAVA_HOME=/usr/lib/jvm/java-11 >> /home/dice/.bashrc
+# default is 8
+if [[ "$CONTAINER_VERSION" == v* ]]; then
+    VERSION_NUM=${CONTAINER_VERSION#v}
+else
+    VERSION_NUM=${CONTAINER_VERSION}
+fi
+
+# only reset if version is not 8
+if [ "$VERSION_NUM" != "8" ]; then
+    alternatives --set java "$(alternatives --list | grep java_sdk_${VERSION_NUM}  | awk '{print $3}' | head -n 1)/bin/java"
+    alternatives --set javac "$(alternatives --list | grep java_sdk_${VERSION_NUM}  | awk '{print $3}' | head -n 1)/bin/javac"
+    export JAVA_HOME=/usr/lib/jvm/java-${VERSION_NUM}
+    echo export JAVA_HOME=/usr/lib/jvm/java-${VERSION_NUM} >> /root/.bashrc
+    echo export JAVA_HOME=/usr/lib/jvm/java-${VERSION_NUM} >> /home/dice/.bashrc
 fi
 
 limit_in_bytes=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)

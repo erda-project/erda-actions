@@ -2,7 +2,7 @@ module github.com/erda-project/erda-actions
 
 go 1.22.0
 
-toolchain go1.22.5
+toolchain go1.22.8
 
 require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1600
@@ -14,6 +14,7 @@ require (
 	github.com/docker/cli v25.0.1+incompatible
 	github.com/docker/distribution v2.8.3+incompatible
 	github.com/erda-project/erda v1.3.0-rc.0.20240910070509-af955232a57b
+	github.com/erda-project/erda-infra v1.0.10-0.20240731020040-45091257939a
 	github.com/erda-project/erda-proto-go v1.4.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/labstack/gommon v0.4.2
@@ -77,7 +78,6 @@ require (
 	github.com/docker/docker-credential-helpers v0.7.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.0.4 // indirect
-	github.com/erda-project/erda-infra v1.0.10-0.20240731020040-45091257939a // indirect
 	github.com/erda-project/erda-infra/tools v0.0.0-20240613021434-6a57addb81b3 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/getkin/kin-openapi v0.76.0 // indirect

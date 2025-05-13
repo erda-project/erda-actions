@@ -1,7 +1,7 @@
 FROM registry.erda.cloud/retag/pyroscope-java:v0.11.5 as pyroscope-java
-FROM registry.erda.cloud/erda-x/openjdk:8_11
+FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21
 
-ARG CONTAINER_VERSION=v8
+ARG CONTAINER_VERSION=8
 ENV CONTAINER_VERSION ${CONTAINER_VERSION}
 
 ARG TARGET

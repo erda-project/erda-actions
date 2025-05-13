@@ -25,6 +25,8 @@ params:
     desc: ${{ i18n.params.target.desc }}
   - name: container_type
     desc: ${{ i18n.params.container_type.desc }}
+  - name: container_version
+    desc: ${{ i18n.params.container_version.desc }}
   - name: workdir
     desc: ${{ i18n.params.workdir.desc }}
   - name: swagger_path
@@ -51,8 +53,9 @@ locale:
     params.build_cmd.desc: 构建命令,如:./gradlew :user:build
     params.build_type.desc: 构建类型 可选 gradle,maven
     params.container_type.desc: 容器类型，可选 openjdk,tomcat
+    params.container_version.desc: 容器版本，默认和 JDK 版本一致。openjdk 可选 8 / 11 / 17 / 21; tomcat 可选 8
     params.copy_assets.desc: 需要配置文件到容器中的文件, 支持2种格式, 复制到相对路径:fileNmae, 复制到绝对路径:sourceFile:destFile
-    params.jdk_version.desc: 构建使用的jdk版本,支持8,11, 默认使用jdk8
+    params.jdk_version.desc: 构建使用的jdk版本,支持 8,11,17,21, 默认使用 8
     params.service_name.desc: 服务名称，需要和dice.yml中对应
     params.swagger_path.desc: swagger.json相对workdir的路径
     params.target.desc: 产物jar或war文件
@@ -65,8 +68,9 @@ locale:
     params.build_cmd.desc: Build command, for example:./gradlew :user:build
     params.build_type.desc: Build type, support gradle, maven
     params.container_type.desc: Container type, support openjdk, tomcat
+    params.container_version.desc: Container version, default same as jdk_version. openjdk support 8 / 11 / 17 / 21; tomcat support 8
     params.copy_assets.desc: Configure file to container, support 2 types, copy to relative path:fileName, copy to absolute path:sourceFile:destFile
-    params.jdk_version.desc: Build use jdk version, support 8, 11, use jdk8 by default
+    params.jdk_version.desc: Build use jdk version, support 8, 11, 17, 21, use 8 by default
     params.service_name.desc: Service name, need to match dice.yml
     params.swagger_path.desc: Swagger.json path relative workdir
     params.target.desc: Product jar or war file

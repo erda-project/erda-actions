@@ -1,10 +1,8 @@
 package build
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
@@ -12,18 +10,17 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/erda-project/erda/pkg/filehelper"
-	"github.com/erda-project/erda/pkg/metadata"
-	"github.com/erda-project/erda/pkg/strutil"
 	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda-actions/actions/java/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda-actions/pkg/dice"
 	"github.com/erda-project/erda-actions/pkg/docker"
-	"github.com/erda-project/erda-actions/pkg/pack"
 	"github.com/erda-project/erda-actions/pkg/render"
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/envconf"
+	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/metadata"
+	"github.com/erda-project/erda/pkg/strutil"
 )
 
 const (
@@ -52,6 +49,20 @@ var jdkSwitchCmdMap = map[string]*JDKConfig{
 			"alternatives --set javac $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/javac",
 		},
 	},
+	"17": {
+		JavaHome: "/usr/lib/jvm/java-17",
+		SwitchCmd: []string{
+			"alternatives --set java $(alternatives --list | grep java_sdk_17  | awk '{print $3}' | head -n 1)/bin/java",
+			"alternatives --set javac $(alternatives --list | grep java_sdk_17  | awk '{print $3}' | head -n 1)/bin/javac",
+		},
+	},
+	"21": {
+		JavaHome: "/usr/lib/jvm/java-21",
+		SwitchCmd: []string{
+			"alternatives --set java $(alternatives --list | grep java_sdk_21  | awk '{print $3}' | head -n 1)/bin/java",
+			"alternatives --set javac $(alternatives --list | grep java_sdk_21  | awk '{print $3}' | head -n 1)/bin/javac",
+		},
+	},
 }
 
 func Execute() error {
@@ -61,70 +72,12 @@ func Execute() error {
 
 	// 有缓存挂载目录,启用缓存
 	if PathExists(cacheRootPath) {
-		cacheKeyName := fmt.Sprintf("%s/%s/%s/%s", cfg.OrgName, cfg.ProjectName, cfg.AppName,
-			strings.Replace(cfg.GittarBranch, "/", "-", -1))
-		cacheStoragePath := cacheRootPath + "/" + cacheKeyName
-		if !PathExists(cacheStoragePath) {
-			err := os.MkdirAll(cacheStoragePath, os.ModePerm)
-			if err != nil {
-				return fmt.Errorf("failed to create dir %s err: %s", cacheStoragePath, err)
-			}
+		if err := handleCache(cfg); err != nil {
+			return err
 		}
-		cacheDirs := []string{"/root/.m2"}
-		cacheMap := map[string]string{}
-		for _, cacheDir := range cacheDirs {
-			cacheFileName := base64.StdEncoding.EncodeToString([]byte(cacheDir)) + ".tar"
-			cacheMap[cacheDir] = path.Join(cacheStoragePath, cacheFileName)
-		}
-
-		for cachePath, cacheTarFile := range cacheMap {
-			// 之前运行存在缓存
-			if PathExists(cacheTarFile) {
-				os.MkdirAll(cachePath, os.ModePerm)
-				fmt.Printf("start restore cache  %s\n", cacheTarFile)
-				err := pack.UnTar(cacheTarFile, cachePath)
-				if err != nil {
-					return fmt.Errorf("failed to untar %s=>%s err: %s", cacheTarFile, cachePath, err)
-				} else {
-					fmt.Printf("restore cache  %s=>%s\n", cacheTarFile, cachePath)
-				}
-			} else {
-				fmt.Printf("cacheFile:%s not exist\n", cacheTarFile)
-			}
-		}
-		defer func() {
-			for cacheDir, cacheTarFile := range cacheMap {
-				if PathExists(cacheDir) {
-					err := os.Chdir(cacheDir)
-					fmt.Printf("pack cacheDir %s\n", cacheDir)
-					if err != nil {
-						fmt.Printf("failed to change cacheDir %s err: %s\n", cacheDir, err)
-					}
-					tmpFile := "/tmp/cache.tar"
-					err = pack.Tar(tmpFile, ".")
-					if err != nil {
-						fmt.Printf("failed to tar %s=>%s err: %s\n", cacheDir, cacheTarFile, err)
-					} else {
-						fmt.Printf("success save cacheDir to %s", tmpFile)
-					}
-					mvCmd := exec.Command("mv", "-f", tmpFile, cacheTarFile)
-					mvCmd.Stdout = os.Stdout
-					mvCmd.Stdout = os.Stderr
-					err = mvCmd.Run()
-					if err != nil {
-						fmt.Printf("failed to move %s=>%s err: %s\n", tmpFile, cacheTarFile, err)
-					}
-				} else {
-					fmt.Printf("cacheDir %s not exist\n", cacheDir)
-				}
-			}
-		}()
 	}
 
-	if cfg.ContainerType == "spring-boot" {
-		// compatible with old spring-boot
-		cfg.ContainerType = "openjdk"
-	}
+	// 切换至对应的 JDK 版本用于编译
 	jdkVersion := "8"
 	if cfg.JDKVersion != nil {
 		jdkVersion = fmt.Sprintf("%v", cfg.JDKVersion)
@@ -141,7 +94,6 @@ func Execute() error {
 		}
 	}
 
-	// runCommand("export JAVA_HOME=" + jdkConfig.JavaHome)
 	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /root/.bashrc")
 	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /home/dice/.bashrc")
 	runCommand("echo JAVA_HOME=$JAVA_HOME")
@@ -160,7 +112,7 @@ func Execute() error {
 	}
 	fmt.Fprintln(os.Stdout, "successfully replaced action placeholder")
 
-	// docker login
+	// 提前执行 docker login
 	if cfg.LocalRegistryUserName != "" {
 		if err := docker.Login(cfg.LocalRegistry, cfg.LocalRegistryUserName, cfg.LocalRegistryPassword); err != nil {
 			return err
@@ -272,7 +224,7 @@ func build(cfg conf.Conf) error {
 		if cfg.ServiceName == "" {
 			return errors.New("need service_name param")
 		}
-		sjson, err := ioutil.ReadFile(cfg.SwaggerPath)
+		sjson, err := os.ReadFile(cfg.SwaggerPath)
 		if err != nil {
 			return err
 		}
@@ -340,8 +292,13 @@ func NewEnv() []string {
 		"PATH=/opt/go/bin:/go/bin:/opt/nodejs/bin:/opt/maven/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 	}
 
-	if os.Getenv("ACTION_JDK_VERSION") == "11" {
+	jdkVersion := os.Getenv("ACTION_JDK_VERSION")
+	if jdkVersion == "11" {
 		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-11")
+	} else if jdkVersion == "17" {
+		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-17")
+	} else if jdkVersion == "21" {
+		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-21")
 	} else {
 		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-1.8.0")
 	}
