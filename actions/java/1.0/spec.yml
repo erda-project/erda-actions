@@ -14,6 +14,12 @@ supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
 supportedErdaVersions:
   - ">= 1.0"
 
+accessibleAPIs:
+  # api compatibility check
+  - path: /api/gateway/check-compatibility
+    method: POST
+    schema: http
+
 params:
   - name: jdk_version
     desc: ${{ i18n.params.jdk_version.desc }}
@@ -25,6 +31,8 @@ params:
     desc: ${{ i18n.params.target.desc }}
   - name: container_type
     desc: ${{ i18n.params.container_type.desc }}
+  - name: container_version
+    desc: ${{ i18n.params.container_version.desc }}
   - name: workdir
     desc: ${{ i18n.params.workdir.desc }}
   - name: swagger_path
@@ -34,39 +42,37 @@ params:
   - name: copy_assets
     type: string_array
     desc: ${{ i18n.params.copy_assets.desc }}
-accessibleAPIs:
-  # api compatibility check
-  - path: /api/gateway/check-compatibility
-    method: POST
-    schema: http
 
 outputs:
   - name: image
     desc: ${{ i18n.outputs.image.desc }}
+
 locale:
   zh-CN:
     desc: 针对 java 工程的编译打包任务，产出可运行镜像
     displayName: Java 工程编译打包镜像构建
     outputs.image.desc: 镜像
-    params.build_cmd.desc: 构建命令,如:./gradlew :user:build
-    params.build_type.desc: 构建类型 可选 gradle,maven
-    params.container_type.desc: 容器类型，可选 openjdk,tomcat
-    params.copy_assets.desc: 需要配置文件到容器中的文件, 支持2种格式, 复制到相对路径:fileNmae, 复制到绝对路径:sourceFile:destFile
-    params.jdk_version.desc: 构建使用的jdk版本,支持8,11, 默认使用jdk8
-    params.service_name.desc: 服务名称，需要和dice.yml中对应
-    params.swagger_path.desc: swagger.json相对workdir的路径
-    params.target.desc: 产物jar或war文件
+    params.build_cmd.desc: 构建命令，如：`./gradlew :user:build`
+    params.build_type.desc: 构建类型 可选 gradle / maven
+    params.container_type.desc: 容器类型，可选 openjdk / tomcat
+    params.container_version.desc: 容器版本，默认和 JDK 版本一致。openjdk 可选 8 / 11 / 17 / 21；tomcat 可选 8
+    params.copy_assets.desc: 需要配置文件到容器中的文件，支持 2 种格式，复制到相对路径：`fileName`，复制到绝对路径：`sourceFile:destFile`
+    params.jdk_version.desc: 构建使用的 jdk 版本，支持 8 / 11 / 17 / 21，默认使用 8
+    params.service_name.desc: 服务名称，需要和 dice.yml 中对应
+    params.swagger_path.desc: swagger.json 相对 workdir 的路径
+    params.target.desc: 产物 jar 或 war 文件
     params.workdir.desc: 工作目录一般为仓库路径 ${git-checkout}
 
   en-US:
     desc: Build and package image for java project
     displayName: Java project build and package image
     outputs.image.desc: Image
-    params.build_cmd.desc: Build command, for example:./gradlew :user:build
-    params.build_type.desc: Build type, support gradle, maven
-    params.container_type.desc: Container type, support openjdk, tomcat
-    params.copy_assets.desc: Configure file to container, support 2 types, copy to relative path:fileName, copy to absolute path:sourceFile:destFile
-    params.jdk_version.desc: Build use jdk version, support 8, 11, use jdk8 by default
+    params.build_cmd.desc: Build command, for example:`./gradlew :user:build`
+    params.build_type.desc: Build type, support gradle / maven
+    params.container_type.desc: Container type, support openjdk / tomcat
+    params.container_version.desc: Container version, default same as jdk_version. openjdk support 8 / 11 / 17 / 21; tomcat support 8
+    params.copy_assets.desc: Configure file to container, support 2 types, copy to relative path:`fileName`, copy to absolute path:`sourceFile:destFile`
+    params.jdk_version.desc: Build use jdk version, support 8 / 11 / 17 / 21, use 8 by default
     params.service_name.desc: Service name, need to match dice.yml
     params.swagger_path.desc: Swagger.json path relative workdir
     params.target.desc: Product jar or war file

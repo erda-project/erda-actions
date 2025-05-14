@@ -3,7 +3,6 @@ package build
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
@@ -12,22 +11,27 @@ import (
 	"strings"
 	"time"
 
-	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
-	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
 
-	"github.com/erda-project/erda/pkg/strutil"
-
 	"github.com/erda-project/erda-actions/actions/java/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
+	pkgconf "github.com/erda-project/erda-actions/pkg/envconf"
 	"github.com/erda-project/erda-actions/pkg/pack"
 	"github.com/erda-project/erda-actions/pkg/version"
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/strutil"
 )
 
 // packAndPushAppImage pack and push application image
 func packAndPushAppImage(cfg conf.Conf) error {
+	// handle container_type
+	if cfg.ContainerType == "spring-boot" {
+		// compatible with old spring-boot
+		cfg.ContainerType = "openjdk"
+	}
+
 	// ch workdir
 	if err := os.Chdir(cfg.WorkDir); err != nil {
 		return err
@@ -91,11 +95,11 @@ func packAndPushAppImage(cfg conf.Conf) error {
 		}
 	}
 	if len(dockerCopyCmds) > 0 {
-		dockerFileBytes, _ := ioutil.ReadFile(dockerFilePath)
+		dockerFileBytes, _ := os.ReadFile(dockerFilePath)
 		for _, cmd := range dockerCopyCmds {
 			dockerFileBytes = append(dockerFileBytes, []byte("\n"+cmd)...)
 		}
-		ioutil.WriteFile(dockerFilePath, dockerFileBytes, os.ModePerm)
+		os.WriteFile(dockerFilePath, dockerFileBytes, os.ModePerm)
 	}
 
 	// jar包生成 & docker build 出业务镜像
@@ -118,12 +122,12 @@ func packAndPushAppImage(cfg conf.Conf) error {
 			return errors.New("is directory, not pre start script file")
 		}
 
-		input, err := ioutil.ReadFile(cfg.PreStartScript)
+		input, err := os.ReadFile(cfg.PreStartScript)
 		if err != nil {
 			return err
 		}
 
-		err = ioutil.WriteFile("pre_start.sh", input, 0644)
+		err = os.WriteFile("pre_start.sh", input, 0644)
 		if err != nil {
 			return err
 		}
@@ -141,6 +145,11 @@ func packAndPushAppImage(cfg conf.Conf) error {
 		"SPRING_PROFILES_ACTIVE": cfg.Profile, // TODO: 非 spring 定制,
 		"ERDA_VERSION":           erdaVersion,
 		"WEB_PATH":               cfg.WebPath,
+	}
+
+	// handle container_version, default as jdk_version
+	if cfg.ContainerVersion == "" {
+		cfg.ContainerVersion = fmt.Sprintf("%v", cfg.JDKVersion)
 	}
 
 	if cfg.ContainerVersion != "" {

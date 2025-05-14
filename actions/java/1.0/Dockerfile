@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-actions/custom-script:2.0 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/golang:1.22 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
@@ -12,7 +12,7 @@ RUN mkdir -p /opt/action/comp && \
 RUN bash /opt/action/comp/download_spot_agent.sh
 RUN bash /opt/action/comp/download_fonts.sh
 
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-actions/custom-script:2.0
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk:8_11_17_21
 
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/comp /opt/action/comp
