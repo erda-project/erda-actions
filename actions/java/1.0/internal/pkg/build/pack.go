@@ -258,6 +258,7 @@ func packWithDocker(cfg conf.Conf, repo string, args map[string]string) error {
 		"-f", fmt.Sprintf("%s/%s/Dockerfile", compPrefix, cfg.ContainerType), ".")
 
 	packCmd := exec.Command("docker", buildCmdArgs...)
+	packCmd.Env = append(packCmd.Env, "DOCKER_BUILDKIT=0")
 
 	fmt.Fprintf(os.Stdout, "packCmd: %v\n", packCmd.Args)
 	packCmd.Stdout = os.Stdout
