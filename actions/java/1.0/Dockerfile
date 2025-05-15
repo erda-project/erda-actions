@@ -18,14 +18,16 @@ RUN bash /opt/action/comp/download_fonts.sh
 FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.11.6 AS buildkit
 FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk:8_11_17_21
 
-# install maven
-ENV MAVEN_HOME=/opt/maven
-ENV PATH=$PATH:$MAVEN_HOME/bin
-RUN mkdir -p "$MAVEN_HOME" && \
-    curl -o /tmp/maven.tar.gz -L https://erda-project.oss-cn-hangzhou.aliyuncs.com/erda-x/apache-maven-3.9.1-bin.tar.gz && \
-    tar xzf /tmp/maven.tar.gz --strip-components=1 -C $MAVEN_HOME && \
-    rm -f /tmp/maven.tar.gz && \
-    ln -s $MAVEN_HOME/bin/mvn /usr/local/bin/mvn
+ENV HOME=/root
+
+# 设置默认使用 bash 作为 shell
+SHELL ["/bin/bash", "-lc"]
+
+# install maven by sdkman
+RUN dnf install -y zip && dnf clean all
+RUN curl -s "https://get.sdkman.io" | bash
+RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install maven 3.9.9
+ENV PATH="$HOME/.sdkman/candidates/maven/current/bin:$PATH"
 
 # install docker-cli & buildctl
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl

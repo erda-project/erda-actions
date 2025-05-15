@@ -6,14 +6,27 @@ if [[ "$CONTAINER_VERSION" == v* ]]; then
 else
     VERSION_NUM=${CONTAINER_VERSION}
 fi
+# 只保留大版本：11.0.6 -> 11
+VERSION_NUM=${VERSION_NUM%%.*}
+VERSION_NUM=${VERSION_NUM%%-*}
+VERSION_NUM=${VERSION_NUM%%_*}
+# print container version
+echo "CONTAINER_VERSION: $CONTAINER_VERSION"
+echo "VERSION_NUM: $VERSION_NUM"
 
 # only reset if version is not 8
-if [ "$VERSION_NUM" != "8" ]; then
-    alternatives --set java "$(alternatives --list | grep java_sdk_${VERSION_NUM}  | awk '{print $3}' | head -n 1)/bin/java"
-    alternatives --set javac "$(alternatives --list | grep java_sdk_${VERSION_NUM}  | awk '{print $3}' | head -n 1)/bin/javac"
+if [ -n "$VERSION_NUM" ] && [ "$VERSION_NUM" != "8" ]; then
+    alternatives --set java "$(alternatives --list | grep "java_sdk_${VERSION_NUM}"  | awk '{print $3}' | head -n 1)/bin/java"
+    alternatives --set javac "$(alternatives --list | grep "java_sdk_${VERSION_NUM}"  | awk '{print $3}' | head -n 1)/bin/javac"
     export JAVA_HOME=/usr/lib/jvm/java-${VERSION_NUM}
-    echo export JAVA_HOME=/usr/lib/jvm/java-${VERSION_NUM} >> /root/.bashrc
-    echo export JAVA_HOME=/usr/lib/jvm/java-${VERSION_NUM} >> /home/dice/.bashrc
+    # Ensure JAVA_HOME is valid before writing to bashrc
+    if [ -d "${JAVA_HOME}" ]; then
+        echo "export JAVA_HOME=${JAVA_HOME}" >> /root/.bashrc
+        echo "export JAVA_HOME=${JAVA_HOME}" >> /home/dice/.bashrc
+    else
+        echo "Warning: JAVA_HOME=${JAVA_HOME} is not a valid directory. Not adding to .bashrc files."
+        exit 1
+    fi
 fi
 
 limit_in_bytes=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)

@@ -148,8 +148,8 @@ func packAndPushAppImage(cfg conf.Conf) error {
 	}
 
 	// handle container_version, default as jdk_version
-	if cfg.ContainerVersion == "" {
-		cfg.ContainerVersion = fmt.Sprintf("%v", cfg.JDKVersion)
+	if cfg.ContainerVersion == "" && cfg.JDKVersion != 0 {
+		cfg.ContainerVersion = strconv.Itoa(cfg.JDKVersion)
 	}
 
 	if cfg.ContainerVersion != "" {

@@ -78,14 +78,13 @@ func Execute() error {
 	}
 
 	// 切换至对应的 JDK 版本用于编译
-	jdkVersion := "8"
-	if cfg.JDKVersion != nil {
-		jdkVersion = fmt.Sprintf("%v", cfg.JDKVersion)
+	if cfg.JDKVersion == 0 {
+		cfg.JDKVersion = 8
 	}
 
-	jdkConfig, ok := jdkSwitchCmdMap[jdkVersion]
+	jdkConfig, ok := jdkSwitchCmdMap[strconv.Itoa(cfg.JDKVersion)]
 	if !ok {
-		return fmt.Errorf("not support java version %s", jdkVersion)
+		return fmt.Errorf("not support java version %d", cfg.JDKVersion)
 	}
 	for _, switchCmd := range jdkConfig.SwitchCmd {
 		err := runCommand(switchCmd)
@@ -96,8 +95,11 @@ func Execute() error {
 
 	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /root/.bashrc")
 	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /home/dice/.bashrc")
+	// 添加到 env，后续执行命令时自动继承
+	os.Setenv("JAVA_HOME", jdkConfig.JavaHome)
 	runCommand("echo JAVA_HOME=$JAVA_HOME")
 	runCommand("java -version")
+	runCommand("mvn -version")
 
 	fmt.Fprintln(os.Stdout, "successfully loaded action config")
 
@@ -281,34 +283,13 @@ func cp(a, b string) error {
 func simpleRun(name string, arg ...string) error {
 	fmt.Fprintf(os.Stdout, "Run: %s, %v\n", name, arg)
 	cmd := exec.Command(name, arg...)
-	cmd.Env = NewEnv()
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 
-func NewEnv() []string {
-	env := []string{
-		"PATH=/opt/go/bin:/go/bin:/opt/nodejs/bin:/opt/maven/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-	}
-
-	jdkVersion := os.Getenv("ACTION_JDK_VERSION")
-	if jdkVersion == "11" {
-		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-11")
-	} else if jdkVersion == "17" {
-		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-17")
-	} else if jdkVersion == "21" {
-		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-21")
-	} else {
-		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-1.8.0")
-	}
-
-	return env
-}
-
 func runCommand(cmd string) error {
 	command := exec.Command("/bin/bash", "-c", cmd)
-	command.Env = NewEnv()
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
 	if err := command.Run(); err != nil {

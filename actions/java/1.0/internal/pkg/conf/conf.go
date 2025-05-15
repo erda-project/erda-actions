@@ -5,24 +5,24 @@ type Conf struct {
 	WorkDir     string `env:"WORKDIR"`
 	DiceVersion string `env:"DICE_VERSION"`
 	// 用户指定
-	ServiceName      string      `env:"ACTION_SERVICE_NAME"`
-	SwaggerPath      string      `env:"ACTION_SWAGGER_PATH"`
-	BuildType        string      `env:"ACTION_BUILD_TYPE" required:"true"`
-	Context          string      `env:"ACTION_WORKDIR" required:"true"` // maven package 目录
-	BuildCmd         string      `env:"ACTION_BUILD_CMD"`
-	Options          string      `env:"ACTION_OPTIONS"`
-	Target           string      `env:"ACTION_TARGET" required:"true"` // mvn package出的jar包, 路径相对于 Context
-	Assets           string      `env:"ACTION_ASSETS"`
-	CopyAssets       []string    `env:"ACTION_COPY_ASSETS"`
-	ContainerType    string      `env:"ACTION_CONTAINER_TYPE" required:"true"`
-	ContainerVersion string      `env:"ACTION_CONTAINER_VERSION"`
-	JDKVersion       interface{} `env:"ACTION_JDK_VERSION"`
-	WebPath          string      `env:"ACTION_WEB_PATH" default:"ROOT"`
-	Service          string      `env:"ACTION_SERVICE"`                   // Deprecated: 与 dice.yml 里 service 对应，部署时，通过 service 关联镜像
-	Profile          string      `env:"ACTION_PROFILE" default:"default"` // Deprecated: spring.profiles.active
-	MonitorAgent     string      `env:"ACTION_MONITOR" default:"true"`    // 是否使用监控 agent，若用户未配置，默认启用, true/false
-	PreStartScript   string      `env:"ACTION_PRE_START_SCRIPT"`          // 执行用户运行前脚本路径+名称，默认为项目根目录
-	PreStartArgs     string      `env:"ACTION_PRE_START_ARGS"`            // 执行用户运行前脚本参数
+	ServiceName      string   `env:"ACTION_SERVICE_NAME"`
+	SwaggerPath      string   `env:"ACTION_SWAGGER_PATH"`
+	BuildType        string   `env:"ACTION_BUILD_TYPE" required:"true"`
+	Context          string   `env:"ACTION_WORKDIR" required:"true"` // maven package 目录
+	BuildCmd         string   `env:"ACTION_BUILD_CMD"`
+	Options          string   `env:"ACTION_OPTIONS"`
+	Target           string   `env:"ACTION_TARGET" required:"true"` // mvn package出的jar包, 路径相对于 Context
+	Assets           string   `env:"ACTION_ASSETS"`
+	CopyAssets       []string `env:"ACTION_COPY_ASSETS"`
+	ContainerType    string   `env:"ACTION_CONTAINER_TYPE" required:"true"`
+	ContainerVersion string   `env:"ACTION_CONTAINER_VERSION"`
+	JDKVersion       int      `env:"ACTION_JDK_VERSION"`
+	WebPath          string   `env:"ACTION_WEB_PATH" default:"ROOT"`
+	Service          string   `env:"ACTION_SERVICE"`                   // Deprecated: 与 dice.yml 里 service 对应，部署时，通过 service 关联镜像
+	Profile          string   `env:"ACTION_PROFILE" default:"default"` // Deprecated: spring.profiles.active
+	MonitorAgent     string   `env:"ACTION_MONITOR" default:"true"`    // 是否使用监控 agent，若用户未配置，默认启用, true/false
+	PreStartScript   string   `env:"ACTION_PRE_START_SCRIPT"`          // 执行用户运行前脚本路径+名称，默认为项目根目录
+	PreStartArgs     string   `env:"ACTION_PRE_START_ARGS"`            // 执行用户运行前脚本参数
 	// pipeline注入，镜像生成需要
 	OrgID             int64  `env:"DICE_ORG_ID" required:"true"`
 	OrgName           string `env:"DICE_ORG_NAME" required:"true"`
