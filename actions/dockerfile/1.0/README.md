@@ -51,3 +51,20 @@
 ```Dockerfile
 COPY --from=other-resource <source_path> <target_path>
 ```
+
+4. 推送至第三方仓库
+
+```yaml
+- stage:
+    - dockerfile:
+      params:
+        registry:
+          url: registry.a.com/repo1
+          username: user
+          password: pass
+        image:
+          name: my-image
+          tag: v1.0.0
+        workdir: ${git-checkout}
+        path: Dockerfile
+```

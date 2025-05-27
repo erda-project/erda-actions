@@ -27,10 +27,14 @@ params:
     desc: ${{ i18n.params.build_args.desc }}
   - name: image
     type: map
-    desc: image.name & image.tag
+    desc: |-
+      image.name & image.tag
+      例如：{"name": "my-repo", "tag": "v1.0.0"}
   - name: registry
     type: map
-    desc: registry.url & registry.username & registry.password
+    desc: |-
+      registry.url & registry.username & registry.password
+      例如：{"url":"registry.a.com/repo1","username":"user","password":"pass"}
 
 outputs:
   - name: image
