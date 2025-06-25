@@ -50,8 +50,9 @@ func Execute() error {
 
 	if filehelper.CheckExist("composer.json", false) == nil {
 		//安装依赖
+		// composer config --no-plugins allow-plugins.composer/installers
 		fmt.Fprintln(os.Stdout, fmt.Sprintf("install composer dep"))
-		if err := runCommand("composer", "config", "-g", "repo.packagist", "composer", "https://mirrors.aliyun.com/composer/"); err != nil {
+		if err := runCommand("composer", "config", "-g", "--no-plugins", "allow-plugins.composer/installers", "true"); err != nil {
 			return err
 		}
 		if err := runCommand("composer install"); err != nil {
