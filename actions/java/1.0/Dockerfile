@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/golang:1.22 AS builder
+FROM registry.erda.cloud/erda-x/golang:1.22 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
@@ -15,8 +15,9 @@ RUN mkdir -p /opt/action/comp && \
 RUN bash /opt/action/comp/download_spot_agent.sh
 RUN bash /opt/action/comp/download_fonts.sh
 
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.11.6 AS buildkit
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/openjdk:8_11_17_21
+FROM registry.erda.cloud/retag/buildkit:v0.11.6 AS buildkit
+FROM registry.erda.cloud/retag/docker:28.2.2-cli AS docker-cli
+FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21_oraclelinux9
 
 ENV HOME=/root
 
@@ -32,10 +33,7 @@ RUN gawk -i inplace '/<mirror>/ { in_block=1; buffer=$0; is_target_block=0; next
 
 # install docker-cli & buildctl
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
-RUN dnf install -y dnf-plugins-core \
-    && dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo \
-    && dnf install -y docker-ce-cli \
-    && dnf clean all
+COPY --from=docker-cli /usr/local/bin/docker /usr/bin/docker
 
 COPY --from=builder /opt/action/run /opt/action/run
 COPY --from=builder /opt/action/comp /opt/action/comp
