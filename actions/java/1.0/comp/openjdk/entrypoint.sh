@@ -16,17 +16,14 @@ echo "VERSION_NUM: $VERSION_NUM"
 
 # only reset if version is not 8
 if [ -n "$VERSION_NUM" ] && [ "$VERSION_NUM" != "8" ]; then
-    alternatives --set java "$(alternatives --list | grep "java_sdk_${VERSION_NUM}"  | awk '{print $3}' | head -n 1)/bin/java"
-    alternatives --set javac "$(alternatives --list | grep "java_sdk_${VERSION_NUM}"  | awk '{print $3}' | head -n 1)/bin/javac"
-    export JAVA_HOME=/usr/lib/jvm/java-${VERSION_NUM}
-    # Ensure JAVA_HOME is valid before writing to bashrc
-    if [ -d "${JAVA_HOME}" ]; then
-        echo "export JAVA_HOME=${JAVA_HOME}" >> /root/.bashrc
-        echo "export JAVA_HOME=${JAVA_HOME}" >> /home/dice/.bashrc
+    JAVA_PATH=$(update-alternatives --list java | grep "java-$VERSION_NUM" | head -n 1)
+    if echo "$JAVA_PATH" | grep -q "/jre/bin/java"; then
+      JAVAC_PATH=$(echo "$JAVA_PATH" | sed 's#/jre/bin/java#/bin/javac#');
     else
-        echo "Warning: JAVA_HOME=${JAVA_HOME} is not a valid directory. Not adding to .bashrc files."
-        exit 1
+      JAVAC_PATH=$(echo "$JAVA_PATH" | sed 's#/bin/java#/bin/javac#');
     fi
+    update-alternatives --set java "$JAVA_PATH"
+    update-alternatives --set javac "$JAVAC_PATH"
 fi
 
 # Initialize memory_unlimited flag
