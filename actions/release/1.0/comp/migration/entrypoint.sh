@@ -1,8 +1,36 @@
 #!/bin/bash
-limit_in_bytes=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
+
+# Initialize memory_unlimited flag
+memory_unlimited=0
+
+if [[ -f /sys/fs/cgroup/cgroup.controllers ]]; then
+  # cgroup v2
+  echo "Using cgroup v2"
+  memory=$(cat /sys/fs/cgroup/memory.max 2>/dev/null)
+  if [ "$memory" != "max" ]; then
+    limit_in_bytes=$memory
+  else
+    memory_unlimited=1
+  fi
+else
+  echo "Using cgroup v1"
+  # default cgroup v1
+  memory=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes 2>/dev/null)
+  if [ "$memory" != "9223372036854771712" ]; then
+     limit_in_bytes=$memory
+  else
+    memory_unlimited=1
+  fi
+fi
+
+if [ "$memory_unlimited" -eq 1 ]; then
+  echo "Memory is unlimited."
+else
+  echo "Memory limited in bytes: $limit_in_bytes"
+fi
 
 # If not default limit_in_bytes in cgroup
-if [ "$limit_in_bytes" -ne "9223372036854771712" ]
+if [ "${memory_unlimited}" -ne 1 ]
 then
     limit_in_megabytes=$(expr $limit_in_bytes \/ 1048576)
 
@@ -38,7 +66,8 @@ then
         fi
     fi
 
-    export JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:+PrintGCDetails -XX:+PrintGCTimeStamps $JAVA_OPTS"
+    # UseContainerSupport: default is true after version JDK8u191
+    export JAVA_OPTS="-XX:+PrintGCDetails -XX:+PrintGCTimeStamps $JAVA_OPTS"
     echo JAVA_OPTS=$JAVA_OPTS
 fi
 

@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda-actions/custom-script:2.0 AS builder
+FROM registry.erda.cloud/erda-x/golang:1.22 AS builder
 
 ENV CGO_ENABLED 0
 
@@ -16,4 +16,4 @@ COPY --from=builder /assets /opt/action
 COPY --from=builder /opt/action/comp /opt/action/comp
 
 #https://github.com/google/bundletool/releases/download/1.11.1/bundletool-all-1.11.1.jar
-ADD https://github.com/google/bundletool/releases/download/1.11.1/bundletool-all-1.11.1.jar /opt/action/
+ADD http://erda-project.oss-cn-hangzhou.aliyuncs.com/erda-actions/bundletool-all-1.11.1.jar /opt/action/
