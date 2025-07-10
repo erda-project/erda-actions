@@ -19,12 +19,26 @@ if [ -n "$VERSION_NUM" ] && [ "$VERSION_NUM" != "8" ]; then
     JAVA_PATH=$(update-alternatives --list java | grep "java-$VERSION_NUM" | head -n 1)
     if echo "$JAVA_PATH" | grep -q "/jre/bin/java"; then
       JAVAC_PATH=$(echo "$JAVA_PATH" | sed 's#/jre/bin/java#/bin/javac#');
+      JPS_PATH=$(echo "$JAVA_PATH" | sed 's#/jre/bin/java#/bin/jps#')
     else
       JAVAC_PATH=$(echo "$JAVA_PATH" | sed 's#/bin/java#/bin/javac#');
+      JPS_PATH=$(echo "$JAVA_PATH" | sed 's#/bin/java#/bin/jps#')
     fi
     update-alternatives --set java "$JAVA_PATH"
     update-alternatives --set javac "$JAVAC_PATH"
+    if [ -x "$JPS_PATH" ]; then
+      update-alternatives --set jps "$JPS_PATH"
+    else
+      echo "WARN: jps not found at $JPS_PATH, skipping update-alternatives --set jps"
+    fi
 fi
+
+# setting java home
+JAVA_HOME=$(java -XshowSettings:properties -version 2>&1 \
+  | grep 'java.home' | awk -F= '{print $2}' | tr -d ' ')
+export JAVA_HOME
+echo "JAVA_HOME: $JAVA_HOME"
+echo "export JAVA_HOME=$JAVA_HOME" >> ~/.bashrc
 
 # Initialize memory_unlimited flag
 memory_unlimited=0
