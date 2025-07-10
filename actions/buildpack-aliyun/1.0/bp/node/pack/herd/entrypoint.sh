@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 START_CMD="${@:-`which npm` run start}"
 

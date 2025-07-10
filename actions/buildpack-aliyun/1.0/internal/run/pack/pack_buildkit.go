@@ -162,7 +162,7 @@ func dockerPackBuildForBuildkit() ([]byte, error) {
 	// 2. 写 pack-result 文件
 
 	packResult := make([]ModuleImage, 0)
-	var tagPushScript = []string{"#!/bin/sh"}
+	var tagPushScript = []string{"#!/bin/bash"}
 	for _, m := range conf.Params().Modules {
 		dockerfileForARG := []string{
 			fmt.Sprintf("FROM %s AS base", oneImage),

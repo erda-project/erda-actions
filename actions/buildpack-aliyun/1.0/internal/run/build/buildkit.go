@@ -169,7 +169,7 @@ func beforeBuildForBuildkit() error {
 
 func runPrepareScriptForBuildkit() error {
 	var script = []string{
-		"#!/bin/sh",
+		"#!/bin/bash",
 		"set -eo pipefail",
 		"w",
 		"env | sort | grep -v USERNAME | grep -v PASSWORD || :",
@@ -186,7 +186,7 @@ func runPrepareScriptForBuildkit() error {
 	if err != nil {
 		return err
 	}
-	cmd := exec.Command("/bin/sh", scriptPath)
+	cmd := exec.Command("/bin/bash", scriptPath)
 	cmd.Dir = filepath.Dir(conf.PlatformEnvs().WorkDir)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -234,7 +234,7 @@ func beforeBuildNodeForBuilckit() []string {
 
 	var script []string
 	script = append(script,
-		"#!/bin/sh",
+		"#!/bin/bash",
 
 		"cd "+conf.Params().Context,
 
