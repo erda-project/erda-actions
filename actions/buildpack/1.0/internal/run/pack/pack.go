@@ -3,7 +3,6 @@ package pack
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -19,6 +18,7 @@ import (
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/langdetect/types"
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/dockerfile"
+	"github.com/erda-project/erda-actions/pkg/version"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/strutil"
 	"github.com/erda-project/erda/pkg/template"
@@ -42,6 +42,7 @@ func Pack() ([]byte, error) {
 
 /*
 context/
+
 	-- repo/
 	-- bp-backend/
 		-- bp/
@@ -164,7 +165,7 @@ func dockerPackBuild() ([]byte, error) {
 	// 2. 写 pack-result 文件
 
 	packResult := make([]ModuleImage, 0)
-	var tagPushScript = []string{"#!/bin/sh"}
+	var tagPushScript = []string{"#!/bin/bash"}
 	for _, m := range conf.Params().Modules {
 		dockerfileForARG := []string{
 			fmt.Sprintf("FROM %s AS base", oneImage),

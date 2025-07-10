@@ -6,12 +6,13 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/filehelper"
+
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/bplog"
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/build/buildartifact"
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/conf"
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/langdetect/types"
-	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/filehelper"
 )
 
 // handleForceBuildpack need force if artifact is nil
@@ -85,10 +86,10 @@ func systemJudgeForceBuildpackJava() (forceBuildpack bool) {
 		}
 	}()
 
-	var script = []string{"#!/bin/sh", "set -eo pipefail"}
+	var script = []string{"#!/bin/bash", "set -eo pipefail"}
 	pomDir := filepath.Join(conf.PlatformEnvs().WorkDir, ".cache_pom")
 	script = append(script,
-		"#!/bin/sh",
+		"#!/bin/bash",
 
 		"cd "+conf.Params().Context,
 
@@ -129,7 +130,7 @@ func systemJudgeForceBuildpackJava() (forceBuildpack bool) {
 	if err := filehelper.CreateFile(scriptPath, strings.Join(script, "\n"), 0755); err != nil {
 		return true
 	}
-	cmd := exec.Command("/bin/sh", scriptPath)
+	cmd := exec.Command("/bin/bash", scriptPath)
 	cmd.Dir = filepath.Dir(conf.PlatformEnvs().WorkDir)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
