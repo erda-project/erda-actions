@@ -1,44 +1,44 @@
 #!/bin/bash
 
-# default is 8
-if [[ "$CONTAINER_VERSION" == v* ]]; then
-    VERSION_NUM=${CONTAINER_VERSION#v}
+# Parse container version (default: 8)
+VERSION_NUM=${CONTAINER_VERSION#v}  # Remove 'v' prefix
+VERSION_NUM=${VERSION_NUM%%.*}      # Extract major version: 11.0.6 -> 11
+VERSION_NUM=${VERSION_NUM%%-*}      # Remove suffix: 17-ea -> 17
+VERSION_NUM=${VERSION_NUM%%_*}      # Remove underscore: 8u292 -> 8
+VERSION_NUM=${VERSION_NUM:-8}       # Default to 8 if empty
+
+# Check and switch Java version if needed
+CURRENT_JAVA=$(java -version 2>&1 | awk -F'"' '/version/{print $2}')
+# Handle Java 8 version format: 1.8.x -> 8, others: 11.x.x -> 11
+if [[ "$CURRENT_JAVA" =~ ^1\.([0-9]+) ]]; then
+  CURRENT_MAJOR=${BASH_REMATCH[1]}
 else
-    VERSION_NUM=${CONTAINER_VERSION}
-fi
-# 只保留大版本：11.0.6 -> 11
-VERSION_NUM=${VERSION_NUM%%.*}
-VERSION_NUM=${VERSION_NUM%%-*}
-VERSION_NUM=${VERSION_NUM%%_*}
-# print container version
-echo "CONTAINER_VERSION: $CONTAINER_VERSION"
-echo "VERSION_NUM: $VERSION_NUM"
-
-# only reset if version is not 8
-if [ -n "$VERSION_NUM" ] && [ "$VERSION_NUM" != "8" ]; then
-    JAVA_PATH=$(update-alternatives --list java | grep "java-$VERSION_NUM" | head -n 1)
-    if echo "$JAVA_PATH" | grep -q "/jre/bin/java"; then
-      JAVAC_PATH=$(echo "$JAVA_PATH" | sed 's#/jre/bin/java#/bin/javac#');
-      JPS_PATH=$(echo "$JAVA_PATH" | sed 's#/jre/bin/java#/bin/jps#')
-    else
-      JAVAC_PATH=$(echo "$JAVA_PATH" | sed 's#/bin/java#/bin/javac#');
-      JPS_PATH=$(echo "$JAVA_PATH" | sed 's#/bin/java#/bin/jps#')
-    fi
-    update-alternatives --set java "$JAVA_PATH"
-    update-alternatives --set javac "$JAVAC_PATH"
-    if [ -x "$JPS_PATH" ]; then
-      update-alternatives --set jps "$JPS_PATH"
-    else
-      echo "WARN: jps not found at $JPS_PATH, skipping update-alternatives --set jps"
-    fi
+  CURRENT_MAJOR=${CURRENT_JAVA%%.*}
 fi
 
-# setting java home
-JAVA_HOME=$(java -XshowSettings:properties -version 2>&1 \
-  | grep 'java.home' | awk -F= '{print $2}' | tr -d ' ')
-export JAVA_HOME
+if [ "$CURRENT_MAJOR" != "$VERSION_NUM" ]; then
+  echo "Switching Java: $CURRENT_MAJOR -> $VERSION_NUM"
+  
+  # Set alternatives for all Java tools
+  for tool in java javac javadoc javap jar jarsigner jps jstack jstat jmap; do
+    TOOL_PATH=$(update-alternatives --list "$tool" 2>/dev/null | grep "java-$VERSION_NUM" | head -1)
+    [ -n "$TOOL_PATH" ] && update-alternatives --set "$tool" "$TOOL_PATH" >/dev/null 2>&1 || echo "✗ $tool"
+  done
+fi
+
+# Set Java environment
+source /usr/local/bin/load-java-env.sh
 echo "JAVA_HOME: $JAVA_HOME"
-echo "export JAVA_HOME=$JAVA_HOME" >> ~/.bashrc
+
+# Get final Java version for configuration
+JAVA_VERSION=$(java -version 2>&1 | awk -F'"' '/version/{print $2}')
+# Handle Java 8 version format consistently
+if [[ "$JAVA_VERSION" =~ ^1\.([0-9]+) ]]; then
+  JAVA_MAJOR=${BASH_REMATCH[1]}
+else
+  JAVA_MAJOR=${JAVA_VERSION%%.*}
+fi
+echo "Active Java: $JAVA_VERSION (major: $JAVA_MAJOR)"
 
 # Initialize memory_unlimited flag
 memory_unlimited=0
@@ -57,7 +57,7 @@ else
   # default cgroup v1
   memory=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes 2>/dev/null)
   if [ "$memory" != "9223372036854771712" ]; then
-     limit_in_bytes=$memory
+    limit_in_bytes=$memory
   else
     memory_unlimited=1
   fi
@@ -69,52 +69,47 @@ else
   echo "Memory limited in bytes: $limit_in_bytes"
 fi
 
-version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
-echo version "$version"
-IFS=. read major minor extra <<<"$version";
-echo major "$major"
-
 export USER_JAVA_OPTS="$JAVA_OPTS"
 
 # If not default limit_in_bytes in cgroup
 if [ "${memory_unlimited}" -ne 1 ] && [ -z "${JAVA_OPTS_DISABLE_PRESET:-}" ]
 then
-    limit_in_megabytes=$(expr $limit_in_bytes \/ 1048576)
+  limit_in_megabytes=$(expr $limit_in_bytes \/ 1048576)
 
-    # JAVA_MAX_MEM_RATIO not given, we calc it based on total mem
-    if [ -z "${JAVA_MAX_MEM_RATIO:-}" ]
+  # JAVA_MAX_MEM_RATIO not given, we calc it based on total mem
+  if [ -z "${JAVA_MAX_MEM_RATIO:-}" ]
+  then
+    if [ "$limit_in_megabytes" -ge 4096 ]
     then
-        if [ "$limit_in_megabytes" -ge 4096 ]
-        then
-            export JAVA_MAX_MEM_RATIO=75
-        elif [ "$limit_in_megabytes" -ge 1024 ]
-        then
-            export JAVA_MAX_MEM_RATIO=70
-        else
-            export JAVA_MAX_MEM_RATIO=50
-        fi
-    fi
-
-    if ! [ "${JAVA_MAX_MEM_RATIO}" -eq 0 ]
+      export JAVA_MAX_MEM_RATIO=75
+    elif [ "$limit_in_megabytes" -ge 1024 ]
     then
-        max_size=$(expr $limit_in_megabytes \* ${JAVA_MAX_MEM_RATIO} \/ 100)
-        # no -Xmx exist
-        if ! echo "${JAVA_OPTS:-}" | grep -q -- "-Xmx"
-        then
-            export JAVA_OPTS="-Xmx${max_size}m $JAVA_OPTS"
-        fi
-        # no -Xms exist
-        if ! echo "${JAVA_OPTS:-}" | grep -q -- "-Xms"
-        then
-            export JAVA_OPTS="-Xms${max_size}m $JAVA_OPTS"
-        fi
+      export JAVA_MAX_MEM_RATIO=70
+    else
+      export JAVA_MAX_MEM_RATIO=50
     fi
+  fi
 
-    if (( major < 11 )); then
-      export JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom $JAVA_OPTS"
-      # UseContainerSupport: default is true after version JDK8u191
-      export JAVA_OPTS="-XX:NewRatio=1 -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 $JAVA_OPTS"
+  if ! [ "${JAVA_MAX_MEM_RATIO}" -eq 0 ]
+  then
+    max_size=$(expr $limit_in_megabytes \* ${JAVA_MAX_MEM_RATIO} \/ 100)
+    # no -Xmx exist
+    if ! echo "${JAVA_OPTS:-}" | grep -q -- "-Xmx"
+    then
+      export JAVA_OPTS="-Xmx${max_size}m $JAVA_OPTS"
     fi
+    # no -Xms exist
+    if ! echo "${JAVA_OPTS:-}" | grep -q -- "-Xms"
+    then
+      export JAVA_OPTS="-Xms${max_size}m $JAVA_OPTS"
+    fi
+  fi
+
+  if (( JAVA_MAJOR < 11 )); then
+    export JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom $JAVA_OPTS"
+    # UseContainerSupport: default is true after version JDK8u191
+    export JAVA_OPTS="-XX:NewRatio=1 -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 $JAVA_OPTS"
+  fi
 fi
 
 # if user add DISABLE_PRESET_JAVA_OPTS env clear erda JAVA_OPTS
@@ -125,7 +120,7 @@ fi
 
 # spot java agent
 if [ -f /opt/spot/spot-agent/spot-agent.jar ]; then
-    export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent/spot-agent.jar"
+  export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent/spot-agent.jar"
 fi
 
 
@@ -168,8 +163,8 @@ echo JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS}"
 export FILEBEAT_CONFIG=${FILEBEAT_CONFIG:-/assets/filebeat-$DICE_WORKSPACE.yml}
 # TODO: for ibm filebeat baseimage
 if [[ -f /opt/filebeat/filebeat && -f ${FILEBEAT_CONFIG} && -z "${FILEBEAT_DISABLE:-}" ]]; then
-    echo "Run filebeat (${FILEBEAT_CONFIG})"
-    /opt/filebeat/filebeat -c ${FILEBEAT_CONFIG} &
+  echo "Run filebeat (${FILEBEAT_CONFIG})"
+  /opt/filebeat/filebeat -c ${FILEBEAT_CONFIG} &
 fi
 
 bash /pre_start.sh ${SCRIPT_ARGS}
