@@ -1,5 +1,5 @@
 FROM registry.erda.cloud/retag/pyroscope-java:v0.11.5 AS pyroscope-java
-FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21_oraclelinux9
+FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04
 
 ARG CONTAINER_VERSION=8
 ENV CONTAINER_VERSION ${CONTAINER_VERSION}
@@ -24,7 +24,7 @@ ARG ERDA_VERSION
 COPY comp/spot-agent/${ERDA_VERSION}/spot-agent.tar.gz /tmp/spot-agent.tar.gz
 RUN \
 	if [ "${MONITOR_AGENT}" = true ]; then \
-        mkdir -p /opt/spot; tar -xzf /tmp/spot-agent.tar.gz -C /opt/spot; \
+        mkdir -p /opt/spot; tar --no-same-owner --no-same-permissions -xzf /tmp/spot-agent.tar.gz -C /opt/spot; \
 	fi && rm -rf /tmp/spot-agent.tar.gz
 
 COPY --from=pyroscope-java /app /opt/pyroscope

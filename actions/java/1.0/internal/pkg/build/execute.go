@@ -12,15 +12,17 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/erda-project/erda-actions/actions/java/1.0/internal/pkg/conf"
-	"github.com/erda-project/erda-actions/pkg/dice"
-	"github.com/erda-project/erda-actions/pkg/docker"
-	"github.com/erda-project/erda-actions/pkg/render"
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/erda-project/erda/pkg/strutil"
+
+	"github.com/erda-project/erda-actions/actions/java/1.0/internal/pkg/conf"
+	"github.com/erda-project/erda-actions/pkg/dice"
+	"github.com/erda-project/erda-actions/pkg/docker"
+	"github.com/erda-project/erda-actions/pkg/jdk"
+	"github.com/erda-project/erda-actions/pkg/render"
 )
 
 const (
@@ -28,42 +30,6 @@ const (
 	compPrefix    = "/opt/action/comp"
 	cacheRootPath = "/opt/build_cache"
 )
-
-type JDKConfig struct {
-	JavaHome  string
-	SwitchCmd []string
-}
-
-var jdkSwitchCmdMap = map[string]*JDKConfig{
-	"8": {
-		JavaHome: "/usr/lib/jvm/java-1.8.0",
-		SwitchCmd: []string{
-			"alternatives --set java $(alternatives --list | grep java_sdk_1.8.0 | awk '{print $3}' | head -n 1)/jre/bin/java",
-			"alternatives --set javac $(alternatives --list | grep java_sdk_1.8.0 | awk '{print $3}' | head -n 1)/bin/javac",
-		},
-	},
-	"11": {
-		JavaHome: "/usr/lib/jvm/java-11",
-		SwitchCmd: []string{
-			"alternatives --set java $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/java",
-			"alternatives --set javac $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/javac",
-		},
-	},
-	"17": {
-		JavaHome: "/usr/lib/jvm/java-17",
-		SwitchCmd: []string{
-			"alternatives --set java $(alternatives --list | grep java_sdk_17  | awk '{print $3}' | head -n 1)/bin/java",
-			"alternatives --set javac $(alternatives --list | grep java_sdk_17  | awk '{print $3}' | head -n 1)/bin/javac",
-		},
-	},
-	"21": {
-		JavaHome: "/usr/lib/jvm/java-21",
-		SwitchCmd: []string{
-			"alternatives --set java $(alternatives --list | grep java_sdk_21  | awk '{print $3}' | head -n 1)/bin/java",
-			"alternatives --set javac $(alternatives --list | grep java_sdk_21  | awk '{print $3}' | head -n 1)/bin/javac",
-		},
-	},
-}
 
 func Execute() error {
 	// 加载环境变量配置，配置来源: 1. 用户指定 2. pipeline指定
@@ -82,21 +48,25 @@ func Execute() error {
 		cfg.JDKVersion = 8
 	}
 
-	jdkConfig, ok := jdkSwitchCmdMap[strconv.Itoa(cfg.JDKVersion)]
-	if !ok {
-		return fmt.Errorf("not support java version %d", cfg.JDKVersion)
-	}
-	for _, switchCmd := range jdkConfig.SwitchCmd {
-		err := runCommand(switchCmd)
-		if err != nil {
-			return err
-		}
+	javaSwitcher := jdk.NewUpdateAlternativesSwitcher()
+	jdkVersionStr := strconv.Itoa(cfg.JDKVersion)
+	if !javaSwitcher.IsVersionSupported(jdkVersionStr) {
+		return fmt.Errorf("unsupported Java version %d", cfg.JDKVersion)
 	}
 
-	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /root/.bashrc")
-	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /home/dice/.bashrc")
+	if err := javaSwitcher.SwitchToVersion(jdkVersionStr); err != nil {
+		return fmt.Errorf("failed to switch Java version: %v", err)
+	}
+
+	actualJavaHome, err := javaSwitcher.GetCurrentJavaHome()
+	if err != nil {
+		return fmt.Errorf("failed to get JAVA_HOME: %v", err)
+	}
+
+	runCommand("echo export JAVA_HOME=" + actualJavaHome + " >> /root/.bashrc")
+	runCommand("echo export JAVA_HOME=" + actualJavaHome + " >> /home/dice/.bashrc")
 	// 添加到 env，后续执行命令时自动继承
-	os.Setenv("JAVA_HOME", jdkConfig.JavaHome)
+	os.Setenv("JAVA_HOME", actualJavaHome)
 	runCommand("echo JAVA_HOME=$JAVA_HOME")
 	runCommand("java -version")
 	runCommand("mvn -version")

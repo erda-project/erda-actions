@@ -17,19 +17,39 @@ RUN bash /opt/action/comp/download_fonts.sh
 
 FROM registry.erda.cloud/retag/buildkit:v0.11.6 AS buildkit
 FROM registry.erda.cloud/retag/docker:28.2.2-cli AS docker-cli
-FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21_oraclelinux9
+FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04
 
 ENV HOME=/root
 
 # 设置默认使用 bash 作为 shell
 SHELL ["/bin/bash", "-lc"]
 
-# install maven by sdkman
-RUN dnf install -y zip && dnf clean all
-RUN curl -s "https://get.sdkman.io" | bash
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install maven 3.9.10
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gawk \
+        zip \
+        unzip \
+        curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN curl -s "https://get.sdkman.io" | bash && \
+    source "$HOME/.sdkman/bin/sdkman-init.sh" && \
+    sdk install maven 3.9.10 && \
+    gawk -i inplace '/<mirror>/ { in_block=1; buffer=$0; is_target_block=0; next } \
+        in_block { buffer = buffer "\n" $0; \
+            if ($0 ~ /<id>maven-default-http-blocker<\/id>/) is_target_block=1; \
+            if ($0 ~ /<\/mirror>/) { \
+                if (is_target_block) print "<!--\n" buffer "\n-->"; \
+                else print buffer; \
+                in_block=0; \
+            } \
+            next \
+        } \
+        !in_block { print }' \
+        /root/.sdkman/candidates/maven/current/conf/settings.xml
+
 ENV PATH="$HOME/.sdkman/candidates/maven/current/bin:$PATH"
-RUN gawk -i inplace '/<mirror>/ { in_block=1; buffer=$0; is_target_block=0; next } in_block { buffer = buffer "\n" $0; if ($0 ~ /<id>maven-default-http-blocker<\/id>/) is_target_block=1; if ($0 ~ /<\/mirror>/) { if (is_target_block) print "<!--\n" buffer "\n-->"; else print buffer; in_block=0; } next } !in_block { print }' /root/.sdkman/candidates/maven/current/conf/settings.xml
 
 # install docker-cli & buildctl
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
