@@ -65,5 +65,5 @@ spa 模式
           copys:
             - ${js-build}/dist:/usr/share/nginx/html/   # dist 是使用 npm run build 生成出来的目录，常见的目录有：public、dist 等
             - ${js-build}/nginx.conf.template:/etc/nginx/conf.d/
-          image: registry.erda.cloud/erda/terminus-nginx:0.2
+          image: registry.erda.cloud/erda/nginx:1.27.1.2
 ```
