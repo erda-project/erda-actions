@@ -1,5 +1,33 @@
 #!/bin/bash
-limit_in_bytes=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
+
+# Initialize memory_unlimited flag
+memory_unlimited=0
+
+if [[ -f /sys/fs/cgroup/cgroup.controllers ]]; then
+  # cgroup v2
+  echo "Using cgroup v2"
+  memory=$(cat /sys/fs/cgroup/memory.max 2>/dev/null)
+  if [ "$memory" != "max" ]; then
+    limit_in_bytes=$memory
+  else
+    memory_unlimited=1
+  fi
+else
+  echo "Using cgroup v1"
+  # default cgroup v1
+  memory=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes 2>/dev/null)
+  if [ "$memory" != "9223372036854771712" ]; then
+     limit_in_bytes=$memory
+  else
+    memory_unlimited=1
+  fi
+fi
+
+if [ "$memory_unlimited" -eq 1 ]; then
+  echo "Memory is unlimited."
+else
+  echo "Memory limited in bytes: $limit_in_bytes"
+fi
 
 version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
 echo version "$version"
@@ -7,7 +35,7 @@ IFS=. read major minor extra <<<"$version";
 echo major "$major"
 
 # If not default limit_in_bytes in cgroup
-if [ "$limit_in_bytes" -ne "9223372036854771712" ] && [ -z "${JAVA_OPTS_DISABLE_PRESET:-}" ]
+if [ "${memory_unlimited}" -ne 1 ] && [ -z "${JAVA_OPTS_DISABLE_PRESET:-}" ]
 then
     limit_in_megabytes=$(expr $limit_in_bytes \/ 1048576)
 
@@ -42,7 +70,8 @@ then
 
     if (( major < 11 )); then
       export JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom $JAVA_OPTS"
-      export JAVA_OPTS="-XX:+UseContainerSupport -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:NewRatio=1 -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 $JAVA_OPTS"
+      # UseContainerSupport: default is true after version JDK8u191
+      export JAVA_OPTS="-XX:NewRatio=1 -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 $JAVA_OPTS"
     fi
 fi
 

@@ -85,10 +85,10 @@ func systemJudgeForceBuildpackJava() (forceBuildpack bool) {
 		}
 	}()
 
-	var script = []string{"#!/bin/sh", "set -eo pipefail"}
+	var script = []string{"#!/bin/bash", "set -eo pipefail"}
 	pomDir := filepath.Join(conf.PlatformEnvs().WorkDir, ".cache_pom")
 	script = append(script,
-		"#!/bin/sh",
+		"#!/bin/bash",
 
 		"cd "+conf.Params().Context,
 
@@ -129,7 +129,7 @@ func systemJudgeForceBuildpackJava() (forceBuildpack bool) {
 	if err := filehelper.CreateFile(scriptPath, strings.Join(script, "\n"), 0755); err != nil {
 		return true
 	}
-	cmd := exec.Command("/bin/sh", scriptPath)
+	cmd := exec.Command("/bin/bash", scriptPath)
 	cmd.Dir = filepath.Dir(conf.PlatformEnvs().WorkDir)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

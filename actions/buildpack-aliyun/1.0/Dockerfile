@@ -1,5 +1,6 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/retag/buildkit:v0.9.2 as buildkit
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/terminus-golang:1.17.12 AS builder
+FROM registry.erda.cloud/retag/buildkit:v0.11.3 AS buildkit
+FROM registry.erda.cloud/retag/docker:28.2.2-cli AS docker-cli
+FROM registry.erda.cloud/erda-x/golang:1.22 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
@@ -7,17 +8,20 @@ WORKDIR /go/src/github.com/erda-project/erda-actions
 ARG ARCH
 
 # go build
-RUN GOPROXY=https://goproxy.cn,direct GOOS=linux GOARCH=$ARCH go build -o /assets/run github.com/erda-project/erda-actions/actions/buildpack-aliyun/1.0/internal
+RUN go build -o /assets/run github.com/erda-project/erda-actions/actions/buildpack-aliyun/1.0/internal
 
 # async assets
 WORKDIR actions/buildpack-aliyun/1.0
 RUN bash sync_assets.sh
 
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda/centos:7
-RUN yum install -y yum-utils && \
-    yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && \
-    yum -y install docker-ce-cli
+FROM registry.erda.cloud/erda-x/debian-bookworm:12
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y procps && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY actions/buildpack-aliyun/1.0/bp /opt/action/bp
+COPY --from=docker-cli /usr/local/bin/docker /usr/bin/docker
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
 COPY --from=builder /assets /opt/action
 

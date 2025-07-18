@@ -3,7 +3,6 @@ package build
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/erda-project/erda-actions/pkg/version"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -12,8 +11,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/erda-project/erda-actions/pkg/docker"
+	"github.com/erda-project/erda-actions/pkg/version"
+
 	"github.com/pkg/errors"
+
+	"github.com/erda-project/erda-actions/pkg/docker"
 
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/bplog"
 	"github.com/erda-project/erda-actions/actions/buildpack/1.0/internal/run/build/buildcache"
@@ -199,7 +201,7 @@ func beforeBuild() error {
 
 func runPrepareScript() error {
 	var script = []string{
-		"#!/bin/sh",
+		"#!/bin/bash",
 		"set -eo pipefail",
 		"w",
 		"env | sort | grep -v USERNAME | grep -v PASSWORD || :",
@@ -216,7 +218,7 @@ func runPrepareScript() error {
 	if err != nil {
 		return err
 	}
-	cmd := exec.Command("/bin/sh", scriptPath)
+	cmd := exec.Command("/bin/bash", scriptPath)
 	cmd.Dir = filepath.Dir(conf.PlatformEnvs().WorkDir)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -282,7 +284,7 @@ func beforeBuildNode() []string {
 
 	var script []string
 	script = append(script,
-		"#!/bin/sh",
+		"#!/bin/bash",
 
 		"cd "+conf.Params().Context,
 
@@ -353,7 +355,7 @@ func afterBuild() error {
 
 	bplog.Println("从编译镜像中获取编译产物 ......")
 
-	cmd := exec.Command("/bin/sh", scriptPath)
+	cmd := exec.Command("/bin/bash", scriptPath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
@@ -377,7 +379,7 @@ func afterBuildJava() (string, []ModuleArtifact, error) {
 	// script
 	var getArtifactScript []string
 	getArtifactScript = append(getArtifactScript,
-		"#!/bin/sh",
+		"#!/bin/bash",
 		`echo "get app from cache image ......"`,
 		"temp_container=$(docker container create "+conf.EasyUse().DockerImageFromBuild+")",
 		strings.Join(cpApps, "\n"),
@@ -403,7 +405,7 @@ func afterBuildNode() (string, []ModuleArtifact, error) {
 	// script
 	var getArtifactScript []string
 	getArtifactScript = append(getArtifactScript,
-		"#!/bin/sh",
+		"#!/bin/bash",
 		`echo "get app from cache image ......"`,
 		"temp_container=$(docker container create "+conf.EasyUse().DockerImageFromBuild+")",
 		"docker cp ${temp_container}:/app/. "+filepath.Join(conf.PlatformEnvs().WorkDir, "app"),
