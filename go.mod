@@ -1,8 +1,6 @@
 module github.com/erda-project/erda-actions
 
-go 1.22.0
-
-toolchain go1.22.8
+go 1.23.0
 
 require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1600
@@ -189,7 +187,7 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/arch v0.0.0-20190312162104-788fe5ffcd8c // indirect
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56 // indirect
-	golang.org/x/oauth2 v0.22.0 // indirect
+	golang.org/x/oauth2 v0.27.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
