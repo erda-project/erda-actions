@@ -36,7 +36,7 @@ ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
 RUN apt-get install -y --no-install-recommends --no-install-suggests \
-       dnsutils tcpdump lsof net-tools telnet nmap ncat \
+       dnsutils tcpdump lsof net-tools telnet ncat \
        vim bat ripgrep \
        wget aria2 unzip \
     && ln -s /usr/bin/batcat /usr/local/bin/bat \

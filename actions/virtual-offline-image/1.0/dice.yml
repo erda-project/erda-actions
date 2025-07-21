@@ -45,7 +45,7 @@ jobs:
   js-herd:
     image: registry.erda.cloud/erda-actions/terminus-herd:1.1.8-node12
   js-spa:
-    image: registry.erda.cloud/erda-actions/terminus-nginx:0.2
+    image: registry.erda.cloud/erda/nginx:1.27.1.2
 
   ### spa
   dice-nginx-1-1-0:
