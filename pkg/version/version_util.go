@@ -15,6 +15,7 @@ var agentHistoryVersions = []string{
 	"1.5",
 	"1.6",
 	"2.0",
+	"2.4",
 }
 
 func IsHistoryVersion(version string) bool {

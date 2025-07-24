@@ -56,8 +56,8 @@ for i in {1..6}; do
     download ${release_1_first_version} ${i} ${assetsDir}
 done
 
-## release erda 1.x
-release_2_first_version=2
-for i in {0..0}; do
-    download ${release_2_first_version} ${i} ${assetsDir}
-done
+## release erda 2.x
+# 只下载 2.0 和 2.4
+
+download 2 0 ${assetsDir}
+download 2 4 ${assetsDir}
