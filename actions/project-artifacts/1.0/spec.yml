@@ -53,6 +53,12 @@ params:
     desc: ${{ i18n.params.groups.modes.desc }}
     required: false
 
+  - name: download
+    type: bool
+    desc: ${{ i18n.params.download.desc }}
+    default: false
+    required: false
+
 outputs:
   - name: releaseID
     type: string
@@ -72,6 +78,9 @@ accessibleAPIs:
   - path: /api/releases/{releaseID}
     method: PUT
     schema: http
+  - path: /api/releases/{releaseID}/actions/download
+    method: GET
+    schema: http
 
 locale:
   zh-CN:
@@ -82,6 +91,7 @@ locale:
     params.groups.desc: 应用列表
     params.groups.applications.desc: 应用分组
     params.groups.modes.desc: 部署模式
+    params.download.desc: 是否在创建后下载制品
 
     outputs.releaseID.desc: 项目制品 ID
     outputs.releaseID.version: 项目制品版本
@@ -94,6 +104,7 @@ locale:
     params.groups.desc: applications list
     params.groups.applications.desc: application groups
     params.groups.modes.desc: deploy modes
+    params.download.desc: whether to download the artifact after creation
 
     outputs.releaseID.desc: project release ID
     outputs.releaseID.version: project release version
