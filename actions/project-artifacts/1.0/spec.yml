@@ -75,10 +75,7 @@ accessibleAPIs:
   - path: /api/releases
     method: POST
     schema: http
-  - path: /api/releases/{releaseID}
-    method: PUT
-    schema: http
-  - path: /api/releases/{releaseID}/actions/download
+  - path: /api/releases/<releaseId>/actions/download
     method: GET
     schema: http
 
