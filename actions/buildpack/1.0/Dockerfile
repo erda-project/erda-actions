@@ -1,6 +1,6 @@
 FROM registry.erda.cloud/retag/buildkit:v0.11.3 AS buildkit
-FROM registry.erda.cloud/retag/docker:28.2.2-cli AS docker-cli
-FROM registry.erda.cloud/erda-x/golang:1.22 AS builder
+FROM registry.erda.cloud/retag/docker:20.10.24-cli AS docker-cli
+FROM registry.erda.cloud/erda-x/golang:1.24 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
