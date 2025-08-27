@@ -45,6 +45,7 @@ type Config struct {
 	Groups    string `env:"ACTION_GROUPS"`
 	Modes     string `env:"ACTION_MODES"`
 	Tz        string `env:"ACTION_TZ"`
+	Download  bool   `env:"ACTION_DOWNLOAD"`
 }
 
 func (cfg Config) Host() string {

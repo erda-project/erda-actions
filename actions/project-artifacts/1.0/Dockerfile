@@ -16,8 +16,8 @@ FROM --platform=linux/amd64 registry.erda.cloud/erda/centos:7
 MAINTAINER chenzhongrun "zhongrun.czr@alibaba-inc.com"
 
 # build go
-RUN wget https://golang.google.cn/dl/go1.17.7.linux-amd64.tar.gz
-RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.7.linux-amd64.tar.gz
+RUN wget https://golang.google.cn/dl/go1.24.2.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.24.2.linux-amd64.tar.gz
 
 # build cmd
 COPY . /go/src/github.com/erda-project/erda-actions

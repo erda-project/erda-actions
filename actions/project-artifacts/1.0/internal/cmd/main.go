@@ -110,4 +110,14 @@ func main() {
 	_ = metawriter.WriteSuccess(true)
 	_ = metawriter.WriteKV("releaseID", releaseID)
 	_ = metawriter.WriteKV("version", cfg.Version)
+
+	// Download the artifact if requested
+	if cfg.Download {
+		if err := oapi.DownloadArtifact(cfg, releaseID); err != nil {
+			_ = metawriter.WriteSuccess(false)
+			_ = metawriter.WriteError(err)
+			errL.WithError(err).Fatalf("failed to download artifact")
+		}
+		infoL.Info("Artifact downloaded successfully as artifact.zip")
+	}
 }
