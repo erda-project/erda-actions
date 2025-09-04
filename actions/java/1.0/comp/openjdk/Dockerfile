@@ -21,6 +21,12 @@ COPY comp/fonts /usr/share/fonts/custom
 COPY comp/jacocoagent.jar /opt/jacoco/jacocoagent.jar
 
 ARG ERDA_VERSION
+COPY comp/spot-agent/${ERDA_VERSION}/spot-agent-jdk17.tar.gz /tmp/spot-agent-jdk17.tar.gz
+RUN \
+	if [ "${MONITOR_AGENT}" = true ]; then \
+        mkdir -p /opt/spot; tar --no-same-owner --no-same-permissions -xzf /tmp/spot-agent-jdk17.tar.gz -C /opt/spot; \
+	fi && mv /opt/spot/spot-agent /opt/spot/spot-agent-jdk17 && rm -rf /tmp/spot-agent-jdk17.tar.gz
+
 COPY comp/spot-agent/${ERDA_VERSION}/spot-agent.tar.gz /tmp/spot-agent.tar.gz
 RUN \
 	if [ "${MONITOR_AGENT}" = true ]; then \

@@ -119,8 +119,10 @@ then
 fi
 
 # spot java agent
-if [ -f /opt/spot/spot-agent/spot-agent.jar ]; then
-  export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent/spot-agent.jar"
+if (( JAVA_MAJOR <= 11 )) && [ -f /opt/spot/spot-agent/spot-agent.jar ]; then
+    export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent/spot-agent.jar"
+elif (( JAVA_MAJOR > 11 )) && [ -f /opt/spot/spot-agent-jdk17/spot-agent.jar ]; then
+    export JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/spot/spot-agent-jdk17/spot-agent.jar"
 fi
 
 
