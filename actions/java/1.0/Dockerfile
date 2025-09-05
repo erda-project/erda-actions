@@ -17,7 +17,7 @@ RUN bash /opt/action/comp/download_fonts.sh
 
 FROM registry.erda.cloud/retag/buildkit:v0.11.6 AS buildkit
 FROM registry.erda.cloud/retag/docker:20.10.24-cli AS docker-cli
-FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04
+FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04-v1
 
 ENV HOME=/root
 
