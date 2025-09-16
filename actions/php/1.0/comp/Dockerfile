@@ -1,6 +1,11 @@
 FROM {{CENTRAL_REGISTRY}}/erda/terminus-php-apache:{{PHP_VERSION}}
 ARG TARGET
 
+# Supported version:
+# - php 7.2 (base image: debian buster)
+RUN sed -i -e 's|security.debian.org|mirrors.aliyun.com/debian-archive|g' \
+           -e 's|deb.debian.org|mirrors.aliyun.com/debian-archive|g' /etc/apt/sources.list
+
 RUN sed -ri -e 's!/var/www/html!{{APACHE_DOCUMENT_ROOT}}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!{{APACHE_DOCUMENT_ROOT}}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 RUN a2enmod rewrite
