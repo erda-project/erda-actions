@@ -16,12 +16,12 @@ jobs:
           ERDA_REGISTRY: registry.erda.cloud
         run: |
           repo_name=`echo ${{ github.repository }} | awk -F "/" '{print $2}'`
-          echo "standard image format: $ERDA_REGISTRY/$repo_name/extension_name:tag"
+          echo "standard image format: $ERDA_REGISTRY/{erda|erda-*}/extension_name:tag"
 
           failed=false
 
           for file in `find . -name $EXT_FILE_NAME`; do
-              res=$(cat $file | grep "image:" | grep -vi "$ERDA_REGISTRY/$repo_name/" | awk '{print $2}')
+              res=$(cat $file | grep "image:" | grep -vi -E "$ERDA_REGISTRY/erda(/|-)" | awk '{print $2}')
               if [ -n "$res" ]; then
                   failed=true
                   echo "[FAILED] illegal image: $res, path: $file"
