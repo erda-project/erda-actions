@@ -9,17 +9,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/envconf"
-	"github.com/erda-project/erda/pkg/filehelper"
-	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/labstack/gommon/random"
 	"github.com/pkg/errors"
+	"github.com/spf13/cast"
 
 	"github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
 	"github.com/erda-project/erda-actions/pkg/dockerfile"
 	"github.com/erda-project/erda-actions/pkg/pack"
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/envconf"
+	"github.com/erda-project/erda/pkg/filehelper"
+	"github.com/erda-project/erda/pkg/metadata"
 )
 
 type Builder interface {
@@ -107,13 +108,7 @@ func packAndPushImage(cfg conf.Conf) error {
 
 	var builder Builder
 
-	isBuildkitEnable, err := strconv.ParseBool(cfg.BuildkitEnable)
-	if err != nil {
-		fmt.Fprintf(os.Stdout, "unparsed builder keyword: %v\n", err)
-		return err
-	}
-
-	if isBuildkitEnable {
+	if cast.ToBool(cfg.BuildkitEnable) {
 		builder = NewBuildkit(&cfg)
 	} else {
 		builder = NewDocker(&cfg)

@@ -28,6 +28,7 @@ require (
 	github.com/sabhiram/go-gitignore v0.0.0-20201211210132-54b8a0bf510f
 	github.com/shogo82148/androidbinary v1.0.2
 	github.com/sirupsen/logrus v1.9.3
+	github.com/spf13/cast v1.7.1
 	github.com/stretchr/testify v1.10.0
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2
 	golang.org/x/crypto v0.25.0
