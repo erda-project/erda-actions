@@ -97,3 +97,9 @@ Examples:
       container_type: openjdk
       #container_version: 8 # 默认和 jdk_version 一致。可选: 8 / 11 / 17 / 21
 ```
+
+## 自定义 JVM 参数
+
+在 **环境部署 → 参数设置** 中，您可以通过添加 `JAVA_OPTS` 来自定义并追加 JVM 配置参数。  
+
+如果希望完全替换系统默认的 `JAVA_OPTS`，请同时添加环境变量 `DISABLE_PRESET_JAVA_OPTS=true`。
