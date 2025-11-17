@@ -65,6 +65,17 @@ git-checkout action 支持的配置。
 - true
 - false
 
+### submodule_remote
+
+是否启用子模块远程更新（--remote 模式）, 默认值为 false。
+
+选填。
+
+可选值：
+
+- true
+- false
+
 ## outputs
 
 outputs 可以通过 `${alias:OUTPUT:output}` 的方式被后续 action 引用。
