@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   js-build:
-    image: registry.erda.cloud/erda-actions/js-build-action:2.0-20240701162611-a6fe417
+    image: registry.erda.cloud/erda-actions/js-build-action:2.0-20251118153125-b0f82d0
     envs:
       ACTION_NODE_VERSION: "20"
       BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
