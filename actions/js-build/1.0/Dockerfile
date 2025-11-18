@@ -15,7 +15,7 @@ SHELL ["/bin/sh", "--login", "-c"]
 
 RUN yum -y install gcc bzip2 git
 
-#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 COPY actions/js-build/1.0/install.sh /tmp/install.sh
 RUN bash /tmp/install.sh && rm -fv /tmp/install.sh
 
