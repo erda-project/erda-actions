@@ -3,47 +3,55 @@ package build
 import (
 	"fmt"
 	"os"
-	"os/exec"
+	"path/filepath"
 	"strconv"
+
+	"github.com/erda-project/erda/apistructs"
 
 	"github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
-	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda-actions/pkg/imagebuilder"
 )
 
 type dockerBuilder struct {
-	config *conf.Conf
-	args   []string
+	config         *conf.Conf
+	dockerfilePath string
 }
 
-func NewDocker(c *conf.Conf) Builder {
-	args := []string{
-		"build",
-		".", // set current dir is build context
-		"-f", c.Path,
+func NewDocker(c *conf.Conf) (Builder, error) {
+	dfDir, dirFileName, err := resolveDockerfilePath(c)
+	if err != nil {
+		return nil, err
 	}
 
 	return &dockerBuilder{
-		config: c,
-		args:   args,
-	}
+		config:         c,
+		dockerfilePath: filepath.Join(dfDir, dirFileName),
+	}, nil
 }
 
 func (d *dockerBuilder) Build(p *Params, o *OutPut) error {
-	// generate command from action params provided
-	d.appendBuildArgs(p.Args)
-	d.appendBuildContexts(p.BuildContext)
+	buildContext := d.config.Context
+	if buildContext == "" {
+		buildContext = "."
+	}
+
+	builder := imagebuilder.NewDockerBuilder(
+		imagebuilder.WithImageName(o.Image),
+		imagebuilder.WithDockerfilePath(d.dockerfilePath),
+		imagebuilder.WithBuildContext(buildContext),
+		imagebuilder.WithBuildArgs(p.Args),
+		imagebuilder.WithBuildContexts(p.BuildContext),
+	)
 
 	// set resource limit
-	d.args = append(d.args,
+	builder.AddCustomArgs(
 		"--cpu-quota", strconv.FormatFloat(d.config.CPU*100000, 'f', 0, 64),
 		"--memory", strconv.FormatInt(int64(d.config.Memory*apistructs.MB), 10),
 	)
 
-	// generate build command
-	buildCmd := exec.Command("docker", d.args...)
+	buildCmd := builder.BuildCommand()
 	fmt.Fprintf(os.Stdout, "Docker build command: %v\n", buildCmd.Args)
-
 	buildCmd.Stdout = os.Stdout
 	buildCmd.Stderr = os.Stderr
 	buildCmd.Dir = d.config.WorkDir
@@ -60,18 +68,4 @@ func (d *dockerBuilder) Build(p *Params, o *OutPut) error {
 
 	fmt.Fprintf(os.Stdout, "Successfully built and pushed image: %s\n", o.Image)
 	return nil
-}
-
-// appendBuildArgs
-func (d *dockerBuilder) appendBuildArgs(args map[string]string) {
-	for k, v := range args {
-		d.args = append(d.args, "--build-arg", fmt.Sprintf("%s=%s", k, v))
-	}
-}
-
-// appendBuildContexts
-func (d *dockerBuilder) appendBuildContexts(contexts map[string]string) {
-	for k, v := range contexts {
-		d.args = append(d.args, "--build-context", fmt.Sprintf("%s=%s", k, v))
-	}
 }

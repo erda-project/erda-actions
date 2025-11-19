@@ -120,7 +120,10 @@ func packAndPushImage(cfg conf.Conf) error {
 			return err
 		}
 	} else {
-		builder = NewDocker(&cfg)
+		builder, err = NewDocker(&cfg)
+		if err != nil {
+			return err
+		}
 	}
 
 	if err := builder.Build(
