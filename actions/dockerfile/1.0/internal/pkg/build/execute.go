@@ -9,12 +9,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/labstack/gommon/random"
+	"github.com/pkg/errors"
+
 	"github.com/erda-project/erda/apistructs"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/filehelper"
 	"github.com/erda-project/erda/pkg/metadata"
-	"github.com/labstack/gommon/random"
-	"github.com/pkg/errors"
 
 	"github.com/erda-project/erda-actions/actions/dockerfile/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
@@ -114,7 +115,10 @@ func packAndPushImage(cfg conf.Conf) error {
 	}
 
 	if isBuildkitEnable {
-		builder = NewBuildkit(&cfg)
+		builder, err = NewBuildkit(&cfg)
+		if err != nil {
+			return err
+		}
 	} else {
 		builder = NewDocker(&cfg)
 	}

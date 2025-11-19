@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"strconv"
 
@@ -24,7 +23,12 @@ type buildkit struct {
 	args   []string
 }
 
-func NewBuildkit(c *conf.Conf) Builder {
+func NewBuildkit(c *conf.Conf) (Builder, error) {
+	dfDir, dfFileName, err := resolveDockerfilePath(c)
+	if err != nil {
+		return nil, err
+	}
+
 	args := []string{
 		"--addr", c.BuildkitdAddr,
 		fmt.Sprintf("--tlscacert=%s", defaultCaCertPath),
@@ -33,14 +37,15 @@ func NewBuildkit(c *conf.Conf) Builder {
 		"build",
 		"--frontend", "dockerfile.v0",
 		"--local", "context=" + c.Context,
-		"--local", "dockerfile=" + resolveDockerfileDir(c),
+		"--local", "dockerfile=" + dfDir,
+		"--opt", "filename=" + dfFileName,
 		"--opt", fmt.Sprintf("platform=%s", pkgconf.GetTargetPlatforms()),
 	}
 
 	return &buildkit{
 		config: c,
 		args:   args,
-	}
+	}, nil
 }
 
 func (b *buildkit) Build(p *Params, o *OutPut) error {
@@ -69,11 +74,22 @@ func (b *buildkit) Build(p *Params, o *OutPut) error {
 	return nil
 }
 
-func resolveDockerfileDir(c *conf.Conf) string {
-	if path.IsAbs(c.Path) {
-		return filepath.Dir(c.Path)
+func resolveDockerfilePath(c *conf.Conf) (string, string, error) {
+	p := c.Path
+	if !filepath.IsAbs(p) {
+		p = filepath.Join(c.Context, p)
 	}
-	return filepath.Dir(path.Join(c.Context, c.Path))
+
+	fi, err := os.Stat(p)
+	if err != nil {
+		return "", "", err
+	}
+
+	if fi.IsDir() {
+		return p, "", nil
+	}
+
+	return filepath.Dir(p), filepath.Base(p), nil
 }
 
 func (b *buildkit) appendBuildArgs(args map[string]string) {
