@@ -1,7 +1,7 @@
 ### job 配置项
 jobs:
   dockerfile:
-    image: registry.erda.cloud/erda-actions/dockerfile-action:1.0-20240912171845-238b6eec
+    image: registry.erda.cloud/erda-actions/dockerfile-action:1.0-20251119181608-5f85d87b
     resources:
       cpu: 1
       mem: 2048
