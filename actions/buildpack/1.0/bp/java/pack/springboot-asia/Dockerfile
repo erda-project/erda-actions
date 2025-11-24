@@ -2,7 +2,7 @@
 # /app/pyroscope.jar natively supports amd64/arm64 arch.
 FROM registry.erda.cloud/retag/pyroscope-java:v0.11.5 as pyroscope-java
 # Build app image
-FROM registry.erda.cloud/erda-x/openjdk:8_11
+FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04-v1
 
 # set default TZ, modify through `--build-arg TZ=XXX`
 ARG TZ="Asia/Shanghai"
