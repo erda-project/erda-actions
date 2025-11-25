@@ -1,6 +1,6 @@
 # source: dockerfiles/pyroscope/java/Dockerfile
 # /app/pyroscope.jar natively supports amd64/arm64 arch.
-FROM registry.erda.cloud/retag/pyroscope-java:v0.11.5 as pyroscope-java
+FROM registry.erda.cloud/retag/pyroscope-java:v0.11.5 AS pyroscope-java
 # Build app image
 FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04-v1
 
@@ -8,7 +8,7 @@ FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04-v1
 ARG TZ="Asia/Shanghai"
 
 # for java8
-RUN sed -i 's/jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1/jdk.tls.disabledAlgorithms=SSLv3/g' $(JAVA_TOOL_OPTIONS= java -XshowSettings:properties -version 2>&1 | grep "java.home" | awk -F= "{print \$2}" | tr -d " ")/lib/security/java.security
+RUN sed -i 's/jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1/jdk.tls.disabledAlgorithms=SSLv3/g' /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
 
 COPY /bp/pack/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
