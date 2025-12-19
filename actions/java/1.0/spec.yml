@@ -42,6 +42,8 @@ params:
   - name: copy_assets
     type: string_array
     desc: ${{ i18n.params.copy_assets.desc }}
+  - name: service
+    desc: ${{ i18n.params.service.desc }}
 
 outputs:
   - name: image
@@ -62,6 +64,7 @@ locale:
     params.swagger_path.desc: swagger.json 相对 workdir 的路径
     params.target.desc: 产物 jar 或 war 文件
     params.workdir.desc: 工作目录一般为仓库路径 ${git-checkout}
+    params.service.desc: (已废弃) 服务名称，用于生成 pack-result 格式的服务上下文文件，请尽快切换至 ${java:OUTPUT:image}
 
   en-US:
     desc: Build and package image for java project
@@ -77,3 +80,4 @@ locale:
     params.swagger_path.desc: Swagger.json path relative workdir
     params.target.desc: Product jar or war file
     params.workdir.desc: Workdir usually is repo path ${git-checkout}
+    params.service.desc: (Deprecated) Service Name, Used to generate service context files in the pack-result format. Please switch to ${java:OUTPUT:image} as soon as possible.
