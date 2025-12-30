@@ -31,7 +31,7 @@ func main() {
 	// http client
 	hc := httpclient.New(
 		httpclient.WithCompleteRedirect(),
-		httpclient.WithTimeout(time.Second, time.Second*3),
+		httpclient.WithTimeout(time.Second*5, time.Second*30),
 	)
 
 	appID, err := getAppID(hc, conf.ApplicationName)
