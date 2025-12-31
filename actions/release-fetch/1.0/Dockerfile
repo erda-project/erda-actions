@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/golang:1.22 AS builder
+FROM --platform=$TARGETPLATFORM registry.erda.cloud/erda-x/golang:1.24 AS builder
 
 COPY . /go/src/github.com/erda-project/erda-actions
 WORKDIR /go/src/github.com/erda-project/erda-actions
