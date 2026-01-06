@@ -3,7 +3,7 @@ package build
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -11,14 +11,16 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
+
 	"github.com/erda-project/erda-actions/actions/java-build/1.0/internal/pkg/conf"
 	"github.com/erda-project/erda-actions/pkg/docker"
+	"github.com/erda-project/erda-actions/pkg/jdk"
 	"github.com/erda-project/erda-actions/pkg/render"
 	"github.com/erda-project/erda-actions/pkg/version"
 	"github.com/erda-project/erda/pkg/envconf"
 	"github.com/erda-project/erda/pkg/strutil"
-	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -29,23 +31,6 @@ const (
 type JDKConfig struct {
 	JavaHome  string
 	SwitchCmd []string
-}
-
-var jdkSwitchCmdMap = map[string]*JDKConfig{
-	"8": {
-		JavaHome: "/usr/lib/jvm/java-1.8.0",
-		SwitchCmd: []string{
-			"alternatives --set java $(alternatives --list | grep java_sdk_1.8.0 | awk '{print $3}' | head -n 1)/jre/bin/java",
-			"alternatives --set javac $(alternatives --list | grep java_sdk_1.8.0 | awk '{print $3}' | head -n 1)/bin/javac",
-		},
-	},
-	"11": {
-		JavaHome: "/usr/lib/jvm/java-11",
-		SwitchCmd: []string{
-			"alternatives --set java $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/java",
-			"alternatives --set javac $(alternatives --list | grep java_sdk_11  | awk '{print $3}' | head -n 1)/bin/javac",
-		},
-	},
 }
 
 func Execute() error {
@@ -60,25 +45,24 @@ func Execute() error {
 		}
 	}
 
-	jdkVersion := "8"
-	if cfg.JDKVersion != nil {
-		jdkVersion = fmt.Sprintf("%v", cfg.JDKVersion)
+	javaSwitcher := jdk.NewUpdateAlternativesSwitcher()
+	jdkVersionStr := strconv.Itoa(cfg.JDKVersion)
+	if !javaSwitcher.IsVersionSupported(jdkVersionStr) {
+		return fmt.Errorf("unsupported Java version %d", cfg.JDKVersion)
 	}
 
-	jdkConfig, ok := jdkSwitchCmdMap[jdkVersion]
-	if !ok {
-		return fmt.Errorf("not support java version %s", jdkVersion)
-	}
-	for _, switchCmd := range jdkConfig.SwitchCmd {
-		err := runCommand(switchCmd)
-		if err != nil {
-			return err
-		}
+	if err := javaSwitcher.SwitchToVersion(jdkVersionStr); err != nil {
+		return fmt.Errorf("failed to switch Java version: %v", err)
 	}
 
-	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /root/.bashrc")
-	runCommand("echo export JAVA_HOME=" + jdkConfig.JavaHome + " >> /home/dice/.bashrc")
-	runCommand("export JAVA_HOME=" + jdkConfig.JavaHome)
+	actualJavaHome, err := javaSwitcher.GetCurrentJavaHome()
+	if err != nil {
+		return fmt.Errorf("failed to get JAVA_HOME: %v", err)
+	}
+
+	runCommand("echo export JAVA_HOME=" + actualJavaHome + " >> /root/.bashrc")
+	runCommand("echo export JAVA_HOME=" + actualJavaHome + " >> /home/dice/.bashrc")
+	runCommand("export JAVA_HOME=" + actualJavaHome)
 	runCommand("java -version")
 
 	fmt.Fprintln(os.Stdout, "successfully loaded action config")
@@ -113,6 +97,7 @@ func build(cfg conf.Conf) error {
 
 	//runCommand(fmt.Sprintf(" mkdir $MAVEN_CONFIG "))
 	//runCommand(fmt.Sprintf(" cp %s %s ", "/opt/action/comp/maven/settings.xml", "$MAVEN_CONFIG/settings.xml"))
+	runCommand("mkdir -p /root/.m2")
 	runCommand(fmt.Sprintf(" cp -f %s %s ", "/opt/action/comp/maven/settings.xml", "/root/.m2/settings.xml"))
 
 	_ = simpleRun("chmod", "+x", "./gradlew")
@@ -159,9 +144,15 @@ func build(cfg conf.Conf) error {
 		erdaVersion = "latest"
 	}
 
+	// java agent version
+	agentFileName := "spot-agent.tar.gz"
+	if cfg.JDKVersion >= 17 {
+		agentFileName = "spot-agent-jdk17.tar.gz"
+	}
+
 	//做一些agent的工作，将dockerfile中下载和拷贝到agent.jar文件拷贝到buildPath目录下
-	runCommand(fmt.Sprintf(" mkdir -p %s", fmt.Sprintf("%s/%s/%s", cfg.WorkDir, pwdName, "spot-agent")))
-	runCommand(fmt.Sprintf(" cp -rv %s %s ", fmt.Sprintf("/opt/action/comp/spot-agent/%s/spot-agent/.", erdaVersion), fmt.Sprintf("%s/%s/%s", cfg.WorkDir, pwdName, "spot-agent")))
+	runCommand(fmt.Sprintf("mkdir -p %s", fmt.Sprintf("%s/%s", cfg.WorkDir, pwdName)))
+	runCommand(fmt.Sprintf("tar -xzf %s -C %s", fmt.Sprintf("/opt/action/comp/spot-agent/%s/%s", erdaVersion, agentFileName), fmt.Sprintf("%s/%s", cfg.WorkDir, pwdName)))
 	runCommand(fmt.Sprintf("echo 'JAVA_OPTS=%s' >> %s ", "-javaagent:/spot-agent/spot-agent.jar", cfg.MetaFile))
 
 	return nil
@@ -169,7 +160,6 @@ func build(cfg conf.Conf) error {
 
 func runCmdBackResult(cmd string) string {
 	command := exec.Command("/bin/bash", "-c", cmd)
-	command.Env = JDKEnv()
 	out, _ := command.StdoutPipe()
 	defer func() {
 		if out != nil {
@@ -181,36 +171,20 @@ func runCmdBackResult(cmd string) string {
 		log.Fatalf("cmd.Start: %v", err)
 	}
 
-	result, _ := ioutil.ReadAll(out) // 读取输出结果
+	result, _ := io.ReadAll(out)
 	return string(result)
 }
 
 func simpleRun(name string, arg ...string) error {
 	fmt.Fprintf(os.Stdout, "Run: %s, %v\n", name, arg)
 	cmd := exec.Command(name, arg...)
-	cmd.Env = JDKEnv()
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 
-func JDKEnv() []string {
-	env := []string{
-		"PATH=/opt/go/bin:/go/bin:/opt/nodejs/bin:/opt/maven/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-	}
-
-	if os.Getenv("ACTION_JDK_VERSION") == "11" {
-		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-11")
-	} else {
-		env = append(env, "JAVA_HOME=/usr/lib/jvm/java-1.8.0")
-	}
-
-	return env
-}
-
 func runCommand(cmd string) error {
 	command := exec.Command("/bin/bash", "-c", cmd)
-	command.Env = JDKEnv()
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
 	if err := command.Run(); err != nil {

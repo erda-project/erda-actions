@@ -1,7 +1,6 @@
 package render
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -13,7 +12,7 @@ import (
 func RenderTemplate(dstDir string, cfgMap map[string]string) error {
 	return filepath.Walk(dstDir, func(path string, info os.FileInfo, err error) error {
 		if info.Mode().IsRegular() {
-			bytes, err := ioutil.ReadFile(path)
+			bytes, err := os.ReadFile(path)
 			if err != nil {
 				return errors.Errorf("render template %s err, %v", path, err)
 			}
@@ -29,7 +28,7 @@ func RenderTemplate(dstDir string, cfgMap map[string]string) error {
 			})
 
 			if replacedContent != string(bytes) { // 若文件含有{{}}占位符，则将替换后的内容回写文件
-				if err := ioutil.WriteFile(path, []byte(replacedContent), info.Mode()); err != nil {
+				if err := os.WriteFile(path, []byte(replacedContent), info.Mode()); err != nil {
 					return err
 				}
 			}

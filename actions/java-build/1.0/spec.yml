@@ -44,7 +44,7 @@ locale:
     outputs.JAVA_OPTS.desc: 需要假如的监控agent入参
     outputs.buildPath.desc: 包的位置
     params.build_cmd.desc: 构建命令,如:./gradlew :user:build，mvn package
-    params.jdk_version.desc: 构建使用的jdk版本,支持8,11
+    params.jdk_version.desc: 构建使用的jdk版本,支持8,11,17,21
     params.workdir.desc: 工作目录一般为仓库路径 ${git-checkout}
 
   en-US:
@@ -53,5 +53,5 @@ locale:
     outputs.JAVA_OPTS.desc: The parameters for monitoring agent
     outputs.buildPath.desc: The path of the package
     params.build_cmd.desc: The build command, such as ./gradlew :user:build, mvn package
-    params.jdk_version.desc: The JDK version to build, support 8, 11
+    params.jdk_version.desc: The JDK version to build, support 8, 11, 17, 21
     params.workdir.desc: The working directory, usually the repository path ${git-checkout}
