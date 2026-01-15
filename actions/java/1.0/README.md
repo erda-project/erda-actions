@@ -100,6 +100,24 @@ Examples:
 
 ## 自定义 JVM 参数
 
-在 **环境部署 → 参数设置** 中，您可以通过添加 `JAVA_OPTS` 来自定义并追加 JVM 配置参数。  
+在 **环境部署 → 参数设置** 中，您可以通过添加 `JAVA_OPTS` 来自定义并追加 JVM 配置参数。
 
 如果希望完全替换系统默认的 `JAVA_OPTS`，请同时添加环境变量 `DISABLE_PRESET_JAVA_OPTS=true`。
+
+## 前置启动脚本
+
+通过配置 `pre_start_script` 和 `pre_start_args`，可以在 Java 服务启动之前执行自定义的脚本。以下是这些参数的说明：
+
+- pre_start_script：指定服务启动之前要执行的脚本文件的路径。
+- pre_start_args：可选项，用于为 pre_start_script 指定额外的命令行参数。如果没有特殊需求，可以不提供。
+
+示例配置：
+
+```yaml
+- java:
+    params:
+      # 服务前置启动脚本路径
+      pre_start_script: ${git-checkout}/pre_start.sh
+      # 可选
+      pre_start_args: "-f -v"
+```
