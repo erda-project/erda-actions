@@ -7,13 +7,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/erda-project/erda/apistructs"
-	"github.com/erda-project/erda/pkg/metadata"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/common"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
+	"github.com/erda-project/erda/apistructs"
+	"github.com/erda-project/erda/pkg/metadata"
 )
 
 type Store interface {
@@ -92,7 +93,13 @@ func (s *store) BatchStoreMetaFile(statusResp map[string]*common.DeploymentStatu
 				})
 			}
 		default:
+			b, err := json.Marshal(resp.Data.Runtime)
+			if err != nil {
+				logrus.Errorf("failed to marshal runtime data: %v", err)
+				continue
+			}
 			metaData = append(metaData, metadata.Metadata{
+				{Name: "serviceInfo", Value: string(b)},
 				{Name: "appID", Value: strconv.FormatUint(s.cfg.AppID, 10)},
 				{Name: "deploymentID", Value: strconv.Itoa(resp.Data.DeploymentId)},
 			}...)
