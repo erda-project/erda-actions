@@ -1,0 +1,8 @@
+### job 配置项
+jobs:
+  dice:
+    image: registry.erda.cloud/erda-actions/mcp-register-action:1.0-20260120141000-9ceae9c
+    resources:
+      cpu: 0.2
+      mem: 512
+      disk: 128
