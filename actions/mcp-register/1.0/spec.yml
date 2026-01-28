@@ -1,5 +1,5 @@
 name: mcp-register
-version: "2.0"
+version: "1.0"
 type: action
 category: deploy_management
 displayName: ${{ i18n.displayName }}
