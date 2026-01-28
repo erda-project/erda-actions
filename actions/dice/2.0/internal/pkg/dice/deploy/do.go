@@ -1,20 +1,20 @@
 package deploy
 
 import (
-	"io/ioutil"
 	"fmt"
-	"time"
+	"io/ioutil"
 	"strings"
+	"time"
 
-	"github.com/sirupsen/logrus"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/common"
-	"github.com/erda-project/erda/pkg/retry"
-	"github.com/erda-project/erda/pkg/http/httpclient"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/conf"
 	"github.com/erda-project/erda-actions/actions/dice/2.0/internal/pkg/utils"
 	"github.com/erda-project/erda-actions/pkg/metawriter"
+	"github.com/erda-project/erda/pkg/http/httpclient"
+	"github.com/erda-project/erda/pkg/retry"
 )
 
 func (d *deploy) Do() (string, map[string]*common.DeployResult, error) {

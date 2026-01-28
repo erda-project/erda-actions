@@ -1,0 +1,49 @@
+name: mcp-register
+version: "1.0"
+type: action
+category: deploy_management
+displayName: ${{ i18n.displayName }}
+logoUrl: //terminus-paas.oss-cn-hangzhou.aliyuncs.com/paas-doc/2026/01/21/9add9365-a3fd-4fc7-9f64-be40ca926b39.png
+desc: ${{ i18n.desc }}
+public: true
+supportedVersions: # Deprecated. Please use supportedErdaVersions instead.
+  - ">= 3.5"
+supportedErdaVersions:
+  - ">= 1.6"
+
+params:
+  - name: service_info
+    desc: ${{ i18n.params.service_info.desc }}
+    default: ${dice:OUTPUT:serviceInfo}
+  - name: release_id
+    desc: ${{ i18n.params.release_id.desc }}
+    default: ${release:OUTPUT:releaseID}
+  - name: mcp_proxy_url
+    desc: ${{ i18n.params.mcp_proxy_url.desc }}
+  - name: mcp_proxy_access_key
+    desc: ${{ i18n.params.mcp_proxy_access_key.desc }}
+
+accessibleAPIs:
+  - path: /api/releases/<releaseId>
+    method: GET
+    schema: http
+
+outputs: []
+locale:
+  zh-CN:
+    desc: 用于将服务作为 MCP Server 注册至 MCP Proxy
+    displayName: 注册 MCP Server
+    outputs.runtimeID.desc: 部署中心运行时 ID
+    params.service_info.desc: 服务部署信息
+    params.release_id.desc: 制品 ID，一般通过表达式语法从前置 Release-Action 获取。
+    params.mcp_proxy_url.desc: Mcp Proxy 的URL地址
+    params.mcp_proxy_access_key.desc: Mcp Proxy 的访问AK
+
+  en-US:
+    desc: Used to register the service as an MCP Server with McpProxy
+    displayName: Register MCP Server
+    outputs.runtimeID.desc: Runtime id
+    params.service_info.desc: Deployed service info
+    params.release_id.desc: The artifact ID, generally obtained from the pre-release-action via expression syntax.
+    params.mcp_proxy_url.desc: Mcp Proxy url address
+    params.mcp_proxy_access_key.desc: Mcp Proxy Access Key
