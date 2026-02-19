@@ -47,7 +47,7 @@ require (
 	cloud.google.com/go v0.112.2 // indirect
 	cloud.google.com/go/iam v1.1.7 // indirect
 	cloud.google.com/go/storage v1.39.1 // indirect
-	filippo.io/edwards25519 v1.1.0 // indirect
+	filippo.io/edwards25519 v1.1.1 // indirect
 	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/ClickHouse/ch-go v0.61.3 // indirect
 	github.com/ClickHouse/clickhouse-go/v2 v2.20.0 // indirect
