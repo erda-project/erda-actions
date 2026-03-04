@@ -1,4 +1,4 @@
-FROM registry.erda.cloud/erda/terminus-golang:1.19.7
+FROM registry.erda.cloud/erda-x/debian-bookworm:12
 
 ARG TARGET
 
