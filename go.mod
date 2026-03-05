@@ -11,7 +11,7 @@ require (
 	github.com/bitly/go-simplejson v0.5.1-0.20181114203107-9db4a59bd4d8
 	github.com/caarlos0/env v3.3.1-0.20180521112546-3e0f30cbf50b+incompatible
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
-	github.com/docker/cli v25.0.1+incompatible
+	github.com/docker/cli v29.2.0+incompatible
 	github.com/docker/distribution v2.8.3+incompatible
 	github.com/erda-project/erda v1.3.0-rc.0.20250826070253-10732ac9a726
 	github.com/erda-project/erda-infra v1.0.10-0.20250818092705-c6933a1cdf22
