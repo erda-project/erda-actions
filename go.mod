@@ -25,6 +25,7 @@ require (
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.13.1
+	github.com/pyroscope-io/pyroscope v0.37.2
 	github.com/robertkrimen/terst v0.0.0-20140908162406-4b1c60b7cc23
 	github.com/sabhiram/go-gitignore v0.0.0-20201211210132-54b8a0bf510f
 	github.com/shogo82148/androidbinary v1.0.2
@@ -155,7 +156,6 @@ require (
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
-	github.com/pyroscope-io/pyroscope v0.37.2 // indirect
 	github.com/rancher/remotedialer v0.3.2 // indirect
 	github.com/rancher/wrangler/v2 v2.2.0-rc6 // indirect
 	github.com/recallsong/go-utils v1.1.2-0.20210826100715-fce05eefa294 // indirect
