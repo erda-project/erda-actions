@@ -14,13 +14,13 @@ RUN mkdir -p /opt/action/comp && \
 RUN bash /opt/action/comp/download_spot_agent.sh
 RUN bash /opt/action/comp/download_fonts.sh
 
-FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04-v2
+FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04-20260324-114328
 
 ENV MAVEN_VERSION=3.9.12
 ENV MAVEN_HOME=/opt/maven
 ENV PATH=$MAVEN_HOME/bin:$PATH
 
-RUN curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+RUN curl -fsSL https://erda-project.oss-cn-hangzhou.aliyuncs.com/erda-actions/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
     | tar -xz -C /opt \
  && mv /opt/apache-maven-${MAVEN_VERSION} ${MAVEN_HOME}
 

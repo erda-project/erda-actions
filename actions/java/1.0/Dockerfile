@@ -17,7 +17,7 @@ RUN bash /opt/action/comp/download_fonts.sh
 
 FROM registry.erda.cloud/retag/buildkit:v0.11.6 AS buildkit
 FROM registry.erda.cloud/retag/docker:20.10.24-cli AS docker-cli
-FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04-v1
+FROM registry.erda.cloud/erda-x/openjdk:8_11_17_21-ubuntu24.04-20260324-114328
 
 ENV HOME=/root
 
@@ -33,23 +33,13 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN curl -s "https://get.sdkman.io" | bash && \
-    source "$HOME/.sdkman/bin/sdkman-init.sh" && \
-    sdk install maven 3.9.10 && \
-    gawk -i inplace '/<mirror>/ { in_block=1; buffer=$0; is_target_block=0; next } \
-        in_block { buffer = buffer "\n" $0; \
-            if ($0 ~ /<id>maven-default-http-blocker<\/id>/) is_target_block=1; \
-            if ($0 ~ /<\/mirror>/) { \
-                if (is_target_block) print "<!--\n" buffer "\n-->"; \
-                else print buffer; \
-                in_block=0; \
-            } \
-            next \
-        } \
-        !in_block { print }' \
-        /root/.sdkman/candidates/maven/current/conf/settings.xml
+ENV MAVEN_VERSION=3.9.12
+ENV MAVEN_HOME=/opt/maven
+ENV PATH=$MAVEN_HOME/bin:$PATH
 
-ENV PATH="$HOME/.sdkman/candidates/maven/current/bin:$PATH"
+RUN curl -fsSL https://erda-project.oss-cn-hangzhou.aliyuncs.com/erda-actions/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+    | tar -xz -C /opt \
+ && mv /opt/apache-maven-${MAVEN_VERSION} ${MAVEN_HOME}
 
 # install docker-cli & buildctl
 COPY --from=buildkit /usr/bin/buildctl /usr/bin/buildctl
