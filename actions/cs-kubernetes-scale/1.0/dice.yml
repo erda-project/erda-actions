@@ -1,6 +1,0 @@
-jobs:
-  cs-kubernetes-scale:
-    image: registry.erda.cloud/erda-actions/cs-kubernetes-scale:4.0
-    resources:
-      cpu: 0.2
-      mem: 128

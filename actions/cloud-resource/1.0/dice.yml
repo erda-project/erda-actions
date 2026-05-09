@@ -1,8 +1,0 @@
-### job 配置项
-jobs:
-  cloud-resource:
-    image: registry.erda.cloud/erda-actions/cloud-resource:3.14
-    resources:
-      cpu: 0.2
-      mem: 200
-      disk: 1024

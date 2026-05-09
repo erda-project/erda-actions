@@ -1,7 +1,0 @@
-### job 配置项
-jobs:
-  js-deploy:
-    image: registry.erda.cloud/erda-actions/js-deploy-action:20200521-5c68300
-    resources:
-      cpu: 1
-      mem: 1024

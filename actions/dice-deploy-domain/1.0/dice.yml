@@ -1,7 +1,0 @@
-jobs:
-  dice:
-    image: registry.erda.cloud/erda-actions/dice-deploy-domain-action:20201029-3a732e9f
-    resources:
-      cpu: 0.2
-      mem: 128
-      disk: 128

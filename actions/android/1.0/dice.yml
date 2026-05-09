@@ -1,8 +1,0 @@
-### job 配置项
-jobs:
-  android:
-    image: registry.erda.cloud/erda-actions/android-action:1.0-20230216114702-eb11715
-    resources:
-      cpu: 2
-      mem: 4096
-      disk: 1024

@@ -1,8 +1,0 @@
-### Spark jar包上传
-jobs:
-  sql:
-    image: registry.erda.cloud/erda-actions/pipeline-spark-resource:v1.0.0
-    resources:
-      cpu: 0.1
-      mem: 1024
-      disk: 1024

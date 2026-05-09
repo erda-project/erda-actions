@@ -1,1 +1,0 @@
-docker build -t registry.erda.cloud/erda/android-gradle-node:v30-$(date '+%Y%m%d%H%M%S') --no-cache .

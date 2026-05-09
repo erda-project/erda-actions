@@ -1,8 +1,0 @@
-### job 配置项
-jobs:
-  integration-test:
-    image: registry.erda.cloud/erda-actions/it-action:3.4.0-20190704-1765035
-    resources:
-      cpu: 0.5
-      mem: 2048
-      disk: 1024

@@ -1,8 +1,0 @@
-### job 配置项
-jobs:
-  ios:
-    image: registry.erda.cloud/erda-actions/ios-action:1.0-20240705150433-e53acb4
-    resources:
-      cpu: 1
-      mem: 1024
-      disk: 1024

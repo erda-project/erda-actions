@@ -1,8 +1,0 @@
-### datax数据同步
-jobs:
-  datax:
-    image: registry.erda.cloud/erda-actions/pipeline-datax-resource:v1.1.0
-    resources:
-      cpu: 0.9
-      mem: 1024
-      disk: 1024

@@ -1,8 +1,0 @@
-### job 配置项
-jobs:
-  echo:
-    image: registry.erda.cloud/erda-actions/oss-upload-action:1.0-201907091525
-    resources:
-      cpu: 0.5
-      mem: 512
-      disk: 0

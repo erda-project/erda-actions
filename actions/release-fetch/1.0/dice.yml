@@ -1,7 +1,0 @@
-jobs:
-  run:
-    image: registry.erda.cloud/erda-actions/release-fetch-action:1.0-20251230212332-e4b63e1
-    resources:
-      cpu: 0.2
-      mem: 128
-      disk: 128

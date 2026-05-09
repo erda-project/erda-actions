@@ -1,8 +1,0 @@
-### cdp-tagging
-jobs:
-  tagging:
-    image: registry.erda.cloud/erda-actions/cdp-tagging:v4.0
-    resources:
-      cpu: 1
-      mem: 2048
-      disk: 1024

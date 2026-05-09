@@ -1,8 +1,0 @@
-jobs:
-  cs-kubernetes:
-    image: registry.erda.cloud/erda-actions/cs-kubernetes:1.4
-    resources:
-      cpu: 0.2
-      mem: 128
-    binds:
-    - ((storageMountPoint))/dice-ops/ecluster-configs:/opt/ecluster-configs:rw

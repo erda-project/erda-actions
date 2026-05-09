@@ -1,7 +1,0 @@
-### job 配置项
-jobs:
-  java-deploy:
-    image: registry.erda.cloud/erda-actions/java-deploy-action:20200417-7842866
-    resources:
-      cpu: 0.5
-      mem: 2048

@@ -1,9 +1,0 @@
-### job 配置项
-jobs:
-  js:
-    image: registry.erda.cloud/erda-actions/js-script-action:1.0-20220107-1bafbd4
-    envs:
-      BP_DOCKER_BASE_REGISTRY: registry.erda.cloud
-    resources:
-      cpu: 1
-      mem: 2048
