@@ -4,8 +4,8 @@
 # Bash: 5.2.37, Wget: 1.25.0, curl: 8.14.1, gcc: 14.2.0, Python: 3.13
 # /etc/os-release: Debian GNU/Linux 13.4 (trixie)
 # Linux cc755cd59f63 6.10.0-linuxkit #1 SMP Wed Jul 17 10:51:09 UTC 2024 aarch64 GNU/Linux
-# Build cmd: docker build . -t hustcer/debian-node:22.22 --no-cache
-# Other tags: hustcer/debian-node:22.22-lts,hustcer/debian-node:22.22
+# Build cmd: docker build . -t hustcer/debian-node:24.15 --no-cache
+# Other tags: hustcer/debian-node:24.15-lts,hustcer/debian-node:24.15
 FROM node:24.15.0-trixie-slim
 
 LABEL org.opencontainers.image.authors="hustcer <hustcer@outlook.com>"
