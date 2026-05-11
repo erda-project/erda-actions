@@ -1,0 +1,66 @@
+# syntax=docker/dockerfile:latest
+
+# Node: 22.22.2, npm: 10.9.7, pnpm: 10.33.4, Git: 2.47.3, fnm: 1.39.0
+# Bash: 5.2.37, Wget: 1.25.0, curl: 8.14.1, gcc: 14.2.0, Python: 3.13
+# /etc/os-release: Debian GNU/Linux 13.4 (trixie)
+# Linux cc755cd59f63 6.10.0-linuxkit #1 SMP Wed Jul 17 10:51:09 UTC 2024 aarch64 GNU/Linux
+# Build cmd: docker build . -t hustcer/debian-node:22.22 --no-cache
+# Other tags: hustcer/debian-node:22.22-lts,hustcer/debian-node:22.22
+FROM node:22.22.2-trixie-slim
+
+LABEL org.opencontainers.image.authors="hustcer <hustcer@outlook.com>"
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Use mirrors to speed up installation
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install ca-certificates locales tzdata -y --no-install-recommends --no-install-suggests \
+    # Change locale & timezone
+    && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+    && echo "zh_CN.UTF-8 UTF-8" >> /etc/locale.gen \
+    && locale-gen \
+    && ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo 'deb https://mirrors.aliyun.com/debian/ trixie main non-free non-free-firmware contrib' > /etc/apt/sources.list \
+    && echo 'deb https://mirrors.aliyun.com/debian-security/ trixie-security main' >> /etc/apt/sources.list \
+    && echo 'deb https://mirrors.aliyun.com/debian/ trixie-updates main non-free non-free-firmware contrib' >> /etc/apt/sources.list \
+    && echo 'deb-src https://mirrors.aliyun.com/debian/ trixie main non-free non-free-firmware contrib' >> /etc/apt/sources.list \
+    && echo 'deb-src https://mirrors.aliyun.com/debian-security/ trixie-security main' >> /etc/apt/sources.list \
+    && echo 'deb-src https://mirrors.aliyun.com/debian/ trixie-updates main non-free non-free-firmware contrib' >> /etc/apt/sources.list \
+    # Clean all official sources.list.d configurations, make sure the mirrors are used.
+    && rm -f /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources \
+    && apt-get update \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV NODEJS_ORG_MIRROR="https://npmmirror.com/dist"
+ENV SASS_BINARY_SITE="https://npmmirror.com/mirrors/node-sass"
+
+RUN npm config set @terminus:registry https://registry.npm.terminus.io/  \
+    && npm config set registry https://registry.npmmirror.com/ \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+       git curl wget bzip2 unzip openssh-client gcc make g++ python3 \
+    # Make /bin/sh symlink to bash instead of dash:
+    # REF: https://groups.google.com/g/linux.debian.user/c/2CyfM5UrSOI?pli=1
+    && dpkg-divert --remove --no-rename /usr/share/man/man1/sh.1.gz \
+    && dpkg-divert --remove --no-rename /bin/sh \
+    && ln -sf bash.1.gz /usr/share/man/man1/sh.1.gz \
+    && ln -sf bash /bin/sh \
+    && dpkg-divert --add --local --no-rename /usr/share/man/man1/sh.1.gz \
+    && dpkg-divert --add --local --no-rename /bin/sh \
+    # fnm --- Reserved expansion point:
+    # See: https://github.com/Schniz/fnm, Fast and simple Node version manager
+    # Make it easier and faster to switch to other node versions in the future
+    # Just do: fnm install 16 && fnm use 16, will finish in 10 seconds.
+    && curl -fsSL https://fnm.vercel.app/install | bash \
+    # Fix: fnm can't infer your shell based on the process tree.
+    && sed -i 's/fnm env/fnm env --shell=bash/' /root/.bashrc \
+    && npm i -g pnpm@10 \
+    # Fix "Unable to find the global bin directory" error while running `pnpm i -g`
+    && pnpm config set global-bin-dir '/usr/local/bin' \
+    && rm -rf /var/lib/apt/lists/* && apt-get autoremove -y \
+    # Make /bin/sh symlink to bash instead of dash:
+    && echo "dash dash/sh boolean false" | debconf-set-selections \
+    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
