@@ -8,9 +8,7 @@ stages:
           description: 代码仓库克隆
           version: "1.0"
           params:
-            branch: ((gittar.branch))
             depth: 1
-            uri: ((gittar.uri))
           timeout: 3600
 
   - stage:
