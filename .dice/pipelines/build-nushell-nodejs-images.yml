@@ -1,0 +1,55 @@
+version: "1.1"
+name: build-nushell-nodejs-images
+
+stages:
+  - stage:
+      - git-checkout:
+          alias: git-checkout
+          description: 代码仓库克隆
+          version: "1.0"
+          params:
+            branch: ((gittar.branch))
+            depth: 1
+            uri: ((gittar.uri))
+          timeout: 3600
+
+  - stage:
+      - custom-script:
+          alias: build-terminus-nodejs
+          description: 构建 terminus-nodejs image
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - export NODEJS_VERSION="${{ configs.nodejs_version }}"
+            - test -n "${NODEJS_VERSION}" || (echo "missing config: nodejs_version" && exit 1)
+            - export BUILD_DIR="dockerfiles/terminus-nodejs/node.${NODEJS_VERSION}"
+            - test -f "${BUILD_DIR}/deploy.sh" || (echo "missing deploy script: ${BUILD_DIR}/deploy.sh" && exit 1)
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - docker buildx use erda-actions || docker buildx create --name erda-actions --use
+            - cd "${BUILD_DIR}"
+            - bash deploy.sh
+          resources:
+            cpu: 1
+            mem: 2048
+          timeout: 7200
+
+      - custom-script:
+          alias: build-terminus-nushell
+          description: 构建 terminus-nushell image
+          version: "2.0"
+          image: registry.erda.cloud/erda-actions/custom-script-action:2.0-20211224-c6b7a3e
+          commands:
+            - cd ${{ dirs.git-checkout }}
+            - export NUSHELL_VERSION="${{ configs.nushell_version }}"
+            - test -n "${NUSHELL_VERSION}" || (echo "missing config: nushell_version" && exit 1)
+            - export BUILD_DIR="dockerfiles/terminus-nushell/nushell.${NUSHELL_VERSION}"
+            - test -f "${BUILD_DIR}/deploy.sh" || (echo "missing deploy script: ${BUILD_DIR}/deploy.sh" && exit 1)
+            - docker login "${DOCKER_REGISTRY_ERDA_ACTIONS}" -u "${DOCKER_REGISTRY_ERDA_ACTIONS_USERNAME}" -p "${DOCKER_REGISTRY_ERDA_ACTIONS_PASSWORD}"
+            - docker buildx use erda-actions || docker buildx create --name erda-actions --use
+            - cd "${BUILD_DIR}"
+            - bash deploy.sh
+          resources:
+            cpu: 1
+            mem: 2048
+          timeout: 7200
