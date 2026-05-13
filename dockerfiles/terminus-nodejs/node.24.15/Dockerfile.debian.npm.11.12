@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:latest
-
 # Node: 24.15.0, npm: 11.12.1, pnpm: 10.33.4, Git: 2.47.3, fnm: 1.39.0
 # Bash: 5.2.37, Wget: 1.25.0, curl: 8.14.1, gcc: 14.2.0, Python: 3.13
 # /etc/os-release: Debian GNU/Linux 13.4 (trixie)
