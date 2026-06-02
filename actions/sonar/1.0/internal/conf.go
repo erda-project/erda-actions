@@ -16,11 +16,12 @@ const (
 	LanguageGo   Language = "go"
 	LanguageJava Language = "java"
 	LanguageJS   Language = "js"
+	LanguagePy   Language = "python"
 )
 
 func (l Language) Supported() bool {
 	switch l {
-	case LanguageGo, LanguageJava, LanguageJS:
+	case LanguageGo, LanguageJava, LanguageJS, LanguagePy:
 		return true
 	default:
 		return false
