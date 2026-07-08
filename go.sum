@@ -109,6 +109,8 @@ github.com/brahma-adshonor/gohook v1.1.9 h1:YuQFj8rhAj1kvtGHUc5BlLvAELw98M/ydpBz
 github.com/brahma-adshonor/gohook v1.1.9/go.mod h1:3B9f7Lwh7z5fW6MvUvGxCFaVdloVI+1tOsl4BMJdWr0=
 github.com/buger/jsonparser v1.1.1 h1:2PnMjfWD7wBILjqQbt530v576A/cAbQvEW9gGIpYMUs=
 github.com/buger/jsonparser v1.1.1/go.mod h1:6RYKKt7H4d4+iWqouImQ9R2FZql3VbhNgx27UK13J/0=
+github.com/buger/jsonparser v1.1.2 h1:frqHqw7otoVbk5M8LlE/L7HTnIq2v9RX6EJ48i9AxJk=
+github.com/buger/jsonparser v1.1.2/go.mod h1:6RYKKt7H4d4+iWqouImQ9R2FZql3VbhNgx27UK13J/0=
 github.com/caarlos0/env v3.3.1-0.20180521112546-3e0f30cbf50b+incompatible h1:FjzBjKb2W4ggJbyACel2jbTWSGqCpmu9YqXwcpUp+3M=
 github.com/caarlos0/env v3.3.1-0.20180521112546-3e0f30cbf50b+incompatible/go.mod h1:tdCsowwCzMLdkqRYDlHpZCp2UooDD3MspDBjZ2AD02Y=
 github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5/go.mod h1:jtAfVaU/2cu1+wdSRPWE2c1N2qeAA3K4RH9pYgqwets=
